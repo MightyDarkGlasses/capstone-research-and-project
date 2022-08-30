@@ -1,0 +1,84 @@
+input[type="text"], input[type="password"],
+input[type="submit"], button {
+    /* filter: drop-shadow(0.1em 0.1em 0.5em black); */
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border-radius: 1em;
+    width: 98%;
+}
+
+
+input[type="checkbox"] {
+    transform: scale(1.5);
+    -webkit-transform: scale(1.5);
+    margin: 10px 10px 10px 4px;
+}
+
+input[type="text"], input[type="password"] {
+    margin: 0.15em;
+    font-size: 1em;
+    
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+}
+input[type="text"]:focus, input[type="password"]:focus {
+
+}
+
+button, input[type="submit"] {
+    background: black;
+    color: white;
+    /* padding: 1em 0; */
+
+    border-radius: 2em;
+    font-size: 1.25em;
+    
+
+    padding: 0.5em 0;
+    font-weight: bold;
+    margin: 0.25em 0;
+    transition: all .5s ease;
+}
+
+button:hover, input[type="submit"]:hover {
+    color: black;
+    background: white;
+    border: 2px solid black;
+    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.25);
+}
+
+
+/* For logo in Login Input */
+.logo-text-input {
+    background-repeat: no-repeat;
+    background-position: 10px 50%;
+    background-size: 25px;
+    padding-left: 40px;
+    padding-right: 15px;
+}
+
+.logo1 {
+    background-image: url('https://api.iconify.design/bxs/user-circle.svg');
+}
+
+.logo2 {
+    background-image: url('https://api.iconify.design/bxs/lock.svg');
+}
+
+/* .icon-wrapper {
+    display: inline-block;
+    position: relative
+}
+
+.icon-wrapper::before {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: red;
+} */
+/* input[type="text"]:nth-of-type(1):before {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: red;
+} */
