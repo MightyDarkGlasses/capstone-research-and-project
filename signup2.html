@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="BulSU, Parking, Management System">
+    <meta name="description" content="A system created by ... ">
+    <meta name="author" content="Group #6">
+    <title>BulSU PMS - Vehicle Information</title>
+
+    <!-- Refresh this document every (num) seconds -->
+    <meta http-equiv="refresh" content="7200">
+
+    <!-- Stylesheet here... -->
+    <link rel="stylesheet" type="text/css" href="styles/registration/style.css">
+    <link rel="stylesheet" type="text/css" href="styles/registration/registration_part2.css">
+    <link rel="stylesheet" type="text/css" href="styles/registration/file_drag.css">
+
+
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" href="images/icons/bxs-car-garage.svg" type="image/x-icon">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sign-up-form-2">
+            <div class="sign-up-form-2a">
+                <div class="registration-progress grid1">
+                    <span class="icon-1"></span>
+                    <span class="icon-2"></span>
+                    <span class="icon-3"></span>
+                </div>
+                <div class="grid2">
+                    <button id="reg-goto-3-skip">Skip</button>
+                </div>
+                <div class="grid3" id="vehicle-front">
+                    <div class="file-drag-area">
+                        <div class="icon">
+                            <box-icon name="rocket"></box-icon>
+                        </div>
+                        <div style="text-align: center;">
+                            <span class="drag-caption">Drag & Drop</span>
+                            <div>
+                                <span class="drag-caption">
+                                or <span class="button">browse</span>
+                                </span>
+                                <input type="file" name="" id="" hidden/><br>
+                                <span class="support">Supports: JPEG, JPG, PNG</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid3" id="vehicle-side">
+                    <div class="file-drag-area">
+                        <div class="icon">
+                            <box-icon name="rocket"></box-icon>
+                        </div>
+                        <div style="text-align: center;">
+                            <span class="drag-caption">Drag & Drop</span>
+                            <div>
+                                <span class="drag-caption">
+                                or <span class="button">browse</span>
+                                </span>
+                                <input type="file" name="" id="" hidden/><br>
+                                <span class="support">Supports: JPEG, JPG, PNG</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid3" id="vehicle-back">
+                    <div class="file-drag-area">
+                        <div class="icon">
+                            <box-icon name="rocket"></box-icon>
+                        </div>
+                        <div style="text-align: center;">
+                            <span class="drag-caption">Drag & Drop</span>
+                            <div>
+                                <span class="drag-caption">
+                                or <span class="button">browse</span>
+                                </span>
+                                <input type="file" name="" id="" hidden/><br>
+                                <span class="support">Supports: JPEG, JPG, PNG</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid4">
+                    <!-- <span class="icon-4"></span> -->
+                    <div class="message">
+                        <p>You can upload a file by clicking the respective view or drag and drop the image. <br><b>PNG, JPEG, GIF</b> up to 25MB each view.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="sign-up-form-2b">
+                <div>
+                    <div>
+                        <label for="">Vehicle Model</label>
+                        <input type="text" class="vehicle-icon-1 vehicle-input" name="signup-fname" id="signup-fname">
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <label for="">Plate Number</label>
+                        <input type="text" class="vehicle-icon-2 vehicle-input" name="signup-fname" id="signup-fname">
+                    </div>
+                </div>
+                <div class="grid5">
+                    <button id="reg-goto-3">Next</button>
+                </div>
+            </div>
+            <!-- <div class="vehicle-formation">
+            </div> -->
+        </div>
+    </div>    
+</body>
+
+<script src="script.js" defer></script>
+<script src="scripts/fileupload.js"></script>
+<script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
+</html>

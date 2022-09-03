@@ -1,0 +1,137 @@
+.container > div{
+    flex: 1;
+}
+
+.left {
+    justify-content: center;
+}
+
+
+.right {
+    background: url("../images/car_model_2.PNG");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 55% center;
+}
+
+.sign-up-form-3 {
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+
+    /* flex-wrap: nowrap; */
+
+    gap: 1em;
+}
+
+.registration-progress {
+    height: 50px;
+}
+.registration-information > *{
+    margin: 2em 0;
+}
+
+/* Personal Information */
+.registration-information-personal > div,
+.registration-information-vehicle > div{
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+}
+.registration-information-personal > div::before,
+.registration-information-vehicle > div::before{
+    background-repeat: no-repeat !important;
+    background-position: center bottom;
+    position: relative;
+    height: 20px;
+    width: 20px;
+    
+    margin-right: 10px;
+    /* display: inline-block; */
+    float: left;
+}
+.registration-information-personal > div:nth-child(2)::before{
+    content: "";
+    background: url("https://api.iconify.design/bxs/user-rectangle.svg?width=20&height=20");
+}
+.registration-information-personal > div:nth-child(3)::before{
+    content: "";
+    background: url("https://api.iconify.design/bxs/id-card.svg?width=20&height=20");
+}
+.registration-information-personal > div:nth-child(4)::before{
+    content: "";
+    background: url("https://api.iconify.design/bxs/user-pin.svg?width=20&height=20");
+}
+.registration-information-personal > div:nth-child(5)::before{
+    content: "";
+    background: url("https://api.iconify.design/fluent/mail-28-filled.svg?width=20&height=20");
+    background-repeat: no-repeat !important;
+}
+.registration-information-personal > div:nth-child(6)::before{
+    content: "";
+    background: url("https://api.iconify.design/fa/phone-square.svg?width=19&height=17");
+}
+
+/* Vehicle Information */
+.registration-information-vehicle > div:nth-child(2)::before{
+    content: "";
+    background: url("https://api.iconify.design/bi/car-front-fill.svg?width=19&height=17");
+}
+.registration-information-vehicle > div:nth-child(3)::before{
+    content: "";
+    background: url("https://api.iconify.design/icon-park-solid/hand-painted-plate.svg?width=19&height=17");
+}
+
+
+/* Final Button */
+/* OK button */
+.sign-up-form-3 > div:last-child {
+    display: flex;
+    justify-content: space-between
+}
+
+#reg-goto-final:hover,
+#reg-goto-back:hover {
+    color: black;
+    background: white;
+    border: 2px solid black;
+    border-color: transparent;
+    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.25);
+}
+#reg-goto-final,
+#reg-goto-back {
+    color: white;
+    background: black;
+    padding: 1em 0;
+    border-color: transparent;
+    border-radius: 2em;
+    font-size: 1em;
+    padding: 0.5em 3em;
+    font-weight: bold;
+    margin: 0.5em;
+    transition: all .5s ease;
+}
+
+
+/* Progress line design */
+.horizontal-line {
+    height: 5px;
+    width: 150px;
+    border: 3px solid black;
+}
+.dashed {
+    border: 3px dashed black;
+}
+
+.icon-2 {
+    background: url('https://api.iconify.design/ic/baseline-looks-two.svg?color=%23ffc700') no-repeat center center / contain;
+    height: var(--progress-icon-height);
+    width: var(--progress-icon-size);
+    display: inline-block;
+    
+    outline: 5px solid black;
+    outline-offset: -5px;
+    border-radius: 1em;
+}
+

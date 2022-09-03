@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>toggle switch</title>
+      <link rel="stylesheet" href="style.css" />
+      <style>
+            h1 {
+                color: green;
+            }
+
+            /* toggle in label designing */
+            .toggle {
+                position: relative;
+                display: inline-block;
+                width: 100px;
+                height: 52px;
+                background-color: red;
+                border-radius: 30px;
+                border: 2px solid gray;
+            }
+
+            /* After slide changes */
+            .toggle:after {
+                content: "";
+                position: absolute;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: gray;
+                top: 1px;
+                left: 1px;
+                transition: all 0.5s;
+            }
+
+            /* Toggle text */
+            p {
+                font-family: Arial, Helvetica, sans-serif;
+                font-weight: bold;
+            }
+
+            /* Checkbox checked effect */
+            .checkbox:checked + .toggle::after {
+                left: 49px;
+            }
+
+            /* Checkbox checked toggle label bg color */
+            .checkbox:checked + .toggle {
+                background-color: green;
+            }
+
+            /* Checkbox vanished */
+            .checkbox {
+                display: none;
+            }
+      </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Upload your File</h1>
+        <div class="drag-area">
+          <div class="icon">
+            <box-icon name="rocket"></box-icon>
+          </div>
+
+          <span class="header">
+            Drag & Drop
+          </span>
+          <span class="header">
+            or <span class="button">browse</span>
+          </span>
+          <input type="file" name="" id="" hidden/>
+          <span class="support">Supports: JPEG, JPG, PNG</span>
+        </div>
+    </div>
+
+
+
+    <!-- <div class="toggle" style="text-align: center">
+        <h1>GeeksforGeeks</h1>
+        <b>Toggle switch with HTML and CSS</b>
+        <br /><br />
+        <input type="checkbox" id="switch" class="checkbox" />
+        <label for="switch" class="toggle">
+            <p>OFF ON</p>
+        </label>
+    </div> -->
+  </body>
+
+  <script src="script.js"></script>
+  <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
+</html>

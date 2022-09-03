@@ -1,0 +1,95 @@
+.container > div{
+    flex: 1;
+}
+
+.left {
+    justify-content: center;
+}
+
+.right {
+    background: url("../images/smartParking.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 55% center;
+}
+
+.right-caption {
+    text-align: right;
+}
+
+.sign-up-form-3 {
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+
+    /* flex-wrap: nowrap; */
+
+    gap: 1.5em;
+}
+
+.sign-up-form-3 > div {
+    /* width or height of flex children */
+    /* flex-basis: 0 !important;  */
+
+    flex-grow: 0;
+    flex-shrink: 1;
+} 
+
+/* The "Thank you for signing in" */
+.sign-up-form-3 > div:nth-child(3) > * {
+    margin: 1em 0;
+}
+
+.sign-up-form-3 a {
+    color: darkblue;
+}
+
+
+
+/* Parent tag of OK Button */
+.sign-up-form-3 > div:last-child {
+    text-align: right;
+}
+/* OK button */
+#reg-goto-final:hover {
+    color: black;
+    background: white;
+    border: 2px solid black;
+    border-color: transparent;
+    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.25);
+}
+#reg-goto-final {
+    color: white;
+    background: black;
+    padding: 1em 0;
+    border-color: transparent;
+    border-radius: 2em;
+    font-size: 1em;
+    padding: 0.5em 3em;
+    font-weight: bold;
+    margin: 0.5em;
+    transition: all .5s ease;
+}
+
+.icon-3 {
+    background: url("https://api.iconify.design/ic/baseline-looks-3.svg?color=%23ffc700") no-repeat center center / contain;
+    height: var(--progress-icon-height);
+    width: var(--progress-icon-size);
+    display: inline-block;
+
+    outline: 5px solid black;
+    outline-offset: -5px;
+    border-radius: 1em;
+}
+
+.horizontal-line {
+    height: 5px;
+    width: 150px;
+    border: 3px solid black;
+}
+.dashed {
+    
+    border: 3px dashed black;
+}
+
