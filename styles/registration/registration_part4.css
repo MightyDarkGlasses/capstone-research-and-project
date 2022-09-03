@@ -28,13 +28,12 @@
     gap: 1.5em;
 }
 
-.sign-up-form-3 > div {
-    /* width or height of flex children */
-    /* flex-basis: 0 !important;  */
-
+/* width or height of flex children */
+/* flex-basis: 0 !important;  */
+/* .sign-up-form-3 > div {
     flex-grow: 0;
     flex-shrink: 1;
-} 
+}  */
 
 /* The "Thank you for signing in" */
 .sign-up-form-3 > div:nth-child(3) > * {

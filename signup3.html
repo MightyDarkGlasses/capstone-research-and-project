@@ -90,13 +90,28 @@
                 </div>
             </div>
             <div class="right-caption">
-                <p>Already have an account? <a href="#">Log In</a></p>
+                <p>Already have an account? <a href="index.html">Log In</a></p>
             </div>
         </div>
     </div>    
 </body>
 
 <script src="script.js" defer></script>
+<script>
+// Test for URL redirection
+let reg_goto_final = document.getElementById("reg-goto-final");
+
+reg_goto_final.addEventListener("click", () => {
+    window.location = "signup4.html";
+});
+
+let reg_goto_back = document.getElementById("reg-goto-back");
+
+reg_goto_back.addEventListener("click", () => {
+    window.location = "signup2.html";
+});
+
+</script>
 </html>
 
 <!-- <a href="https://www.freepik.com/free-vector/smart-parking-man-user-with-smartphone-touch-screen-control-car-driving-park_2238478.htm#query=parking%20lot%20car%20park&position=20&from_view=keyword">Image by vectorpouch</a> on Freepik -->

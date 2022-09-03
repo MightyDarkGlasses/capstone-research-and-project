@@ -77,7 +77,7 @@
                             <input class="logo-text-input" type="password" name="signup-cpassword" id="signup-cpassword">
                         </div>
                         <div class="reg-next-page">
-                            <button id="reg-goto-page2">Next</button>
+                            <button type="button" id="reg-goto-page2">Next</button>
                         </div>
                     </div>
                 </form>
@@ -91,11 +91,22 @@
                 </div>
             </div>
             <div class="right-caption">
-                <p>Already have an account? <a href="#">Log In</a></p>
+                <p>Already have an account? <a href="index.html">Log In</a></p>
             </div>
         </div>
     </div>    
 </body>
 
 <script src="script.js" defer></script>
+
+
+<script>
+// Test for URL redirection
+
+let reg_goto_page2 = document.getElementById("reg-goto-page2");
+
+reg_goto_page2.addEventListener("click", () => {
+    window.location = "signup2.html";
+});
+</script>
 </html>

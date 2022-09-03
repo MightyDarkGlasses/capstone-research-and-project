@@ -1,4 +1,6 @@
-
+.container > div {
+    flex: 1;
+}
 /* Register button */
 .reg-next-page{
     text-align: right;
@@ -154,8 +156,8 @@ input[type="email"], input[type="tel"] {
     padding-left: 0.5em;
 }
 .right-caption:last-of-type {
-    display: flex;
-    flex-direction: row;
+    /* display: flex;
+    flex-direction: row; */
     text-align: right;
     /* width: ; */
 }

@@ -20,7 +20,7 @@
 
 body {
     height: 100vh;
-    background: url("/styles/images/bulsuMainGate222.png");
+    background: url("../images/bulsuMainGate_blurred.png");
     background-size: cover;
     background-repeat: no-repeat;
 
@@ -30,7 +30,8 @@ body {
     backdrop-filter: blur(2px); */
 }
 
-select, input[type="text"], input[type="password"] {
+select, input[type="text"], 
+input[type="password"], input[type="email"] {
     /* border: none !important; */
     border: 1px solid black;
 }

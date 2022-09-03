@@ -1,5 +1,7 @@
+/* Used in index.html */
+
 input[type="text"], input[type="password"],
-input[type="submit"], button {
+input[type="submit"], input[type="email"], button {
     /* filter: drop-shadow(0.1em 0.1em 0.5em black); */
     padding-top: 1em;
     padding-bottom: 1em;
@@ -14,7 +16,8 @@ input[type="checkbox"] {
     margin: 10px 10px 10px 4px;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"],
+input[type="email"] {
     margin: 0.15em;
     font-size: 1em;
     
@@ -58,7 +61,7 @@ button:hover, input[type="submit"]:hover {
 }
 
 .logo1 {
-    background-image: url('https://api.iconify.design/bxs/user-circle.svg');
+    background-image: url('https://api.iconify.design/ic/round-email.svg');
 }
 
 .logo2 {

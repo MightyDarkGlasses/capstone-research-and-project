@@ -46,7 +46,8 @@
 }
 .grid5 {
     grid-column: span 2;
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
 }
 
 .vehicle-formation {
@@ -74,7 +75,7 @@
 /* -- NAVIGATION BUTTONS --  */
 /* Next button, in the bottom right */
 /* Skip button, top right, to skip the vehicle submission section */
-#reg-goto-3-skip, #reg-goto-3 {
+#reg-goto-3-skip, #reg-goto-page3 {
     color: white;
     background: black;
     padding: 1em 0;
