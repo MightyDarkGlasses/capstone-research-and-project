@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="BulSU, Parking, Management System">
+    <meta name="description" content="A system created by ... ">
+    <meta name="author" content="Group #6">
+    <title>BulSU PMS - Administrator Panel</title>
+
+    <!-- Refresh this document every (num) seconds -->
+    <meta http-equiv="refresh" content="7200">
+
+    <!-- Stylesheet here... -->
+    <link rel="stylesheet" href="styles/panel/style.css">
+    <link rel="stylesheet" href="styles/panel/adminpanel.css">
+
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" href="images/icons/bxs-car-garage.svg" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+
+        </div>
+        <div class="right">
+            <div>
+                <div class="security-icon white-shadow"></div>
+                <h1 class="white-text white-shadow">Administrator Panel</h1>
+            </div>
+            <div>
+                <form action="#" method="post">
+                    <div>
+                        <label for="">Username</label>
+                        <input class="logo-1" type="text" name="admin_user" id="admin_user">
+                    </div>
+                    <div>
+                        <label for="">Password</label>
+                        <input class="logo-2" type="password" name="admin_pass" id="admin_pass">
+                    </div>
+                    <div>
+                        <!-- <input type="submit" name="admin_login" id="admin_login"> -->
+                        <button type="button" name="admin_login" id="admin_login">Log In</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    let admin_login = document.getElementById("admin_login");
+    admin_login.addEventListener("click", () => {
+        window.alert("Log In as Administrator");
+    });
+</script>
+</html>

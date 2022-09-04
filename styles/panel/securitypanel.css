@@ -1,0 +1,114 @@
+.white-text { 
+    width: 100%;
+    text-align: center;
+    color: white; 
+}
+.white-shadow { text-shadow: 0px 6px 4px rgba(255, 255, 255, 0.25); }
+
+.security-icon {
+    background: url('https://api.iconify.design/healthicons/security-worker.svg?color=white') no-repeat center center / contain;
+    height: 80px;
+}
+
+body {
+    background-image: url("../images/panel/abstract_background_securityofficer.jpg");
+}
+
+h1 {
+    font-size: 2.25em;
+    font-weight: 800;
+}
+
+label {
+    width: 100%;
+    display: block;
+    color: white;
+}
+
+#admin_user, #admin_pass {
+    /* Nakalaan para sa icon ng input */
+    padding-left: 3em;
+
+    /* Spacing between the label and input */
+    margin: 0.25em 0;
+}
+
+#admin_login {
+    border: 2px solid rgba(255, 255, 255, 0);
+    border-radius: 2em;
+    font-size: 1em;
+    padding: 0.5em 3em;
+    font-weight: bold;
+    /* margin: 0.5em; */
+    transition: all .5s ease;
+    background: black;
+    color: white;
+}
+#admin_login:hover {
+    color: black;
+    background: white;
+    border: 2px solid black;
+    border-color: transparent;
+    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.25);
+}
+
+input[type="text"], input[type="password"],
+input[type="submit"], button {
+    font-size: 1em;
+    padding: 0.5em 0;
+
+    border-radius: 1em;
+    width: 98%;
+    color: white;
+}
+
+
+.right {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Logo and Admin Panel title */
+.right > div:first-child {
+    margin-top: 4em;
+}
+
+/* The form thingy */
+.right > div:last-child {
+    margin: 2em 0;
+}
+
+.right form {
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.right form > div {
+    margin: 0.2em 0;
+}
+
+
+
+.logo-1 {
+    background: url('https://api.iconify.design/bxs/user-circle.svg?color=white');
+    height: var(--progress-icon-height);
+    width: var(--progress-icon-size);
+    background-repeat: no-repeat;
+    background-position: 10px 50%;
+    background-size: 25px;
+    padding-left: 40px;
+    padding-right: 15px;
+    display: inline-block;
+}
+.logo-2 {
+    background: url('https://api.iconify.design/bxs/lock.svg?color=white');
+    height: var(--progress-icon-height);
+    width: var(--progress-icon-size);
+    background-repeat: no-repeat;
+    background-position: 10px 50%;
+    background-size: 25px;
+    padding-left: 40px;
+    padding-right: 15px;
+    display: inline-block;
+}
