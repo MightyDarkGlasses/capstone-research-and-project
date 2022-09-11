@@ -1,0 +1,14 @@
+
+input[type="text"], 
+input[type="password"], input[type="email"] {
+    width: 97%;
+    margin: 0.25em;
+    box-shadow: var(--text-shadow);
+
+    border-radius: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin: 0.5em 0.1em;
+    outline: none;
+    border: 2px solid black;
+}

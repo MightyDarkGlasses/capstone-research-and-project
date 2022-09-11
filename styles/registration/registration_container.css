@@ -106,7 +106,7 @@ input[type="password"], input[type="email"] {
 /* .container :not(div:nth-child(2)) {
     flex: 1;
 } */
-
+.
 
 
 .sign-up-form-1 {
@@ -183,65 +183,4 @@ input[type="password"], input[type="email"] {
 /* Top navigation, for smaller screens */
 .small-top-nav {
     display: none;
-}
-
-/* media queries */
-@media screen and (max-width: 960px) {
-
-    .container  {
-        border-radius: .5em;
-        padding: 1.5em 0;
-    }
-    .right {
-        display: none;
-    }
-
-    /* Change the margin on left side (visible side on mobile) */
-    .left {
-        margin: auto 1.25em;
-    }
-
-    /* Top navigation, for smaller screens */
-    .small-top-nav {
-        display: none;
-    }
-
-    /* Show the title "Register" */
-    .caption {
-        display: block;
-    }
-    
-
-    .container {
-        flex-direction: column;
-        width: max(90vw, 400px);
-        height: 90vh;
-        transition: all 0.1s ease;
-        /* max(max-width, width) */
-    }
-
-    /* The lines in progress registration */
-    .registration-progress .progress-divider {
-        width: 25%;
-    }
-
-    .reg-next-page {
-        text-align: center;
-    }
-    #reg-goto-page2 {
-        width: 98%;
-    }
-
-    /* Name input */
-    .user_input_name {
-        flex-direction: column;
-    }
-    .user_input_name input {
-        width: 99% !important;
-      }
-
-    /* Text size for error logs */
-    .error-container .error-log {
-        font-size: .75em;
-    }
 }

@@ -1,3 +1,26 @@
+@import url("registration_container.css"); /* container */
+
+.sign-up-form-1 {
+    overflow-y: auto;
+}
+
+.left {
+    /* margin: auto 2em !important; */
+}
+
+.icon-1 {
+    /* border-radius: 100vmax; */
+    /* outline: black solid 5px; */
+    outline: 5px solid black;
+    outline-offset: -5px;
+    border-radius: 0.5em;
+    background-color: black !important;
+}
+
+
+/* .container::before {
+    content: "asdf";
+} */
 .container > div {
     flex: 1;
 }
@@ -5,6 +28,11 @@
 .reg-next-page{
     text-align: right;
     width: 97%;
+}
+
+/* The 1-2-3 */
+.registration-progress {
+    margin-top: 1em;
 }
 #reg-goto-page2 {
     background: black;
@@ -33,7 +61,12 @@
 
 /* Inputs */
 input[type="text"], input[type="password"], 
-input[type="email"], input[type="tel"], .user-type {
+input[type="email"], input[type="tel"] {
+    width: 97%;
+    margin: 0.25em;
+    box-shadow: var(--text-shadow);
+}
+.user-type {
     width: 97%;
     margin: 0.25em;
 }
@@ -42,18 +75,26 @@ input[type="email"], input[type="tel"] {
     border-radius: 1em;
     padding-top: 1em;
     padding-bottom: 1em;
-    outline: 0;
+    margin: 0.5em 0.1em;
+    outline: none;
     border: 2px solid black;
 }
+label {
+    margin: 0 .1em;
+}
+input[type="tel"] {
+    border: none;
+    outline: 1px solid black !important;
+}
+/* width for every name input (first, middle, last) */
 .user_input_name input {
-    width: 97%;
+    /* width: 95% !important; */
 }
 
-/* Selection of User Type */
-.user-type {
-    display: flex;
-    flex-direction: row;
-}
+
+/* Input, borders and shadow */
+
+
 
 /* User Type -> User input of real name */
 .user_input_name {
@@ -68,16 +109,22 @@ input[type="email"], input[type="tel"] {
     width: 48%;
 } */
 
+
+/* Selection of User Type */
+.user-type {
+    display: flex;
+    flex-direction: row;
+    /* height: 200px; */
+}
 .select-type1, .select-type2 {
     display: flex;
     align-items: end;
     padding: 0.5em;
-    height: 75px;
+    height: 60px;
     width: 50%;
     text-transform: uppercase;
     font-weight: 900;
 }
-
 .select-type1 {
     border-radius: 1em 0 0 1em;
     background-color: #E1DEFB;
@@ -102,6 +149,7 @@ input[type="email"], input[type="tel"] {
     /* vertical-align: text-bottom; */
 }
 .select-type2 p {
+    width: 100%;
     text-align: right;
     /* margin-top: auto; */
 }
@@ -173,4 +221,131 @@ input[type="email"], input[type="tel"] {
 
     font-size: 1.25em;
     border-radius: 1em;
+}
+
+
+/* FOR ERROR CONTAINER */
+/* --error-container: #FACFCF;
+--error-header: #AF0303;
+--error-border: #F2B2B2;
+
+--success-border: #B3650A;
+--default-border: #E1E1E3; */
+
+/* 
+Container for error list,
+Set the caption of error
+Background color for the error container
+Logo for error log
+*/
+.error-container {
+    width: 95%;
+    margin: 0 .5em;
+    /* gap: 1em; */
+}
+
+/* Give a space between error container */
+.error-container div {
+    margin: 1em 0;
+}
+
+.error-container .input-error::before, .password-error::before{    
+    color: var(--error-header);
+    font-weight: bold;
+    font-size: 1em;
+}
+.error-container .input-error::before {
+    content: "Input Error";
+}
+.error-container .password-error::before {
+    content: "Password Error";
+}
+
+.error-container .input-error, .password-error {
+    padding: 1em;
+    background-color: var(--error-container);
+    border-radius: 1em;
+}
+
+.error-container .input-error .error-log,
+.error-container .password-error .error-log {
+    display: flex;
+    align-items: center;
+    margin: .5em 0;
+}
+.error-container .input-error .error-log::before,
+.password-error .error-log::before {
+    content: "";
+    display: block;
+    float: left;
+    height: 30px;
+    width: 30px;
+    padding-right: 1em;
+    background: url('https://api.iconify.design/clarity/error-solid.svg?color=%23af0303') no-repeat center center / contain;
+}
+
+/* Error text message */
+.error-container .error-log {
+    font-weight: bold;
+}
+
+/* media queries */
+@media screen and (max-width: 960px) {
+
+    .container  {
+        border-radius: .5em;
+        padding: 1.5em 0;
+    }
+    .right {
+        display: none;
+    }
+
+    /* Change the margin on left side (visible side on mobile) */
+    .left {
+        margin: auto 1.25em;
+    }
+
+    /* Top navigation, for smaller screens */
+    .small-top-nav {
+        display: none;
+    }
+
+    /* Show the title "Register" */
+    .caption {
+        display: block;
+    }
+    
+
+    .container {
+        flex-direction: column;
+        width: max(90vw, 400px);
+        height: 90vh;
+        transition: all 0.1s ease;
+        /* max(max-width, width) */
+    }
+
+    /* The lines in progress registration */
+    .registration-progress .progress-divider {
+        width: 25%;
+    }
+
+    .reg-next-page {
+        text-align: center;
+    }
+    #reg-goto-page2 {
+        width: 98%;
+    }
+
+    /* Name input */
+    .user_input_name {
+        flex-direction: column;
+    }
+    .user_input_name input {
+        width: 99% !important;
+      }
+
+    /* Text size for error logs */
+    .error-container .error-log {
+        font-size: .75em;
+    }
 }

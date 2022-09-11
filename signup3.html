@@ -13,7 +13,7 @@
     <meta http-equiv="refresh" content="7200">
 
     <!-- Stylesheet here... -->
-    <link rel="stylesheet" type="text/css" href="styles/registration/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="styles/registration/style.css"> -->
     <link rel="stylesheet" type="text/css" href="styles/registration/registration_part3.css">
 
     <!-- Boxicons CSS -->
@@ -34,30 +34,31 @@
                 </div>
                 <div class="registration-information">
                     <p>Please review your information below before you proceed.</p>
-
+                    <hr>
                     <div class="registration-information-personal">
                         <div>
                             <p><b>PERSONAL INFORMATION</b></p>
                         </div>
                         <div>
-                            <span>Complete Name</span>
-                            <span>Last Name, First Name</span>
+                            <p class="info-title">Complete Name</p>
+                            <p class="info-user">Last Name, First Name</p>
+                        </div>
+
+                        <div>
+                            <span class="info-title">ID Number</span>
+                            <span class="info-user">####-######</span>
                         </div>
                         <div>
-                            <span>ID Number</span>
-                            <span>####=######</span>
+                            <span class="info-title">User Type</span>
+                            <span class="info-user">{userType}</span>
                         </div>
                         <div>
-                            <span>User Type</span>
-                            <span>{userType}</span>
+                            <span class="info-title">E-mail Address</span>
+                            <span class="info-user">example@mail.com</span>
                         </div>
                         <div>
-                            <span>E-mail Address</span>
-                            <span>example@mail.com</span>
-                        </div>
-                        <div>
-                            <span>Contact Number</span>
-                            <span>09123456789</span>
+                            <span class="info-title">Contact Number</span>
+                            <span class="info-user">09123456789</span>
                         </div>
                     </div>
 
@@ -66,17 +67,17 @@
                             <p><b>VEHICLE INFORMATION</b></p>
                         </div>
                         <div>
-                            <span>Vehicle Name</span>
-                            <span>{vehicleName}</span>
+                            <span class="info-title">Vehicle Name</span>
+                            <span class="info-user">{vehicleName}</span>
                         </div>
                         <div>
-                            <span>Plate Number</span>
-                            <span>ABC 1234</span>
+                            <span class="info-title">Plate Number</span>
+                            <span class="info-user">ABC 1234</span>
                         </div>
                     </div>
                 </div>
                 
-                <div>
+                <div class="page-navigation">
                     <button id="reg-goto-back">Back</button>
                     <button id="reg-goto-final">OK</button>
                 </div>

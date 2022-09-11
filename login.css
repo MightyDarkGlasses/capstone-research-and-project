@@ -4,7 +4,15 @@
 @import url("styles/login_text.css");
 
 :root {
+    /* --color-primary-btn: #ef7900;
+    --color-primary-btn-hover: white;
+    --color-border-btn: black; 
+    --color-border-btn-hover: #ef7900;  */
 
+    --color-primary-btn: #ef7900;
+    --color-primary-btn-hover: white;
+    --color-text-and-border-1: white;
+    --color-text-and-border-2: black;
 }
 
 * {
@@ -14,6 +22,13 @@
     font-family: "Lexend Deca", "Inter", Arial, sans-serif;
     overflow: hidden;
 }
+input[type="text"], input[type="email"], input[type="pass"] {
+    outline: none;
+}
+button, input[type="submit"] {
+    border: none;
+    outline: none;
+}
 
 body {
     height: 100vh;
@@ -22,22 +37,90 @@ body {
     background-repeat: no-repeat;
 }
 
-select, input[type="text"], input[type="password"] {
-    /* border: none !important; */
-    border: 1px solid black;
+/* Title (Proceed to Login) */
+/* .title {
+    
+} */
+
+/* .title {
+    margin: -0.5em 0;
+} */
+.title span:nth-child(1) {
+    font-size: 1.5em;
+    display: block;
 }
+.title span:nth-child(2) {
+    position: relative;
+    top: -0.1em;
+    font-size: 3em;
+    font-weight: 900;
+    color: #EE8100;
+}
+/* .title  {
+    font-size: 1rem;
+}
+.title > span {
+    display: block;
+    font-size: calc(1em - 0.25em);
+} */
+
+
+
+/* Button for Login and Signup */
+button, input[type="submit"] {
+    border: none;
+    outline: none;
+}
+button, input[type="submit"] {
+
+
+    background: var(--color-primary-btn);
+    border: 2px solid var(--color-text-and-border-1);
+    color: var(--color-text-and-border-1);
+    /* padding: 1em 0; */
+
+    border-radius: 2em;
+    font-size: 1.25em;
+    padding: 0.5em 0;
+    font-weight: bold;
+    margin: 0.25em 0;
+
+    transition: all .5s ease;
+}
+button:hover, input[type="submit"]:hover{
+    background: var(--color-primary-btn-hover);
+    border: 2px solid var(--color-text-and-border-2);
+    color: var(--color-text-and-border-1);
+
+    color: black;
+    background: white;
+    border: 2px solid black;
+    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.25);
+}
+/* .user_input #user_signup {
+    color: var(--color-text-and-border-2);
+    background-color: white;
+    border: 2px solid #ef7900;
+}
+.user_input #user_signup:hover {
+    background: var(--color-primary-btn);
+    border: 2px solid var(--color-text-and-border-1);
+    color: var(--color-text-and-border-1);
+}
+ */
+
 
 .container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: max(80%, 800px);
+    width: max(80vw, 800px);
     /* width: 70%; max-width: 500px; min(500px, 70%) */
     /* width: 70%; min-width: 800px; max(800px, 70%) */
 
 
-    height: 550px;
+    height: 650px;
     background: white;
 
     border-radius: 60px;
@@ -48,12 +131,18 @@ select, input[type="text"], input[type="password"] {
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
 }
 
+/* Forgot password link */
+.container .forgor div:last-child {
+    display: flex;
+    justify-content: end;
+}
+
 .divider {
     width: 5px;
     background: black;
 }
 
-.container :not(div:nth-child(2)) {
+.container div {
     flex: 1;
 }
 
@@ -63,7 +152,6 @@ select, input[type="text"], input[type="password"] {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 70% center;
-    margin: 1em;
     /* width: 50%; */
 }
 
@@ -75,6 +163,8 @@ select, input[type="text"], input[type="password"] {
 .right {
     display: flex;
     height: fit-content;
+
+    /* padding: 1em; */
     margin: auto 3em;
     flex-direction: column;
     /* justify-content: space; */
@@ -93,8 +183,29 @@ select, input[type="text"], input[type="password"] {
 
 /* media queries */
 @media screen and (max-width: 960px) {
-    body {
+    .left {
         display: none;
+    }
+
+    .container div {
+        flex: none;
+    }
+
+    .container {
+        flex-direction: column;
+        width: max(90vw, 400px);
+        height: 650px;
+        /* max(max-width, width) */
+    }
+
+    .container .right-login-form {
+        display: flex;
+        align-items: center;
+    }
+
+     #user_forgot {
+        width: inherit;
+        text-align: right;
     }
 }
 
@@ -125,11 +236,13 @@ select, input[type="text"], input[type="password"] {
 @media only screen and (device-width: 768px) {
     default iPad screens
 }
-/* different techniques for iPad screening */
+
+Different techniques for iPad screening 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
     For portrait layouts only
 }
 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
     For landscape layouts only
-} */
+} 
+*/

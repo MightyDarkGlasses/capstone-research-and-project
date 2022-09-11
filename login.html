@@ -13,7 +13,7 @@
     <meta http-equiv="refresh" content="7200">
 
     <!-- Stylesheet here... -->
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="login.css">
 
     <!-- Boxicons CSS -->
     <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
@@ -24,25 +24,32 @@
     <div class="container">
         <div class="left">
         </div>
-        <div class="divider"></div>
         <div class="right">
             <div class="right-login-form">
                 <form action="#" method="get">
-                    <h1>Log In</h1>
+                    
+                    <div class="title">
+                        <span>Proceed to your</span>
+                        <span>Login</span>
+                    </div>
+
                     <div class="user_input">
                         <label for="">E-mail Address</label><br>
     
                         <div class="icon-wrapper">
-                            <input class="logo-text-input logo1" type="email" name="user_email" id="">
+                            <input class="logo-text-input logo1" type="email" name="user_email" id="user_email">
                         </div>
                     </div>
                     <div class="user_input">
                         <label for="">Password</label><br>
-                        <input class="logo-text-input logo2" type="password" name="user_password" id="">
+
+                        <div class="icon-wrapper">
+                            <input class="logo-text-input logo2" type="password" name="user_password" id="user_password">
+                        </div>
                     </div>
                     <div class="forgor">
                         <div>
-                            <input type="checkbox" name="" id="">
+                            <input type="checkbox" name="" id="user_keeplogged">
                             <label for="">Keep me logged in.</label>
                         </div>
                         <div>
@@ -50,8 +57,8 @@
                         </div>
                     </div>
                     <div class="user_input">
-                        <input type="submit" id="user_signup" value="SIGN UP"><br>
                         <button type="button" id="user_signin">SIGN IN</button>
+                        <input type="submit" id="user_signup" value="SIGN UP"><br>
                     </div>
                     <p>
                         By logging in to PMS, I confirm that I have read and agree to the BulSU PMS Terms of Service, Privacy Policy, and to recieve emails and updates

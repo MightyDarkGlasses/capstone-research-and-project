@@ -1,24 +1,52 @@
+@import url("registration_container.css"); /* container */
+
 .container > div{
-    /* flex: 1; */
+    flex: 1;
 }
 
 .left {
     justify-content: center;
 }
 
+/* body {
+    height:100%;
+} */
+
+
+.right .right-caption {
+    display: none;
+}
 
 .right {
     background: url("../images/car_model_2.PNG");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 55% center;
-}
 
-.sign-up-form-3 {
-    margin: 1em;
     display: flex;
     flex-direction: column;
-    flex-basis: unset;
+    justify-content: space-between;
+    padding: 2em;
+}
+/* The Sign Up button */
+.right-caption:first-of-type {
+    width: 100%;
+    text-align: right;
+}
+/* Design for Sign Up button */
+.right-caption span {
+    background-color: white;
+    font-weight: bold;
+    padding: 0.5em 1em;
+    font-size: 1.25em;
+    border-radius: 1em;
+  }
+
+.sign-up-form-3 {
+    /* margin: 1em; */
+    display: flex;
+    flex-direction: column;
+    /* flex-basis: unset; */
     /* align-items: center; */
 
     /* flex-wrap: nowrap; */
@@ -30,17 +58,59 @@
     height: 50px;
 }
 
+/* The Personal and Vehicle Information container (middle) */
+.registration-information {
+    height: 80%;
+    overflow-y: auto;
+}
 /* Spacing between the three divs (Info, Personal Info section, and Vehicle info section) */
 .registration-information > *{
     margin: 1em 0;
 }
 
-/* Personal Information */
+/* The <p> tag contains "review your information" */
+/* .registration-information p {
+    text-align: center;
+} */
+.registration-information hr {
+    width: 80%;
+    margin: 0 auto;
+}
+
+/* Personal Information and Vehicle Information
+    Infos margin, every field
+*/
+.registration-information .registration-information-personal div,
+.registration-information .registration-information-vehicle div{
+    margin: 1em 0;
+}
+
+/* Center alignment for "Caption (review your information thingy)" and "Information Container Title (Personal, Vehicle)" */
+.registration-information > p,
+.registration-information-personal > div:first-child p,
+.registration-information-vehicle > div:first-child p{
+    text-align: center;
+}
+.registration-information-personal > div .info-user,
+.registration-information-vehicle > div .info-user {
+    margin-left: 2em;
+}
+
 .registration-information-personal > div,
 .registration-information-vehicle > div{
     margin: 5px 0;
     display: flex;
     align-items: center;
+}
+.registration-information-personal > div:nth-child(1) p,
+.registration-information-vehicle > div:nth-child(1) p{
+    /* 
+    Personal Information TITLE 
+    Text align center
+    */
+    margin: 0 auto; 
+    font-size: 1.25em;
+    letter-spacing: 1px;
 }
 .registration-information-personal > div::before,
 .registration-information-vehicle > div::before{
@@ -86,6 +156,20 @@
     background: url("https://api.iconify.design/icon-park-solid/hand-painted-plate.svg?width=19&height=17");
 }
 
+/* The input title such as Complete Name, ID Number, User Type etc. */
+.registration-information-personal .info-title,
+.registration-information-vehicle .info-title {
+    font-weight: bold;
+    display: block;
+}
+.registration-information-personal .info-user {
+}
+
+/* Position for divs */
+.registration-information-personal > div,
+.registration-information-vehicle > div {
+    display: block;
+}
 
 /* Final Button */
 /* OK button */
@@ -127,7 +211,7 @@
     border: 3px dashed black;
 }
 
-.icon-2 {
+/* .icon-2 {
     background: url('https://api.iconify.design/ic/baseline-looks-two.svg?color=%23ffc700') no-repeat center center / contain;
     height: var(--progress-icon-height);
     width: var(--progress-icon-size);
@@ -136,5 +220,38 @@
     outline: 5px solid black;
     outline-offset: -5px;
     border-radius: 1em;
-}
+} */
 
+@media screen and (max-width: 960px) {
+    
+
+    .container {
+        flex-direction: column;
+        width: max(90vw, 400px);
+        height: 90vh;
+        transition: all 0.1s ease;
+        border-radius: .5em;
+        padding: 1.5em 0;
+    }
+    .left {
+        margin: auto 1.25em;
+    }
+    .sign-up-form-3 {
+
+        height: 100%;
+    }
+    .right {
+        display: none;
+    }
+
+    .page-navigation {
+        flex-direction: column;
+    }
+    .page-navigation #reg-goto-final, 
+    .page-navigation #reg-goto-back{
+        margin: .5em 0;
+        width: 100%;
+    }
+
+
+}

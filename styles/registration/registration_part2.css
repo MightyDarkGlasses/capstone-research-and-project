@@ -1,6 +1,9 @@
+@import url("registration_container.css"); /* container */
+@import url("input.css"); /* user input */
+
 /* The main container under registration part 2 */
 .sign-up-form-2 {
-
+    width: 100%;
     margin: 2em;
     /* overflow-y: scroll; */
 }
@@ -14,13 +17,13 @@
     /* height: fit-content; */
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    gap: 0.5em;
 }
 .grid1 {
-    grid-column-start: span 2;
+    grid-column-start: span 1;
 }
 .grid2 {
-    grid-column: span 1;
+    grid-column: span 2;
     text-align: right; /* use text align on its corresponding container */
 }
 .grid3 {
@@ -28,11 +31,12 @@
 }
 .grid4 {
     grid-column: span 3;
-    margin: 1em 0;
+    margin: .5em 0;
     /* display: flex; */
 }
-.grid4 .icon-4 {
-
+.grid4 .message > p{
+    text-align: center;
+    font-size: .9em;
 }
 
 /* Grid for Sign Up FORM-B
@@ -72,32 +76,88 @@
     /* background-color: cadetblue; */
 }
 
+
+
+
 /* -- NAVIGATION BUTTONS --  */
 /* Next button, in the bottom right */
 /* Skip button, top right, to skip the vehicle submission section */
-#reg-goto-3-skip, #reg-goto-page3 {
-    color: white;
-    background: black;
-    padding: 1em 0;
-    border-color: transparent;
+.sign-up-form-2 button {
+    /* Remove the weird default style in buttons */
+    border: none;
+    border: 2px solid white;
+}
+#reg-goto-page2 {
+    background: url('https://api.iconify.design/eva/arrow-back-outline.svg?color=white') no-repeat 15% center / contain;
+    /* Back button */
+    background-size: 30px;
     border-radius: 2em;
     font-size: 1em;
-    padding: 0.5em 3em;
+    padding: 0.75em 4em;
     font-weight: bold;
     margin: 0.2em;
     transition: all .5s ease;
+    background-color: black;
+    color: white;
 }
-#reg-goto-3-skip:hover, #reg-goto-3:hover {
+#reg-goto-page2:hover {
+    background: url('https://api.iconify.design/eva/arrow-back-outline.svg?color=black') no-repeat 10% center / contain !important;
+    background-size: 30px !important;
+    /* Back button */
     color: black;
     background: white;
     border: 2px solid black;
-      border-top-color: black;
-      border-right-color: black;
-      border-bottom-color: black;
-      border-left-color: black;
-    border-color: transparent;
     box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.25);
 }
+
+#reg-goto-3-skip {
+    border-radius: 2em;
+    color: white;
+    padding: 0.75em 4em;
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0.2em;
+
+    background: url('https://api.iconify.design/bi/skip-backward-fill.svg?color=white&flip=horizontal') no-repeat 80% center / contain black;
+    background-size: 20px;
+    transition: all .5s ease;
+}
+#reg-goto-3-skip:hover {
+    border-radius: 2em;
+    color: black;
+    padding: 0.75em 4em;
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0.2em;
+    border: 2px solid black;
+    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.25);
+
+    background: url('https://api.iconify.design/bi/skip-backward-fill.svg?color=black&flip=horizontal') no-repeat 89% center / contain white;
+    background-size: 20px;
+}
+#reg-goto-page3 {
+    border-radius: 2em;
+    background-color: black !important;
+    color: white !important;
+    padding: 0.75em 4em;
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0.2em;
+    transition: all .5s ease;
+
+    background: url('https://api.iconify.design/eva/arrow-back-outline.svg?color=white&flip=horizontal') no-repeat 85% center / contain;
+    background-size: 30px;
+}
+
+#reg-goto-page3:hover {
+    color: black !important;
+    background: white;
+    border-color: transparent;
+    border: 2px solid black;
+    background: url('https://api.iconify.design/eva/arrow-back-outline.svg?color=black&flip=horizontal') no-repeat 90% center / contain !important;
+    background-size: 30px !important;
+}
+
 
 /* Input in Vehicle Model and Plate Number */
 .vehicle-input {
@@ -128,4 +188,87 @@
     height: var(--progress-icon-height);
     width: var(--progress-icon-size);
     display: inline-block;
+}
+
+@media screen and (max-width: 960px) {
+    
+
+    .container {
+        border-radius: .5em;
+        /* padding: 1.5em 0; */
+        flex-direction: column;
+        width: max(90vw, 400px);
+        height: 90vh;
+        transition: all 0.1s ease;
+        /* max(max-width, width) */
+
+        padding: 1.5em 0;
+    }
+
+    /* .sign-up-form-2a, .sign-up-form-2b {
+        display: none !important;
+    } */
+
+    .sign-up-form-2 {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        width: auto;
+        margin: 0 1em;
+        /* padding: 1.5em 0; */
+        overflow-y: auto;
+        /* height: 1000px !important; */
+    }
+
+    .sign-up-form-2a {
+        /* height: fit-content; */
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5em;
+    }
+    .grid1 {
+        grid-column-start: span 2;
+    }
+    .grid2 {
+        grid-column: span 2;
+        text-align: right;
+    }
+    .grid3 {
+        grid-column: span 2;
+    }
+
+    /* The last file upload */
+    #vehicle-back {
+        grid-column: span 4;
+        /* margin-top: .1em; */
+    }
+    .grid4 {
+        grid-column: span 4;
+        margin: .5em 0;
+    }
+    .grid4 .message {
+        /* margin: 1em 0; */
+        font-size: .75em;
+    }
+
+    /* Next and Back button */
+    .grid5 {
+        flex-direction: column;
+    }
+    .file-drag-area {
+        height: 170px !important;
+    }
+    .sign-up-form-2b {
+        display: flex;
+        gap: 0.5em;
+        flex-direction: column;
+    }
+    .sign-up-form-2b input[type="text"] {
+        margin: 0.35em 0.1em;
+    }
+    /* Form grid */
+    .sign-up-form-2b > div:nth-child(1), 
+    .sign-up-form-2b > div:nth-child(2) {
+        grid-column: span 3;
+    }
 }

@@ -13,8 +13,8 @@
     <meta http-equiv="refresh" content="7200">
 
     <!-- Stylesheet here... -->
-    <link rel="stylesheet" type="text/css" href="styles/registration/style.css">
-    <link rel="stylesheet" type="text/css" href="styles/registration/login.css">
+    <!-- <link rel="stylesheet" type="text/css" href="styles/registration/style.css"> -->
+    <link rel="stylesheet" type="text/css" href="styles/registration/registration_part1.css">
 
     <!-- Boxicons CSS -->
     <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
@@ -22,12 +22,35 @@
 </head>
 
 <body>
+    <!-- <div class="caption">
+        <p>Create a New Account</p>
+        <h1>Personal Information</h1>
+    </div> -->
     <div class="container">
         <div class="left"> 
             <div class="sign-up-form-1">
+                <div class="small-top-nav">
+                    <div class="small-navigation">
+                        <div>
+                            <p>Already have an account?</p>
+                            <a href="#" target="_blank" rel="noopener noreferrer">Login</a>
+                        </div>
+                        <div>
+                            <button>Sign Up</button>
+                        </div>
+                    </div>
+                    <div class="small-caption">
+                        <h1>Register</h1>
+                    </div>
+                </div>
+                <div class="caption">
+                    <h1>Register</h1>
+                </div>
                 <div class="registration-progress">
                     <span class="icon-1"></span>
+                    <span class="progress-divider"></span>
                     <span class="icon-2"></span>
+                    <span class="progress-divider"></span>
                     <span class="icon-3"></span>
                 </div>
                 <form action="#" method="get">
@@ -76,11 +99,24 @@
                             <label for="">Confirm Password</label>
                             <input class="logo-text-input" type="password" name="signup-cpassword" id="signup-cpassword">
                         </div>
+                        <div class="error-container">
+                            <div class="input-error">
+                                <div class="error-log">Please enter your first name.</div>
+                                <div class="error-log">Please enter your last name.</div>
+                                <div class="error-log">Please enter your e-mail address name.</div>
+                            </div>
+                            <div class="password-error">
+                                <div class="error-log">The provided password do not match.</div>
+                                <div class="error-log">The provided password do not match.</div>
+                                <div class="error-log">The provided password do not match.</div>
+                            </div>
+                        </div>
                         <div class="reg-next-page">
                             <button type="button" id="reg-goto-page2">Next</button>
                         </div>
                     </div>
                 </form>
+                
             </div>
         </div>
         <!-- <div class="divider"></div> -->
