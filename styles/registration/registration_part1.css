@@ -33,6 +33,7 @@
 /* The 1-2-3 */
 .registration-progress {
     margin-top: 1em;
+    /* width: 135% !important; */
 }
 #reg-goto-page2 {
     background: black;
@@ -318,7 +319,7 @@ Logo for error log
 
     .container {
         flex-direction: column;
-        width: max(90vw, 400px);
+        width: max(90vw, 300px);
         height: 90vh;
         transition: all 0.1s ease;
         /* max(max-width, width) */

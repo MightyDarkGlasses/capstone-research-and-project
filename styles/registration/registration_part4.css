@@ -21,11 +21,13 @@
     margin: 1em;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
     /* align-items: center; */
 
     /* flex-wrap: nowrap; */
 
-    gap: 1.5em;
+    gap: .5em;
 }
 
 /* width or height of flex children */
@@ -36,19 +38,22 @@
 }  */
 
 /* The "Thank you for signing in" */
-.sign-up-form-3 > div:nth-child(3) > * {
+/* .sign-up-form-3 > div:nth-child(3) > * {
     margin: 1em 0;
-}
+} */
 
 .sign-up-form-3 a {
     color: darkblue;
 }
 
-
+/* The OK button */
+/* .sign-up-form-3 #reg-goto-final {
+    
+} */
 
 /* Parent tag of OK Button */
 .sign-up-form-3 > div:last-child {
-    text-align: right;
+    text-align: center;
 }
 /* OK button */
 #reg-goto-final:hover {
@@ -61,13 +66,14 @@
 #reg-goto-final {
     color: white;
     background: black;
-    padding: 1em 0;
     border-color: transparent;
     border-radius: 2em;
     font-size: 1em;
     padding: 0.5em 3em;
     font-weight: bold;
-    margin: 0.5em;
+    /* margin: 0.5em; */
+    margin-bottom: 1em;
+    width: 95%;
     transition: all .5s ease;
 }
 
@@ -92,3 +98,26 @@
     border: 3px dashed black;
 }
 
+
+
+
+.sign-up-form-3 h3 {
+    text-align: center;
+}
+.message > * {
+    margin: 1em 0;
+}
+.message {
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 960px) {
+    .container {
+        flex-direction: column;
+        width: max(90vw, 300px);
+        height: 90vh;
+        transition: all 0.1s ease;
+        border-radius: .5em;
+        padding: 1.5em 0;
+    }
+}

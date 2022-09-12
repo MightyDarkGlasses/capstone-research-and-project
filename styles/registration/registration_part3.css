@@ -12,6 +12,38 @@
     height:100%;
 } */
 
+.icon-1 {
+    background: url('https://api.iconify.design/ic/baseline-looks-one.svg?color=%23ffc700') no-repeat center center / contain;
+    outline: 1px solid black;
+    outline-offset: -4px;
+    border-radius: 0.5em;
+    background-color: black;
+}
+.icon-2 {
+    background: url('https://api.iconify.design/ic/baseline-looks-two.svg?color=%23ffc700') no-repeat center center / contain;
+    /* background: url('https://api.iconify.design/ic/baseline-looks-one.svg?color=%23ffc700') no-repeat center center / contain; */
+    outline: 1px solid black;
+    outline-offset: -4px;
+    border-radius: 0.5em;
+    background-color: black;
+}
+.icon-3 {
+    background: url('https://api.iconify.design/ic/baseline-looks-3.svg?color=%23ffc700') no-repeat center center / contain;
+    /* background: url('https://api.iconify.design/ic/baseline-looks-one.svg?color=%23ffc700') no-repeat center center / contain; */
+    outline: 1px solid black;
+    outline-offset: -4px;
+    border-radius: 0.5em;
+    background-color: black;
+}
+.horizontal-line {
+    border: #ffc700 solid 3px !important;
+}
+
+/* Verify your email title */
+.sign-up-form-3 h3 {
+    text-align: center;
+}
+
 
 .right .right-caption {
     display: none;
@@ -51,7 +83,7 @@
 
     /* flex-wrap: nowrap; */
 
-    gap: 1em;
+    /* gap: 1em; */
 }
 
 .registration-progress {
@@ -178,6 +210,7 @@
     justify-content: space-between
 }
 
+
 #reg-goto-final:hover,
 #reg-goto-back:hover {
     color: black;
@@ -223,11 +256,17 @@
 } */
 
 @media screen and (max-width: 960px) {
-    
+    .icon-1, .icon-2, .icon-3 {
+        --size: 30px;
+
+        /* background-size: var(--size); */
+        height: calc(var(--size) - 5px);
+        width: var(--size);
+    }
 
     .container {
         flex-direction: column;
-        width: max(90vw, 400px);
+        width: max(90vw, 300px);
         height: 90vh;
         transition: all 0.1s ease;
         border-radius: .5em;

@@ -8,6 +8,10 @@
     /* overflow-y: scroll; */
 }
 
+/* The 1-2-3 */
+.registration-progress {
+    width: 135%
+}
 
 /* Grid for Sign Up FORM-A
     Starting - 1, 2, 3 square thingy (the progress)
@@ -190,14 +194,65 @@
     display: inline-block;
 }
 
+
+/* Icon for file upload */
+.vehicle-front .file-drag-area::before {
+    content: "a";
+}
+.vehicle-side .file-drag-area::before {
+    content: "b";
+}
+.vehicle-back .file-drag-area::before {
+    content: "c";
+}
+.icon .front-car-view {
+    background: url('https://api.iconify.design/fluent/vehicle-car-16-filled.svg') no-repeat center center / contain;
+    height: var(--progress-icon-height);
+    width: var(--progress-icon-size);
+    display: inline-block;
+}
+.icon .side-car-view {
+    background: url('https://api.iconify.design/fluent/vehicle-car-profile-ltr-16-filled.svg') no-repeat center center / contain;
+    height: var(--progress-icon-height);
+    width: var(--progress-icon-size);
+    display: inline-block;
+}
+.icon .rear-car-view {
+    background: url('https://api.iconify.design/fe/car.svg') no-repeat center center / contain;
+    height: var(--progress-icon-height);
+    width: var(--progress-icon-size);
+    display: inline-block;
+}
+
+
+.sign-up-form-2a .registration-progress .icon-1 {
+    /* background-color: black; */
+    outline: 1px solid black;
+    outline-offset: -4px;
+    border-radius: 0.5em;
+    background-color: black;
+}
+.sign-up-form-2a .registration-progress .icon-2 {
+    /* background-color: black; */
+    background: url('https://api.iconify.design/ic/baseline-looks-two.svg?color=%23ffc700') no-repeat center center / contain;
+
+    outline: 1px solid black;
+    outline-offset: -4px;
+    border-radius: 0.5em;
+    background-color: black;
+}
+
 @media screen and (max-width: 960px) {
-    
+    /* The 1-2-3 */
+    .registration-progress {
+        width: 100%
+    }
 
     .container {
         border-radius: .5em;
         /* padding: 1.5em 0; */
         flex-direction: column;
-        width: max(90vw, 400px);
+        width: max(90vw, 300px);
         height: 90vh;
         transition: all 0.1s ease;
         /* max(max-width, width) */
@@ -209,8 +264,25 @@
         display: none !important;
     } */
 
+    /* drag-caption */
+    .drag-caption,
+    .file-drag-area .support {
+        font-size: .7em !important;
+    }
+    .drag-caption .button {
+        font-size: .7rem !important;
+    }
+
+    .icon-1, .icon-2, .icon-3 {
+        --size: 25px;
+
+        background-size: var(--size) !important;
+        height: var(--size);
+        width: var(--size);
+    }
+
     .sign-up-form-2 {
-        display: flex;
+        display: block;
         justify-content: center;
         flex-direction: column;
         width: auto;
@@ -249,6 +321,11 @@
     .grid4 .message {
         /* margin: 1em 0; */
         font-size: .75em;
+    }
+
+    
+    .progress-divider {
+        width: 12%;
     }
 
     /* Next and Back button */
