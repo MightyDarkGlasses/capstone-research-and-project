@@ -34,6 +34,7 @@ function fileExplorer_Events(myButton, myInput, myDragArea) {
 }
 
 function fileDragArea_Events(myDragArea, mDragText) {
+    console.log("events:", myDragArea);
     myDragArea.addEventListener("dragover", (event) => {
         console.log("File is inside the drag area.");
         event.preventDefault(); //prevent image in opening a new tab
@@ -67,24 +68,71 @@ function fileDragArea_Events(myDragArea, mDragText) {
 
 
 
+// function displayFile(file, dragArea) {
+//     console.log("displayFile() is called");
+//     let validFileExt = ["image/jpeg", "image/jpg", "image/png"];
+
+
+//     //Is the file extension valid?
+//     if(validFileExt.includes(file.type)) {
+//         let fileReader = new FileReader();
+//         fileReader.onload = () => {
+//             let fileURL = fileReader.result;
+//             // console.log(fileURL);
+//             let imageTag = 
+//             `<img src="${fileURL}" alt="dropped file">`;
+//             dragArea.innerHTML = imageTag;
+//         };
+//         fileReader.readAsDataURL(file);
+//     }
+//     else {
+//         alert("The file is not an image or has an invalid file extension");
+//     }
+// }
+
+
+// function displayFile2(file, dragArea) {
+//     console.log("displayFile() is called");
+//     let validFileExt = ["image/jpeg", "image/jpg", "image/png"];
+//     //Is the file extension valid?
+//     if(validFileExt.includes(file.type)) {
+//         let fileReader = new FileReader();
+//         fileReader.onload = () => {
+//             let fileURL = fileReader.result;
+//             // console.log(fileURL);
+//             let imageTag = 
+//             `<img src="${fileURL}" alt="dropped file">`;
+//             dragArea.innerHTML = imageTag;
+//         };
+//         fileReader.readAsDataURL(file);
+//     }
+//     else {
+//         alert("The file is not an image or has an invalid file extension");
+//     }
+// }
+
+
 function displayFile(file, dragArea) {
     console.log("displayFile() is called");
     let validFileExt = ["image/jpeg", "image/jpg", "image/png"];
-
-
     //Is the file extension valid?
+    const reader = new FileReader();
+    
     if(validFileExt.includes(file.type)) {
-        let fileReader = new FileReader();
-        fileReader.onload = () => {
-            let fileURL = fileReader.result;
-            // console.log(fileURL);
+        reader.addEventListener('load', (event) => {
+            const result = event.target.result;
             let imageTag = 
-            `<img src="${fileURL}" alt="dropped file">`;
+            `<img src="${result}" alt="dropped file">`;
             dragArea.innerHTML = imageTag;
-        };
-        fileReader.readAsDataURL(file);
+            // Do something with result
+        });
     }
-    else {
-        alert("The file is not an image or has an invalid file extension");
-    }
+    reader.readAsDataURL(file);
+
+    // reader.addEventListener('progress', (event) => {
+    //     if (event.loaded && event.total) {
+    //     const percent = (event.loaded / event.total) * 100;
+    //     console.log(`Progress: ${Math.round(percent)}`);
+    //     }
+    // });
 }

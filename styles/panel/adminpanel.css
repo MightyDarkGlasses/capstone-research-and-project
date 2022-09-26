@@ -1,3 +1,20 @@
+:root {
+    --rotate-reload-icon: 0deg;
+    --reload-bg-icon: url('https://api.iconify.design/ion/reload-circle.svg?color=white');
+}
+
+body {
+    backdrop-filter: blur(5px);
+}
+
+.container {
+    width: max(80vw, 800px);
+    height: 650px;
+    /* background-color: #181a21; */
+    background-color: #1a1c1d;
+}
+
+
 .white-text { 
     width: 100%;
     text-align: center;
@@ -21,12 +38,30 @@ label {
     color: white;
 }
 
+/* Username and password input IDs */
 #admin_user, #admin_pass {
     /* Nakalaan para sa icon ng input */
-    padding-left: 3em;
+    padding-left: 3.5em;
 
     /* Spacing between the label and input */
     margin: 0.25em 0;
+}
+
+.icon-wrapper::before {
+    content: "";
+    color: white;
+    position: relative;
+    float: left;
+    right: 0;
+    margin-top: 0.70em;
+    border-radius: 100vmax;
+    left: 0px;
+    top: 2px;
+    left: 50px;
+    width: 0.1em;
+    height: 1.3em;
+    background-color: white;
+    border-right: 3px solid white;
 }
 
 #admin_login {
@@ -62,12 +97,13 @@ input[type="submit"], button {
 .right {
     display: flex;
     flex-direction: column;
+    margin: auto 0;
 }
 
 /* Logo and Admin Panel title */
-.right > div:first-child {
+/* .right > div:first-child {
     margin-top: 4em;
-}
+} */
 
 /* The form thingy */
 .right > div:last-child {
@@ -107,4 +143,110 @@ input[type="submit"], button {
     padding-left: 40px;
     padding-right: 15px;
     display: inline-block;
+}
+
+/* Error Screen */
+.error-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-screen button {
+    background-color: rgba(255 255 255 / .1);
+    outline: none;
+    border: 2px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding-left: 1.5em; */
+
+    transition: all ease .5s;
+}
+.error-screen button:hover {
+    background-color: rgba(255 255 255 / .25);
+    outline: none;
+    border: 2px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding-left: 1.5em; */
+    
+    transition: all ease .1s;
+}
+
+.error-screen button::before {
+
+    content: "";
+    float: left;
+    position: relative;
+    left: -10%;
+    /* left: 34vw; */
+
+    width: 25px;
+    height: 25px;
+
+    background: url('https://api.iconify.design/ion/reload-circle.svg?color=white') no-repeat center center / contain;
+    background-size: 28px;
+    transform: rotate(var(--rotate-reload-icon));
+    transition: all ease .5s;
+}
+
+
+/* .error-screen button {
+    
+} */
+/* .error-screen button:hover {
+    background-color: rgba(255 255 255 / .35);
+    background: url('https://api.iconify.design/ion/reload-circle.svg?color=white&rotate=180deg') no-repeat 15% center / contain;
+    background-size: 28px;
+    padding-left: 1.5em;
+} */
+
+/* Error logo */
+.logo {
+    --error-icon-size: 60px;
+
+    background: url('https://api.iconify.design/bxs/message-alt-error.svg?color=%23ba3329&flip=vertical') no-repeat center center / contain;
+    background-size: var(--error-icon-size);
+    height: var(--error-icon-size);
+    width: var(--error-icon-size);
+    transform: rotate(180deg);
+}
+
+.error-screen > * {
+    color: white;
+}
+
+/* The reload button */
+.error-screen #error-screen-reload {
+    width: max(150px, 25%);
+    margin: 1em 0;
+}
+
+.error-screen > p {
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.error-screen {
+    display: none;
+}
+
+/* Issue an error for smaller screen in Administrator Panel */
+@media screen and (max-width: 900px) {
+    .left, .right {
+        display: none;
+    }
+    .error-screen {
+        display: flex;
+    }
+
+    .container {
+        flex-direction: column;
+        width: max(90vw, 400px);
+        height: 650px;
+        background-color: rgb(187, 5, 34, 0.25);
+    }
 }

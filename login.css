@@ -67,11 +67,15 @@ body {
 
 
 /* Button for Login and Signup */
-button, input[type="submit"] {
+
+#user_signup {
+    width: 98%;
+}
+button, input[type="submit"], #user_signup {
     border: none;
     outline: none;
 }
-button, input[type="submit"] {
+button, input[type="submit"], #user_signup {
 
 
     background: var(--color-primary-btn);
@@ -87,7 +91,7 @@ button, input[type="submit"] {
 
     transition: all .5s ease;
 }
-button:hover, input[type="submit"]:hover{
+button:hover, input[type="submit"]:hover, #user_signup:hover{
     background: var(--color-primary-btn-hover);
     border: 2px solid var(--color-text-and-border-2);
     color: var(--color-text-and-border-1);

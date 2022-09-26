@@ -21,6 +21,8 @@
     <link rel="icon" href="images/icons/bxs-car-garage.svg" type="image/x-icon">
 </head>
 
+
+
 <body>
     <!-- <div class="caption">
         <p>Create a New Account</p>
@@ -53,11 +55,11 @@
                     <span class="progress-divider"></span>
                     <span class="icon-3"></span>
                 </div>
-                <form action="#" method="get">
+                <form class="personal-info">
                     <!-- <h1>Sign In</h1> -->
                     <div class="user_input">
-                        <label for="">User Type</label>
-                        <div class="user-type">
+                        <label style="display: none;">User Type</label>
+                        <div class="user-type" style="display: none;">
                             <div class="select-type1">
                                 <p>Employee</p>
                             </div>
@@ -66,53 +68,72 @@
                             </div>
                         </div>
                         <div class="user_input">
-                            <label for="">ID Number</label>
-                            <input class="logo-text-input" type="text" name="signup-id" id="signup-id">
+                            <label >ID Number</label>
+                            <input class="logo-text-input" type="text" required="required" 
+                            name="signup_id" id="signup_id" required="required"
+                            pattern=".{10,}"
+                            title="Enter the 10-digit school id number."
+                            value="2019123456">
                         </div>
                         <div class="user_input_name">
                             <div>
-                                <label for="">First Name</label>
-                                <input type="text" name="signup-fname" id="signup-fname">
+                                <label >First Name</label>
+                                <input type="text" required="required" name="signup_fname" id="signup_fname" value="Beans">
                             </div>
                             <div>
-                                <label for="">Middle Name</label>
-                                <input type="text" name="signup-mname" id="signup-mname">
+                                <label >Middle Name</label>
+                                <input type="text" name="signup_mname" id="signup_mname" value="">
                             </div>
                             <div>
-                                <label for="">Last Name</label>
-                                <input type="text" name="signup-lname" id="signup-lname">
+                                <label >Last Name</label>
+                                <input type="text" required="required" name="signup_lname" id="signup_lname" value="Honey">
                             </div>
                         </div>
                         <div class="user_input">
-                            <label for="">E-mail Address</label>
-                            <input class="logo-text-input" type="email" name="signup-email" id="signup-email">
+                            <label >E-mail Address</label>
+                            <input class="logo-text-input" required="required" type="email" name="signup_email" id="signup_email"
+                            value="1@mail.com">
                         </div>
                         <div class="user_input">
-                            <label for="">Phone Number</label>
-                            <input class="logo-text-input" type="tel" name="signup-phone" id="signup-phone">
+                            <label >Phone Number</label>
+                            <input class="logo-text-input" required="required" type="tel" name="signup_phone" id="signup_phone"
+                            pattern=".{11,}"
+                            title="Please enter a 11-digit phone number."
+                            value="09123456789"
+                            >
                         </div>
                         <div class="user_input">
-                            <label for="">Password</label>
-                            <input class="logo-text-input" type="password" name="signup-password" id="signup-password">
+                            <label >Password</label>
+                            <input class="logo-text-input" required="required" type="password" 
+                            name="signup_password" id="signup_password"
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                            title="Must contain at least one a number and one uppercase and lowercase letter, and at least 8 or more characters."
+                            value="J123456a">
                         </div>
                         <div class="user_input">
-                            <label for="">Confirm Password</label>
-                            <input class="logo-text-input" type="password" name="signup-cpassword" id="signup-cpassword">
+                            <label >Confirm Password</label>
+                            <input class="logo-text-input" required="required" type="password"
+                            name="signup_cpassword" id="signup-cpassword"
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                            title="Must contain at least one a number and one uppercase and lowercase letter, and at least 8 or more characters"
+                            value="J123456a">
                         </div>
                         <div class="error-container">
                             <div class="input-error">
                                 <div class="error-log">Please enter your first name.</div>
                                 <div class="error-log">Please enter your last name.</div>
-                                <div class="error-log">Please enter your e-mail address name.</div>
+                                <div class="error-log">Please enter your e-mail address.</div>
+                                <div class="error-log">Please enter your phone number.</div>
                             </div>
                             <div class="password-error">
                                 <div class="error-log">The provided password do not match.</div>
-                                <div class="error-log">The provided password do not match.</div>
-                                <div class="error-log">The provided password do not match.</div>
+                                <div class="error-log">Your password needs to be at least 6 characters long.</div>
+                                <div class="error-log">Include both lower and upper case character.</div>
+                                <div class="error-log">Add at least one number or special character/symbols.</div>
                             </div>
                         </div>
                         <div class="reg-next-page">
-                            <button type="button" id="reg-goto-page2">Next</button>
+                            <button type="submit" id="reg-goto-page2">Next</button>
                         </div>
                     </div>
                 </form>
@@ -133,16 +154,17 @@
     </div>    
 </body>
 
-<script src="script.js" defer></script>
+<script type="text/javascript" src="src/index.js" defer></script>
+<!-- <script type="text/javascript" src="src/cookies.js" defer></script> -->
+<script type="text/javascript" src="src/user.js" defer></script>
 
 
 <script>
 // Test for URL redirection
 
-let reg_goto_page2 = document.getElementById("reg-goto-page2");
-
-reg_goto_page2.addEventListener("click", () => {
-    window.location = "signup2.html";
-});
+// let reg_goto_page2 = document.getElementById("reg-goto-page2");
+// reg_goto_page2.addEventListener("click", () => {
+//     window.location = "signup2.html";
+// });
 </script>
 </html>

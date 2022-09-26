@@ -1,3 +1,33 @@
+.container {
+    width: max(80vw, 800px);
+    height: 650px;
+    /* background-color: #181a21; */
+    background-color: #1a1c1d;
+}
+
+/* Error screen dialog */
+.error-screen {
+    display: none;
+}
+
+/* Line icons, divider */
+.icon-wrapper::before {
+    content: "";
+    color: white;
+    position: relative;
+    float: left;
+    right: 0;
+    margin-top: 0.70em;
+    border-radius: 100vmax;
+    left: 0px;
+    top: 2px;
+    left: 50px;
+    width: 0.1em;
+    height: 1.3em;
+    background-color: white;
+    border-right: 3px solid white;
+}
+
 .white-text { 
     width: 100%;
     text-align: center;
@@ -66,12 +96,13 @@ input[type="submit"], button {
 .right {
     display: flex;
     flex-direction: column;
+    margin: auto 0;
 }
 
 /* Logo and Admin Panel title */
-.right > div:first-child {
+/* .right > div:first-child {
     margin-top: 4em;
-}
+} */
 
 /* The form thingy */
 .right > div:last-child {

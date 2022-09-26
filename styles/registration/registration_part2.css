@@ -42,6 +42,21 @@
     text-align: center;
     font-size: .9em;
 }
+.vehicle-form {
+    width: 100%;
+    /* display: flex; */
+}
+
+.grid5 > div {
+    width: 98%;
+}
+
+/* Submit Vehicle and Back button */
+.vehicle-form > div:last-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
 /* Grid for Sign Up FORM-B
     Starting - 1, 2, 3 square thingy (the progress)

@@ -41,24 +41,24 @@
                         </div>
                         <div>
                             <p class="info-title">Complete Name</p>
-                            <p class="info-user">Last Name, First Name</p>
+                            <p class="info-user" id="preview_fullname">Last Name, First Name</p>
                         </div>
 
                         <div>
                             <span class="info-title">ID Number</span>
-                            <span class="info-user">####-######</span>
+                            <span class="info-user" id="preview_idnum">####-######</span>
                         </div>
-                        <div>
+                        <!-- <div>
                             <span class="info-title">User Type</span>
                             <span class="info-user">{userType}</span>
-                        </div>
+                        </div> -->
                         <div>
                             <span class="info-title">E-mail Address</span>
-                            <span class="info-user">example@mail.com</span>
+                            <span class="info-user" id="preview_email">example@mail.com</span>
                         </div>
                         <div>
                             <span class="info-title">Contact Number</span>
-                            <span class="info-user">09123456789</span>
+                            <span class="info-user" id="preview_phonenum">09123456789</span>
                         </div>
                     </div>
 
@@ -68,11 +68,11 @@
                         </div>
                         <div>
                             <span class="info-title">Vehicle Name</span>
-                            <span class="info-user">{vehicleName}</span>
+                            <span class="info-user" id="preview_vehiclemodel">{vehicleName}</span>
                         </div>
                         <div>
                             <span class="info-title">Plate Number</span>
-                            <span class="info-user">ABC 1234</span>
+                            <span class="info-user" id="preview_vehicleplate">ABC 1234</span>
                         </div>
                     </div>
                 </div>
@@ -97,14 +97,24 @@
     </div>    
 </body>
 
-<script src="script.js" defer></script>
+
+<script src="dist/bundle.js" defer></script>
+<script src="src/cookies.js" defer></script>
+<script src="src/preview.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js" defer></script>
+<!-- <script src="src/jquery.js"></script> -->
+
 <script>
+
+
+
+
 // Test for URL redirection
 let reg_goto_final = document.getElementById("reg-goto-final");
 
-reg_goto_final.addEventListener("click", () => {
-    window.location = "signup4.html";
-});
+// reg_goto_final.addEventListener("click", () => {
+//     window.location = "signup4.html";
+// });
 
 let reg_goto_back = document.getElementById("reg-goto-back");
 

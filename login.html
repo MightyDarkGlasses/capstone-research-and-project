@@ -26,7 +26,7 @@
         </div>
         <div class="right">
             <div class="right-login-form">
-                <form action="#" method="get">
+                <form class="login">
                     
                     <div class="title">
                         <span>Proceed to your</span>
@@ -34,31 +34,31 @@
                     </div>
 
                     <div class="user_input">
-                        <label for="">E-mail Address</label><br>
+                        <label >E-mail Address</label><br>
     
                         <div class="icon-wrapper">
-                            <input class="logo-text-input logo1" type="email" name="user_email" id="user_email">
+                            <input class="logo-text-input logo1" type="email" name="email" id="user_email" value="test@bsu-local.com">
                         </div>
                     </div>
                     <div class="user_input">
-                        <label for="">Password</label><br>
+                        <label >Password</label><br>
 
                         <div class="icon-wrapper">
-                            <input class="logo-text-input logo2" type="password" name="user_password" id="user_password">
+                            <input class="logo-text-input logo2" type="password" name="password" id="user_password" value="1111111">
                         </div>
                     </div>
                     <div class="forgor">
                         <div>
                             <input type="checkbox" name="" id="user_keeplogged">
-                            <label for="">Keep me logged in.</label>
+                            <label >Keep me logged in.</label>
                         </div>
                         <div>
                             <a id="user_forgot" type="" href="#">Forgot Password</a>
                         </div>
                     </div>
                     <div class="user_input">
-                        <button type="button" id="user_signin">SIGN IN</button>
-                        <input type="submit" id="user_signup" value="SIGN UP"><br>
+                        <input type="submit" id="user_signin" value="SIGN IN"></input>
+                        <input type="button" id="user_signup" value="SIGN UP"><br>
                     </div>
                     <p>
                         By logging in to PMS, I confirm that I have read and agree to the BulSU PMS Terms of Service, Privacy Policy, and to recieve emails and updates
@@ -71,28 +71,26 @@
 
 <!-- Scripts here...-->
 <script src="script.js" defer></script>
-
+<script src="dist/bundle.js" defer></script>
 
 <script>
 // Test for URL redirection
 // var url= "https://www.geeksforgeeks.org";
 // window.location = url;
 
-let user_forgot = document.getElementById("user_forgot");
-let user_signin = document.getElementById("user_signin");
+// let user_forgot = document.getElementById("user_forgot");
+// let user_signin = document.getElementById("user_signin");
 let user_signup = document.getElementById("user_signup");
 
-user_forgot.addEventListener("click", () => {
-    window.alert("Forgot Password: Under construction");
-});
-user_signin.addEventListener("click", () => {
-    window.alert("Submit Form: Under construction");
-});
+// user_forgot.addEventListener("click", () => {
+//     window.alert("Forgot Password: Under construction");
+// });
+// user_signin.addEventListener("click", () => {
+//     window.alert("Submit Form: Under construction");
+// });
 user_signup.addEventListener("click", () => {
     window.location = "signup1.html";
 });
-
-
 </script>
 
 

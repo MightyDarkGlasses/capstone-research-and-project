@@ -22,6 +22,12 @@
 </head>
 <body>
     <div class="container">
+        <div class="error-screen">
+            <div class="logo"></div>
+            <h1>ERROR</h1>
+            <p>Sorry, this page is not available for smaller screens.</p>
+            <button id="error-screen-reload">Reload</button>
+        </div>
         <div class="left">
 
         </div>
@@ -34,11 +40,17 @@
                 <form action="#" method="post">
                     <div>
                         <label for="">Username</label>
-                        <input class="logo-1" type="text" name="admin_user" id="admin_user">
+
+                        <div class="icon-wrapper">
+                            <input class="logo-1" type="text" name="admin_user" id="admin_user">
+                        </div>
                     </div>
                     <div>
                         <label for="">Password</label>
-                        <input class="logo-2" type="password" name="admin_pass" id="admin_pass">
+
+                        <div class="icon-wrapper">
+                            <input class="logo-2" type="password" name="admin_pass" id="admin_pass">
+                        </div>
                     </div>
                     <div>
                         <!-- <input type="submit" name="admin_login" id="admin_login"> -->
@@ -52,8 +64,29 @@
 
 <script>
     let admin_login = document.getElementById("admin_login");
+
+    let reloadPage = document.getElementById("error-screen-reload");
+    let rootStyle = document.querySelector(":root");
+
     admin_login.addEventListener("click", () => {
         window.alert("Log In as Administrator");
     });
+
+    reloadPage.addEventListener("mouseenter", () => {
+        // reloadPage.style.setProperty("--rotate-reload-icon", "180deg");
+        rootStyle.style.setProperty("--rotate-reload-icon", "0deg")
+        // rootStyle.style.setProperty("--reload-bg-icon", "url('https://api.iconify.design/ion/reload-circle.svg?color=white')")
+        // console.log("mouseentered");
+    });
+    reloadPage.addEventListener("mouseleave", () => {
+        // reloadPage.style.setProperty("--rotate-reload-icon", "0deg");
+        rootStyle.style.setProperty("--rotate-reload-icon", "180deg")
+        // rootStyle.style.setProperty("--reload-bg-icon", "url('https://api.iconify.design/ion/reload-circle.svg?color=white&rotate=180deg')")
+        // console.log("mouseleave");
+    });
+    reloadPage.addEventListener("click", () => {
+        location.reload(); //reloads the page
+    });
+
 </script>
 </html>

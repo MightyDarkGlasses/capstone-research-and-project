@@ -171,16 +171,16 @@ input[type="tel"] {
 }
 
 /* Adding Icon in User Input */
-#signup-id {
+#signup_id {
     background: url("https://api.iconify.design/bxs/id-card.svg")
 }
-#signup-email {
+#signup_email {
     background: url("https://api.iconify.design/fluent/mail-28-filled.svg")
 }
-#signup-phone {
+#signup_phone {
     background: url("https://api.iconify.design/fa/phone-square.svg?width=5&height=5")
 }
-#signup-password, #signup-cpassword {
+#signup_password, #signup_cpassword {
     background: url("https://api.iconify.design/bxs/lock.svg")
 }
 
@@ -288,6 +288,11 @@ Logo for error log
 /* Error text message */
 .error-container .error-log {
     font-weight: bold;
+}
+
+/* Errors inside the error-container */
+.input-error, .password-error {
+    display: none;
 }
 
 /* media queries */

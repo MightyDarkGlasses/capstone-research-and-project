@@ -97,23 +97,27 @@
                     </div>
                 </div>
             </div>
-            <div class="sign-up-form-2b">
-                <div>
-                    <div>
-                        <label for="">Vehicle Model</label>
-                        <input type="text" class="vehicle-icon-1 vehicle-input" name="signup-fname" id="signup-fname">
+            <div class="sign-up-form-2b grid5">
+                <form class="vehicle-form">
+                    <div class="grid5">
+                        <div>
+                            <label >Vehicle Model</label>
+                            <input type="text" class="vehicle-icon-1 vehicle-input" 
+                            name="signup_vehiclemodel" id="signup-fname" required="required"
+                            value="Honda ABC 4455">
+                        </div>
+                        <div>
+                            <label >Plate Number</label>
+                            <input type="text" class="vehicle-icon-2 vehicle-input" 
+                            name="signup_vehicleplatenum" id="signup-fname" required="required"
+                            value="ABC1234">
+                        </div>
                     </div>
-                </div>
-                <div>
                     <div>
-                        <label for="">Plate Number</label>
-                        <input type="text" class="vehicle-icon-2 vehicle-input" name="signup-fname" id="signup-fname">
+                        <button type="button" id="reg-goto-page2">Back</button>
+                        <input type="submit" id="reg-goto-page3" value="Submit"></input>
                     </div>
-                </div>
-                <div class="grid5">
-                    <button id="reg-goto-page2">Back</button>
-                    <button id="reg-goto-page3">Next</button>
-                </div>
+                </form>
             </div>
             <!-- <div class="vehicle-formation">
             </div> -->
@@ -123,21 +127,30 @@
 
 <script src="script.js" defer></script>
 <script src="scripts/fileupload.js"></script>
+<script src="src/vehicle.js"></script>
 <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
+<!-- <script src="src/cookies.js"></script> -->
 
 <script>
+console.log("Cookie: ", document.cookie);
 // Test for URL redirection
-
+// console.log(document.cookie)
 let reg_goto_page2 = document.getElementById("reg-goto-page2");
 
 reg_goto_page2.addEventListener("click", () => {
     window.location = "signup1.html";
 });
 
-let reg_goto_page3 = document.getElementById("reg-goto-page3");
 
-reg_goto_page3.addEventListener("click", () => {
+let reg_goto_3_skip = document.getElementById("reg-goto-3-skip");
+reg_goto_3_skip.addEventListener("click", () => {
     window.location = "signup3.html";
 });
+
+// console.log(getCookie("lname"))
+
+
+// console.log("getCookie: ", getCookie("lname"))
+// console.log("Output: ", getCookie("pass"))
 </script>
 </html>
