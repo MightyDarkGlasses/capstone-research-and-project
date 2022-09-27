@@ -1,6 +1,6 @@
 const vehicleInfo = document.querySelector(".vehicle-form");
 
-if (vehicleInfo !== null) {
+if (vehicleInfo !== null && vehicleInfo !== undefined) {
     vehicleInfo.addEventListener('submit', (e) => {
         e.preventDefault();    
         console.log("Bazinga!");

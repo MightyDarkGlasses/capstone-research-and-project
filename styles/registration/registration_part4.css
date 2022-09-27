@@ -56,14 +56,14 @@
     text-align: center;
 }
 /* OK button */
-#reg-goto-final:hover {
+#reg-goto-final:hover, #reg-goto-final-verifyemail:hover {
     color: black;
     background: white;
     border: 2px solid black;
     border-color: transparent;
     box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.25);
 }
-#reg-goto-final {
+#reg-goto-final, #reg-goto-final-verifyemail {
     color: white;
     background: black;
     border-color: transparent;

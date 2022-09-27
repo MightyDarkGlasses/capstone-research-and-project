@@ -1,18 +1,13 @@
 // personal-info
-
 const personalInfo = document.querySelector('.personal-info')
-if (personalInfo !== null) {
+if (personalInfo !== null && personalInfo !== undefined) {
     personalInfo.addEventListener('submit', (e) => {
         e.preventDefault();
-    
-        console.log("Nice one!");
+        setCookiePersonalInformation();
+        console.log("Nice one! Nom nom nom");
     
         //Proceed to the next page
-    
-        
-        setCookiePersonalInformation();
         // console.log(personalInfo.signup_id.value)
-        console.log("ddd")
         window.location = "signup2.html";
         
         return;
