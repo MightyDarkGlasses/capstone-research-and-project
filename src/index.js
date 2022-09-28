@@ -365,7 +365,7 @@ async function generateVehicleQRCode(userUID, mySize) {
     // console.log("userUID:", userUID);
 
     const storage = getStorage();
-    const storageRef = ref(storage, `vehicle-information/${userUID}/1/qrCode.PNG}`);
+    const storageRef = ref(storage, `vehicle-information/${userUID}/1/qrCode.PNG`);
     let qrCodeBlob = await base64ToBlob((generatedOutput.replace(/^data:image\/(png|jpeg);base64,/, "")), "image/png");
     const uploadTask = uploadBytesResumable(storageRef, qrCodeBlob, "image/png");
 
