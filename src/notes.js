@@ -63,3 +63,47 @@
 
 /***********  ACCOUNT INFORMATION ***********/
 // import { doc, setDoc, Timestamp } from "firebase/firestore"; 
+
+
+
+
+// let registerVerifyEmail = document.getElementById("reg-goto-final-verifyemail");
+// if (registerVerifyEmail !== null && registerVerifyEmail !== undefined) {
+
+// }
+
+
+// const docData = {
+//     stringExample: "Hello world!",
+//     booleanExample: true,
+//     numberExample: 3.14159265,
+//     dateExample: Timestamp.fromDate(new Date("December 10, 1815")),
+//     arrayExample: [5, true, "hello"],
+//     nullExample: null,
+//     objectExample: {
+//         a: 5,
+//         b: {
+//             nested: "foo"
+//         }
+//     }
+// };
+// await setDoc(doc(db, "data", "one"), docData);
+
+// Get the User UID using onAuthStateChanged function
+// https://stackoverflow.com/questions/62974697/how-to-retrieve-user-uid-after-they-have-been-created-firebase-js
+// firebase.auth().onAuthStateChanged(function(user) {
+//     if (user) {
+//       // User is signed in.
+//       var displayName = user.displayName;
+//       var email = user.email;
+//       var emailVerified = user.emailVerified;
+//       var photoURL = user.photoURL;
+//       var isAnonymous = user.isAnonymous;
+//       var uid = user.uid;
+//       var providerData = user.providerData;
+//       // ...
+//     } else {
+//       // User is signed out.
+//       // ...
+//     }
+//   });

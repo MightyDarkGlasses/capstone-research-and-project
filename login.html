@@ -44,7 +44,7 @@
                         <label >Password</label><br>
 
                         <div class="icon-wrapper">
-                            <input class="logo-text-input logo2" type="password" name="password" id="user_password" value="1111111">
+                            <input class="logo-text-input logo2" type="password" name="password" id="user_password" value="J123456a">
                         </div>
                     </div>
                     <div class="forgor">
@@ -75,24 +75,25 @@
 <!-- <script src="https://code.jquery.com/jquery-3.6.1.js" 
 integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous" defer></script> -->
 <!-- <script src="script.js" defer></script> -->
-
-
 <script defer>
-// Test for URL redirection
-// var url= "https://www.geeksforgeeks.org";
-// window.location = url;
-// let user_forgot = document.getElementById("user_forgot");
-// let user_signin = document.getElementById("user_signin");
-let user_signup = document.getElementById("user_signup");
-// user_forgot.addEventListener("click", () => {
-//     window.alert("Forgot Password: Under construction");
-// });
-// user_signin.addEventListener("click", () => {
-//     window.alert("Submit Form: Under construction");
-// });
-user_signup.addEventListener("click", () => {
-    window.location = "signup1.html";
-});
+    let user_signup = document.getElementById("user_signup");
+
+    user_signup.addEventListener("click", () => {
+        window.location = "signup1.html";
+    });
+
+    // const auth = getAuth();
+    // const user = auth.currentUser;
+
+    // if (user !== null) {
+    //     if(user.emailVerified) {
+    //         alert("Email is verified.");
+    //     }
+    //     else {
+    //         console.log("Email is not yet verified.");
+    //         alert("Please verify your e-mail first.")
+    //     }
+    // }
 </script>
 
 

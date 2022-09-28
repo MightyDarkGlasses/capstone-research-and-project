@@ -28,6 +28,10 @@ import {
     updateProfile
 } from 'firebase/auth';
 
+
+import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL } 
+from "firebase/storage";
+
 console.log("bundle.js/index.js is called.");
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -57,6 +61,9 @@ console.log(auth);
 /************** == LOGIN PAGE == ***************/
 /************** == LOGIN PAGE == ***************/
 const loginForm = document.querySelector('.login'); 
+
+
+
 // console.log(loginForm)
 if(loginForm !== undefined && loginForm !== null) {
     loginForm.addEventListener('submit', (e) => {
@@ -103,9 +110,22 @@ function checkCurrentLoggedUser() {
         "uid: " + myId,
         "emailVerified: " + emailVerified);
     }
+
+    if (user !== null) {
+        if(user.emailVerified) {
+            alert("Email is verified.\n Go to login page.");
+        }
+        else {
+            console.log("Email is not yet verified.");
+            alert("Please verify your e-mail first.")
+        }
+    }
     return;
 }
 
+// function getUserUID() {
+//     return getAuth().currentUser.uid;
+// }
 function isUserVerified() {
     // true -> the user is verified
     // false -> not yet. need to confirm by checking the Spam mail inbox.
@@ -150,15 +170,20 @@ function getCurrentLoggedUserUID() {
 }
 let registerButtonFinal = document.getElementById("reg-goto-final");
 if (registerButtonFinal !== null && registerButtonFinal !== undefined) {
+
+    
     registerButtonFinal.addEventListener("click", () => {
         createUserWithEmailAndPassword(auth, getCookie("email"), getCookie("pass"))
         .then((cred) => {
             console.log('User created: ', cred.user);
             const userId = getCurrentLoggedUserUID();
             createNewData(userId);
+            // createVehicleImageData(userId);
         }).catch((err) => {
             console.log("Signup error message: ", err); //e.g password is wrong or too short, invalid email, etc.
         });
+
+        // createVehicleImageData("THISISUSERIDHAHAHAHA");
     });
 }
 function createNewData(userUID) {
@@ -176,7 +201,8 @@ function createNewData(userUID) {
     setDoc(doc(db, "vehicle-information", userUID), {
         registered_vehicle: {
             vehicles: {
-                images: ["front", "side", "rear"]
+                // images: ["front", "side", "rear"]
+                images: createVehicleImageData(userID) //add Vehicle, store the vehicle on the fly.
             },
             qrcode: ["QRCODE-TEST"],
             plate: [getCookie("plate")],
@@ -187,10 +213,159 @@ function createNewData(userUID) {
         console.log("Vehicle Information was added in the collection");
 
         //Success! Redirect to the next page.
-        sendVerification();
-        window.location = "signup4.html";
+        // sendVerification();
+        // window.location = "signup4.html";
     });
 }
+
+function createVehicleImageData(userId) {
+    // vehicle-front
+    // vehicle-side
+    // vehicle-rear
+
+    // vehicle-front-filename
+    // vehicle-side-filename
+    // vehicle-rear-filename
+
+    // vehicle-front-filetype
+    // vehicle-side-filetype
+    // vehicle-rear-filetype
+
+    // let vehicle_front = [localStorage.getItem("vehicle-front").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+    // localStorage.getItem("vehicle-front-filename"), localStorage.getItem("vehicle-front-filetype")];
+    // let vehicle_side = [localStorage.getItem("vehicle-side").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+    // localStorage.getItem("vehicle-side-filename"), localStorage.getItem("vehicle-side-filetype")];
+    // let vehicle_rear = [localStorage.getItem("vehicle-rear").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+    // localStorage.getItem("vehicle-rear-filename"), localStorage.getItem("vehicle-rear-filetype")];\\\
+
+
+    let fileNameFront = localStorage.getItem("vehicle-front-filename");
+    let fileNameSide = localStorage.getItem("vehicle-side-filename");
+    let fileNameRear = localStorage.getItem("vehicle-rear-filename");
+    let vehicle_front = [localStorage.getItem("vehicle-front").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+    "vehicleFront"+fileNameFront.substring(fileNameFront.lastIndexOf(".")), localStorage.getItem("vehicle-front-filetype")];
+    let vehicle_side = [localStorage.getItem("vehicle-side").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+    "vehicleSide"+fileNameSide.substring(fileNameSide.lastIndexOf(".")), localStorage.getItem("vehicle-side-filetype")];
+    let vehicle_rear = [localStorage.getItem("vehicle-rear").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+    "vehicleRear"+fileNameRear.substring(fileNameRear.lastIndexOf(".")), localStorage.getItem("vehicle-rear-filetype")];
+
+    const storage = getStorage();
+    let blobVehicleFront, blobVehicleSide, blobVehicleRear;
+    blobVehicleFront = base64ToBlob(vehicle_front[0], vehicle_front[2]);  
+    blobVehicleSide = base64ToBlob(vehicle_side[0], vehicle_side[2]);  
+    blobVehicleRear = base64ToBlob(vehicle_rear[0], vehicle_rear[2]);  
+    
+
+
+    
+    // console.log(localStorage.getItem("vehicle-rear-filename"), fileName.substring(fileName.lastIndexOf(".")))
+
+    // console.log(vehicle_front);
+    // console.log(vehicle_side);
+    // console.log(vehicle_rear);
+
+    // console.log(blobVehicleFront);
+    // console.log(blobVehicleSide);
+    // console.log(blobVehicleRear);
+
+    let imageLinks = [];
+    const metadataFront = { contentType: vehicle_front[2], };
+    const metadataSide = { contentType: vehicle_side[2], };
+    const metadataRear = { contentType: vehicle_rear[2], };
+
+    const storageRef1 = ref(storage, `vehicle-information/${userId}/${vehicle_front[1]}`);
+    const storageRef2 = ref(storage, `vehicle-information/${userId}/${vehicle_side[1]}`);
+    const storageRef3 = ref(storage, `vehicle-information/${userId}/${vehicle_rear[1]}`);
+    
+    const uploadTask1 = uploadBytesResumable(storageRef1, blobVehicleFront, metadataFront);
+    const uploadTask2 = uploadBytesResumable(storageRef2, blobVehicleSide, metadataSide);
+    const uploadTask3 = uploadBytesResumable(storageRef3, blobVehicleRear, metadataRear);
+
+    uploadTask1.on('state_changed', (snapshot) => {
+            const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            console.log("Uploading vehicle front.");
+            console.log('Upload is ' + progress + '% done');    //progress of upload
+        }, 
+        (error) => {
+            // Handle unsuccessful uploads
+            console.log(error);
+        }, 
+        () => {
+            getDownloadURL(uploadTask1.snapshot.ref).then((downloadURL) => {
+                console.log('File available at', downloadURL);
+                console.log(typeof(downloadURL))
+                imageLinks.push(downloadURL);
+            });
+        } //end of getDownloadURL
+    ); //end of on method
+
+    uploadTask2.on('state_changed', (snapshot) => {
+            const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            console.log("Uploading vehicle side.");
+            console.log('Upload is ' + progress + '% done');    //progress of upload
+        }, 
+        (error) => {
+            // Handle unsuccessful uploads
+            console.log(error);
+        }, 
+        () => {
+            getDownloadURL(uploadTask2.snapshot.ref).then((downloadURL) => {
+                console.log('File available at', downloadURL);
+                console.log(typeof(downloadURL))
+                imageLinks.push(downloadURL);
+            });
+        } //end of getDownloadURL
+    ); //end of on method
+
+    uploadTask3.on('state_changed', (snapshot) => {
+            const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            console.log("Uploading vehicle rear.");
+            console.log('Upload is ' + progress + '% done');    //progress of upload 
+        }, 
+        (error) => {
+            // Handle unsuccessful uploads
+            console.log(error);
+        }, 
+        () => {
+            getDownloadURL(uploadTask3.snapshot.ref).then((downloadURL) => {
+                console.log('File available at', downloadURL);
+                console.log(typeof(downloadURL))
+                imageLinks.push(downloadURL);
+            });
+        } //end of getDownloadURL
+    ); //end of on method
+
+
+    //vehicle_front[1]
+    //vehicle_side[1]
+    //vehicle_rear[1]
+
+    return imageLinks;
+}
+
+
+// Convert base64 (generated by FileReader) into Blob (which is supported by Firebase Storage)
+function base64ToBlob(base64, mime) 
+{
+    mime = mime || '';
+    var sliceSize = 1024;
+    var byteChars = window.atob(base64);
+    var byteArrays = [];
+
+    for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+        var slice = byteChars.slice(offset, offset + sliceSize);
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+        
+        var byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+    }
+
+    return new Blob(byteArrays, {type: mime});
+}
+
 
 /********** END OF REGISTER THE USER **********/
 /********** END OF REGISTER THE USER **********/
@@ -215,43 +390,3 @@ function sendVerification() {
         alert("User verification was sent.")
     });
 }
-// let registerVerifyEmail = document.getElementById("reg-goto-final-verifyemail");
-// if (registerVerifyEmail !== null && registerVerifyEmail !== undefined) {
-
-// }
-
-
-// const docData = {
-//     stringExample: "Hello world!",
-//     booleanExample: true,
-//     numberExample: 3.14159265,
-//     dateExample: Timestamp.fromDate(new Date("December 10, 1815")),
-//     arrayExample: [5, true, "hello"],
-//     nullExample: null,
-//     objectExample: {
-//         a: 5,
-//         b: {
-//             nested: "foo"
-//         }
-//     }
-// };
-// await setDoc(doc(db, "data", "one"), docData);
-
-// Get the User UID using onAuthStateChanged function
-// https://stackoverflow.com/questions/62974697/how-to-retrieve-user-uid-after-they-have-been-created-firebase-js
-// firebase.auth().onAuthStateChanged(function(user) {
-//     if (user) {
-//       // User is signed in.
-//       var displayName = user.displayName;
-//       var email = user.email;
-//       var emailVerified = user.emailVerified;
-//       var photoURL = user.photoURL;
-//       var isAnonymous = user.isAnonymous;
-//       var uid = user.uid;
-//       var providerData = user.providerData;
-//       // ...
-//     } else {
-//       // User is signed out.
-//       // ...
-//     }
-//   });
