@@ -110,6 +110,8 @@ function checkCurrentLoggedUser() {
         "emailVerified: " + emailVerified);
     }
 
+
+    // Is user verified
     if (user !== null) {
         if(user.emailVerified) {
             alert("Email is verified.\n Go to login page.");
@@ -442,3 +444,59 @@ function sendVerification() {
         alert("User verification was sent.")
     });
 }
+
+
+
+/*********** START OF USER ACCOUNT ************/
+/*********** START OF USER ACCOUNT ************/
+/*********** START OF USER ACCOUNT ************/
+
+let userAccountInformation = document.getElementById("user-account-information");
+if (registerButtonFinal !== null && registerButtonFinal !== undefined) { 
+    const colRef = collection(db, 'account-information');
+    const colRef2 = collection(db, 'vehicle-information');
+    
+    // get collection data
+    getDocs(colRef) //JS Promises
+        .then((snapshot) => {
+            // console.log(snapshot.docs); //docs, represent the documents
+            let accountInformation = [];
+            snapshot.docs.forEach((doc) => {
+                accountInformation.push({ ...doc.data(), id: doc.id }); //... -> Spread, get all the data then the id
+            });
+            console.log(accountInformation); //print the book array
+
+            console.log("accountInformation: ", accountInformation);
+            // let output = "";
+            // accountInformation.forEach((info) => {
+            //     output += `${info.id}, ${info.authors}, ${info.title}\n`; 
+            // });
+            // document.getElementById("output").innerText = output;
+    }).catch(err => {
+        console.log("Error: ", err);
+    }); //looks at the collection
+
+    // get collection data
+    getDocs(colRef2) //JS Promises
+        .then((snapshot) => {
+            // console.log(snapshot.docs); //docs, represent the documents
+            let vehicleInformation = [];
+            snapshot.docs.forEach((doc) => {
+                vehicleInformation.push({ ...doc.data(), id: doc.id }); //... -> Spread, get all the data then the id
+            });
+            console.log(vehicleInformation); //print the book array
+
+            console.log("vehicleInformation: ", vehicleInformation);
+            // let output = "";
+            // vehicleInformation.forEach((info) => {
+            //     output += `${info.id}, ${info.authors}, ${info.title}\n`; 
+            // });
+            // document.getElementById("output").innerText = output;
+    }).catch(err => {
+        console.log("Error: ", err);
+    }); //looks at the collection
+}
+
+/*********** END OF USER ACCOUNT ************/
+/*********** END OF USER ACCOUNT ************/
+/*********** END OF USER ACCOUNT ************/
