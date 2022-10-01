@@ -1,23 +1,53 @@
-function loadAcc() {
-
-    // let xhttp = new XMLHttpRequest();
-    // xhttp.onreadystatechange = function() {
-    //   if(this.readyState == 4 && this.status == 200) {
-    //     document.getElementById('content').innerHTML = this.responseText;
-    //     let buttonS = document.querySelector('.sample');
-    //     buttonS.addEventListener('click', () => {
-    //       console.log("hi");
-    //     })
-    //   }
-    // };   
-  
-    // xhttp.open("GET", "account.html",true);
-    // xhttp.send();
-
-    window.location = "user-account.html";
-
-  }
+import * as fire from "../src/index";
    
+let colRefAccount = fire.myCollection(fire.db, "account-information");
+let colRefVehicle = fire.myCollection(fire.db, "vehicle-information");
 
-  
- 
+// console.log("user.js is called.");
+// console.log(fire.auth);
+
+
+// function getAccountInformation(element, collectionReference) {
+function getAccountInformation(collectionReference) {
+    // get collection data
+    fire.myGetDocs(collectionReference) //JS Promises
+        .then((snapshot) => {
+            // console.log(snapshot.docs); //docs, represent the documents
+            let accountInformation = [];
+            snapshot.docs.forEach((doc) => {
+                accountInformation.push({ ...doc.data(), id: doc.id }); //... -> Spread, get all the data then the id
+            });
+            console.log(accountInformation); //print the book array
+            console.log("accountInformation: ", accountInformation);
+    }).catch(err => {
+        console.log("Error: ", err);
+    }); //looks at the collection
+}  
+
+// function getVehicleInformation(element, collectionReference) {
+function getVehicleInformation(collectionReference) {
+      // get collection data
+      fire.myGetDocs(collectionReference) //JS Promises
+          .then((snapshot) => {
+              // console.log(snapshot.docs); //docs, represent the documents
+              let vehicleInformation = [];
+              snapshot.docs.forEach((doc) => {
+                  vehicleInformation.push({ ...doc.data(), id: doc.id }); //... -> Spread, get all the data then the id
+              });
+              console.log(vehicleInformation); //print the book array
+              console.log("vehicleInformation: ", vehicleInformation);
+      }).catch(err => {
+          console.log("Error: ", err);
+      }); //looks at the collection
+}
+
+
+fire.getSignInWithEmailAndPassword(fire.auth, "centteedow@gmail.com", "J123456a")
+.then((cred) => {
+    console.log("User logged in:", cred.user);
+    getAccountInformation(colRefAccount);
+    getVehicleInformation(colRefVehicle);
+
+}).catch((err) => {
+    console.log("Sign in error: ", err);
+});

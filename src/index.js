@@ -32,7 +32,7 @@ import {
 import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL } 
 from "firebase/storage";
 
-console.log("bundle.js/index.js is called.");
+console.log("index.js is called.");
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBFzmDkFR_ZIi5aSc1ATfXykOcowRTx8oA",
@@ -50,11 +50,25 @@ const firebaseConfig = {
 initializeApp(firebaseConfig)
 
 // init service, Firestore is more concerned in Collections than JSON.
-const db = getFirestore(); //anything we do in our DB, we use this
-const auth = getAuth(); //utilize authentication service, (login, signup, signin)
+export const db = getFirestore(); //anything we do in our DB, we use this
+export const auth = getAuth(); //utilize authentication service, (login, signup, signin)
 // const colRef1 = collection(db, 'account-information');
 // const colRef2 = collection(db, 'vehicle-information');
 
+//exports
+
+export const myGetFirestore = getFirestore;
+export const myCollection = collection;
+export const myOnSnapshot = onSnapshot;
+export const myGetDocs = getDocs;
+export const myAddDoc = addDoc;
+export const myDeleteDoc = deleteDoc;
+export const myDoc = doc;
+
+
+export const getCreateUserWithEmailAndPassword = createUserWithEmailAndPassword;
+export const getSignOut = signOut;
+export const getSignInWithEmailAndPassword = signInWithEmailAndPassword;
 // Authentication check.
 console.log(auth);
 /************** == LOGIN PAGE == ***************/
@@ -451,51 +465,7 @@ function sendVerification() {
 /*********** START OF USER ACCOUNT ************/
 /*********** START OF USER ACCOUNT ************/
 
-let userAccountInformation = document.getElementById("user-account-information");
-if (registerButtonFinal !== null && registerButtonFinal !== undefined) { 
-    const colRef = collection(db, 'account-information');
-    const colRef2 = collection(db, 'vehicle-information');
-    
-    // get collection data
-    getDocs(colRef) //JS Promises
-        .then((snapshot) => {
-            // console.log(snapshot.docs); //docs, represent the documents
-            let accountInformation = [];
-            snapshot.docs.forEach((doc) => {
-                accountInformation.push({ ...doc.data(), id: doc.id }); //... -> Spread, get all the data then the id
-            });
-            console.log(accountInformation); //print the book array
 
-            console.log("accountInformation: ", accountInformation);
-            // let output = "";
-            // accountInformation.forEach((info) => {
-            //     output += `${info.id}, ${info.authors}, ${info.title}\n`; 
-            // });
-            // document.getElementById("output").innerText = output;
-    }).catch(err => {
-        console.log("Error: ", err);
-    }); //looks at the collection
-
-    // get collection data
-    getDocs(colRef2) //JS Promises
-        .then((snapshot) => {
-            // console.log(snapshot.docs); //docs, represent the documents
-            let vehicleInformation = [];
-            snapshot.docs.forEach((doc) => {
-                vehicleInformation.push({ ...doc.data(), id: doc.id }); //... -> Spread, get all the data then the id
-            });
-            console.log(vehicleInformation); //print the book array
-
-            console.log("vehicleInformation: ", vehicleInformation);
-            // let output = "";
-            // vehicleInformation.forEach((info) => {
-            //     output += `${info.id}, ${info.authors}, ${info.title}\n`; 
-            // });
-            // document.getElementById("output").innerText = output;
-    }).catch(err => {
-        console.log("Error: ", err);
-    }); //looks at the collection
-}
 
 /*********** END OF USER ACCOUNT ************/
 /*********** END OF USER ACCOUNT ************/

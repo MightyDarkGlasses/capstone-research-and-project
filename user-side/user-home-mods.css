@@ -191,11 +191,28 @@ hr {
     justify-content: space-;
 }
 
+/* Buttons on top right, (Settings, Change Theme, etc.) */
 .utils {
     display: flex;
     justify-content: space-between;
     /* width: 40%; */
     gap: .5em;
+}
+.util-box {
+    --icon-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1B192E;
+    border-radius: 10px;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    padding: 1em;
+
+    transition: .25s ease;
+}
+.util-box:hover {
+    background-color: #1c1b3e;
 }
 
 
@@ -204,8 +221,8 @@ hr {
     display: flex;
     align-items: center;
     background: #11101D;
-    margin: 10px 0;
-    padding: 20px;
+    margin: .25em 0;
+    padding: 1em;
     border-radius: 20pt;
     gap: 10px;
 }
@@ -224,11 +241,18 @@ hr {
     font-size: 1.25em;
     /* padding-left: 1.5em; */
 }
+.take-me {
+    color: white;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
 
 
 .tips-box .tips-items
 .tip-1::before, .tip-2::before,
-.tip-3::before {
+.tip-3::before, .take-me::before {
     content: '';
     float: left;
 
@@ -250,6 +274,12 @@ hr {
     content: '';
     background: url('https://api.iconify.design/material-symbols/forms-apps-script.svg?color=white') no-repeat 0 0 / contain;
 }
+.take-me::before {
+    content: '';
+    background: url('https://api.iconify.design/ion/enter.svg?color=white') no-repeat center center / contain;
+}
+
+
 
 .util-icon-notif, 
 .util-icon-notif {

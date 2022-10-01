@@ -220,7 +220,7 @@ a {
     justify-content: space-between;
     width: 60%;
 } */
-.util-box {
+/* .util-box {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -228,7 +228,7 @@ a {
     border-radius: 10px;
     width: 48px;
     height: 48px;
-}
+} */
 .util-divider {
     display: flex;
     justify-content: center;
@@ -461,12 +461,12 @@ canvas {
     font-size: 20px;
     width: 50%;
 }
-.take-me {
+/* .take-me {
     color: white;
     width: 100%;
     display: flex;
     justify-content: flex-end;
-}
+} */
 
 .qrbox {
     background-color: #11101D;
