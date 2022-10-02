@@ -4,7 +4,8 @@ module.exports = {              // export the module
   mode: 'development',          // mode, kung ano man
   entry: [
     './src/index.js',
-    './user-side/user.js'],      // path, where we should look
+    './user-side/home1.js',
+    './user-side/myaccount2.js'],      // path, where we should look
   output: {
     
     //__dirname -> current directory, dist -> relative path (dist)

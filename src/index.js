@@ -52,6 +52,7 @@ initializeApp(firebaseConfig)
 // init service, Firestore is more concerned in Collections than JSON.
 export const db = getFirestore(); //anything we do in our DB, we use this
 export const auth = getAuth(); //utilize authentication service, (login, signup, signin)
+export const storage = getStorage(); //get the firebase storage
 // const colRef1 = collection(db, 'account-information');
 // const colRef2 = collection(db, 'vehicle-information');
 
@@ -69,8 +70,17 @@ export const myDoc = doc;
 export const getCreateUserWithEmailAndPassword = createUserWithEmailAndPassword;
 export const getSignOut = signOut;
 export const getSignInWithEmailAndPassword = signInWithEmailAndPassword;
+
+
+export const myGetStorage = getStorage;
+export const myRef = ref;
+export const myUploadBytes = uploadBytes;
+export const myUploadBytesResumable = uploadBytesResumable;
+export const myGetDownloadURL = getDownloadURL;
 // Authentication check.
-console.log(auth);
+// console.log(auth);
+
+
 /************** == LOGIN PAGE == ***************/
 /************** == LOGIN PAGE == ***************/
 /************** == LOGIN PAGE == ***************/
