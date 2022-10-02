@@ -6,9 +6,18 @@
 
     --sidebar-width: 250px;
     --right-container-width: calc(98vw - var(--sidebar-width));
+
+    --primary-color: #11101D;
+    --secondary-color: #272442;
+    --secondary-color-opaque: rgba(39, 36, 66, 0.35);
+    --tertiary-color: #191925;
+
+    --bradius: 100vmax;
 }
 
-
+table tbody{
+    font-family: 'Lexend Deca', sans-serif;
+}
 
 /* Sidebar icons */
 .sidebar-icon-1 {
@@ -65,17 +74,50 @@ body {
     background-image: cover;
     overflow-y: hidden; */
 
-        height: 100vh;
-        background: url("abstract_background_securityofficer.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        overflow-y: hidden; 
+    height: 100vh;
+    background: url("abstract_background_securityofficer.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow-y: hidden; 
 }
 
-.personal-info-table tbody tr td {
+
+/* Tables */
+.personal-info-table {
+    width: 90%;
+    color: white;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+
+    border-spacing: 0 .5em;
+    /* border-collapse: collapse; */
+    border-collapse: separate;
+}
+.personal-info-table tr {
+    display: table-row;
+    transition: .2s ease;
+}
+.personal-info-table tr:hover {
+    background-color: #1c1b3e;
+}
+.personal-info-table td  {
+    display: table-cell;
+    max-width: 30px;
+    padding: 1em;
+}
+/* .personal-info-table tbody tr td {
     padding: .25em 0 !important;
     align-items: center;
+} */
+.personal-edit-btn {
+    text-align: center;
+    cursor: pointer;
+    width: 10%;
 }
+
+
+
+
 
 hr {
     width: 60%;
@@ -122,6 +164,7 @@ hr {
     height: 98vh;
     background-color: #1b192e;
     padding: 0 1em;
+    overflow: scroll;
     
     /* Strect - the size of sidebar */
     /* width: calc(98vw - 250px); */
@@ -314,3 +357,230 @@ hr {
   float: left;
 }
 */
+
+
+
+/* QR Code class */
+.tips-box {
+    display: none;
+}
+
+/* QR Code with Vehicle Information */
+.qr-code {
+    width: 100%;
+    height: 300px; 
+    background-color: #11101D;
+    border-radius: 1em;
+    display: flex;
+
+    color: white;
+}
+.qr-code button {
+    color: white;
+    cursor: pointer;
+    background-color: var(--secondary-color-opaque);
+    border-radius: var(--bradius);
+    padding: 1em;
+    font-size: .75em;
+    text-transform: uppercase;
+    font-family: 'Lexend Deca', serif;
+}
+.qr-code .qr-code-information {
+    margin: 1em;
+}
+
+/* Quick Actions like Recent Activity, Linkages, Registration Status, and Update Information */
+/* .qr-code .qr-code-common-actions .save{
+    background: url('https://api.iconify.design/bxs/save.svg?color=white') no-repeat center center / contain;
+}
+.qr-code .qr-code-common-actions .viewQR{
+    background: url('https://api.iconify.design/entypo/eye.svg?color=white') no-repeat center center / contain;
+} */
+.qr-code .qr-code-quick-actions > a:hover,
+.qr-code .qr-code-common-actions > a:hover {
+    background-color: #272442;
+    
+}
+.viewQR, .save {
+    cursor: pointer;
+    padding: 
+    1em;
+    border-radius: 100vmax;
+    color: white;
+    text-transform: uppercase;
+    font-size: .75em;
+}
+.qr-code .qr-code-quick-actions > a,
+.qr-code .qr-code-common-actions > a {
+    background-color: #18162a;
+    /* pointer-events: none; */
+    transition: .25s ease;
+}
+.qr-code .qr-code-quick-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1em;
+    margin: 01em;
+}
+.qr-code .qr-code-quick-actions > a {
+    display: flex;
+    align-items: center;
+    /* gap: 1em; */
+}
+.qr-code .qr-code-common-actions > a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+}
+
+/* Save and View QR Code */
+.qr-code .qr-code-common-actions {
+    margin: 0 1em;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    justify-content: end;
+}
+.qr-code .qr-code-common-actions > a{
+    width: fit-content;
+}
+.qr-code .qr-code-image {
+    height: 90%;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1em;
+    background-color: var(--secondary-color-opaque);
+    border-radius: 1em;
+}
+.qr-code .qr-code-image img {
+    --image-dimension: 250px;
+    width: var(--image-dimension);
+    border: 1em white solid;
+    border-radius: 1em;
+    /* height: var(--image-dimension); */
+}
+
+
+/* QR Code - Information */
+.qr-code-vehicle-info {
+    width: 65%;
+    font-family: 'Lexend Deca', sans-serif;
+    margin: 1em 0;
+}
+/* .qr-code-vehicle-info::before {
+    
+    --icon-dimension: 50px;
+
+    content: "";
+    background: url('https://api.iconify.design/fluent/vehicle-car-28-filled.svg?color=white') no-repeat center center / contain;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 20px 0 35px;
+    height: 70px;
+    width: var(--icon-dimension);
+} */
+
+/* .qr-code-vehicle-info::after {
+    --icon-dimension: 50px;
+
+    content: "";
+    background: url('https://api.iconify.design/fluent/vehicle-car-28-filled.svg?color=white') no-repeat center center / contain;
+    float: right;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    top: 100px;
+    height: 90px;
+    width: var(--icon-dimension);
+} */
+/* All of the component (divs) Vehicle dropdown, descriptions, quick actions, save and qr view */
+
+.qr-code-vehicle-info {
+    display: flex;
+    flex-direction: column;
+}
+.qr-code-vehicle-info > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: auto 0;
+}
+.qr-code-vehicle-info .qr-code-dropdown .qr-code-dropdown-clickable {
+    background-color: var(--secondary-color-opaque);
+    border-radius: 1.5em;
+    padding: .5em;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    /* margin: .75em; */
+}
+.qr-code-vehicle-info .qr-code-dropdown {
+    position: relative;
+}
+.popup-dropdown {
+    background-color: #18162a !important;
+    display: block;
+    display: none;
+    position: absolute;
+    top: 80px;
+    /* left: 50px; */
+    max-width: 100%;
+    border-radius: 1em;
+    z-index: 100;
+    
+    /* top: 50px; */
+    /* margin: 1.5em 0; */
+}
+.popup-dropdown ul {
+    margin: 0 2em;
+}
+.popup-dropdown ul li {
+    cursor: pointer;
+    margin: 1em 0;
+}
+.popup-dropdown ul li:hover {
+    background-color: var(--tertiary-color);
+}
+.qr-code-vehicle-info .qr-code-dropdown img {
+    width: 50px;
+    margin: 0 1em;
+}
+.qr-code-vehicle-info .qr-code-dropdown div {
+    width: 100%;
+}
+.qr-code-vehicle-info .qr-code-dropdown p:last-child {
+    /* Target the Vehicle Index (Vehicle #1, #2, etc...) */
+    font-size: 1em;
+}
+.qr-code-vehicle-info .qr-code-dropdown p:first-child {
+    /* Target the Vehicle Index (Vehicle #1, #2, etc...) */
+    font-weight: 700;
+    font-size: 1.5em;
+}
+
+/* 
+<div id="ex1" class="modal">
+    <img class="modal-qrcode" src="" alt="">
+</div>
+     */
+
+#ex1 {
+    width: 500px;
+    height: 500px;
+}
+
+.modal > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#ex1 img {
+    width: 470px;
+}
