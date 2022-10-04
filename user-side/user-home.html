@@ -162,7 +162,7 @@
                 </div>
                 <div class="qr-code">
                     <div class="qr-code-image">
-                        <img src="bulsu-logo.png" alt="testing">
+                        <img src="bulsu-logo.png" alt="testing" download="download">
                     </div>
                     <div class="qr-code-vehicle-info">
                         <div class="qr-code-dropdown">
@@ -212,14 +212,14 @@
                             </button>
                         </div>
                         <div class="qr-code-common-actions">
-                            <button class="save">
+                            <!-- <button class="save">
                                 <img src="https://api.iconify.design/bxs/save.svg?color=white" alt="">
                                 Save
-                            </button>
-                            <!-- <a class="save saveQR" download href="">
+                            </button> -->
+                            <a class="save saveQR" download="download" >
                                 <img src="https://api.iconify.design/entypo/eye.svg?color=white" alt="">
                                 Save
-                            </a> -->
+                            </a>
                             <a class="viewQR" href="#ex1" rel="modal:open">
                                 <img src="https://api.iconify.design/entypo/eye.svg?color=white" alt="">
                                 View QR Code
@@ -256,7 +256,7 @@
     let dropdown = document.querySelector('.qr-code-dropdown-clickable');
     let popup = document.querySelector('.popup-dropdown');
     let buttons = document.querySelectorAll('.qr-code .qr-code-common-actions > button');
-
+    let getQRCodeImage = document.querySelector("qr-code-image img");
 
     let bool = false;
     dropdown.addEventListener('click', () => {
@@ -277,10 +277,36 @@
         }
     });
 
+
+    // Using fetch
+
+    let saveImage = document.querySelector(".save");
+    saveImage.addEventListener('click', () => {
+        
+    });
+    async function downloadImage(imageSrc) {
+        const image = await fetch(imageSrc)
+        const imageBlog = await image.blob()
+        const imageURL = URL.createObjectURL(imageBlog)
+
+        const link = document.createElement('a')
+        link.href = imageURL
+        link.download = 'qrcode.png'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+    }
+
     // let saveImage = document.querySelector(".save");
     // saveImage.addEventListener('click', () => {
-    //     var blob = new Blob("https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FcjOBEg9vvUYw4vQLycSs89KUbCb2%2F1%2FqrCode.PNG%7D?alt=media&token=3625ffa4-7e1d-4fc6-bf50-ec7df36f46b3", {type: "image/png"});
-    //     saveAs(blob, "hello world.PNG");
+        
+    //     const reader = new FileReader();
+    //     reader.addEventListener("load", function() {
+    //         console.log(reader.result); //print the Blob
+    //     });
+    //     reader.readAsDataURL();
+    //     // var blob = new Blob()
+    //     // saveAs(blob, "hello world.PNG");
     // });
     // dropdown.addEventListener("mouseout", () => {
     //     popup.style.display = "none";

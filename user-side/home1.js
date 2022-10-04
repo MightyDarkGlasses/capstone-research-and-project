@@ -39,7 +39,8 @@ if(windowLocation.indexOf("user-home") > -1) {
                 localStorage.setItem("qrCodePlaceholder", vehicleInformation[0].registered_vehicle.vehicles.qrCode[0]);
                 myQRImage.setAttribute("src", localStorage.getItem("qrCodePlaceholder"));
                 myQRImage2.setAttribute("src", localStorage.getItem("qrCodePlaceholder"));
-                // saveQR.setAttribute("src", localStorage.getItem("qrCodePlaceholder"));
+                // saveQR.setAttribute("href", localStorage.getItem("qrCodePlaceholder"));
+                saveQR.setAttribute("onclick", `downloadImage("${localStorage.getItem("qrCodePlaceholder")}")`);
 
 
                 // qrCodeBlob();
@@ -58,7 +59,8 @@ if(windowLocation.indexOf("user-home") > -1) {
     else {
         myQRImage.setAttribute("src", localStorage.getItem("qrCodePlaceholder"));
         myQRImage2.setAttribute("src", localStorage.getItem("qrCodePlaceholder"));
-        // saveQR.setAttribute("src", localStorage.getItem("qrCodePlaceholder"));
+        // saveQR.setAttribute("href", localStorage.getItem("qrCodePlaceholder"));
+        saveQR.setAttribute("onclick", `downloadImage("${localStorage.getItem("qrCodePlaceholder")}")`);
         // qrCodeBlob();
     }
     // setQRCodes();
@@ -66,6 +68,8 @@ if(windowLocation.indexOf("user-home") > -1) {
 
 
     let saveQRImage = document.querySelector(".save");
+    const httpsReference = fire.myRef(fire.storage, localStorage.getItem("qrCodePlaceholder"));  
+    console.log("httpsReference:", httpsReference)
     // fire.myGetDownloadURL(fire.myRef(fire.storage, 'vehicle-information/cjOBEg9vvUYw4vQLycSs89KUbCb2/1/qrCode.PNG}'))
     // .then((url) => {
     //     // `url` is the download URL for 'images/stars.jpg'
