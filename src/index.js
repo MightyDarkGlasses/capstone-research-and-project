@@ -138,7 +138,12 @@ function checkCurrentLoggedUser() {
     // Is user verified
     if (user !== null) {
         if(user.emailVerified) {
-            alert("Email is verified.\n Go to login page.");
+            // alert("Email is verified.\n Go to login page.");
+
+            //Store the logged user into the local storage for future reference
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            localStorage.setItem('currentUserId', user.uid);
+            window.location = "../user-side/user-home.html"
         }
         else {
             console.log("Email is not yet verified.");

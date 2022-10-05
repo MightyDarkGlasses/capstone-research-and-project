@@ -13,6 +13,18 @@
     --tertiary-color: #191925;
 
     --bradius: 100vmax;
+
+    /* icon size for edit and profile */
+    --icon-size: 40px;
+}
+
+
+/* Disable text selection */
+.disable-select {
+    -webkit-user-select: none;  
+    -moz-user-select: none;    
+    -ms-user-select: none;      
+    user-select: none;
 }
 
 table tbody{
@@ -79,6 +91,20 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     overflow-y: hidden; 
+}
+
+/* Edit button */
+.personal-box .personal-info-table .personal-edit-btn {
+    background: url('https://api.iconify.design/bxs/message-square-edit.svg?color=white') no-repeat center center / contain;
+    background-size: var(--icon-size);
+}
+.personal-box .personal-info-table .personal-profile {
+    background: url('https://api.iconify.design/healthicons/ui-user-profile.svg?color=white') no-repeat 35% center / contain;
+    background-size: var(--icon-size);
+}
+.personal-box :where(.personal-edit-btn, .personal-profile):hover {
+    /* filter: brightness(0.75); */
+    filter: brightness(75%);
 }
 
 
@@ -239,7 +265,7 @@ hr {
     display: flex;
     justify-content: space-between;
     /* width: 40%; */
-    gap: .5em;
+    /* gap: .5em; */
 }
 .util-box {
     --icon-size: 20px;
@@ -323,9 +349,8 @@ hr {
 }
 
 
-
-.util-icon-notif, 
-.util-icon-notif {
+/* Icons in top right */
+.util-icon-notif{
     background: url('https://api.iconify.design/carbon/notification-filled.svg?color=white') no-repeat center center / contain;
 }
 .util-icon-theme {
@@ -337,6 +362,32 @@ hr {
 .util-icon-settings {
     background: url('https://api.iconify.design/ci/settings-filled.svg?color=white') no-repeat center center / contain;
 }
+.util-icon-logout {
+    background: url('https://api.iconify.design/majesticons/logout-half-circle.svg?color=white') no-repeat center center / contain;
+}
+/* .util-icon-notif, .util-icon-theme, .util-icon-fullscr,
+.util-icon-settings, .util-icon-logout {
+    cursor: pointer;
+} */
+.utils :where(.util-icon-notif, .util-icon-theme, .util-icon-fullscr,
+.util-icon-settings, .util-icon-logout) {
+    --icon-size: 45px;
+    cursor: pointer;
+    height: var(--icon-size);
+    width: var(--icon-size);
+    /* height: 50px; */
+    background-size: 30px;
+}
+
+/* 
+
+Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and pseudo-elements]
+:is() -> highest specificity 
+:where() -> zero specificity 
+*/
+
+
+
 /* 
 .registration-information-vehicle > div:nth-child(3)::before {
   content: "";
@@ -570,7 +621,7 @@ hr {
 </div>
      */
 
-#ex1 {
+#qr-code-modal {
     width: 500px;
     height: 500px;
 }
@@ -581,6 +632,6 @@ hr {
     align-items: center;
     justify-content: center;
 }
-#ex1 img {
+#qr-code-modal img {
     width: 470px;
 }

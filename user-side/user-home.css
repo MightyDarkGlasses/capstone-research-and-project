@@ -412,7 +412,7 @@ canvas {
     border: 3px dashed rgba(255, 255, 255, 0.25);
     background-color: #191925;
     border-radius: 20px;
-
+    font-family: 'Lexend Deca', sans-serif;
 }
 .welcome-title-box {
     padding: 10px;
@@ -424,6 +424,8 @@ canvas {
 .welcome-title-holder { 
     display: flex;
     align-items: center;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 .welcome-icon {
     margin-right: 10px;

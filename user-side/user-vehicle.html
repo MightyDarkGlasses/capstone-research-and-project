@@ -4,14 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="admin.js" defer></script> -->
+    <script
+        src="https://code.jquery.com/jquery-3.6.1.js"
+        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+        crossorigin="anonymous" defer>
+    </script>
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bayon&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="user-home.css">
     <link rel="stylesheet" href="user-home-mods.css">
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-
-    <!-- JQuery Modal Styles -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Bayon&display=swap" rel="stylesheet">
+    
     <title>Welcome To BulSU VMS</title>
 </head>
 <!-- 
@@ -151,7 +163,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="qr-code disable-select">
+                <div class="qr-code">
                     <div class="qr-code-image">
                         <img src="bulsu-logo.png" alt="testing" download="download">
                     </div>
@@ -159,15 +171,15 @@
                         <div class="qr-code-dropdown">
                             <div class="qr-code-dropdown-clickable">
                                 <img src="https://api.iconify.design/fluent/vehicle-car-28-filled.svg?color=white" alt="vehicle icon">
-                                <div id="vehicle-placeholder">
-                                    <!-- <p>Vehicle #1</p>
-                                    <p>Toyota Raize 2022, Private</p> -->
+                                <div>
+                                    <p>Vehicle #1</p>
+                                    <p>Toyota Raize 2022, Private</p>
                                 </div>
                                 <img src="https://api.iconify.design/gridicons/dropdown.svg?color=white" alt="dropdown icon">
                             </div>
                             <div class="popup-dropdown">
                                 <ul id="vehicle-list">
-                                    <!-- Vehicle List here... -->
+                                    
                                 </ul>
                             </div>
                         </div>
@@ -203,7 +215,7 @@
                                 <img src="https://api.iconify.design/entypo/eye.svg?color=white" alt="">
                                 Save
                             </a>
-                            <a class="viewQR" id="open-qr-code-modal">
+                            <a class="viewQR" href="#ex1" rel="modal:open">
                                 <img src="https://api.iconify.design/entypo/eye.svg?color=white" alt="">
                                 View QR Code
                             </a>
@@ -221,26 +233,46 @@
     </div>
 
     <!-- Modals -->
-    <div id="qr-code-modal" class="modal">
+    <div id="ex1" class="modal">
         <div>
             <img class="modal-qrcode" src="" alt="">
         </div>
-            
     </div>
       
       <!-- Link to open the modal -->
     <!-- <p><a href="#ex1" rel="modal:open">Open Modal</a></p> -->
 </body>
 
-<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous" defer> </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js" defer></script>
+<script src="../dist/bundle.js"></script>
+<script src="FileSaver.js"></script>
+<script>
+    
+    
 
 
-<script src="../dist/bundle.js" defer></script>
-<script src="test.js" defer></script>
-<!-- jQuery Modal -->
-<script defer>
+    let dropdown = document.querySelector('.qr-code-dropdown-clickable');
+    let popup = document.querySelector('.popup-dropdown');
+    let buttons = document.querySelectorAll('.qr-code .qr-code-common-actions > button');
+    let getQRCodeImage = document.querySelector("qr-code-image img");
 
+    let bool = false;
+    dropdown.addEventListener('click', () => {
+        bool = !bool;
+        if(bool) {
+            popup.style.display = "block";
+    
+            buttons.forEach((btn) => {
+                btn.style.pointerEvents = "none";
+            });
+        }
+        else {
+            popup.style.display = "none";
+    
+            buttons.forEach((btn) => {
+                btn.style.pointerEvents = "auto";
+            });
+        }
+    });
 
 
     // Using fetch
@@ -259,7 +291,5 @@
         link.click();
         document.body.removeChild(link);
     }
-
-    
 </script>
 </html>
