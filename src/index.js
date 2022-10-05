@@ -148,7 +148,7 @@ function checkCurrentLoggedUser() {
         else {
             console.log("Email is not yet verified.");
             alert("Please verify your e-mail first.")
-            // sendVerification();
+            sendVerification();
         }
     }
     return;

@@ -436,6 +436,13 @@ Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and p
     text-transform: uppercase;
     font-family: 'Lexend Deca', serif;
 }
+.qr-code-image, .qr-code-nocode {
+    background-image: url('../images/shape_blank.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 70% center;
+    /* backdrop-filter: brightness(30%); */
+}
 .qr-code .qr-code-information {
     margin: 1em;
 }
@@ -497,7 +504,8 @@ Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and p
 .qr-code .qr-code-common-actions > a{
     width: fit-content;
 }
-.qr-code .qr-code-image {
+.qr-code .qr-code-image,
+.qr-code .qr-code-image-nocode {
     height: 90%;
     width: 30%;
     display: flex;
@@ -507,13 +515,77 @@ Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and p
     background-color: var(--secondary-color-opaque);
     border-radius: 1em;
 }
-.qr-code .qr-code-image img {
+
+
+/* For no vehicle information layout */
+
+.qr-code {
+    display: none;
+}
+.qr-code .qr-code-no-info {
+    margin: 1em;
+}
+.qr-code .qr-code-image-nocode img {
+    width: 250px;
+}
+
+.qr-code :where(.qr-code-no-info, .qr-code-nocode-steps) {
+    width: 65%;
+}
+.qr-code-nocode-steps {
+    margin-left: 1em;
+}
+
+.qr-code .qr-code-no-info .qr-code-nocode-title {
+    background-color: var(--secondary-color-opaque);
+    border-radius: 1.5em;
+    padding: .5em;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+
+    font-family: 'Lexend Deca', sans-serif;
+    padding: 1em 2em;
+    margin-bottom: 1em;
+}
+.qr-code-nocode-steps {
+    width: 98%;
+    font-family: 'Lexend Deca', sans-serif;
+}
+.qr-code .qr-code-no-info .qr-code-nocode-title p {
+    font-weight: bold;
+}
+
+.qr-code-nocode-steps p{
+    text-transform: uppercase;
+}
+.qr-code-nocode-steps-ulist {
+    margin: 1em 0;
+}
+.qr-code-nocode-steps-ulist > li {
+    margin: .5em 0;
+}
+
+.qr-code .qr-code-no-info .qr-code-nocode-title::before {
+    content: '';
+    background: url('https://api.iconify.design/carbon/vehicle-insights.svg?color=white') no-repeat center center / contain;
+}
+/* qr-code-nocode */
+
+.qr-code .qr-code-image img,
+.qr-code .qr-code-nocode img {
     --image-dimension: 250px;
     width: var(--image-dimension);
     border: 1em white solid;
     border-radius: 1em;
-    /* height: var(--image-dimension); */
 }
+
+/* .qr-code .qr-code-image img {
+    --image-dimension: 250px;
+    width: var(--image-dimension);
+    border: 1em white solid;
+    border-radius: 1em;
+} */
 
 
 /* QR Code - Information */

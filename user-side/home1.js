@@ -30,24 +30,34 @@ if(windowLocation.indexOf("user-home") > -1) {
         fire.myOnSnapshot(docReference, (doc) => {
             // console.log("vehicleInformation", doc.data(), doc.id);
             let vehicleInformation = {...doc.data()};
-            // console.log("vehicleInformation:", vehicleInformation);
+            console.log("vehicleInformation:", vehicleInformation);
+            let noQrCode = document.querySelector('.no-qr-code');
+            let yesQRCode = document.querySelector('.yes-qr-code');
 
-            console.log("modelVehicle:", vehicleInformation.registered_vehicle.model[0]);
-            console.log("plateNumber:", vehicleInformation.registered_vehicle.plate[0]);
-            // console.log("vehicleImages:", vehicleInformation.registered_vehicle.vehicles.images[0]); // will be used later
-            console.log("qrCode:", vehicleInformation.registered_vehicle.vehicles.qrCode[0]); //default, vehicle #1 
+            if(vehicleInformation.vehicle_length !== 0) {
+                console.log("modelVehicle:", vehicleInformation.registered_vehicle.model[0]);
+                console.log("plateNumber:", vehicleInformation.registered_vehicle.plate[0]);
+                // console.log("vehicleImages:", vehicleInformation.registered_vehicle.vehicles.images[0]); // will be used later
+                console.log("qrCode:", vehicleInformation.registered_vehicle.vehicles.qrCode[0]); //default, vehicle #1 
+    
+                localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation)); //store vehicle information
+                localStorage.setItem("qrCodePlaceholder", JSON.stringify(vehicleInformation.registered_vehicle.vehicles.qrCode));
+                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]}")`);
+                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]);
+                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]);
+    
+    
+                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
+                console.log('vehicleInformation:', vehi);
+                displayVehicleDropdownList(vehi);
+                addEventsInList();
 
-            localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation)); //store vehicle information
-            localStorage.setItem("qrCodePlaceholder", JSON.stringify(vehicleInformation.registered_vehicle.vehicles.qrCode));
-            saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]}")`);
-            myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]);
-            myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]);
-
-
-            vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-            console.log('vehicleInformation:', vehi);
-            displayVehicleDropdownList(vehi);
-            addEventsInList();
+                yesQRCode.style.display = 'flex';
+            }
+            else {
+                let qrCode = document.querySelectorAll('.qr-code');
+                noQrCode.style.display = 'flex';
+            }
         });
         
     }
@@ -70,6 +80,10 @@ if(windowLocation.indexOf("user-home") > -1) {
         // displayVehicleDropdownList(vehi);
         displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
         addEventsInList();  //re-add the events
+
+        // let noQrCode = document.querySelector('.no-qr-code');
+        let yesQRCode = document.querySelector('.yes-qr-code');
+        yesQRCode.style.display = 'flex';
     }
 
     function displayVehicleDropdownList(vehicle) {
@@ -102,8 +116,6 @@ if(windowLocation.indexOf("user-home") > -1) {
         }
 
         vehicleListUL.innerHTML = listOfVehiclesTags;
-
-        
         return;
     }
 
@@ -137,6 +149,26 @@ if(windowLocation.indexOf("user-home") > -1) {
                 });
             });
         }
+
+
+        dropdown.addEventListener('click', () => {
+            // console.log('clicked.', bool)
+            if(bool) {
+                popup.style.display = "block";
+                
+                buttons.forEach((btn) => {
+                    btn.style.pointerEvents = "none";
+                });
+            }
+            else {
+                popup.style.display = "none";
+        
+                buttons.forEach((btn) => {
+                    btn.style.pointerEvents = "auto";
+                });
+            }
+            bool = !bool;
+        });
     }
     
 
@@ -147,27 +179,6 @@ if(windowLocation.indexOf("user-home") > -1) {
         window.location = '../login.html';
     });
     
-    dropdown.addEventListener('click', () => {
-        // console.log('clicked.', bool)
-        if(bool) {
-            popup.style.display = "block";
-            
-            buttons.forEach((btn) => {
-                btn.style.pointerEvents = "none";
-            });
-        }
-        else {
-            popup.style.display = "none";
-    
-            buttons.forEach((btn) => {
-                btn.style.pointerEvents = "auto";
-            });
-        }
-        bool = !bool;
-    });
 
 
-    function changeCardInformation() {
-
-    }
 }
