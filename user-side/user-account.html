@@ -114,11 +114,171 @@
                     </div>
             </div>
             <div id="content" class="content user-content " >
+
+                <style> 
+                    .personal-box-grid {
+
+                        font-family: 'Lexend Deca', sans-serif;
+                        width: 80%;
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 1rem 0; 
+                        /* min -> (normal size, minimun width) */
+                        /* grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); */
+                        /* grid-template-columns: repeat(2, 1fr); */
+                        /* gap: .25rem; */
+                        /* flex-direction: row;
+                        flex-wrap: wrap; */
+                    }
+                    
+                    .popdown form {
+                        display: flex;
+                        flex-direction: column;
+                        gap: .25em;
+                    }
+                    .popdown form > * {
+                        display: block;
+                        width: 90%;
+                        margin: 0 auto;
+                        font-weight: bold;
+                    }
+                    .popdown form input {
+                        border: none;
+                        outline: 0;
+
+                        font-family: 'Lexend Deca', sans-serif;
+                        margin-bottom: .75em;
+                        background: #F8F8F8;
+                        border-radius: 10px;
+                        padding: .5em 0;
+                        color: black;
+                    }
+                    .popdown form input[type="button"] {
+                        width: max(30%, 200px);
+                        margin-left: 5%;
+                        background: #000000;
+                        box-shadow: 0px 7px 6px 1px rgba(0, 0, 0, 0.25);
+                        border-radius: 1em;
+                        text-transform: uppercase;
+                        
+                        border: .15em white solid;
+                        cursor: pointer;
+                    }
+                    .personal-box-grid > * {
+                        color: white;
+                        padding: 1em 0;
+                    }
+                    
+
+                    /* User Type */
+                    .popdown input[type="radio"] {
+                        display: initial;
+                        width: 50px;
+                        margin: initial;
+                    }
+                    .popdown input[type="submit"], 
+                    .popdown input[type="button"] {
+                        color: white;
+                    }
+                    .form-usertype {
+                        display: flex;
+                    }
+
+
+                    
+                    .popdown {
+                        grid-column: span 2;
+                        margin-bottom: 1em;
+                        display: none;
+                    }
+
+
+                    @media only screen and (max-width: 960px) {
+                        .personal-box-grid {
+                            grid-template-columns: 1fr;
+                            gap: 0;
+                        }
+
+                        .personal-info-profile {
+                            margin-bottom: 1rem;
+                        }
+
+                        .popdown {
+                            grid-column: span 1;
+                        }
+                    }
+                </style>
                 <div class="personal-container">
                     <!-- <button class="sample">sample button</button> -->
                     <div class="personal-title">Personal Information</div>
                     <div class="personal-box">
-                        <table class="personal-info-table">
+                        <div class="personal-box-grid">
+                            <span class="personal-category personal-info-title">Profile Picture</span>
+                            <span class="personal-info-profile"></span>
+                            
+
+                            <span class="personal-info-title">Full Name</span>
+                            <span class="personal-info-name">Juan Dela Cruz</span>
+                            <div class="popdown pop-fullname">
+                                <form action="#" class="form-fullname">
+                                    <label>First Name</label>
+                                    <input type="text" name="" id="">
+                                    <label>Middle Name</label>
+                                    <input type="text" name="" id="">
+                                    <label>Last Name</label>
+                                    <input type="text" name="" id="">
+
+                                    <input type="button" value="Save Changes">
+                                </form>
+                            </div>
+
+                            <span class="personal-info-title">ID/Employee Number</span>
+                            <span class="personal-info">2020123456</span>
+                            <div class="popdown pop-fullname">
+                                <form action="#" class="form-idnumber">
+                                    <label>ID/Employee Number</label>
+                                    <input type="number" name="" id="">
+
+                                    <input type="button" value="Save Changes">
+                                </form>
+                            </div>
+
+                            <span class="personal-info-title">User Type</span>
+                            <span class="personal-info">None</span>
+                            <div class="popdown pop-usertype">
+                                <form action="#" class="form-usertype">
+                                    <div class="">
+                                        <input type="radio" name="user_type" value="Personnel">
+                                        <label>Personnel</label>
+                                    </div>
+                                    <div class="">
+                                        <input type="radio" name="user_type" value="Non-working Personnel">
+                                        <label>Non-working Personnel</label>
+                                    </div>
+
+                                    <input type="button" value="Save Changes">
+                                </form>
+                            </div>
+
+                            <span class="personal-info-title">Phone Number</span>
+                            <span class="personal-info">09123456789</span>
+                            <div class="popdown pop-phonenum">
+                                <form action="#" class="form-phonenum">
+                                    <label>Phone Number</label>
+                                    <input type="tel" name="" id="">
+
+                                    <input type="button" value="Save Changes">
+                                </form>
+                            </div>
+
+                            
+                            <!-- <span class="endpoint" style="text-align: right;">Edit</span> -->
+                        </div>
+
+
+
+                        
+                        <!-- <table class="personal-info-table">
                             <tbody>
                                 <tr>
                                     <td class="personal-category">Profile Picture</td>
@@ -147,13 +307,40 @@
                                 </tr>
                             </tbody>
         
-                        </table>
+                        </table> -->
                     </div>
                 </div>
                 <div class="personal-container">
                     <div class="personal-title">Account Information</div>
                     <div class="personal-box">
-                        <table class="personal-info-table">
+                        <div class="personal-box-grid">
+                            <span class="personal-info-title">E-mail Address</span>
+                            <span class="">mail@example.com</span>
+                            <div class="popdown pop-phonenum">
+                                <form action="#" class="form-phonenum">
+                                    <label>E-mail Address</label>
+                                    <input type="email" name="" id="">
+
+                                    <input type="button" value="Save Changes">
+                                </form>
+                            </div>
+
+                            <span class="personal-info-title">Password</span>
+                            <span class="">********</span>
+                            <div class="popdown pop-phonenum">
+                                <form action="#" class="form-password">
+                                    <label>Current Password</label>
+                                    <input type="password" name="" id="">
+                                    <label>New Password</label>
+                                    <input type="password" name="" id="">
+                                    <label>Confirm New Password</label>
+                                    <input type="password" name="" id="">
+                                    
+                                    <input type="button" value="Save Changes">
+                                </form>
+                            </div>
+                        </div>
+                        <!-- <table class="personal-info-table">
                             <tbody>
                                 <tr>
                                     <td>Email Address</td>
@@ -166,7 +353,7 @@
                                     <td class="personal-edit-btn"></td>
                                 </tr>
                             </tbody>
-                        </table>
+                        </table> -->
                     </div>
                 </div>
             </div>
@@ -175,6 +362,6 @@
 </body>
 
 
-<script src="../dist/bundle.js" defer></script>
+<!-- <script src="../dist/bundle.js" defer></script> -->
 </html>
 

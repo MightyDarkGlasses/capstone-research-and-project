@@ -102,6 +102,11 @@ body {
     background: url('https://api.iconify.design/healthicons/ui-user-profile.svg?color=white') no-repeat 35% center / contain;
     background-size: var(--icon-size);
 }
+
+.personal-box .personal-box-grid .personal-info-profile {
+    background: url('https://api.iconify.design/healthicons/ui-user-profile.svg?color=white') no-repeat 35% center / contain;
+    background-size: var(--icon-size);
+}
 .personal-box :where(.personal-edit-btn, .personal-profile):hover {
     /* filter: brightness(0.75); */
     filter: brightness(75%);
@@ -707,3 +712,11 @@ Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and p
 #qr-code-modal img {
     width: 470px;
 }
+
+
+
+
+
+
+
+
