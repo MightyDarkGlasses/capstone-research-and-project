@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Bayon&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="user-home.css">
     <link rel="stylesheet" href="user-home-mods.css">
+    <link rel="stylesheet" href="user-account.css">
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <script src="https://code.iconify.design/iconify-icon/1.0.0/iconify-icon.min.js"></script>
     <title>Welcome To BulSU VMS</title>
@@ -56,7 +57,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="menu">
+                    <a href="user-vehicle.html" class="menu">
                         <div class="sidebar-icon-3"></div>
                         <div class="title">Vehicles</div>
                     </a>
@@ -116,135 +117,54 @@
             <div id="content" class="content user-content " >
 
                 <style> 
-                    .personal-box-grid {
 
-                        font-family: 'Lexend Deca', sans-serif;
-                        width: 80%;
-                        display: grid;
-                        grid-template-columns: repeat(2, 1fr);
-                        gap: 1rem 0; 
-                        /* min -> (normal size, minimun width) */
-                        /* grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); */
-                        /* grid-template-columns: repeat(2, 1fr); */
-                        /* gap: .25rem; */
-                        /* flex-direction: row;
-                        flex-wrap: wrap; */
-                    }
-                    
-                    .popdown form {
-                        display: flex;
-                        flex-direction: column;
-                        gap: .25em;
-                    }
-                    .popdown form > * {
-                        display: block;
-                        width: 90%;
-                        margin: 0 auto;
-                        font-weight: bold;
-                    }
-                    .popdown form input {
-                        border: none;
-                        outline: 0;
-
-                        font-family: 'Lexend Deca', sans-serif;
-                        margin-bottom: .75em;
-                        background: #F8F8F8;
-                        border-radius: 10px;
-                        padding: .5em 0;
-                        color: black;
-                    }
-                    .popdown form input[type="button"] {
-                        width: max(30%, 200px);
-                        margin-left: 5%;
-                        background: #000000;
-                        box-shadow: 0px 7px 6px 1px rgba(0, 0, 0, 0.25);
-                        border-radius: 1em;
-                        text-transform: uppercase;
-                        
-                        border: .15em white solid;
-                        cursor: pointer;
-                    }
-                    .personal-box-grid > * {
-                        color: white;
-                        padding: 1em 0;
-                    }
-                    
-
-                    /* User Type */
-                    .popdown input[type="radio"] {
-                        display: initial;
-                        width: 50px;
-                        margin: initial;
-                    }
-                    .popdown input[type="submit"], 
-                    .popdown input[type="button"] {
-                        color: white;
-                    }
-                    .form-usertype {
-                        display: flex;
-                    }
-
-
-                    
-                    .popdown {
-                        grid-column: span 2;
-                        margin-bottom: 1em;
-                        display: none;
-                    }
-
-
-                    @media only screen and (max-width: 960px) {
-                        .personal-box-grid {
-                            grid-template-columns: 1fr;
-                            gap: 0;
-                        }
-
-                        .personal-info-profile {
-                            margin-bottom: 1rem;
-                        }
-
-                        .popdown {
-                            grid-column: span 1;
-                        }
-                    }
                 </style>
+
+
                 <div class="personal-container">
                     <!-- <button class="sample">sample button</button> -->
                     <div class="personal-title">Personal Information</div>
-                    <div class="personal-box">
+                    <div class="personal-box disable-select">
                         <div class="personal-box-grid">
                             <span class="personal-category personal-info-title">Profile Picture</span>
                             <span class="personal-info-profile"></span>
                             
+                            
+                            
+                            
+                            
+
+                            
+
 
                             <span class="personal-info-title">Full Name</span>
                             <span class="personal-info-name">Juan Dela Cruz</span>
-                            <div class="popdown pop-fullname">
-                                <form action="#" class="form-fullname">
+                            <div class="popdown pop-name">
+                                <form action="#" class="form-name">
                                     <label>First Name</label>
-                                    <input type="text" name="" id="">
+                                    <input type="text" name="form_name_fname" id="">
                                     <label>Middle Name</label>
-                                    <input type="text" name="" id="">
+                                    <input type="text" name="form_name_mname" id="">
                                     <label>Last Name</label>
-                                    <input type="text" name="" id="">
+                                    <input type="text" name="form_name_lname" id="">
 
-                                    <input type="button" value="Save Changes">
+                                    <input type="submit" value="Save Changes">
                                 </form>
                             </div>
 
                             <span class="personal-info-title">ID/Employee Number</span>
-                            <span class="personal-info">2020123456</span>
-                            <div class="popdown pop-fullname">
-                                <form action="#" class="form-idnumber">
+                            <span class="personal-info-id">2020123456</span>
+                            <div class="popdown pop-id">
+                                <form action="#" class="form-id">
                                     <label>ID/Employee Number</label>
-                                    <input type="number" name="" id="">
+                                    <input type="number" name="form_id" id="">
 
-                                    <input type="button" value="Save Changes">
+                                    <input type="submit" value="Save Changes">
                                 </form>
                             </div>
 
                             <span class="personal-info-title">User Type</span>
-                            <span class="personal-info">None</span>
+                            <span class="personal-info-usertype">None</span>
                             <div class="popdown pop-usertype">
                                 <form action="#" class="form-usertype">
                                     <div class="">
@@ -256,18 +176,18 @@
                                         <label>Non-working Personnel</label>
                                     </div>
 
-                                    <input type="button" value="Save Changes">
+                                    <input type="submit" value="Save Changes">
                                 </form>
                             </div>
 
                             <span class="personal-info-title">Phone Number</span>
-                            <span class="personal-info">09123456789</span>
+                            <span class="personal-info-phonenum">09123456789</span>
                             <div class="popdown pop-phonenum">
                                 <form action="#" class="form-phonenum">
                                     <label>Phone Number</label>
-                                    <input type="tel" name="" id="">
+                                    <input type="tel" name="form_phonenum" id="">
 
-                                    <input type="button" value="Save Changes">
+                                    <input type="submit" value="Save Changes">
                                 </form>
                             </div>
 
@@ -310,34 +230,39 @@
                         </table> -->
                     </div>
                 </div>
+
+                
+                
                 <div class="personal-container">
                     <div class="personal-title">Account Information</div>
                     <div class="personal-box">
-                        <div class="personal-box-grid">
+                        <div class="personal-box-grid disable-select">
                             <span class="personal-info-title">E-mail Address</span>
-                            <span class="">mail@example.com</span>
-                            <div class="popdown pop-phonenum">
-                                <form action="#" class="form-phonenum">
+                            <span class="personal-info-email">mail@example.com</span>
+                            <div class="popdown pop-email">
+                                <form action="#" class="form-email">
                                     <label>E-mail Address</label>
-                                    <input type="email" name="" id="">
+                                    <input type="email" name="form_email" id="">
 
-                                    <input type="button" value="Save Changes">
+                                    <input type="submit" value="Save Changes">
                                 </form>
+                                <!-- <button id="form-reset-email">Update Email Address</button> -->
                             </div>
 
                             <span class="personal-info-title">Password</span>
-                            <span class="">********</span>
-                            <div class="popdown pop-phonenum">
+                            <span class="personal-info-password">********</span>
+                            <div class="popdown pop-password">
                                 <form action="#" class="form-password">
                                     <label>Current Password</label>
-                                    <input type="password" name="" id="">
+                                    <input type="password" name="form_currentpass" id="">
                                     <label>New Password</label>
-                                    <input type="password" name="" id="">
+                                    <input type="password" name="form_newpass" id="">
                                     <label>Confirm New Password</label>
-                                    <input type="password" name="" id="">
+                                    <input type="password" name="form_confirmpass" id="">
                                     
-                                    <input type="button" value="Save Changes">
+                                    <input type="submit" value="Save Changes">
                                 </form>
+                                <button id="form-reset-password">Reset Password</button>
                             </div>
                         </div>
                         <!-- <table class="personal-info-table">
@@ -361,7 +286,10 @@
     </div>
 </body>
 
-
-<!-- <script src="../dist/bundle.js" defer></script> -->
+<script src="https://code.jquery.com/jquery-3.6.1.js" 
+integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" 
+crossorigin="anonymous" defer></script>
+<script src="../dist/bundle.js" defer></script>
+<script src="script_users/account.js" defer></script>
 </html>
 

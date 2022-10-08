@@ -1,0 +1,187 @@
+.personal-box-grid {
+
+    font-family: 'Lexend Deca', sans-serif;
+    width: 90%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 0; 
+    /* min -> (normal size, minimun width) */
+    /* grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); */
+    /* grid-template-columns: repeat(2, 1fr); */
+    /* gap: .25rem; */
+    /* flex-direction: row;
+    flex-wrap: wrap; */
+}
+
+.popdown form {
+    display: flex;
+    flex-direction: column;
+    gap: .25em;
+}
+.popdown form > * {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+    font-weight: bold;
+}
+.popdown form > input,
+#form-reset-email,
+#form-reset-password {
+    /* Each input inside the form tag */
+    border: none;
+    outline: 0;
+
+    font-family: 'Lexend Deca', sans-serif;
+    font-size: 1em;
+
+    margin-bottom: 1.5em;
+    background: #F8F8F8;
+    border-radius: 10px;
+    padding: .75em 1em;
+    
+    color: black;
+}
+.popdown form input[type="button"],
+.popdown form input[type="submit"],
+#form-reset-password,
+#form-reset-email {
+    width: max(30%, 200px);
+    margin-left: 5%;
+    background: #000000;
+    box-shadow: 0px 7px 6px 1px rgba(0, 0, 0, 0.25);
+    border-radius: 1em;
+    text-transform: uppercase;
+    
+    border: .15em white solid;
+    cursor: pointer;
+}
+
+/* Rectangle 1 */
+
+
+
+/* Vehicles */
+.title-with-add {
+
+    color: white;
+    padding: 0 1em;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.title-with-add button {
+    font-family: 'Lexend Deca', sans-serif;
+    outline: none;
+    color: white;
+    width: 150px;
+
+    background: #000000;
+    box-shadow: 0px 7px 6px 1px rgba(0, 0, 0, 0.25);
+    border-radius: 40px;
+    cursor: pointer;
+    transition: .1s all ease;
+}
+.title-with-add button:hover {
+    background: #727272;
+}
+
+
+.linkages-box {
+    font-family: 'Lexend Deca', sans-serif;
+    border-radius: 20px;
+    background-color: #11101D;
+    padding: 10px;
+    padding-bottom: 1em;
+}
+.linkages-box > * {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.linkages-box p {
+    color: white;
+    margin: 1.5em auto;
+}
+.linkages-box .vehicle-linkages-list > p {
+    font-style: italic;
+    opacity: .5;
+}
+.linkages-box ul > li {
+    color: white;
+    margin: 1em 0;
+}
+
+
+.personal-box-grid > * {
+    color: white;
+    padding: 1em;
+    border-radius: 1em;
+    /* transition: .15s ease all; */
+}
+.personal-box-grid > *:hover {
+    --hover-color: rgba(35, 32, 61, 0.3);
+    background-color: var(--hover-color);
+}
+
+
+/* User Type */
+.popdown input[type="radio"] {
+    display: initial;
+    width: 50px;
+    margin: initial;
+}
+.popdown input[type="submit"], 
+.popdown input[type="button"],
+#form-reset-password,
+#form-reset-email {
+    color: white;
+}
+
+/* User Type, radio buttons */
+.form-usertype {
+    gap: 1em !important;
+}
+
+
+
+.popdown {
+    grid-column: span 2;
+    margin-bottom: 1em;
+    display: none;
+}
+.personal-container .personal-box-grid .pop-fullname{
+    display: block;
+}
+
+.personal-info-password {
+    /* line-height: 10px */
+    display: flex;
+    display: table-cell;
+    vertical-align:middle;
+}
+
+.right-container > h2 {
+    color: white;
+    margin-left: 1em;
+}
+
+.vehicle-dropdown {
+    margin-bottom: 2em;
+} 
+
+
+@media only screen and (max-width: 960px) {
+    .personal-box-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .personal-info-profile {
+        margin-bottom: 1rem;
+    }
+
+    .popdown {
+        grid-column: span 1;
+    }
+}

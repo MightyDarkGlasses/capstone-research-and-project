@@ -496,7 +496,7 @@ canvas {
     display: flex;
     flex-direction: column;
  }
- .personal-box {
+ .personal-box, .vehicle-box {
     border-radius: 20px;
     background-color: #11101D;
     display: flex;

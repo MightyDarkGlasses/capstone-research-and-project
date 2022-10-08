@@ -25,6 +25,8 @@ if(windowLocation.indexOf("user-home") > -1) {
 
     
     const auth = fire.auth;
+    console.log("home_currentUser:", auth);
+    
     // function getVehicleInformation(element, collectionReference) {
     function getVehicleInformation(docReference) {
         fire.myOnSnapshot(docReference, (doc) => {
@@ -176,9 +178,7 @@ if(windowLocation.indexOf("user-home") > -1) {
     logoutUser.addEventListener('click', () => {
         console.log("this is a test.");
         localStorage.clear();
+        fire.logoutUser();
         window.location = '../login.html';
     });
-    
-
-
 }

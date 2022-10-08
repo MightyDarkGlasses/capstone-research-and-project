@@ -25,7 +25,13 @@ import {
     signInWithEmailAndPassword, //signIn
     onAuthStateChanged,  //state change
     sendEmailVerification,
-    updateProfile
+    updateProfile,
+    reauthenticateWithCredential,
+    signInWithCustomToken,
+    updateEmail,
+    updatePassword,
+    sendPasswordResetEmail,
+    verifyBeforeUpdateEmail
 } from 'firebase/auth';
 
 
@@ -58,6 +64,7 @@ export const storage = getStorage(); //get the firebase storage
 
 //exports
 
+// Firestore
 export const myGetFirestore = getFirestore;
 export const myCollection = collection;
 export const myOnSnapshot = onSnapshot;
@@ -65,18 +72,25 @@ export const myGetDocs = getDocs;
 export const myAddDoc = addDoc;
 export const myDeleteDoc = deleteDoc;
 export const myDoc = doc;
+export const myUpdateDoc = updateDoc;
 
-
+// Authentication
 export const getCreateUserWithEmailAndPassword = createUserWithEmailAndPassword;
 export const getSignOut = signOut;
 export const getSignInWithEmailAndPassword = signInWithEmailAndPassword;
-
+export const getReauthenticateWithCredential = reauthenticateWithCredential;
+export const getUpdateEmail = updateEmail;
+export const getUpdatePassword = updatePassword;
+export const getSendPasswordResetEmail = sendPasswordResetEmail;
+export const getOnAuthStateChanged = onAuthStateChanged;
+export const getSignInWithCustomToken = signInWithCustomToken;
 
 export const myGetStorage = getStorage;
 export const myRef = ref;
 export const myUploadBytes = uploadBytes;
 export const myUploadBytesResumable = uploadBytesResumable;
 export const myGetDownloadURL = getDownloadURL;
+export const doVerifyBeforeUpdateEmail = verifyBeforeUpdateEmail;
 // Authentication check.
 // console.log(auth);
 
@@ -107,12 +121,11 @@ function doLoginForm() {
                     console.log("User logged in:", cred.user)
                     checkCurrentLoggedUser();
                     // sendVerification();
-                    logoutUser();
+                    // logoutUser();
                     console.log("isUserVerified:", isUserVerified());
-                    
-                }).catch((err) => {
-                    console.log("Sign in error: ", err);
-                });
+            }).catch((err) => {
+                console.log("Sign in error: ", err);
+            });
     //     });
     // }
 }
@@ -162,11 +175,14 @@ function isUserVerified() {
     // false -> not yet. need to confirm by checking the Spam mail inbox.
     return getAuth().currentUser.emailVerified;
 }
-function logoutUser() {
+
+
+export function logoutUser() {
     //Temporary only.
     signOut(auth)
         .then(() => {
             console.log("User signed out.")
+            console.log('check logged user:', fire.auth)
         }).catch((err) => {
             console.log("Logout error message: ", err);
     }); //auth = getAuth();

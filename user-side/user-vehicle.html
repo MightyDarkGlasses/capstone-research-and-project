@@ -22,6 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Bayon&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="user-home.css">
     <link rel="stylesheet" href="user-home-mods.css">
+    <link rel="stylesheet" href="user-account.css">
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     
     <title>Welcome To BulSU VMS</title>
@@ -88,6 +89,42 @@
                 <hr>
             </div>
         </div>
+
+        <style>
+            .vehicle-dropdown {
+                font-family: 'Lexend Deca', sans-serif;
+                color: white;
+
+
+                background-color: var(--secondary-color-opaque);
+                border-radius: 1.5em;
+                padding: 1em;
+                cursor: pointer;
+                width: 100%;
+            }
+
+            .vehicle-dropdown img {
+                width: 50px;
+                margin: 0 1em;
+            }
+
+            .vehicle-list-dropdown,
+            #vehicle-placeholder  {
+                width: 100%;
+            }
+            .vehicle-list-dropdown-clickable {
+                display: flex;
+            }
+
+            #vehicle-placeholder p:first-child {
+                font-weight: 700;
+                font-size: 1.5em;
+            }
+
+            .vehicle-dropdown ~ div {
+                margin: .5em 0;
+            }
+        </style>
         <div class="right-container">
             <div class="header">
                     <div class="logo-holder user-holder">
@@ -123,111 +160,75 @@
     
                     </div>
             </div>
-            <div id="content" class="content user-content " >
-                <div class="welcome-box">
-                    <div class="welcome-title-box">
-                        <div class="welcome-title-holder">
-                            <div class="welcome-icon sidebar-logo"><iconify-icon icon="fluent:megaphone-loud-20-filled" style="color: white;" width="36" height="36"></iconify-icon></div>
-                            <div class="welcome-title">Welcome to BulSU VMS</div>
-                        </div>
+            
+            <div class="vehicle-dropdown disable-select">
+                <div class="vehicle-list-dropdown">
+                    <div class="vehicle-list-dropdown-clickable">
+                        <img src="https://api.iconify.design/fluent/vehicle-car-28-filled.svg?color=white" alt="vehicle icon">
+                        <div id="vehicle-placeholder"><p>Vehicle #1</p>
+                        <p>Honda ABC 4455, Private</p></div>
+                        <img src="https://api.iconify.design/gridicons/dropdown.svg?color=white" alt="dropdown icon">
                     </div>
-                    <div class="welcome-message">
-                        Dashboards are a wonderful way to monitor your logs, check registered vehicle, provide information for logging, and more.
+                </div>
+            </div>
+
+
+            <div class="title-with-add">
+                <h2>Vehicle Information</h2>
+                <button id="add-new-vehicle">Add Vehicle</button>
+            </div>
+            <div class="personal-box vehicle-information">
+                <div class="personal-box-grid">
+                    <span class="personal-category personal-info-title">Vehicle Photo</span>
+                    <span class="personal-info-vehicle-photo"></span>
+                    <div class="popdown pop-photo">
+                        <p style="width: 95%; margin: 1em 1em;">You can upload a file by clicking the respective view or drag and drop the image.
+                            PNG, JPEG, GIF up to 25MB each view.
+                        </p>
+                        <form action="#" class="form-photo">
+                            <input type="file" name="form_front" id="">
+                            <input type="file" name="form_side" id="">
+                            <input type="file" name="form_rear" id="">
+                            <input type="submit" value="Save Changes">
+                        </form>
+                    </div>
+
+                    <span class="personal-info-title">Plate Number</span>
+                    <span class="personal-info-plate">ABCD 1234</span>
+                    <div class="popdown pop-plate">
+                        <form action="#" class="form-plate">
+                            <p>Plate Number</p>
+                            <input type="text" name="" id="">
+                            <input type="submit" value="Save Changes">
+                        </form>
 
                     </div>
-                </div>
-                <div class="tips-box">
-                    <div class="tips-title">TIPS: </div>
-                    <div class="add-new-box items-flex">
-                        <div class="tips-items">
-                            <div class="tip-1">add new vehicle</div>
-                            <a href="#" class="take-me">
-                                Take me there
-                            </a>
-                        </div>
-                    </div>
-                    <div class="add-twoF-box items-flex">
-                        <div class="tips-items">
-                            <div class="tip-2">Fill additional personal information</div>
-                            <a href="#" class="take-me">
-                                Take me there
-                            </a>
-                        </div>
-                    </div>
-                    <div class="fill-other-box items-flex">
-                        <div class="tips-items">
-                            <div class="tip-3">Fill additional vehicle information</div>
-                            <a href="#" class="take-me">
-                                Take me there
-                            </a>
-                        </div>
+
+                    <span class="personal-info-title">Vehicle Model</span>
+                    <span class="personal-info-model">Toyota Raize, 2022</span>
+                    <div class="popdown pop-vehicle">
+                        <form action="#" class="form-model">
+                            <p>Vehicle Model</p>
+                            <input type="text" name="" id="">
+                            <input type="submit" value="Save Changes">
+                        </form>
                     </div>
                 </div>
-                <div class="qr-code">
-                    <div class="qr-code-image">
-                        <img src="bulsu-logo.png" alt="testing" download="download">
-                    </div>
-                    <div class="qr-code-vehicle-info">
-                        <div class="qr-code-dropdown">
-                            <div class="qr-code-dropdown-clickable">
-                                <img src="https://api.iconify.design/fluent/vehicle-car-28-filled.svg?color=white" alt="vehicle icon">
-                                <div>
-                                    <p>Vehicle #1</p>
-                                    <p>Toyota Raize 2022, Private</p>
-                                </div>
-                                <img src="https://api.iconify.design/gridicons/dropdown.svg?color=white" alt="dropdown icon">
-                            </div>
-                            <div class="popup-dropdown">
-                                <ul id="vehicle-list">
-                                    
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="qr-code-information">
-                            <p>
-                                Lorem ipsum dolor sit amet. This is a description of the that the user provided. Never gonna give up, never gonna let you down
-                            </p>
-                        </div>
-                        <div class="qr-code-quick-actions">
-                            <button>
-                                <img src="https://api.iconify.design/fluent/shifts-activity-24-filled.svg?color=white" alt="recents">
-                                Recent Activity
-                            </button>
-                            <button>
-                                <img src="https://api.iconify.design/bx/link.svg?color=white" alt="linkages">
-                                Linkages
-                            </button>
-                            <button>
-                                <img src="https://api.iconify.design/bi/cloud-check-fill.svg?color=white" alt="registration">
-                                Account Registration Status
-                            </button>
-                            <button>
-                                <img src="https://api.iconify.design/icon-park-solid/update-rotation.svg?color=white" alt="update info.">
-                                Update Information
-                            </button>
-                        </div>
-                        <div class="qr-code-common-actions">
-                            <!-- <button class="save">
-                                <img src="https://api.iconify.design/bxs/save.svg?color=white" alt="">
-                                Save
-                            </button> -->
-                            <a class="save saveQR" download="download" >
-                                <img src="https://api.iconify.design/entypo/eye.svg?color=white" alt="">
-                                Save
-                            </a>
-                            <a class="viewQR" href="#ex1" rel="modal:open">
-                                <img src="https://api.iconify.design/entypo/eye.svg?color=white" alt="">
-                                View QR Code
-                            </a>
-                            <!-- <button class="viewQR" href="#ex1" rel="modal:open">
-                                <img src="https://api.iconify.design/entypo/eye.svg?color=white" alt="">
-                                View QR Code
-                            </button> -->
-                            <!-- <p><a href="#ex1" rel="modal:open">Open Modal</a></p> -->
-                        </div>
-                    </div>
-                </div>
-                <!-- <div class="qrbox"></div> -->
+            </div>
+
+
+            <div class="title-with-add">
+                <h2>Linkages</h2>
+                <button id="add-new-linkages">Add Linkages</button>
+            </div>
+            <div class="linkages-box linkages">
+                <p>Linkages are family members, friends, relatives, etc. that can also use your vehicle.</p>
+
+                <ul class="vehicle-linkages-list">
+                    <!-- <p style="">None.</p> -->
+                    <li>Dela Cruz, Juana H.</li>
+                    <li>Freefy, Vandeela S.</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -244,52 +245,4 @@
 </body>
 
 <script src="../dist/bundle.js"></script>
-<script src="FileSaver.js"></script>
-<script>
-    
-    
-
-
-    let dropdown = document.querySelector('.qr-code-dropdown-clickable');
-    let popup = document.querySelector('.popup-dropdown');
-    let buttons = document.querySelectorAll('.qr-code .qr-code-common-actions > button');
-    let getQRCodeImage = document.querySelector("qr-code-image img");
-
-    let bool = false;
-    dropdown.addEventListener('click', () => {
-        bool = !bool;
-        if(bool) {
-            popup.style.display = "block";
-    
-            buttons.forEach((btn) => {
-                btn.style.pointerEvents = "none";
-            });
-        }
-        else {
-            popup.style.display = "none";
-    
-            buttons.forEach((btn) => {
-                btn.style.pointerEvents = "auto";
-            });
-        }
-    });
-
-
-    // Using fetch
-    let saveImage = document.querySelector(".save");
-    saveImage.addEventListener('click', () => {
-        
-    });
-    async function downloadImage(imageSrc) {
-        const image = await fetch(imageSrc);
-        const imageBlog = await image.blob();
-        const imageURL = URL.createObjectURL(imageBlog);
-        const link = document.createElement('a');
-        link.href = imageURL;
-        link.download = 'qrcode.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-</script>
 </html>
