@@ -176,7 +176,15 @@ function checkCurrentLoggedUser() {
             //Store the logged user into the local storage for future reference
             localStorage.setItem('currentUser', JSON.stringify(user));
             localStorage.setItem('currentUserId', user.uid);
-            window.location = "../user-side/user-home.html";
+
+
+            if(window.location.pathname.indexOf('capstone-research-and-project') > -1) {
+                window.location = './capstone-research-and-project/user-side/user-home.html'
+            }
+            else {
+                window.location = "../user-side/user-home.html";
+            }
+
         }
         else {
             console.log("Email is not yet verified.");

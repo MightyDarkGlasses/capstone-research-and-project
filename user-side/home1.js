@@ -179,6 +179,7 @@ if(windowLocation.indexOf("user-home") > -1) {
         console.log("this is a test.");
         localStorage.clear();
         fire.logoutUser();
-        window.location = '../login.html';
+        // window.location = '../login.html';
+        window.location = '../index.html';
     });
 }
