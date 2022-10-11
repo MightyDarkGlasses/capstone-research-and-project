@@ -178,7 +178,7 @@ function checkCurrentLoggedUser() {
             localStorage.setItem('currentUserId', user.uid);
 
 
-            if(window.location.pathname.indexOf('mightydarkglasses.github.io') > -1) {
+            if(window.location.pathname.indexOf('capstone-research-and-project') > -1) {
                 window.location = '/user-side/user-home.html'
             }
             else {
