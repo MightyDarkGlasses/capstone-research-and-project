@@ -177,11 +177,13 @@ function checkCurrentLoggedUser() {
             localStorage.setItem('currentUser', JSON.stringify(user));
             localStorage.setItem('currentUserId', user.uid);
 
-
+            
             if(window.location.pathname.indexOf('capstone-research-and-project') > -1) {
-                window.location = '/user-side/user-home.html'
+                console.log('GitHub Hosting');
+                window.location = 'user-side/user-home.html'
             }
             else {
+                console.log('Localhost');
                 // window.location = "../user-side/user-home.html";
             }
 
