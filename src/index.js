@@ -181,7 +181,7 @@ function checkCurrentLoggedUser() {
         else {
             console.log("Email is not yet verified.");
             alert("Please verify your e-mail first.");
-            sendVerification();
+            // sendVerification();
         }
     }
     return;
@@ -339,6 +339,8 @@ function createNewData(userUID, flag) {
         Promise.all([promiseAccount, promiseVehicle]).then((success) => {
             deleteAllCookies();
             localStorage.clear();
+            sendVerification();
+            logoutUser();
             window.location = "signup4.html";
             console.log('Everything is all set up!');
         });
@@ -366,6 +368,8 @@ function createNewData(userUID, flag) {
         Promise.all([promiseAccount, promiseVehicle]).then((success) => {
             deleteAllCookies();
             localStorage.clear();
+            sendVerification();
+            logoutUser();
             window.location = "signup4.html";
             console.log('Everything is all set up!');
         });
@@ -635,7 +639,7 @@ let windowLocation = window.location.pathname;
 if(windowLocation.indexOf('signup4') > -1) {
     let finalVerifyEmail = document.querySelector('#reg-goto-final-verifyemail');
     finalVerifyEmail.addEventListener('click', () => {
-        window.location = 'login.html';
+        window.location = 'index.html';
     });
 }
 
