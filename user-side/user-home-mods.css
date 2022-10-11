@@ -699,8 +699,8 @@ Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and p
      */
 
 #qr-code-modal {
-    width: 500px;
-    height: 500px;
+    width: minmax(300px, 750px);
+    height: minmax(300px, 800px);
 }
 
 .modal > div {
@@ -710,7 +710,8 @@ Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and p
     justify-content: center;
 }
 #qr-code-modal img {
-    width: 470px;
+    width: 100%;
+    padding: 1em;
 }
 
 

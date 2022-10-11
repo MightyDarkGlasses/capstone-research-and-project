@@ -97,7 +97,7 @@ if(windowLocation.indexOf("user-home") > -1) {
         console.log("Vehicle Images:", vehicle.registered_vehicle.vehicles.images);
         console.log("Plate:", vehicle.registered_vehicle.plate);
         console.log("Model:", vehicle.registered_vehicle.model);
-        console.log("User Types:", vehicle.registered_vehicle.use_types);
+        console.log("User Types:", vehicle.registered_vehicle);
         console.log("Length:", vehicle.vehicle_length);
         for (let x=0; x<vehicle.vehicle_length; x++) {
             console.log('x:', x);

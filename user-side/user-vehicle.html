@@ -23,6 +23,279 @@
     <link rel="stylesheet" href="user-home.css">
     <link rel="stylesheet" href="user-home-mods.css">
     <link rel="stylesheet" href="user-account.css">
+    <!-- <link rel="stylesheet" href="../styles/registration/registration_part2.css"> -->
+
+
+    <style>
+
+        :root {
+            --progress-icon-size: 40px;
+            --progress-icon-height: 40px;
+            --progress-icon-width: 40px;
+            --progress-icon-width: 40px;
+        }
+
+        .modal {
+            max-width: 70% !important;
+        }
+        
+        .file-drag-area {
+            height: 200px;
+            border: 3px dashed #e0eafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 10px auto;
+            border-radius: 1em;
+            padding: 2em 0;
+            background-color: aliceblue;
+        }
+
+        .file-drag-area .drag-caption {
+            font-size: 1.25em;
+            font-weight: 500;
+            color: #34495e;
+            text-align: center;
+        }
+        .file-drag-area .support {
+            font-size: 12px;
+            color: gray;
+            margin: 10px 0;
+        }
+        .file-drag-area .button {
+            font-size: 20px;
+            font-weight: 500;
+            color: #1683ff;
+            cursor: pointer;
+        }
+        /* Grid for Sign Up FORM-A
+            Starting - 1, 2, 3 square thingy (the progress)
+            Ending - The "you can upload" message
+        */
+
+        .icon .rear-car-view {
+            background: url('https://api.iconify.design/fe/car.svg') no-repeat center center / contain;
+            height: var(--progress-icon-height);
+            width: var(--progress-icon-size);
+            display: inline-block;
+        }
+        .icon .side-car-view {
+            background: url('https://api.iconify.design/fluent/vehicle-car-profile-ltr-16-filled.svg') no-repeat center center / contain;
+            height: var(--progress-icon-height);
+            width: var(--progress-icon-size);
+            display: inline-block;
+        }
+        .icon .front-car-view {
+            background: url('https://api.iconify.design/fluent/vehicle-car-16-filled.svg') no-repeat center center / contain;
+            height: var(--progress-icon-height);
+            width: var(--progress-icon-size);
+            display: inline-block;
+        }
+
+        .vehicle-input {
+            font-family: 'Lexend Deca', sans-serif;
+        }
+        /* .vehicle-input {
+            font-size: 1em;
+            padding-top: 0.75em;
+            padding-bottom: 0.75em;
+            background-repeat: no-repeat;
+            background-position: 10px 50%;
+            background-size: 25px;
+            padding-left: 40px;
+            padding-right: 15px;
+        } */
+
+        .sign-up-form-2 {
+            display: block;
+            width: 100%;
+            overflow-y: auto;
+        }
+        .sign-up-form-2a {
+            /* height: fit-content; */
+            font-family: 'Lexend Deca', sans-serif;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5em;
+        }
+
+        .sign-up-form-2b input[type="text"] {
+            width: 97%;
+            margin: 0.25em;
+            box-shadow: var(--text-shadow);
+            border-radius: 1em;
+            padding: .75em 1em;
+            margin: 0.5em 0.1em;
+            outline: none;
+            border: 2px solid black;
+        }
+
+        .grid1 {
+            grid-column-start: span 1;
+        }
+        .grid2 {
+            grid-column: span 2;
+            text-align: right; /* use text align on its corresponding container */
+        }
+        .grid3 {
+            grid-column: span 1;
+        }
+        .grid4 {
+            grid-column: span 3;
+            margin: .5em 0;
+            /* display: flex; */
+        }
+        .grid4 .message > p{
+            text-align: center;
+            font-size: .9em;
+        }
+        .vehicle-form {
+            width: 100%;
+            /* display: flex; */
+        }
+
+        .grid5 > div {
+            width: 98%;
+        }
+        /* #signup-fname {
+            padding: 0 1em;
+        } */
+
+        /* Submit Vehicle and Back button */
+        .vehicle-form > div:last-child {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        /* Grid for Sign Up FORM-B
+            Starting - 1, 2, 3 square thingy (the progress)
+            Ending - The "you can upload" message
+        */
+        .sign-up-form-2b {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        .grid5 {
+            grid-column: span 2;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .vehicle-formation {
+            display: flex;
+            flex-direction: row;
+            height: fit-content;
+            
+        }
+        .vehicle-formation div {
+            flex: 1;
+            height: fit-content;
+        }
+
+        /* The divs for file drag and drop (or explorer) section */
+        /* Vehicle Front, Vehicle Side, and Vehicle Back */
+        #vehicle-front, #vehicle-side,
+        #vehicle-back {
+            width: auto;
+            height: fit-content;
+
+            /* padding: 2em; */
+            /* background-color: cadetblue; */
+        }
+
+        /* Fill the uploaded image */
+        .file-drag-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+    
+    <style>
+          @media screen and (max-width: 960px) {
+              .container {
+                border-radius: .5em;
+                padding: 1.5em 0;
+                flex-direction: column;
+                width: max(90vw, 300px);
+                height: 90vh;
+                transition: all 0.1s ease;
+                padding: 1.5em 0;
+              }
+
+              .drag-caption,
+                .file-drag-area .support {
+                    font-size: .7em;
+                }
+                .drag-caption .button {
+                    font-size: .7rem;
+                }
+
+                .icon-1, .icon-2, .icon-3 {
+                    --size: 25px;
+
+                    background-size: var(--size);
+                    height: var(--size);
+                    width: var(--size);
+                }
+
+                
+
+                .sign-up-form-2a {
+                    /* height: fit-content; */
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 0.5em;
+                }
+                .grid1 {
+                    grid-column-start: span 2;
+                }
+                .grid2 {
+                    grid-column: span 2;
+                    text-align: right;
+                }
+                .grid3 {
+                    grid-column: span 2;
+                }
+
+                /* The last file upload */
+                #vehicle-back {
+                    grid-column: span 4;
+                    /* margin-top: .1em; */
+                }
+                .grid4 {
+                    grid-column: span 4;
+                    margin: .5em 0;
+                }
+                .grid4 .message {
+                    /* margin: 1em 0; */
+                    font-size: .75em;
+                }
+                /* Next and Back button */
+                .grid5 {
+                    flex-direction: column;
+                }
+                .file-drag-area {
+                    height: 170px;
+                }
+                .sign-up-form-2b {
+                    display: flex;
+                    gap: 0.5em;
+                    flex-direction: column;
+                }
+                .sign-up-form-2b input[type="text"] {
+                    margin: 0.35em 0.1em;
+                }
+                /* Form grid */
+                .sign-up-form-2b > div:nth-child(1), 
+                .sign-up-form-2b > div:nth-child(2) {
+                    grid-column: span 3;
+                }
+          }
+    </style>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     
     <title>Welcome To BulSU VMS</title>
@@ -98,16 +371,24 @@
 
                 background-color: var(--secondary-color-opaque);
                 border-radius: 1.5em;
-                padding: 1em;
+                /* padding: 1em; */
                 cursor: pointer;
                 width: 100%;
+                /* padding-top: .25em; */
             }
 
             .vehicle-dropdown img {
-                width: 50px;
+                width: 30px;
                 margin: 0 1em;
             }
+            #vehicle-list {
+                padding: .25em;
+            }
 
+            #vehicle-placeholder {
+                display: flex;
+                align-items: center;
+            }
             .vehicle-list-dropdown,
             #vehicle-placeholder  {
                 width: 100%;
@@ -118,11 +399,26 @@
 
             #vehicle-placeholder p:first-child {
                 font-weight: 700;
-                font-size: 1.5em;
+                font-size: 1.25em;
             }
 
             .vehicle-dropdown ~ div {
                 margin: .5em 0;
+            }
+
+            #reg-goto-page3 {
+                outline: none;
+                border: 1px solid white;
+                font-family: 'Lexend Deca', sans-serif;
+                color: white;
+                width: 90%;
+                background: #000000;
+                /* box-shadow: 0px 7px 6px 1px rgba(0, 0, 0, 0.25); */
+                border-radius: 40px;
+                cursor: pointer;
+
+                margin: 1em;
+                padding: .5em;
             }
         </style>
         <div class="right-container">
@@ -163,11 +459,15 @@
             
             <div class="vehicle-dropdown disable-select">
                 <div class="vehicle-list-dropdown">
-                    <div class="vehicle-list-dropdown-clickable">
+                    <div class="vehicle-list-dropdown-clickable" style="padding: .75em 0;">
                         <img src="https://api.iconify.design/fluent/vehicle-car-28-filled.svg?color=white" alt="vehicle icon">
-                        <div id="vehicle-placeholder"><p>Vehicle #1</p>
-                        <p>Honda ABC 4455, Private</p></div>
+                        <div id="vehicle-placeholder"><p>Vehicle #1</p></div>
                         <img src="https://api.iconify.design/gridicons/dropdown.svg?color=white" alt="dropdown icon">
+                    </div>
+                    <div class="popup-dropdown" style="display: none; position: relative; top: 0;">
+                        <ul id="vehicle-list">
+                            <li>Vehicle 1 | Honda ABC 4455, Private</li><li>Vehicle 2 | Hyundai Icari 113, Private</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -177,7 +477,7 @@
                 <h2>Vehicle Information</h2>
                 <button id="add-new-vehicle">Add Vehicle</button>
             </div>
-            <div class="personal-box vehicle-information">
+            <div class="personal-box vehicle-information disable-select">
                 <div class="personal-box-grid">
                     <span class="personal-category personal-info-title">Vehicle Photo</span>
                     <span class="personal-info-vehicle-photo"></span>
@@ -193,12 +493,14 @@
                         </form>
                     </div>
 
+                    
+
                     <span class="personal-info-title">Plate Number</span>
                     <span class="personal-info-plate">ABCD 1234</span>
                     <div class="popdown pop-plate">
                         <form action="#" class="form-plate">
                             <p>Plate Number</p>
-                            <input type="text" name="" id="">
+                            <input type="text" name="form_plate" id="">
                             <input type="submit" value="Save Changes">
                         </form>
 
@@ -206,10 +508,10 @@
 
                     <span class="personal-info-title">Vehicle Model</span>
                     <span class="personal-info-model">Toyota Raize, 2022</span>
-                    <div class="popdown pop-vehicle">
+                    <div class="popdown pop-model">
                         <form action="#" class="form-model">
                             <p>Vehicle Model</p>
-                            <input type="text" name="" id="">
+                            <input type="text" name="form_model" id="">
                             <input type="submit" value="Save Changes">
                         </form>
                     </div>
@@ -233,16 +535,111 @@
         </div>
     </div>
 
+    <style>
+        #add-vehicle-modal > div,
+        #add-linkages-modal > div {
+            align-items: baseline;
+        }
+    </style>
     <!-- Modals -->
-    <div id="ex1" class="modal">
+    <div id="add-vehicle-modal" class="modal">
         <div>
-            <img class="modal-qrcode" src="" alt="">
+            <div class="sign-up-form-2">
+                <div class="sign-up-form-2a">
+                    <div class="grid3" id="vehicle-front">
+                        <div class="file-drag-area">
+                            <div class="icon">
+                                <div class="front-car-view"></div>
+                                <!-- <box-icon name="rocket"></box-icon> -->
+                            </div>
+                            <div style="text-align: center;">
+                                <span class="drag-caption">Drag &amp; Drop</span>
+                                <div>
+                                    <span class="drag-caption">
+                                    or <span class="button">browse</span>
+                                    </span>
+                                    <input type="file" name="" id="" hidden=""><br>
+                                    <span class="support">Supports: JPEG, JPG, PNG</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid3" id="vehicle-side">
+                        <div class="file-drag-area">
+                            <div class="icon">
+                                <div class="side-car-view"></div>
+                                <!-- <box-icon name="rocket"></box-icon> -->
+                            </div>
+                            <div style="text-align: center;">
+                                <span class="drag-caption">Drag &amp; Drop</span>
+                                <div>
+                                    <span class="drag-caption">
+                                    or <span class="button">browse</span>
+                                    </span>
+                                    <input type="file" name="" id="" hidden=""><br>
+                                    <span class="support">Supports: JPEG, JPG, PNG</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid3" id="vehicle-back">
+                        <div class="file-drag-area">
+                            <div class="icon">
+                                <div class="rear-car-view"></div>
+                                <!-- <box-icon name="rocket"></box-icon> -->
+                            </div>
+                            <div style="text-align: center;">
+                                <span class="drag-caption">Drag &amp; Drop</span>
+                                <div>
+                                    <span class="drag-caption">
+                                    or <span class="button">browse</span>
+                                    </span>
+                                    <input type="file" name="" id="" hidden=""><br>
+                                    <span class="support">Supports: JPEG, JPG, PNG</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid4">
+                        <div class="message">
+                            <p>You can upload a file by clicking the respective view or drag and drop the image. <br><b>PNG, JPEG, GIF</b> up to 25MB each view.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="sign-up-form-2b grid5">
+                    <form class="vehicle-form">
+                        <div class="grid5">
+                            <div>
+                                <label>Vehicle Model</label>
+                                <input type="text" class="vehicle-icon-1 vehicle-input" name="signup_vehiclemodel" id="signup-fname" required="required" value="Honda ABC 4455">
+                            </div>
+                            <div>
+                                <label>Plate Number</label>
+                                <input type="text" class="vehicle-icon-2 vehicle-input" name="signup_vehicleplatenum" id="signup-fname" required="required" value="ABC1234">
+                            </div>
+                        </div>
+                        <div>
+                            <input type="submit" id="reg-goto-page3" value="Submit" rel="modal:close">
+                        </div>
+                    </form>
+                </div>
+                <!-- <div class="vehicle-formation">
+                </div> -->
+            </div>
         </div>
     </div>
       
+    <div id="add-linkages-modal" class="modal">
+        <div>
+            <p>Thanks for clicking. That felt good.</p>
+            <a href="#" rel="modal:close">Close</a>
+        </div>
+    </div>
       <!-- Link to open the modal -->
     <!-- <p><a href="#ex1" rel="modal:open">Open Modal</a></p> -->
 </body>
 
 <script src="../dist/bundle.js"></script>
+<script src="script_users/vehicle.js" defer></script>
+<script src="../scripts/fileupload.js"></script>
 </html>

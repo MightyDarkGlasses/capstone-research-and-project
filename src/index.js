@@ -101,6 +101,26 @@ export const doVerifyBeforeUpdateEmail = verifyBeforeUpdateEmail;
 const loginForm = document.querySelector('.login'); 
 // let allImageLinks = []; //all of the images links are stored here to be uploaded ng Firebase
 
+function deleteAllCookies() {
+    var cookies = document.cookie.split(";");
+
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+}
+if(window.location.pathname.indexOf('login.html') > -1) {
+    localStorage.clear();
+    document.cookie = ''
+
+    console.log('We are on the login.html file');
+
+    deleteAllCookies();
+    console.log('data cleared.')
+}
+
 // console.log(loginForm)
 if(loginForm !== undefined && loginForm !== null) {
     loginForm.addEventListener('submit', (e) => {
@@ -156,11 +176,11 @@ function checkCurrentLoggedUser() {
             //Store the logged user into the local storage for future reference
             localStorage.setItem('currentUser', JSON.stringify(user));
             localStorage.setItem('currentUserId', user.uid);
-            window.location = "../user-side/user-home.html"
+            window.location = "../user-side/user-home.html";
         }
         else {
             console.log("Email is not yet verified.");
-            alert("Please verify your e-mail first.")
+            alert("Please verify your e-mail first.");
             sendVerification();
         }
     }
@@ -217,32 +237,62 @@ function getCurrentLoggedUserUID() {
 }
 
 let registerButtonFinal = document.getElementById("reg-goto-final");
+
+// Variables for vehicle image links and QR code
+let imageLinks = [];
+let qrCodeLink = [];
+
 if (registerButtonFinal !== null && registerButtonFinal !== undefined) { 
     registerButtonFinal.addEventListener("click", () => {
         createUserWithEmailAndPassword(auth, getCookie("email"), getCookie("pass"))
         .then((cred) => {
             console.log('User created: ', cred.user);
             const userId = getCurrentLoggedUserUID();
-            console.log(userId);
-            createNewData(userId);
+            // console.log(userId);
+            // createNewData(userId);
+
+            let decisions = localStorage.getItem('vehicle-front') === null || localStorage.getItem('vehicle-side') === null 
+            || localStorage.getItem('vehicle-rear') === null;
+            console.log('decisions: ', decisions)
+
+            if(!decisions) {
+                console.log('create new vehicle data')
+                createVehicleImageData(userId);
+            }
+            else {
+                createNewData(userId, false);
+            }
             // createVehicleImageData(userId);
+        }).then((success) => {
+            console.log('registration successful!');
+            // window.location = "signup4.html";
+
         }).catch((err) => {
             console.log("Signup error message: ", err); //e.g password is wrong or too short, invalid email, etc.
         });
 
+        // createNewData("7fjUF7uqknYbx0EvVruxgFWxizq1");
+        
         // For testing.
         // createNewData("THISISATEST");
     });
 }
-async function createNewData(userUID) {
-    let allOfMyLinks = await createVehicleImageData(userUID); //create vehicle data and send it to Firebase Storage
-    // let allOfMyLinks = [];
-    let qrCodeGenerated = await generateVehicleQRCode(userUID, 500);
-    console.log("allOfMyLinks", allOfMyLinks);
-    console.log("Afterthought: ", qrCodeGenerated);
+function createNewData(userUID, flag) {
+    let windowLocation = window.location.pathname;
+    if(windowLocation.indexOf("signup") > -1) {
+    
+    
+    // let allOfMyLinks = await createVehicleImageData(userUID); //create vehicle data and send it to Firebase Storage
+    // let qrCodeGenerated = await generateVehicleQRCode(userUID, getCookie("plate"), 500);
+
 
     //Account Information (Firestore)
-    await setDoc(doc(db, "account-information", userUID), {
+    // Uncomment these...
+
+    console.log('imageLinks: ', imageLinks);
+    console.log('qrCodeLink: ', qrCodeLink);
+    console.log('qrCodeLink[0]: ', qrCodeLink[0]);
+    const promiseAccount = setDoc(doc(db, "account-information", userUID), {
         id_number: getCookie("id"),
         first_name: getCookie("fname"),
         middle_name: getCookie("mname"),
@@ -253,147 +303,224 @@ async function createNewData(userUID) {
     }).then(() => {
         console.log("Account Information was added in the collection");
     });
+    
+    // Vehicle Information (Firestore)
 
-    //Vehicle Information (Firestore)
-    await setDoc(doc(db, "vehicle-information", userUID), {
-        registered_vehicle: {
-            vehicles: {
-                qrCode: {
-                    "0": qrCodeGenerated[0]
+
+
+    console.log('flag:', flag)
+    // flag -> if we have the vehicle uploaded or not
+    if(flag) {
+        // let imageLinks = [];
+        // let qrCodeLink = [];
+
+        console.log('imageLinks:', imageLinks);
+        console.log('qrCodeLink:', qrCodeLink);
+
+        const promiseVehicle = setDoc(doc(db, "vehicle-information", userUID), {
+            registered_vehicle: {
+                vehicles: {
+                    qrCode: qrCodeLink,
+                    images: {
+                        0: imageLinks
+                    }
                 },
-                images: {
-                    "0": allOfMyLinks
-                }
+                // qrcode: [qrCodeGenerated],
+                plate: [getCookie("plate")],
+                model: [getCookie("model")],
+                use_types: ['Private']
             },
-            // qrcode: [qrCodeGenerated],
-            plate: [getCookie("plate")],
-            model: [getCookie("model")]
-        },
-        createdAt: serverTimestamp()
-    }).then(() => {
-        console.log("Vehicle Information was added in the collection");
-    });
+            vehicle_length: 1,
+            createdAt: serverTimestamp()
+        }).then(() => {
+            console.log("Vehicle Information was added in the collection");
+        });
+
+        Promise.all([promiseAccount, promiseVehicle]).then((success) => {
+            deleteAllCookies();
+            localStorage.clear();
+            window.location = "signup4.html";
+            console.log('Everything is all set up!');
+        });
+    }
+    else {
+        // Uncomment these...
+        const promiseVehicle = setDoc(doc(db, "vehicle-information", userUID), {
+            registered_vehicle: {
+                vehicles: {
+                    qrCode: [],
+                    images: {
+                        0: []
+                    }
+                },
+                plate: [],
+                model: [],
+                use_types: []
+            },
+            vehicle_length: 0,
+            createdAt: serverTimestamp()
+        }).then(() => {
+            console.log("Vehicle Information was added in the collection");
+        });
+
+        Promise.all([promiseAccount, promiseVehicle]).then((success) => {
+            deleteAllCookies();
+            localStorage.clear();
+            window.location = "signup4.html";
+            console.log('Everything is all set up!');
+        });
+    }
+
+    // function doPrint() {
+    //     console.log('allOfMyLinks:', allOfMyLinks);
+    //     console.log('allOfMyLinks[0]:', allOfMyLinks[0]);
+    //     console.log('allOfMyLinks[1]:', allOfMyLinks[1]);
+    //     console.log('allOfMyLinks[2]:', allOfMyLinks[2]);
+    
+    //     console.log("localStorage uploadImage1", localStorage.uploadImage1);
+    //     console.log("localStorage uploadImage2", localStorage.uploadImage2);
+    //     console.log("localStorage uploadImage3", localStorage.uploadImage3);
+    
+    //     console.log('a-b-c:', ['a', 'b', 'c']);
+    //     console.log('localStorage qrCodeLink:', localStorage.getItem('qrCodeLink'));
+    
+    //     console.log('vehicle-information', db, userUID, allOfMyLinks);
+    //     console.log('qrCodeGenerated', qrCodeGenerated);
+    // }
+
+
+    // Promise.all([promiseAccount, promiseVehicle]).then((success) => {
+    //     function deleteAllCookies() {
+    //         var cookies = document.cookie.split(";");
+        
+    //         for (var i = 0; i < cookies.length; i++) {
+    //             var cookie = cookies[i];
+    //             var eqPos = cookie.indexOf("=");
+    //             var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    //             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    //         }
+    //     }
+    
+    //     // deleteAllCookies();
+    //     // localStorage.clear();
+    //     // window.location = "signup4.html";
+    //     console.log('Everything is all set up!');
+    // });
+
+    } //if statement, are we on signup.html
 }
+
+
+// let promise1, promise2, promise3, promise4; //all of the promises
+
 
 function createVehicleImageData(userId) {
-    let imageLinks = []; //STORE THE VEHICLE IMAGE LINKS HERE...
-    // // vehicle-front
-    // // vehicle-side
-    // // vehicle-rear
-
-    // // vehicle-front-filename
-    // // vehicle-side-filename
-    // // vehicle-rear-filename
-
-  
-    // // vehicle-front-filetype
-    // // vehicle-side-filetype
-    // // vehicle-rear-filetype
-  
-    // // let vehicle_front = [localStorage.getItem("vehicle-front").replace(/^data:image\/(png|jpeg);base64,/, ""), 
-    // // localStorage.getItem("vehicle-front-filename"), localStorage.getItem("vehicle-front-filetype")];
-    // // let vehicle_side = [localStorage.getItem("vehicle-side").replace(/^data:image\/(png|jpeg);base64,/, ""), 
-    // // localStorage.getItem("vehicle-side-filename"), localStorage.getItem("vehicle-side-filetype")];
-    // // let vehicle_rear = [localStorage.getItem("vehicle-rear").replace(/^data:image\/(png|jpeg);base64,/, ""), 
-    // // localStorage.getItem("vehicle-rear-filename"), localStorage.getItem("vehicle-rear-filetype")];\\\
-
-
-    let fileNameFront = localStorage.getItem("vehicle-front-filename");
-    let fileNameSide = localStorage.getItem("vehicle-side-filename");
-    let fileNameRear = localStorage.getItem("vehicle-rear-filename");
-    let vehicle_front = [localStorage.getItem("vehicle-front").replace(/^data:image\/(png|jpeg);base64,/, ""), 
-    "vehicleFront"+fileNameFront.substring(fileNameFront.lastIndexOf(".")), localStorage.getItem("vehicle-front-filetype")];
-    let vehicle_side = [localStorage.getItem("vehicle-side").replace(/^data:image\/(png|jpeg);base64,/, ""), 
-    "vehicleSide"+fileNameSide.substring(fileNameSide.lastIndexOf(".")), localStorage.getItem("vehicle-side-filetype")];
-    let vehicle_rear = [localStorage.getItem("vehicle-rear").replace(/^data:image\/(png|jpeg);base64,/, ""), 
-    "vehicleRear"+fileNameRear.substring(fileNameRear.lastIndexOf(".")), localStorage.getItem("vehicle-rear-filetype")];
-
-    const storage = getStorage();
-    let blobVehicleFront, blobVehicleSide, blobVehicleRear;
-    blobVehicleFront = base64ToBlob(vehicle_front[0], vehicle_front[2]);  
-    blobVehicleSide = base64ToBlob(vehicle_side[0], vehicle_side[2]);  
-    blobVehicleRear = base64ToBlob(vehicle_rear[0], vehicle_rear[2]);  
-
-    // Uncomment 318 - 397
-    const metadataFront = { contentType: vehicle_front[2], };
-    const metadataSide = { contentType: vehicle_side[2], };
-    const metadataRear = { contentType: vehicle_rear[2], };
-
-    const storageRef1 = ref(storage, `vehicle-information/${userId}/1/${vehicle_front[1]}`);
-    const storageRef2 = ref(storage, `vehicle-information/${userId}/1/${vehicle_side[1]}`);
-    const storageRef3 = ref(storage, `vehicle-information/${userId}/1/${vehicle_rear[1]}`);
+    if(localStorage.getItem("vehicle-front") === null || 
+        localStorage.getItem("vehicle-side") === null ||
+        localStorage.getItem("vehicle-rear") === null) {
+            console.log("Skipped, no image was uploaded");
+    }
+    else {
+        let fileNameFront = localStorage.getItem("vehicle-front-filename");
+        let fileNameSide = localStorage.getItem("vehicle-side-filename");
+        let fileNameRear = localStorage.getItem("vehicle-rear-filename");
+        let vehicle_front = [localStorage.getItem("vehicle-front").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+        "vehicleFront0"+fileNameFront.substring(fileNameFront.lastIndexOf(".")), localStorage.getItem("vehicle-front-filetype")];
+        let vehicle_side = [localStorage.getItem("vehicle-side").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+        "vehicleSide0"+fileNameSide.substring(fileNameSide.lastIndexOf(".")), localStorage.getItem("vehicle-side-filetype")];
+        let vehicle_rear = [localStorage.getItem("vehicle-rear").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+        "vehicleRear0"+fileNameRear.substring(fileNameRear.lastIndexOf(".")), localStorage.getItem("vehicle-rear-filetype")];
     
-    const uploadTask1 = uploadBytesResumable(storageRef1, blobVehicleFront, metadataFront);
-    const uploadTask2 = uploadBytesResumable(storageRef2, blobVehicleSide, metadataSide);
-    const uploadTask3 = uploadBytesResumable(storageRef3, blobVehicleRear, metadataRear);
-
-    // Upload image (front view)
-    // link1 = link2 = link3 = "";
-     uploadTask1.on('state_changed', (snapshot) => {
-            // Progress of fileupload
-            const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            console.log("Uploading vehicle front.");
-            console.log('Upload is ' + progress + '% done');    //progress of upload
-        }, 
-        (error) => {
-            // Handle unsuccessful uploads
-            console.log(error);
-        }, 
-        () => {
-            // If successful, do this.
-            getDownloadURL(uploadTask1.snapshot.ref).then((downloadURL) => {
-                console.log('File available at', downloadURL);
-                console.log(typeof(downloadURL))
-                imageLinks.push(downloadURL); //append the user link (vehicle)
-            });
-        } //end of getDownloadURL
-    ); //end of on method
-
-     uploadTask2.on('state_changed', (snapshot) => {
-            const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            console.log("Uploading vehicle side.");
-            console.log('Upload is ' + progress + '% done');    //progress of upload
-        }, 
-        (error) => {
-            // Handle unsuccessful uploads
-            console.log(error);
-        }, 
-        () => {
-            getDownloadURL(uploadTask2.snapshot.ref).then((downloadURL) => {
-                console.log('File available at', downloadURL);
-                console.log(typeof(downloadURL))
-                imageLinks.push(downloadURL);
-            });
-        } //end of getDownloadURL
-    ); //end of on method
-
-     uploadTask3.on('state_changed', (snapshot) => {
-            const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            console.log("Uploading vehicle rear.");
-            console.log('Upload is ' + progress + '% done');    //progress of upload 
-        }, 
-        (error) => {
-            // Handle unsuccessful uploads
-            console.log(error);
-        }, 
-        () => {
-            getDownloadURL(uploadTask3.snapshot.ref).then((downloadURL) => {
-                console.log('File available at', downloadURL);
-                console.log(typeof(downloadURL))
-                imageLinks.push(downloadURL);
-            });
-        } //end of getDownloadURL
-    ); //end of on method
-
-    console.log("BeforeReturn_Image Links: ", imageLinks);
-    return imageLinks; //return the image link of the provided image
+        const storage = getStorage();
+        let blobVehicleFront, blobVehicleSide, blobVehicleRear;
+        blobVehicleFront = base64ToBlob(vehicle_front[0], vehicle_front[2]);  
+        blobVehicleSide = base64ToBlob(vehicle_side[0], vehicle_side[2]);  
+        blobVehicleRear = base64ToBlob(vehicle_rear[0], vehicle_rear[2]);  
+    
+        // Uncomment 318 - 397
+        const metadataFront = { contentType: vehicle_front[2], };
+        const metadataSide = { contentType: vehicle_side[2], };
+        const metadataRear = { contentType: vehicle_rear[2], };
+    
+        const storageRef1 = ref(storage, `vehicle-information/${userId}/1/${vehicle_front[1]}`);
+        const storageRef2 = ref(storage, `vehicle-information/${userId}/1/${vehicle_side[1]}`);
+        const storageRef3 = ref(storage, `vehicle-information/${userId}/1/${vehicle_rear[1]}`);
+        
+        const uploadTask1 = uploadBytesResumable(storageRef1, blobVehicleFront, metadataFront);
+        const uploadTask2 = uploadBytesResumable(storageRef2, blobVehicleSide, metadataSide);
+        const uploadTask3 = uploadBytesResumable(storageRef3, blobVehicleRear, metadataRear);
+        
+        // Upload image (front view)
+        var promise1 = uploadTask1.on('state_changed', (snapshot) => {
+                // Progress of fileupload
+                const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                console.log("Uploading vehicle front.");
+                console.log('Upload is ' + progress + '% done');    //progress of upload
+            }, 
+            (error) => {
+                // Handle unsuccessful uploads
+                console.log(error);
+            }, 
+            (success) => {
+                // If successful, do this.
+                getDownloadURL(uploadTask1.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    console.log(typeof(downloadURL))
+                    imageLinks.push(downloadURL); //append the user link (vehicle)
+                    // localStorage.setItem('uploadImage1', downloadURL);
+                });
+            } //end of getDownloadURL
+        ); //end of on method
+        var promise2 = uploadTask2.on('state_changed', (snapshot) => {
+                const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                console.log("Uploading vehicle side.");
+                console.log('Upload is ' + progress + '% done');    //progress of upload
+            }, 
+            (error) => {
+                // Handle unsuccessful uploads
+                console.log(error);
+            }, 
+            (success) => {
+                getDownloadURL(uploadTask2.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    console.log(typeof(downloadURL))
+                    imageLinks.push(downloadURL); //append the user link (vehicle)
+                });
+            } //end of getDownloadURL
+        ); //end of on method  
+        var promise3 = uploadTask3.on('state_changed', (snapshot) => {
+                const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                console.log("Uploading vehicle rear.");
+                console.log('Upload is ' + progress + '% done');    //progress of upload 
+            }, 
+            (error) => {
+                // Handle unsuccessful uploads
+                console.log(error);
+            }, 
+            (success) => {
+                getDownloadURL(uploadTask3.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    console.log(typeof(downloadURL));
+                    imageLinks.push(downloadURL); //append the user link (vehicle)
+                });
+            } //end of getDownloadURL
+        ); //end of on method
+        
+        //Wait for everything to be uploaded.
+        Promise.all([uploadTask1, uploadTask2, uploadTask3]).then((output) => {
+            console.log("All uploaded done.")
+            console.log(output);
+            generateVehicleQRCode(userId, getCookie("plate"), 500);
+        });
+        console.log("BeforeReturn_Image Links: ", imageLinks);
+    }
+    return; //return the image link of the provided image
 }
 
 
-
-async function generateVehicleQRCode(userUID, mySize) {
+//generateVehicleQRCode(userUID, getCookie("plate"), 500)
+async function generateVehicleQRCode(userUID, plateNumber, mySize) {
     // let qrCodeLink = "";
-    let qrCodeLink = [];
     let generatedOutput;
 
     const generateQRCode = (text, size) => {
@@ -407,15 +534,25 @@ async function generateVehicleQRCode(userUID, mySize) {
         })
         generatedOutput = qrcode._oDrawing._elCanvas.toDataURL("image/png");
     };
-    await generateQRCode(userUID, mySize);
+
+    let qrCodeDataObject = {
+        'uid': userUID,
+        'plate_number': plateNumber.replace(" ", "")
+    }
+    console.log('qrCodeDataObject', JSON.stringify(qrCodeDataObject))
+
+    await generateQRCode(JSON.stringify(qrCodeDataObject), mySize);
+
+    //  USE THIS FOR GENERATING OBJECT
+    
     // console.log("generatedOutput:", generatedOutput);
     // console.log("userUID:", userUID);
 
     const storage = getStorage();
-    const storageRef = ref(storage, `vehicle-information/${userUID}/1/qrCode.PNG`);
+    const storageRef = ref(storage, `vehicle-information/${userUID}/1/qrCode0.PNG`);
     let qrCodeBlob = await base64ToBlob((generatedOutput.replace(/^data:image\/(png|jpeg);base64,/, "")), "image/png");
     const uploadTask = uploadBytesResumable(storageRef, qrCodeBlob, "image/png");
-
+    
     uploadTask.on('state_changed', 
         async (snapshot) => {
             // Progress of fileupload
@@ -427,20 +564,24 @@ async function generateVehicleQRCode(userUID, mySize) {
             // Handle unsuccessful uploads
             console.log(error);
         }, 
-        () => {
+        (success) => {
             // If successful, do this.
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                 console.log('QR Code - File available at', downloadURL);
-                // qrCodeLink = downloadURL;
-                // console.log("qrCodeLink generateVehicleQRCode(): DURING.", qrCodeLink)
                 qrCodeLink.push(downloadURL);
+                console.log('qrCodeLink pushed', qrCodeLink);
+
+                console.log('QR Code done.');
+                console.log('userUID:', userUID)
+                createNewData(userUID, true);
             });
         } //end of getDownloadURL
     ); //end of on method
-    
-    
-    console.log("qrCodeLink generateVehicleQRCode(): end", qrCodeLink);
-    return qrCodeLink;
+    // Promise.all([uploadTask]).then(() => {
+    //     console.log('QR Code done.');
+    //     console.log('userUID:', userUID)
+    //     createNewData(userUID, true);
+    // });
 }
 
 // Convert base64 (generated by FileReader) into Blob (which is supported by Firebase Storage)
@@ -478,6 +619,25 @@ function base64ToBlob(base64, mime)
 //         console.log("An email verification was send successfully.");
 //     }
 // }
+
+
+let windowLocation = window.location.pathname;
+// if(windowLocation.indexOf("signup4") > -1) {
+//     console.log(getAuth());
+//     // Send e-mail verification, to be later verify by user.
+//     // sendEmailVerification(getAuth().currentUser)
+//     //   .then(() => {
+//     //     console.log("User verification was sent.")
+//     //     alert("User verification was sent.")
+//     // });
+// }
+
+if(windowLocation.indexOf('signup4') > -1) {
+    let finalVerifyEmail = document.querySelector('#reg-goto-final-verifyemail');
+    finalVerifyEmail.addEventListener('click', () => {
+        window.location = 'login.html';
+    });
+}
 
 function sendVerification() {
     const auth = getAuth();
