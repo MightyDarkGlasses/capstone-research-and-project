@@ -333,7 +333,8 @@ function createNewData(userUID, flag) {
                     qrCode: qrCodeLink,
                     images: {
                         0: imageLinks
-                    }
+                    },
+                    linkages: {}
                 },
                 // qrcode: [qrCodeGenerated],
                 plate: [getCookie("plate")],
@@ -361,9 +362,8 @@ function createNewData(userUID, flag) {
             registered_vehicle: {
                 vehicles: {
                     qrCode: [],
-                    images: {
-                        0: []
-                    }
+                    images: {},
+                    linkages: {}
                 },
                 plate: [],
                 model: [],

@@ -70,7 +70,8 @@
     flex-direction: row;
     justify-content: space-between;
 }
-.title-with-add button {
+.title-with-add button,
+#add-new-vehicle2 {
     font-family: 'Lexend Deca', sans-serif;
     outline: none;
     color: white;
@@ -84,6 +85,15 @@
 }
 .title-with-add button:hover {
     background: #727272;
+}
+
+/* Div for no information/no vehicle registered */
+.no-info {
+    text-align: center;
+}
+/* For button, no vehicle registered */
+#add-new-vehicle2 {
+    padding: 1em 2em;
 }
 
 
