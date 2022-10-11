@@ -126,7 +126,7 @@ if(windowLocation.indexOf("user-account") > -1) {
     logoutUser.addEventListener('click', () => {
         console.log("this is a test.");
         localStorage.clear();
-        window.location = '../login.html';
+        window.location = '../index.html';
     });
 } //end of link checking, windowLocation.indexOf("user-account") > -1
 

@@ -8,7 +8,12 @@ let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', () => {
 
 if(windowLocation.indexOf("user-vehicle") > -1) {
-
+    let logoutUser = document.querySelector('.util-icon-logout');
+    logoutUser.addEventListener('click', () => {
+        console.log("this is a test.");
+        localStorage.clear();
+        window.location = '../index.html';
+    });
     // let vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
     let vehicleInformation = JSON.parse(localStorage.getItem("vehicleInformation"));
     
@@ -32,9 +37,15 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
             
 
+            // console.log('vehicle.registered_vehicle.model[0]', vehicle.registered_vehicle.model[0])
+            // console.log('vehicle.registered_vehicle.plate[0]', vehicle.registered_vehicle.plate[0])
 
             if(x === 0) { //will be used for placeholder
                 document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
+                document.querySelector('.personal-info-plate').innerText = vehicleInformation.registered_vehicle.plate[0];
+                // document.querySelector('.personal-info-plate').innerText = '123';
+                document.querySelector('.personal-info-model').innerText = vehicleInformation.registered_vehicle.model[0];
+                // document.querySelector('.personal-info-model').innerText = '456';
             }
         }
 
@@ -54,7 +65,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
                 document.querySelector('.personal-info-plate').textContent = vehicleInformation.registered_vehicle.plate[index];
                 document.querySelector('.personal-info-model').textContent = vehicleInformation.registered_vehicle.model[index];
-
+                
                 console.log('working', index);
                 console.log('vehicleInfo:', vehicleInformation);
 

@@ -184,7 +184,7 @@ function checkCurrentLoggedUser() {
             }
             else {
                 console.log('Localhost');
-                // window.location = "../user-side/user-home.html";
+                window.location = "../user-side/user-home.html";
             }
 
         }
