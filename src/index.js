@@ -182,7 +182,7 @@ function checkCurrentLoggedUser() {
                 window.location = '/user-side/user-home.html'
             }
             else {
-                window.location = "../user-side/user-home.html";
+                // window.location = "../user-side/user-home.html";
             }
 
         }
