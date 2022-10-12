@@ -1,16 +1,5 @@
 console.log('script_users/account.js is called');
 
-// let profile = document.querySelector(".personal-info-profile");
-// let name = document.querySelector(".personal-info-name");
-// let id = document.querySelector(".personal-info-id");
-// let usertype = document.querySelector(".personal-info-usertype");
-// let phonenum = document.querySelector(".personal-info-phonenum");
-// .personal-info-email
-// .personal-info-password
-// $( document ).ready(function() {
-//     // Handler for .ready() called.
-// });
-
 jQuery(function() {
     // $('.personal-info-name').on('click', () => {
     //     $('.pop-name').css({

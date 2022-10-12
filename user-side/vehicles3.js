@@ -1,5 +1,5 @@
-import { doc } from "firebase/firestore";
 import * as fire from "../src/index";
+import QrScanner from './script_users/qr-scanner.min.js'; 
 
 let vehicleForm = document.querySelector('.vehicle-form');
 
@@ -83,24 +83,16 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 let linkagesOutput = '';
                 
                 myKeys.forEach((element, index) => {
-                    // console.log('test', myObject[element][0], myObject[element][1])
-
-                    const docRef = fire.myDoc(fire.db, "account-information", myObject[element][0]);
-                    fire.myOnSnapshot(docRef, (doc) => {
-                        // console.log("vehicleInformation", doc.data(), doc.id);
-                        let accountInformation = {...doc.data()};
-                        let fullName = `${accountInformation.last_name}, ${accountInformation.first_name} ${accountInformation.middle_name}`
-                        console.log('fullName', fullName);
-                        linkagesOutput += `<li>${fullName} - ${myObject[element][1].toUpperCase()}</li>`
-                        
-
-                        // Last index for setting the list of linkages
-                        if(index === myKeys.length-1) {
-                            console.log('index === myKeys.length', index === myKeys.length)
-                            document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
-                        }
-                    });
+                    console.log('test', myObject)
+                    linkagesOutput += `<li>Link #${index}: ${myObject[myKeys]}</li>`;
+                    //     // Last index for setting the list of linkages
+                    //     if(index === myKeys.length-1) { 
+                    //         console.log('index === myKeys.length', index === myKeys.length)
+                    //         document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
+                    //     }
                 });
+
+                document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
                 console.log('myKeys:', myKeys);
                 console.log('linkageOutput:', linkagesOutput);
             }
@@ -214,6 +206,118 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             });
         });
     }
+
+    // ########## LINKAGES ###########
+    const fileQrResult = document.getElementById('file-qr-result');
+    const fileSelector = document.getElementById('file-selector');
+
+    // ####### Result #######
+    function setResult(label, result) {
+        console.log(result.data);
+        label.textContent = result.data;
+        // camQrResultTimestamp.textContent = new Date().toString();
+        label.style.color = 'teal';
+        clearTimeout(label.highlightTimeout);
+        label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+    
+        // scanner.stop();
+    }
+
+    // ####### File Scanning #######
+    fileSelector.addEventListener('change', event => {
+        const file = fileSelector.files[0];
+        if (!file) {
+            return;
+        }
+        QrScanner.scanImage(file, { returnDetailedScanResult: true })
+            .then(result => {
+                // setResult(fileQrResult, result);
+                addNewLinkages(result);
+            }).catch(e => setResult(fileQrResult, { data: e || 'No QR code found.' }));
+    });
+    document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
+        console.log('drop-zone hey hey hey')
+        const dropZoneElement = inputElement.closest(".drop-zone");
+
+        dropZoneElement.addEventListener("drop", (e) => {
+            e.preventDefault();
+
+            if (e.dataTransfer.files.length) {
+                let myFile = e.dataTransfer.files[0];
+
+                const file = fileSelector.files[0];
+                if (!file) {
+                    return;
+                }
+                QrScanner.scanImage(file, { returnDetailedScanResult: true })
+                    .then(result => {
+                        // setResult(fileQrResult, result)
+                        addNewLinkages(result);
+                    }).catch(e => setResult(fileQrResult, { data: e || 'No QR code found.' }));
+            }
+        });
+    });
+
+    function addNewLinkages(info) {
+        console.log(info.data)
+        let parseData = JSON.parse(info.data);
+        console.log(parseData);
+        
+        let currentCount = -1;
+        
+
+        const docRef = fire.myDoc(fire.db, "vehicle-information", parseData.uid);
+        fire.myOnSnapshot(docRef, (doc) => {
+            // console.log("vehicleInformation", doc.data(), doc.id);
+            let vehicleInfo = {...doc.data()};
+
+            if(Object.keys(vehicleInfo).length > 0) {
+                let arr = vehicleInfo.registered_vehicle.plate;
+                console.log('vehicleInfo...', vehicleInfo);
+                console.log('vehicleInfo...', Object.keys(vehicleInfo).length < 0);
+                console.log('vehicleInfo...', arr.findIndex((element) => element === parseData.plate_number) > 0);
+                console.log('vehicleInfo...', arr.findIndex((element) => element === parseData.plate_number));
+
+                if(arr.findIndex((element) => element === parseData.plate_number) === -1) {
+
+                    let linkages = vehicleInformation.registered_vehicle.vehicles.linkages;
+                    let lengthOfLinkages = Object.keys(linkages).length;
+                    // console.log(vehicleInformation.registered_vehicle.vehicles.linkages);
+                    // console.log(Object.keys(linkages).length);
+                    
+                    
+                    let storeLinkages = vehicleInfo.registered_vehicle.vehicles.linkages;
+                    console.log('before:', storeLinkages);
+                    storeLinkages[lengthOfLinkages-1] = parseData.plate_number; //replace the array value
+                    console.log('after:', storeLinkages);
+
+                    const updateDocumentRef = fire.myDoc(fire.db, 'vehicle-information', currentUserId);
+                    fire.myUpdateDoc(updateDocumentRef, {
+                        'registered_vehicle.vehicles.linkages': storeLinkages
+                    }).then((success) => {
+                        console.log("Done");
+                        location.reload();
+                    });
+                }
+            }
+            else {
+                console.log('Imbento na qr code');
+            }
+            
+
+            // Fix: Real-time counting for current size of linkages
+
+            // console.log('fetched!', vehicleInfo);
+            // console.log('plate_number', parseData.plate_number, typeof(parseData.plate_number));
+            // console.log('findIndex', arr.findIndex((element) => element === parseData.plate_number));
+
+            // Non-exising
+            
+        });
+    }
 }
+
+// console.log(fire.db)
+
 
 });

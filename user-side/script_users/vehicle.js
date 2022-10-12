@@ -1,3 +1,5 @@
+
+
 console.log('script_users/vehicle.js is called');
 
 
@@ -60,12 +62,13 @@ jQuery(function() {
         });    
     });
 
-    // $("#add-vehicle-modal").modal({
-    //     fadeDuration: 100
-    // });  
+    
     $('#add-new-linkages').on('click', () => {
         $("#add-linkages-modal").modal({
             fadeDuration: 100
         });
     });
+    // $("#add-linkages-modal").modal({
+    //     fadeDuration: 100
+    // });
 });
