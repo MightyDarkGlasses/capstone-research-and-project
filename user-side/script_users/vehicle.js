@@ -54,6 +54,12 @@ jQuery(function() {
         });    
     });
 
+    $('#add-new-vehicle2').on('click', () => {
+        $("#add-vehicle-modal").modal({
+            fadeDuration: 100
+        });    
+    });
+
     // $("#add-vehicle-modal").modal({
     //     fadeDuration: 100
     // });  

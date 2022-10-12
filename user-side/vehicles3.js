@@ -14,8 +14,13 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         localStorage.clear();
         window.location = '../index.html';
     });
+
+
+    //JSON
+
     // let vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
     let vehicleInformation = JSON.parse(localStorage.getItem("vehicleInformation"));
+    
     
     vehicleForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -23,9 +28,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     });
 
     let listOfVehiclesTags = '';
-
-
-    
+    let currentIndexSelectedSubmit = undefined;
     function showVehicleList(vehicle) {
 
         if(vehicle == null || vehicle.vehicle_length == 0) {
@@ -38,6 +41,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             document.querySelector('.linkages-box').style.display = 'none';
         }
         else {
+            currentIndexSelectedSubmit = 0;
             for (let x=0; x<vehicle.vehicle_length; x++) {
                 console.log('x:', x);
         
@@ -59,15 +63,57 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     // document.querySelector('.personal-info-model').innerText = '456';
                 }
             }
-    
+            
+
+            document.querySelector('.no-vehicle-box').style.display = 'none';
             document.getElementById('vehicle-list').innerHTML = listOfVehiclesTags;
             console.log(listOfVehiclesTags)
         }
     }
+    function showLinkagesList(vehicle) {
+        if(vehicle !== null) {
+        //const docRefVehicle = fire.myDoc(fire.db, "vehicle-information", currentUserId);
+            
+            let myObject = vehicle.registered_vehicle.vehicles.linkages;
+            let myKeys = Object.keys(myObject);
+
+            if(myKeys.length > 0) {
+                console.log('Linkages detected!');
+                
+                let linkagesOutput = '';
+                
+                myKeys.forEach((element, index) => {
+                    // console.log('test', myObject[element][0], myObject[element][1])
+
+                    const docRef = fire.myDoc(fire.db, "account-information", myObject[element][0]);
+                    fire.myOnSnapshot(docRef, (doc) => {
+                        // console.log("vehicleInformation", doc.data(), doc.id);
+                        let accountInformation = {...doc.data()};
+                        let fullName = `${accountInformation.last_name}, ${accountInformation.first_name} ${accountInformation.middle_name}`
+                        console.log('fullName', fullName);
+                        linkagesOutput += `<li>${fullName} - ${myObject[element][1].toUpperCase()}</li>`
+                        
+
+                        // Last index for setting the list of linkages
+                        if(index === myKeys.length-1) {
+                            console.log('index === myKeys.length', index === myKeys.length)
+                            document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
+                        }
+                    });
+                });
+                console.log('myKeys:', myKeys);
+                console.log('linkageOutput:', linkagesOutput);
+            }
+            else {
+                console.log('No linked yet.');
+            }
+            console.log('linkages:', vehicle.registered_vehicle.vehicles.linkages);
+            console.log('linkages:', Object.keys(vehicle.registered_vehicle.vehicles.linkages).length);
+        }
+    }
 
 
-
-    let currentIndexSelectedSubmit = undefined;
+    
     function clickableVehicleList() {
         let myLists = document.querySelectorAll('#vehicle-list > li');
 
@@ -81,7 +127,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 console.log('working', index);
                 console.log('vehicleInfo:', vehicleInformation);
 
-
+                currentIndexSelectedSubmit = index;
+                console.log('currentIndexSelectedSubmit', currentIndexSelectedSubmit);
                 if(vehicleInformation['linkages'] === undefined || vehicleInformation["linkages"] == null) {
                     document.querySelector('.vehicle-linkages-list').textContent = 'None';
                 }
@@ -89,6 +136,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         });
     }
     showVehicleList(vehicleInformation);  // display the list
+    showLinkagesList(vehicleInformation); // display the linkages
     clickableVehicleList();
 
     let currentUserId = localStorage.getItem('currentUserId');   
@@ -98,50 +146,73 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     formPlate.addEventListener('submit', (e) => {
         e.preventDefault();
         let plateNumber = formPlate.form_plate.value;
-
-        let updateObj = {
-            registered_vehicle: {
-                model: {
-                    currentIndexSelectedSubmit: plateNumber
-                }
-            }
-        };
-        // console.log("formPhoneNum:", currentUserId, phoneNumObj, formPhoneNum);
-        updateVehicleInformation(currentUserId, updateObj, formPlate);
+        updateVehiclePlateNumber(currentUserId, plateNumber, formPlate);
     });
 
     formModel.addEventListener('submit', (e) => {
+        e.preventDefault();
         let plateModel = formModel.form_model.value;
-
-        let updateObj = {
-            registered_vehicle: {
-                plate: {
-                    currentIndexSelectedSubmit: plateModel
-                }
-            }
-        };
-        // console.log("formPhoneNum:", currentUserId, phoneNumObj, formPhoneNum);
-        updateVehicleInformation(currentUserId, updateObj, formModel);
+        updateVehicleModelNumber(currentUserId, plateModel, formModel)
     });
 
-    function updateVehicleInformation(myId, myObject, myForm) {
-        console.log("vehicle info. updated: ", myObject);
-        const docRefAccount = fire.myDoc(fire.db, "vehicle-information", myId);
 
-        // console.log(fire.myUpdateDoc(docRefAccount))
-        fire.myUpdateDoc(docRefAccount, myObject)
-        .then(() => {    
-            myForm.reset();
-            // window.location.href = window.location.href; //reload a page in JS
-            location.reload();
-        })
+    // https://firebase.google.com/docs/firestore/manage-data/add-data#update_elements_in_an_array
+    // Update fields in nested objects
+    function updateVehicleModelNumber(myId, updateValue, myForm) {
+        console.log("vehicle info. updated: ", updateValue);
+        let storeModel = [];
 
-        // updateDoc(docRef, {
-        //     title: "Updated title.",    //I can use input later
-        //     authors: "Updated authors"
-        // }).then(() => {
-        //     updateForm.reset();
-        // });
+        const updateDocumentRef = fire.myDoc(fire.db, 'vehicle-information', myId);
+        const docRef = fire.myDoc(fire.db, "vehicle-information", myId);
+        fire.myOnSnapshot(docRef, (doc) => {
+            // console.log("vehicleInformation", doc.data(), doc.id);
+            let vehicleInfo = {...doc.data()};
+            localStorage.setItem("vehicleInformation", JSON.stringify({...doc.data()}));
+
+            console.log('vehicleInfo:', vehicleInfo.registered_vehicle.model);
+            storeModel = vehicleInfo.registered_vehicle.model;
+
+            console.log('before:', storeModel)
+            storeModel[currentIndexSelectedSubmit] = updateValue; //replace the array value
+            console.log('after:', storeModel)
+
+            fire.myUpdateDoc(updateDocumentRef, {
+                'registered_vehicle.model': storeModel
+            })
+            .then(() => {
+                myForm.reset();
+                location.reload();
+            });
+        });
+    }
+
+    function updateVehiclePlateNumber(myId, updateValue, myForm) {
+        console.log("vehicle info. updated: ", updateValue);
+        let storePlates = [];
+
+        const updateDocumentRef = fire.myDoc(fire.db, 'vehicle-information', myId);
+        const docRef = fire.myDoc(fire.db, "vehicle-information", myId);
+        fire.myOnSnapshot(docRef, (doc) => {
+            // console.log("vehicleInformation", doc.data(), doc.id);
+            let vehicleInfo = {...doc.data()};
+            localStorage.setItem("vehicleInformation", JSON.stringify({...doc.data()}));
+
+            console.log('vehicleInfo:', vehicleInfo.registered_vehicle.plate);
+            storePlates = vehicleInfo.registered_vehicle.plate;
+
+            console.log('before:', storePlates)
+            console.log('update task', currentIndexSelectedSubmit, updateValue)
+            storePlates[currentIndexSelectedSubmit] = updateValue; //replace the array value
+            console.log('after:', storePlates)
+
+            fire.myUpdateDoc(updateDocumentRef, {
+                'registered_vehicle.plate': storePlates
+            })
+            .then(() => {    
+                myForm.reset();
+                location.reload();
+            });
+        });
     }
 }
 
