@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="user-home.css">
     <link rel="stylesheet" href="user-home-mods.css">
     <link rel="stylesheet" href="user-account.css">
+    <link rel="stylesheet" href="./sidebar/sidebar-mobile.css">
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
     <!-- JQuery Modal Styles -->
@@ -61,13 +62,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="menu">
+                    <a href="user-logs.html" class="menu">
                         <div class="sidebar-icon-4"></div>
                         <div class="title">Logs</div>
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="menu">
+                    <a href="user-announcements.html" class="menu">
                         <div class="sidebar-icon-5"></div>
                         <div class="title">Announcements</div>
                     </a>
@@ -78,6 +79,27 @@
             </div>
         </div>
         <div class="right-container">
+            <div class="mobile-sidebar">
+                <header style="margin-bottom: 1em;">
+                    <div class="main-sidebar">
+                        <h2>BulSU</h2>
+                        <button class="hamburger">
+                            <div class="bar"></div>
+                        </button>
+                    </div>
+                </header>
+                <nav class="mobile-nav">
+                    <a href="user-home.html">Home</a>
+                    <a href="user-account.html">My Account</a>
+                    <a href="user-vehicle.html">Vehicles</a>
+                    <a href="user-logs.html">Logs</a>
+                    <a href="user-announcements.html">Announcements</a>
+                    <div class="mobile-nav-buttons">
+                        <a href="#">Logout</a>
+                    </div>
+                </nav>
+            </div>
+            
             <div class="header">
                     <div class="logo-holder user-holder">
                         <div class="dashboard-logo"><iconify-icon icon="ic:baseline-account-circle" style="color: white;" width="48" height="48"></iconify-icon></div>
@@ -257,6 +279,7 @@
 
 
 <script src="../dist/bundle.js" defer></script>
+<script src="./sidebar/sidebar-mobile.js" defer></script>
 <script src="test.js" defer></script>
 <!-- jQuery Modal -->
 <script defer>

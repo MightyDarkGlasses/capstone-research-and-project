@@ -1,10 +1,16 @@
 /* bayon-regular - latin */
 
+@import url('https://fonts.googleapis.com/css2?family=Bayon&display=swap');
 
 
 
 html {
     box-sizing: border-box;
+}
+
+.profile-box .fullname, 
+.profile-box .category {
+    font-family: 'Bayon', sans-serif;
 }
 
 /* The border box is inherited in HTML */
@@ -491,6 +497,8 @@ canvas {
 }
  */
 
+
+
 /* account user css */
  .account-container {
     display: flex;
@@ -564,4 +572,26 @@ canvas {
 }
 .hide {
     display: none;
+}
+
+
+
+/* media queries */
+@media screen and (max-width: 960px) {
+    .sidebar {
+        display: none;
+    }
+
+    #content {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .qr-code {
+        flex-direction: column;
+    }
+
+
+
+
 }

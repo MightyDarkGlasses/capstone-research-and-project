@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="user-home-mods.css">
     <link rel="stylesheet" href="user-account.css">
     <link rel="stylesheet" href="../fileupload-test/main.css">
+    <link rel="stylesheet" href="./sidebar/sidebar-mobile.css">
+
     <!-- <link rel="stylesheet" href="../styles/registration/registration_part2.css"> -->
 
 
@@ -212,12 +214,17 @@
           @media screen and (max-width: 960px) {
               .container {
                 border-radius: .5em;
-                padding: 1.5em 0;
+                /* padding: 1.5em 0; */
                 flex-direction: column;
-                width: max(90vw, 300px);
+                /* width: max(90vw, 300px); */
                 height: 90vh;
                 transition: all 0.1s ease;
-                padding: 1.5em 0;
+                /* padding: 1.5em 0; */
+              }
+
+              .personal-box, .linkages-box {
+                width: 98%;
+                margin: 0 auto !important;
               }
 
               .drag-caption,
@@ -416,6 +423,27 @@
             }
         </style>
         <div class="right-container">
+            <div class="mobile-sidebar">
+                <header style="margin-bottom: 1em;">
+                    <div class="main-sidebar">
+                        <h2>BulSU</h2>
+                        <button class="hamburger">
+                            <div class="bar"></div>
+                        </button>
+                    </div>
+                </header>
+                <nav class="mobile-nav">
+                    <a href="user-home.html">Home</a>
+                    <a href="user-account.html">My Account</a>
+                    <a href="user-vehicle.html">Vehicles</a>
+                    <a href="user-logs.html">Logs</a>
+                    <a href="user-announcements.html">Announcements</a>
+                    <div class="mobile-nav-buttons">
+                        <a href="#">Logout</a>
+                    </div>
+                </nav>
+            </div>
+
             <div class="header">
                     <div class="logo-holder user-holder">
                         <div class="dashboard-logo"><iconify-icon icon="ic:baseline-account-circle" style="color: white;" width="48" height="48"></iconify-icon></div>
@@ -658,76 +686,6 @@
 <script src="script_users/vehicle.js" defer></script>
 <script src="../scripts/fileupload.js" defer></script>
 <script src="../fileupload-test/main.js" defer></script>
-<!-- <script type="module" src="./script_users/qr-scanner.min.js" defer></script> -->
-<!-- <script type="module" defer>
-    
-
-
-    // console.log(fire.db)
-    document.addEventListener('DOMContentLoaded', () => {
-        const fileQrResult = document.getElementById('file-qr-result');
-        const fileSelector = document.getElementById('file-selector');
-    
-        // ####### Result #######
-        function setResult(label, result) {
-            console.log(result.data);
-            label.textContent = result.data;
-            // camQrResultTimestamp.textContent = new Date().toString();
-            label.style.color = 'teal';
-            clearTimeout(label.highlightTimeout);
-            label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
-        
-            // scanner.stop();
-        }
-    
-        // ####### File Scanning #######
-        fileSelector.addEventListener('change', event => {
-            const file = fileSelector.files[0];
-            if (!file) {
-                return;
-            }
-            QrScanner.scanImage(file, { returnDetailedScanResult: true })
-                .then(result => {
-                    // setResult(fileQrResult, result);
-                    addNewLinkages(result);
-                }).catch(e => setResult(fileQrResult, { data: e || 'No QR code found.' }));
-        });
-        
-        document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
-            const dropZoneElement = inputElement.closest(".drop-zone");
-    
-            dropZoneElement.addEventListener("drop", (e) => {
-                e.preventDefault();
-    
-                if (e.dataTransfer.files.length) {
-                    let myFile = e.dataTransfer.files[0];
-    
-                    const file = fileSelector.files[0];
-                    if (!file) {
-                        return;
-                    }
-                    QrScanner.scanImage(file, { returnDetailedScanResult: true })
-                        .then(result => {
-                            // setResult(fileQrResult, result)
-                            addNewLinkages(result);
-                        }).catch(e => setResult(fileQrResult, { data: e || 'No QR code found.' }));
-                }
-            });
-        });
-    });
-
-
-    function addNewLinkages(info) {
-        console.log(info.data)
-        let parseData = JSON.parse(info.data);
-        console.log(parseData);
-
-        const docRef = fire.myDoc(fire.db, "vehicle-information", parseData.uid);
-        fire.myOnSnapshot(docRef, (doc) => {
-            // console.log("vehicleInformation", doc.data(), doc.id);
-            let vehicleInfo = {...doc.data()};
-        });
-    }
-</script> -->
+<script src="./sidebar/sidebar-mobile.js" defer></script>
 
 </html>

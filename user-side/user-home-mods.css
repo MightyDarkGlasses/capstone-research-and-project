@@ -429,6 +429,7 @@ Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and p
     background-color: #11101D;
     border-radius: 1em;
     display: flex;
+    padding-bottom: 1em;
 
     color: white;
 }
@@ -714,9 +715,71 @@ Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and p
     width: 100%;
     padding: 1em;
 }
+.right-container .mobile-sidebar {
+    display: none;
+}
+
+@media screen and (max-width: 960px) {
+    .container {
+        width: 97%;
+    }
+
+    .header {
+        display: none;
+    }
+
+    .right-container {
+        /* width: 95vw !important; */
+        overflow: hidden;
+        padding: 0;
+        overflow-y: scroll;
+        border-radius: 1em;
+        width: 97vw;
+    }
 
 
+    .qr-code .qr-code-image {
+        display: block;
+        width: fit-content;
+        height: fit-content;
+        padding: 1em;
+        margin: 1em auto;
+    }
+    .welcome-box {
+        width: 100%;
+    }
 
+    .qr-code-vehicle-info {
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    .qr-code .qr-code-quick-actions {
+        flex-direction: column;
+    }
+
+    /* Dropdown */
+    .qr-code-vehicle-info .qr-code-dropdown .qr-code-dropdown-clickable {
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    /* Save, View QR Code */
+    .qr-code .qr-code-common-actions {
+        /* text-align: center; */
+        justify-content: center;
+    }
+
+    .welcome-title {
+        text-align: center;
+    }
+
+    .right-container .mobile-sidebar {
+        display: block;
+    }
+    
+
+}
 
 
 
