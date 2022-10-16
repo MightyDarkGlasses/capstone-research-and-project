@@ -82,6 +82,10 @@ export const doSetDoc = setDoc;
 export const doArrayUnion = arrayUnion;
 export const doArrayRemove = arrayRemove;
 export const doIncrement = increment;
+export const doQuery = query;
+export const doWhere = where;
+export const doOrderBy = orderBy;
+
 
 // Authentication
 export const getServerTimestamp = serverTimestamp;

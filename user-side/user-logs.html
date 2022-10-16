@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+     <head>
+          <meta charset="UTF-8" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta
+               name="viewport"
+               content="width=device-width, initial-scale=1.0"
+          />
+
+          <link rel="stylesheet" href="user-home.css" />
+          <link rel="stylesheet" href="user-home-mods.css" />
+          <link rel="stylesheet" href="user-account.css" />
+          <link rel="stylesheet" href="./sidebar/sidebar-mobile.css" />
+          <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+
+          <!-- JQuery Modal Styles -->
+          <link
+               rel="stylesheet"
+               href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"
+          />
+          <link
+               href="https://fonts.googleapis.com/css2?family=Bayon&display=swap"
+               rel="stylesheet"
+          />
+
+          <link
+               rel="stylesheet"
+               type="text/css"
+               href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css"
+          />
+          <title>Welcome To BulSU VMS</title>
+     </head>
+     <!-- 
+    Things to do: 
+    1. Layout of the dashboard:
+        - sidebar
+        - main content
+        - table layout
+        - pie chart 
+     -->
+
+     <style>
+        #content {
+            color: white;
+        }
+        #table_id_length > label,
+        #table_id_filter, #table_id_filter > label > input,
+        #table_id_length > label > select{
+            color: white !important;
+        }
+        #table_id_info, #table_id_paginate > a{
+            color: white !important;
+        }
+     </style>
+     <body>
+          <div class="container user-main">
+               <div class="sidebar">
+                    <div class="admin-details-box">
+                         <div class="sidebar-logo school-logo-container">
+                              <img src="bulsu-logo.png" alt="" id="bsuLogo" />
+                         </div>
+                         <div>
+                              <p>BulSU Vehicle<br />Management<br />System</p>
+                         </div>
+                    </div>
+
+                    <div class="horizontal-box">
+                         <hr />
+                    </div>
+                    <!-- <div class="horizontal-box">
+                <div class="horizontal-line"></div>
+            </div> -->
+                    <ul>
+                         <li>
+                              <a href="user-home.html" class="menu">
+                                   <div class="sidebar-icon-1"></div>
+                                   <div class="title">Home</div>
+                              </a>
+                         </li>
+                         <li>
+                              <a href="user-account.html" class="menu">
+                                   <div class="sidebar-icon-2"></div>
+                                   <div class="title">My Account</div>
+                              </a>
+                         </li>
+                         <li>
+                              <a href="user-vehicle.html" class="menu">
+                                   <div class="sidebar-icon-3"></div>
+                                   <div class="title">Vehicles</div>
+                              </a>
+                         </li>
+                         <li>
+                              <a href="#" class="menu">
+                                   <div class="sidebar-icon-4"></div>
+                                   <div class="title">Logs</div>
+                              </a>
+                         </li>
+                         <li>
+                              <a href="user-announcements.html" class="menu">
+                                   <div class="sidebar-icon-5"></div>
+                                   <div class="title">Announcements</div>
+                              </a>
+                         </li>
+                    </ul>
+                    <div class="horizontal-box">
+                         <hr />
+                    </div>
+               </div>
+               <div class="right-container">
+                    <div class="mobile-sidebar">
+                         <header style="margin-bottom: 1em">
+                              <div class="main-sidebar">
+                                   <h2>BulSU</h2>
+                                   <button class="hamburger">
+                                        <div class="bar"></div>
+                                   </button>
+                              </div>
+                         </header>
+                         <nav class="mobile-nav">
+                              <a href="user-home.html">Home</a>
+                              <a href="user-account.html">My Account</a>
+                              <a href="user-vehicle.html">Vehicles</a>
+                              <a href="user-logs.html">Logs</a>
+                              <a href="user-announcements.html"
+                                   >Announcements</a
+                              >
+                              <div class="mobile-nav-buttons">
+                                   <a href="../index.html">Logout</a>
+                              </div>
+                         </nav>
+                    </div>
+
+                    <div class="header">
+                         <div class="logo-holder user-holder">
+                              <div class="dashboard-logo">
+                                   <iconify-icon
+                                        icon="ic:baseline-account-circle"
+                                        style="color: white"
+                                        width="48"
+                                        height="48"
+                                   ></iconify-icon>
+                              </div>
+                              <div class="profile-box">
+                                   <div class="fullname">DELA CRUZ, Juan</div>
+                                   <div class="category">Resident</div>
+                                   <!-- Resident / Visitor -->
+                              </div>
+                         </div>
+                         <div class="util-holder">
+                              <div class="search-box">
+                                   <input
+                                        class="search-icon"
+                                        type="text"
+                                        id="search"
+                                        placeholder="Type here to see the magic!"
+                                   />
+                              </div>
+
+                              <div class="utils">
+                                   <div class="util-icon-notif util-box"></div>
+                                   <div class="util-icon-theme util-box"></div>
+                                   <div
+                                        class="util-icon-fullscr util-box"
+                                   ></div>
+                                   <div
+                                        class="util-icon-settings util-box"
+                                   ></div>
+                                   <div class="util-icon-logout util-box"></div>
+                              </div>
+                         </div>
+                    </div>
+                    <div id="content" class="content user-content">
+                         <table
+                              id="table_id"
+                              class="display"
+                              style="width: 100%">
+                              <thead>
+                                   <tr>
+                                        <th>Time In</th>
+                                        <th>Time Out</th>
+                                        <th>Plate Number</th>
+                                        <th>Driver</th>
+                                   </tr>
+                              </thead>
+                         </table>
+                    </div>
+               </div>
+          </div>
+
+          <!-- Modals -->
+          <div
+               id="qr-code-modal"
+               class="modal"
+               style="max-width: 600px !important"
+          >
+               <div style="height: 100%">
+                    <img class="modal-qrcode" src="" alt="" />
+               </div>
+          </div>
+     </body>
+
+     <script
+          src="https://code.jquery.com/jquery-3.6.1.min.js"
+          integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+          crossorigin="anonymous"></script>
+     <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"
+          defer></script>
+     <script
+          type="text/javascript"
+          charset="utf8"
+          src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"
+          defer></script>
+     <script src="../dist/bundle.js" defer></script>
+     <script src="./sidebar/sidebar-mobile.js" defer></script>
+
+     <!-- jQuery Modal -->
+     <!-- <script defer>
+          $(document).ready(function () {
+               $("#datatable-logs").DataTable();
+          });
+     </script> -->
+
+    <!-- <script>
+        $(document).ready(function() {
+            $("#table_id").DataTable({
+                ajax: "./ajaxList.txt"
+            });
+        });
+    </script> -->
+</html>

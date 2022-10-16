@@ -7,6 +7,8 @@ module.exports = {              // export the module
     './user-side/home1.js',
     './user-side/myaccount2.js',
     './user-side/vehicles3.js',
+    './user-side/logs4.js',
+    './user-side/announcement5.js',
     './security-side/qrscanning.js',
     './security-side/security-officer/scripts/qr.js'],      // path, where we should look
   output: {

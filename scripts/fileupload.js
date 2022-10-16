@@ -41,10 +41,29 @@ function fileExplorer_Events(myButton, myInput, myDragArea, index) {
         console.log("Explorer is clicked!");
         myInput.click(); //if the button is click, make "input" clicked also
     });
-    myInput.addEventListener("change", function() {
+    myInput.addEventListener("change", function(e) {
         file = this.files[0];
         myDragArea.classList.add("active");
         displayFile(file, myDragArea);
+
+
+        console.log('change explorer');
+        //Check whether if the file was uploaded under Front, Side, or Rear vehicle container
+        switch(index) {
+            case 1: {
+                doStoreVehicleData(file, "vehicle-front", "vehicle-front-filename", "vehicle-front-filetype");
+                break;
+            }
+            case 2: {
+                doStoreVehicleData(file, "vehicle-side", "vehicle-side-filename", "vehicle-side-filetype");
+                break;
+            }
+            case 3: {
+                doStoreVehicleData(file, "vehicle-rear", "vehicle-rear-filename", "vehicle-rear-filetype");
+                break;
+            }
+        }
+        
     });
 }
 

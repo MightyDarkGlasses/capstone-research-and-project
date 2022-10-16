@@ -1,5 +1,6 @@
 import QrScanner from "./qr-scanner.min.js";
 import * as fire from "../../../src/index";
+import e from "./qr-scanner.min.js";
 
 if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     console.log('QrScanner qr.js');
@@ -151,63 +152,113 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         // };
 
 
-        const docRefLogs = fire.myDoc(fire.db, "logs", userUID);
-        const docSnap = await fire.myGetDoc(docRefLogs);
+        const myQuery = fire.doQuery(fire.myCollection(fire.db, 'logs'));
+        fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
+        const unsubCollection = fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
+            // let logs = {};
+            let logs = [];
 
-        //Document logs exists?
-        if (docSnap.exists()) {
-            const selectedUserLogsData = docSnap.data();
-            console.log("Document data:", selectedUserLogsData);
-            console.log('currentIndex:', selectedUserLogsData.index);
-            console.log('currentIndex:', selectedUserLogsData[selectedUserLogsData.index]);
+            let index = 0;
+            snapshot.docs.forEach((doc) => {
+                let unpackData = {...doc.data()};
+                let objSize = Object.keys(unpackData).length;
+                Object.entries(unpackData).map((element, index) => {
+                    if(objSize-1 !== index) {
+                        console.log(index, element[1]);
+                        index += 1; //increment
+                        logs.push(element[1]);
+                    }
+                });
+            });
+            console.log(logs); 
 
-            if(selectedUserLogsData[selectedUserLogsData.index] === undefined) {
-                const docData2 = {
-                    [selectedUserLogsData.index]: {   
-                        "userUID": userUID,
-                        "time_scanned": new Date().toString(),
-                        "time_in": fire.getServerTimestamp(),
-                        "time_out": '',
-                        "owner": fullName,
-                        "plate_number": plateNumber
-                    },
-                };
+            //Sort the data by time_scanned
+            logs.sort(function(a, b) {
+                return new Date(a.time_scanned) - new Date(b.time_scanned);
+            });
+            console.log('sorted:', logs);   //print the result
+
+            }); //end of function
+        }); //end of snapshot function
+        
+        // const querySnapshot = await fire.myGetDocs(q);
+        // console.log('Do the querySnapshot:', querySnapshot)
+        // querySnapshot.forEach((doc) => {
+        //     // doc.data() is never undefined for query doc snapshots
+        //     console.log(doc.id, " => ", doc.data());
+        // });
+
+
+        // const myQuery = query(colRef, where("authors", "==", "Rick Astley"));
+        // onSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
+        // const unsubCollection = onSnapshot(myQuery, (snapshot) => {     //based on the query
+        // let books = [];
+        //     snapshot.docs.forEach((doc) => {
+        //     books.push({ ...doc.data(), id: doc.id }); //... -> Spread, get all the data then the id
+        // });
+        // console.log(books); //print the book array
+
+
+
+
+        // const docRefLogs = fire.myDoc(fire.db, "logs", userUID);
+        // const docSnap = await fire.myGetDoc(docRefLogs);
+        // //Document logs exists?
+        // if (docSnap.exists()) {
+        //     const selectedUserLogsData = docSnap.data();
+        //     console.log("Document data:", selectedUserLogsData);
+        //     console.log('currentIndex:', selectedUserLogsData.index);
+        //     console.log('currentIndex:', selectedUserLogsData[selectedUserLogsData.index]);
+
+        //     if(selectedUserLogsData[selectedUserLogsData.index] === undefined) {
+        //         const docData2 = {
+        //             [selectedUserLogsData.index]: {   
+        //                 "userUID": userUID,
+        //                 "time_scanned": new Date().toString(),
+        //                 "time_in": fire.getServerTimestamp(),
+        //                 "time_out": '',
+        //                 "owner": fullName,
+        //                 "plate_number": plateNumber
+        //             },
+        //         };
     
-                await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData2);
-            }
-            else {
-                if(selectedUserLogsData[selectedUserLogsData.index].time_out === "") {
-                    // Update the time out.
+        //         await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData2);
+        //     }
+        //     else {
+        //         if(selectedUserLogsData[selectedUserLogsData.index].time_out === "") {
+        //             // Update the time out.
     
-                    // Atomically increment the population of the city by 50.
-                    const name = `${selectedUserLogsData.index}.time_out`;
-                    console.log('name:', name)
-                    await fire.myUpdateDoc(docRefLogs, {
-                        // `${selectedUserLogsData.index}.time_out`: new Date().toString();
-                        [name]: new Date().toString(),
-                        index: fire.doIncrement(1)
-                    });
-                }
-                // await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData);
-            }
-        }
-        else {
-            console.log("No such document!");
+        //             // Atomically increment the population of the city by 50.
+        //             const name = `${selectedUserLogsData.index}.time_out`;
+        //             console.log('name:', name)
+        //             await fire.myUpdateDoc(docRefLogs, {
+        //                 // `${selectedUserLogsData.index}.time_out`: new Date().toString();
+        //                 [name]: new Date().toString(),
+        //                 index: fire.doIncrement(1)
+        //             });
+        //         }
+        //         // await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData);
+        //     }
+        // }
+        // else {
+        //     console.log("No such document!");
 
-            const docData = {
-                0: {   
-                    "userUID": userUID,
-                    "time_scanned": new Date().toString(),
-                    "time_in": fire.getServerTimestamp(),
-                    "time_out": '',
-                    "owner": fullName,
-                    "plate_number": plateNumber
-                },
-                'index': 0
-            };
+        //     const docData = {
+        //         0: {   
+        //             "userUID": userUID,
+        //             "time_scanned": new Date().toString(),
+        //             "time_in": fire.getServerTimestamp(),
+        //             "time_out": '',
+        //             "owner": fullName,
+        //             "plate_number": plateNumber
+        //         },
+        //         'index': 0
+        //     };
 
-            await fire.doSetDoc(fire.myDoc(fire.db, "logs", userUID), docData);
-        }
+        //     await fire.doSetDoc(fire.myDoc(fire.db, "logs", userUID), docData);
+        // }
+
+
 
 
         // await fire.myAddDoc(fire.myCollection(fire.db, "logs", userUID), docData);

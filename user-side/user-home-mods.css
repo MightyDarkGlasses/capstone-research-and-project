@@ -634,12 +634,13 @@ Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and p
 .qr-code-vehicle-info {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 .qr-code-vehicle-info > div {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    margin: auto 0;
+    /* margin: auto 0; */
 }
 .qr-code-vehicle-info .qr-code-dropdown .qr-code-dropdown-clickable {
     background-color: var(--secondary-color-opaque);
