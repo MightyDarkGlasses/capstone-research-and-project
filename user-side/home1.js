@@ -182,4 +182,10 @@ if(windowLocation.indexOf("user-home") > -1) {
         // window.location = '../login.html';
         window.location = '../index.html';
     });
+
+    // document.querySelector('.fullname').innerText = localStorage.personal_info_name === '' ? '' : localStorage.personal_info_name;
+    // document.querySelector('.category').innerText = 
+    //     localStorage.user_type === '' || localStorage.user_type === undefined || localStorage.user_type === null
+    //      ? '' : localStorage.personal_info_name;
+
 }
