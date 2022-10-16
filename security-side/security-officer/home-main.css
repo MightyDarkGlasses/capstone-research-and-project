@@ -1,0 +1,1272 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lexend+Deca:wght@100;200;300;400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+  font-family: 'Lexend Deca';
+  box-sizing: border-box;
+}
+
+:root {
+  --sidebar-width: 250px;
+  --main-container-width:  calc(100vw - var(--sidebar-width));
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 250px 4fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: 
+  "sidebar main-container";
+  box-sizing: border-box;
+  font-family: 'Lexend Deca';
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-container {
+  display:grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0fr 0fr 1fr;
+  grid-template-areas:
+  "header"
+  "search-area"
+  "content-container";
+  margin-left: 15px;
+  overflow-y: scroll;
+}
+
+
+/* sidebar items*/
+
+.sidebar {
+  background-color: #0085FF;
+  grid-area: sidebar;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0fr 1fr ;
+  grid-template-areas: 
+  "title-box"
+  "sidebar-pages";
+}
+
+.title-box {
+  grid-area: title-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 1em 0.5em;
+  flex-direction: row;
+}
+
+.title-box > img {
+  height: 65px;
+  width: 65px;
+}
+
+.title-box > h1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* horizontal divider on side lowerside */
+.line {
+  grid-area: line;
+  margin: 0.5em 0em 2em;
+}
+
+hr {
+  background-color: white;
+  margin: 0 auto;
+  height: 5px;
+  width: 60%;
+  place-content: center;
+}
+
+/* horizontal divider on side topside */
+.line1 {
+  grid-area: line1;
+  margin: 2em 0em;
+ 
+}
+
+.sidebar-pages {
+  grid-area: sidebar-pages;
+  justify-content: flex-start;
+}
+
+.sidebar-pages .title {
+  font-size: 1.25em;
+  letter-spacing: -0.035em;
+}
+
+/* sidebar logo and text */
+
+.sidebar-pages li a{
+  display: flex;
+  color:white;
+  align-items: center;
+  border-left: 5px solid transparent;
+  margin: 0.5em 0em;  
+}
+
+.sidebar-pages li a:hover {
+  color: #FFC700;
+  border-left: 5px solid #FFC700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+/* li a.active {
+  color: #FFC700;
+  border-left: 5px solid #FFC700;
+} */
+
+.logout {
+  grid-area: logout;
+  margin-top: 10px;
+}
+
+.sidebar-logo {
+  padding: 10px;
+  display: flex;
+  font-size:30px;
+  margin-left: 15px;
+  justify-content: center;
+}
+
+
+/* HEADER CSS */
+.header-container {
+  display: grid;
+  grid-area: header;
+  grid-template-columns: 1fr;
+  margin-right: 15px;
+  margin-top: 20px;
+}
+
+.header {
+  background-color: #C1CFDB;
+  border-radius: 15px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: 
+  "guard_box utility";
+  align-items: center;
+}
+
+/* profile picture */
+.guard_box > img {
+  height: 60px;
+  display: flex;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.guard-title > .name-sg {
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.guard-title > .secTitle {
+  font-weight: 12px;
+  color: #3CA1FF;
+}
+
+
+/* box of profile picture */
+.guard_box {
+  grid-area: guard_box;
+  padding: 10px;
+  justify-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.uti-divider {
+  font-size: 45px;
+  line-height: 20px;
+  width: 30px;
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
+
+ /* header div icons */
+.utility {
+  display: flex;
+  grid-area: utility;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px;
+  flex-direction: row;
+}
+
+/* header icons */
+.nav-logo {
+  display: flex;
+  color:#3CA1FF;
+  cursor: pointer;
+  align-items: center;
+  justify-items: center;  
+  border-radius: 15px;
+  padding: 8px;
+  font-size: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.nav-logo:hover {
+  color: white;
+  background-color: #3CA1FF;
+  border-radius: 15px;
+  transition: 0.3s;
+}
+
+
+/* SEARCH AREA CSS */
+.search-area {
+  grid-area: search-area;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-right: 25px;
+}
+
+.search-outline {
+  display: flex;
+  border: 2px solid black;
+  width: 300px;
+  border-radius: 15px;
+  align-items: center;
+}
+
+#search {
+  border: 0px solid transparent;
+  background: none;
+  font-size: 15px;
+  width: 220px;
+}
+
+#search:focus {
+  outline: none;
+}
+
+.search-icon {
+  font-size: 30px;
+  align-self: center;
+  line-height: 20px;
+  display: flex;
+  padding: 10px;
+  flex-direction: row;
+}
+
+::-webkit-input-placeholder{
+  font-size: 15px;
+  color: black;
+}
+
+
+/* whole box of content */
+.content-container {
+  grid-area: content-container;
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  margin-right: 15px;
+  margin-top: 10px;
+}
+
+.content-area {
+  display:grid;
+  grid-template-columns: 1fr 5px 1fr ;
+  grid-template-rows: 1fr; 
+  grid-template-areas: 
+  "content1 vertical-line content2";
+  border-radius: 15px;
+  border: 2px solid black;
+
+  height: 50%;
+}
+
+/* first half box of content */
+.content1 {
+  grid-area: content1;
+  display: flex;
+  padding: 20px 0px 20px 0px;
+  justify-content: center;
+}
+
+.output-box {
+  /* background-image: url("../images/icons/qrcode-1.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover; */
+  display: flex;
+  height: 100%;
+  /* width: 20em; */
+  width: 90%;
+  margin: auto;
+  border-radius: 20px;
+  box-shadow: 0px 3px 5px 4px #BEBEBE;
+}
+
+
+.output-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 110px;
+  padding: 10px;
+  text-transform: uppercase;
+  font-weight: bolder;
+  color: black;
+  border-top-left-radius: 20px;
+  border-top: 40px solid white;
+  
+  border-right: 30px solid transparent;
+  filter: drop-shadow(0px 1px 3px gray);
+  height: 0;
+  line-height: 3.5;
+  text-decoration: none;
+}
+
+/* divider on content box */
+.divider {
+  display: flex;
+}
+
+.vertical-line {
+  grid-area:"vertical-line";
+  display: flex;
+  width: 3px;
+  height: 90%;
+  align-self: center;
+  flex-direction: column;
+  background-color: #C1CFDB;
+}
+
+/* second half box of content */
+.content2 {
+  grid-area: content2;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.6fr 0fr 0fr;
+  grid-template-areas: 
+  "scanner"
+  "btn-scan"
+  "scan-icon";
+
+  /* justify-items: auto; */
+  margin: auto 0;
+  gap: 1em;
+}
+
+/* place where the scanner takes place */
+.scanner {
+  color: black;
+  display: flex;
+  font-size: 15em;
+  justify-content: center;
+}
+
+/* scanner icon and gate # line */
+.scan-icon {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+ 
+}
+
+.gate {
+  display: flex;
+  align-items: flex-end;
+  font-weight: bold;
+}
+
+.usbcameraicon {
+  display: flex;
+  height: 36px;
+} 
+
+/* scanning ready button */
+.btn-scan {
+  cursor: pointer;
+  background: black;
+  border-radius: 20px;
+  color: white;
+  margin: auto;
+  text-transform: uppercase;
+  font-weight: 800;
+  padding: 10px;
+  width: 250px;
+  box-shadow: 0px 5px 10px gray;
+}
+
+.btn-scan:hover {
+  color:black;
+  background: white;
+  transition: 0.3s;
+}
+
+.btn-scan-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+
+/* visitor button area*/
+.visitor {
+  grid-area: visitor;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* properties of visitor button */
+#btn-visitor {
+  cursor: pointer;
+  background: black;
+  border-radius: 25px;
+  color: white;
+  padding: 10px;
+  width: 200px;
+  font-size: 15px;
+  text-align: center;
+  font-weight: bold;
+  border: none;
+}
+
+#btn-visitor:hover {
+  background:#0085FF;
+  color: black;
+  transition: 0.3s;
+}
+
+
+/* securityOfficer-home-success.html CSS */
+
+.container-success{
+  grid-area: container-success;
+  display: grid;
+  border: 2px solid black;
+  grid-column: 1/2;
+  width: auto;
+  border-radius: 20px;
+  margin: 0px 20px 0px 10px;
+  flex-direction: row;
+}
+
+.content-area-success {
+  display: grid;
+  height: 350px;
+  grid-template-columns: 1fr 5px 1fr;
+  width: auto;
+  flex-direction: row;
+}
+
+.content-success-1 {
+  display: flex;  
+  margin: auto;
+}
+
+.output-success-box {
+  text-transform: uppercase;
+  height: 280px;
+  width: 320px;
+  border-radius: 20px;
+  box-shadow: 0px 3px 5px 4px #BEBEBE;
+  display: grid;
+  background-image: url("../images/icons/qrCodeScanned-success.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 55%;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0fr 1fr;
+}
+
+.output-text-success {
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  text-transform: uppercase;
+  font-weight: bolder;
+  border-top-left-radius: 20px;
+  border-top: 40px solid white;
+ 
+  border-right: 30px solid transparent;
+  filter: drop-shadow(0px 1px 3px gray);
+ 
+  height: 0;
+  width: 110px;
+  line-height: 3.5;
+  text-decoration: none;
+}
+
+.output-success-scanned {
+  display: flex;
+  padding: 15px;
+  color: #343434;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  font-weight: bolder;
+  text-transform: uppercase;
+  margin: 2px;
+}
+
+.content-success-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0fr 1fr 0.2fr 0fr 1fr 0.5fr;
+  grid-template-areas: 
+  "vehicle-information"
+  "car-info"
+  "line-info"
+  "personal-information"
+  "personal-info"
+  "buttons-information";
+  grid-gap: 0.5rem;
+  padding: 20px 20px 20px 30px;
+  
+}
+
+.vehicle-information {
+  grid-area: vehicle-information;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-transform: uppercase;
+  margin-left: 30px;
+}
+
+.car-info {
+  grid-area: car-info;
+  display: flex;
+  align-items: flex-start;
+  grid-gap: 20px;
+  align-items: center;
+  margin-left: 30px;
+}
+
+.car-icon, .user-icon {
+  height: 50px; 
+}
+
+.info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.line-info {
+  grid-area: line-info;
+  width: auto;
+  background-color:#C1CFDB;
+  height: 3px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+.personal-information {
+  grid-area: personal-information;
+  display: flex;
+  flex-direction: row;
+  text-transform: uppercase;
+  margin-left: 30px;
+}
+
+.personal-info {
+  grid-area: personal-info;
+  display: flex;
+  grid-gap: 20px;
+  align-items: center;
+  margin-left: 30px;
+  margin-bottom: 20px;
+}
+
+.buttons-information {
+  grid-area: buttons-information;
+  display: flex;
+  margin: 0;
+  flex-direction: row;
+  grid-gap: 2rem;
+  justify-content: space-between;
+}
+
+#btn-reject, #btn-confirm {
+  width: 240px;
+  border: 2px solid black;
+  border-radius: 25px;
+  flex-direction: row;
+  text-transform: uppercase;
+  font-weight: bolder;
+  box-shadow: 0px 5px 10px gray;
+}
+
+#btn-reject:hover {
+  background: red;
+  transition: 0.3s;
+  color: white;
+}
+
+#btn-confirm:hover {
+  background: #32CD32;
+  transition: 0.3s;
+  color: white;
+}
+
+#btn-confirm {
+  background: black;
+  color: white;
+  font-weight: bolder;
+}
+
+/* divider on content box */
+.divider-success {
+  display: flex;
+}
+
+.vertical-line-success {
+  display: flex;
+  justify-content: center;
+  width: 3px;
+  background-color:#C1CFDB;
+  height: 300px;
+  margin-top: 20px;
+}
+
+h1 {
+  font-size: 18px;
+}
+
+/* securityOffer-home-unrecognized CSS */
+
+.container-unrecognized{
+  display: grid;
+  border: 2px solid black;
+  grid-column: 1/2;
+  width: auto;
+  border-radius: 15px;
+  margin: 0px 20px 0px 10px;
+  flex-direction: row;
+}
+.content-area-unrecognized {
+  display: grid;
+  height: 350px;
+  grid-template-columns: 1fr 5px 1fr;
+  width: auto;
+  flex-direction: row;
+}
+
+.content-unrecognized-1 {
+  display: flex;  
+  margin: auto;
+}
+
+.output-unrecognized-box {
+  text-transform: uppercase;
+  height: 280px;
+  width: 320px;
+  border-radius: 20px;
+  box-shadow: 0px 3px 5px 4px #BEBEBE;
+  display: grid;
+  background-image: url("../images/icons/qrCodeScanned-error.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 55%;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0fr 1fr;
+}
+
+.output-text-unrecognized {
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  place-items: center;
+  text-transform: uppercase;
+  font-weight: bolder;
+  border-top-left-radius: 20px;
+  border-top: 40px solid white;
+ 
+  border-right: 30px solid transparent;
+  filter: drop-shadow(0px 1px 3px gray);
+ 
+  height: 0;
+  width: 110px;
+  line-height: 3.5;
+  text-decoration: none;
+}
+
+.output-unrecognized-scanned {
+  display: flex;
+  padding: 15px;
+  color: #343434;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  font-weight: bolder;
+  text-transform: uppercase;
+  margin: 2px;
+}
+
+.content-unrecognized-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 2fr 1fr;
+}
+
+.timeUnrecognized {
+  display: flex;
+  text-transform: uppercase;
+  justify-content: flex-end;
+  margin-top: 15px;
+  margin-right: 15px;
+  padding: 10px;
+}
+
+.error-icon {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}
+
+.qrCodeUnrecognized {
+  text-transform: uppercase;
+  font-weight: bolder;
+}
+
+.QrCodeText {
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: center;
+  align-items: center;
+}
+
+.button-box {
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  border-radius: 20px;
+  background-color: black;
+  color: white;
+  box-shadow: 0px 5px 10px gray;
+}
+
+.back-button:hover {
+  background-color: white;
+  color: black;
+  transition: 0.3s;
+}
+
+/* divider on content box */
+.divider-unrecognized {
+  display: flex;
+}
+
+.vertical-line-unrecognized {
+  display: flex;
+  justify-content: center;
+  width: 3px;
+  background-color:#C1CFDB;
+  height: 300px;
+  margin-top: 20px;
+}
+
+/* securityOfficer-vistor.html CSS */
+
+
+.container-visitor{
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  border: 2px solid black;
+  border-radius: 15px;
+  margin: 0px 20px 0px 10px;
+  margin-right: 20px;
+  margin-top: 40px;
+}
+
+.content-area-visitor {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
+.header-visitor {
+  display: flex;
+  font-size: 30px;
+  font-weight: bolder;
+  justify-content:center;
+  text-transform: uppercase;
+  font-family: 'Lexend Deca';
+  margin-bottom: 30px;
+  color: black;
+}
+
+.input-box-visitor {
+  flex-direction: row;
+  display: flex;
+  grid-gap: 1.5rem;
+  padding: 10px;
+}
+
+.input-visitor {
+  padding: 8px;
+  border-radius: 8px;
+  border: 2px solid #E1E1E3;
+  width: 250px;
+  outline: transparent;
+  filter: drop-shadow(0px 4px 2px #BEBEBE);
+  text-transform: uppercase;
+
+}
+
+.visitor-title {
+  display: flex;
+  justify-content: flex-start;
+  font-weight: bold;
+  font-size: 20px;
+  margin:auto;
+  padding-bottom: 2px;
+  font-family: 'Inter';
+}
+
+.buttons-visitor {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-top: 50px;
+  font-size: 24px;
+}
+
+#btn-backToScanner, #btn-saveEntry {
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 20px; 
+  
+  text-transform: uppercase;
+  font-weight: bolder;
+  filter: drop-shadow(0px 3px 3px gray);
+  width:  250px;
+}
+
+#btn-saveEntry {
+  background-color: black;
+  color: white;
+}
+
+#btn-backToScanner:hover {
+  background: black;
+  color: white;
+  transition: 0.3s;
+}
+
+#btn-saveEntry:hover {
+  background:white;
+  color: black;
+  transition: 0.3s;
+}
+
+
+
+.mobileVisitor {
+  display: none;
+}
+
+.mobile-btn-scan-area {
+  display: none;
+}
+
+.mobileGate{
+  display: none;
+}
+
+
+@media (max-width: 768px){
+  .container{
+    grid-template-columns: 1fr;
+    grid-template-rows: 0fr 0fr 0.1fr 0.1fr ;
+    grid-template-areas: 
+    "sidebar"
+    "header"
+    "search-area"
+    "content-area";
+    overflow: scroll;
+  }
+
+
+  .main-container {
+    margin-left: 0px;
+    overflow: visible;
+  }
+
+  /* WHOLE SIDEBAR AREA MOBILE VERSION */
+
+  .title-box {
+    display: flex;
+    grid-gap: 0.5rem;
+    place-content: flex-start;
+  }
+
+  .school-logo {
+    height: 70px;
+    width: 70px;
+  }
+
+  .bulsu-name {
+    font-size: 17px;
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+    font-size: 15px;
+    background-color: #D9EDFF;
+    width: 100%;
+    display: flex;
+    padding: 0;
+    padding-bottom: 0;
+  }
+
+  .sidebar-pages {
+    display: none;    
+  }
+  
+  .line, .line-1 {
+    display: none;
+  }
+
+  /* WHOLE HEADER AREA MOBILE VERSION */
+
+  .header-container {
+    background-color: #D9EDFF;
+    margin: 0;
+  }
+  
+  .header {
+    display: grid;
+    border-radius: 35px;
+    margin: 0px 10px;
+    font-size: 15px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 
+    "guard_box";
+  }
+
+  .guard_box {
+    grid-area: guard_box;
+    padding: 10px;
+    justify-content: flex-start;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .utility {
+    display: none;
+  }
+  .name-sg {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .secTitle {
+    color: black;
+    font-weight: 800;
+    font-size: 18px;
+  }
+
+  .search-area {
+    background-color:  #D9EDFF;
+    margin-right: 0px;
+    padding-bottom: 15px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    filter: drop-shadow(0px 4px 2px gray);
+  }
+
+  .search-icon {
+    padding: 5px;
+    font-size: 25px;
+  }
+  
+  .search-outline {
+    margin-right: 20px;
+    margin-top: 5px;
+  }
+  
+  
+/* WHOLE CONTENT AREA MOBILE VERSION */
+  
+  .content-container {
+    margin: 5px;
+  }
+  .content-area {
+    grid-area: content-area;
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 5px 1fr; 
+    grid-template-areas: 
+    "content1"
+    "divider"
+    "content2";
+    border-radius: 15px;
+    border: none;
+    height: auto;
+    width: auto;
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .content1 {
+    grid-area: content1;
+    display: flex;
+    margin: auto;
+    padding: 20px;
+  }
+
+  .output-box {
+    height: 350px;
+    margin:0%;
+  }
+  
+  .content2 {
+    grid-area: content2;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0fr 1fr 0fr;
+    grid-template-areas: 
+    "mobileGate"
+    "scanner"
+    "scan-icon";
+  }
+
+  .mobileGate {
+    grid-area: mobileGate;
+    padding: 15px;
+    display: flex;
+    font-size: 18px;
+    font-weight: bolder;
+    justify-content: flex-end;
+  }
+
+  .scanner {
+    grid-area: scanner;
+    margin: 0;
+    grid-row: scanner / mobileGate;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+  }
+
+  .scan-icon {
+    grid-area: scan-icon;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+  #btn-visitor {
+    display: flex;
+    grid-area: visitor;
+    padding: 20px;
+    height: 20px;
+    flex-direction: column;
+    border-radius: 20px;
+    font-size: 13px;
+    width: 170px;
+    text-transform: uppercase;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-btn-scan-area {
+    display: flex;
+  }
+
+  .mobile-scan {
+    display: flex;
+    cursor: pointer;
+    background: black;
+    border-radius: 20px;
+    color: white;
+    grid-area: visitor;
+    font-size: 13px;
+    text-transform: uppercase;
+    height: 30px;
+    padding: 20px;
+    width: 170px;
+    font-weight: 800;
+    border: none;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mobile-scan:hover {
+    box-shadow: 0px 0px 10px gray;
+    color:black;
+    background: white;
+    transition: 0.3s;
+  }
+
+  .mobileVisitor {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .usbcameraicon {
+    display: none;
+  }
+  .gate {
+    display: none;
+  }
+
+  .btn-scan {
+    display: none;
+  }
+
+  .visitor {
+    display: none;
+  }
+
+  .divider {
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn-scan-area {
+    display: none;
+  }
+  
+  .vertical-line {
+    grid-area:"vertical-line";
+    display: flex;
+    width: 90%;
+    height: 5px;
+    background-color: #C1CFDB;
+  }
+
+
+  
+}
+
+
+
+
+/* ######## Unregistered HyperCam 2 ########*/
+/* https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F92%2Fda%2F16%2F92da16089d9f2de8e29429d8ba89d267.jpg&f=1&nofb=1&ipt=314146c1a4a5a79fbf15347962c23301520fb166bdb378ad36b7699f719b22d0&ipo=images */
+#camera-icon {
+  background: url('https://api.iconify.design/humbleicons/camera.svg?color=white') no-repeat center center / contain;
+  background-size: 100%;
+
+  --size: 200px;
+  width: var(--size);
+  height: var(--size);
+
+  margin-top: 3em;
+}
+
+#placeholder {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-direction: column;
+
+  background-image: url('gridLines.jpg');
+  width: max(30%, 750px);
+  height: 420px;
+
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#placeholder p {
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+}
+/* ######## */
+
+/* ######## Unregistered HyperCam 2 ########*/
+/* div {
+  margin-bottom: 16px;
+} */
+
+#video-container {
+  line-height: 0;
+}
+
+#video-container.example-style-1 .scan-region-highlight-svg,
+#video-container.example-style-1 .code-outline-highlight {
+  stroke: #64a2f3 !important;
+}
+
+#video-container.example-style-2 {
+  position: relative;
+  width: max-content;
+  height: max-content;
+  overflow: hidden;
+}
+#video-container.example-style-2 .scan-region-highlight {
+  border-radius: 30px;
+  outline: rgba(0, 0, 0, .25) solid 50vmax;
+}
+#video-container.example-style-2 .scan-region-highlight-svg {
+  display: none;
+}
+#video-container.example-style-2 .code-outline-highlight {
+  stroke: rgba(255, 255, 255, .5) !important;
+  stroke-width: 15 !important;
+  stroke-dasharray: none !important;
+}
+
+#flash-toggle {
+  display: none;
+}
+
+hr {
+  margin-top: 32px;
+}
+input[type="file"] {
+  display: block;
+  margin-bottom: 16px;
+}
+
+#qr-video {
+/* width: 750px; */
+width: max(30%, 750px);
+margin: 0 auto;
+/* height: 750px; */
+}
+/* ######## Unregistered HyperCam 2 ########*/

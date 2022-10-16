@@ -654,6 +654,7 @@
                             <div>
                                 <label>Plate Number</label>
                                 <input type="text" class="vehicle-icon-2 vehicle-input" name="signup_vehicleplatenum" id="signup-fname" required="required" value="ABC1234">
+                                <div id="qrcode" style="display: none;"> <!-- QR Code is generated here -->
                             </div>
                         </div>
                         <div>
@@ -682,10 +683,12 @@
     <!-- <p><a href="#ex1" rel="modal:open">Open Modal</a></p> -->
 </body>
 
+<script src="qrcode.min.js" defer></script>
 <script src="../dist/bundle.js" defer></script>
 <script src="script_users/vehicle.js" defer></script>
 <script src="../scripts/fileupload.js" defer></script>
 <script src="../fileupload-test/main.js" defer></script>
 <script src="./sidebar/sidebar-mobile.js" defer></script>
+
 
 </html>

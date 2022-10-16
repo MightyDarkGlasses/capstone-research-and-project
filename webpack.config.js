@@ -6,7 +6,9 @@ module.exports = {              // export the module
     './src/index.js',
     './user-side/home1.js',
     './user-side/myaccount2.js',
-    './user-side/vehicles3.js'],      // path, where we should look
+    './user-side/vehicles3.js',
+    './security-side/qrscanning.js',
+    './security-side/security-officer/scripts/qr.js'],      // path, where we should look
   output: {
     
     //__dirname -> current directory, dist -> relative path (dist)

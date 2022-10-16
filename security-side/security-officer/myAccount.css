@@ -1,0 +1,348 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lexend+Deca:wght@100;200;300;400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bayon&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lexend+Deca:wght@100;200;300;400;500;600;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Lexend Deca';
+    box-sizing: border-box;
+  }
+
+.main-container-myAccount {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 0fr);
+    grid-template-areas: 
+    "P-Info"
+    "content-container-myAccount"
+    "A-Info" 
+    "content-container-myAccount1";
+}
+
+.content-container-myAccount{
+    grid-area: content-container-myAccount;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 20px;
+    font-weight: bold;
+}
+
+.P-Info {
+    grid-area: P-Info;
+    font-size: 30px;
+    font-family: 'Bayon';
+
+}
+
+.A-Info {
+    margin-top: 30px;
+    grid-area: A-Info;
+    font-size: 30px;
+    font-family: 'Bayon';
+
+}
+
+.myAccount-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+    "profilePicture   profileIcon" 
+    "name             name-id"
+    "pop-name         pop-name"
+    "position         position-id"
+    "address          address-id"
+    "pop-address      pop-address"
+    "phoneNumber      phoneNumber-id"
+    "pop-phonenum     pop-phonenum";
+    padding: 0.5em 4em;
+    
+}
+
+.profilePicture, .name, .position, .address, .phoneNumber {
+    padding: 20px;
+}
+
+.profileIcon:hover, .name-id:hover, .position-id:hover, .address-id:hover, 
+.phoneNumber-id:hover, .email-id:hover, .password-id:hover {
+    background-color: rgba(155, 154, 151, .4);
+    transition: 0.1s;
+    border-radius: 15px;
+}
+
+
+.profilePicture {
+    grid-area: profilePicture;
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.profileIcon {
+    grid-area: profileIcon;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.profileIcon > img {
+    height: 45px;
+   
+}
+
+.name {
+    grid-area: name;
+    display: flex;
+
+    align-items: center;
+}
+
+.name-id {
+    grid-area: name-id;
+    align-items: center;
+    display: flex;
+    font-weight: normal;
+}
+
+  /* pop-up for display */
+  .popdown {
+    margin-top: 20px;
+    display:none;
+}
+
+.pop-name {
+    grid-area: pop-name;
+}
+
+.pop-address {
+    grid-area: pop-address;
+}
+
+.pop-phonenum {
+    grid-area: pop-phonenum;
+}
+/* Layout for forms */
+.popdown form {
+    display: flex;
+    flex-direction: column;
+    gap: .25em;
+}
+
+/* Select all of the direct child in popdown form */
+.popdown form > * {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+    font-weight: bold;
+}
+
+/* Layout for submit button */
+.popdown form > input, #form-reset-email, #form-reset-password {
+    outline: 0;
+    border: .15em black solid;
+    font-family: 'Lexend Deca', sans-serif;
+    font-size: 1em;
+    margin-bottom: 1.5em;
+    background: #F8F8F8;
+    border-radius: 10px;
+    padding: .75em 1em;
+    color: #d9d9d9;
+}
+
+.popdown form input[type="button"], 
+.popdown form input[type="submit"], 
+#form-reset-password, 
+#form-reset-email {
+    width: max(30%, 200px);
+    margin-left: 5%;
+    background: #000000;
+    box-shadow: 0px 7px 6px 1px rgba(0, 0, 0, 0.25);
+    border-radius: 1em;
+    text-transform: uppercase;
+    border: .15em white solid;
+    cursor: pointer;
+    color: white;
+}
+
+.disable-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Clickable cursor */
+.name-id, .position-id, .address-id, .phoneNumber-id, .email-id, .password-id{
+    cursor: pointer;
+    padding-left: 10px;
+}
+
+.position {
+    grid-area: position;
+    display: flex;
+    
+    align-items: center;
+}
+
+.position-id {
+    grid-area: position-id;
+    display: flex;
+    align-items: center;
+    
+    font-weight: normal;
+}
+
+.address {
+    grid-area: address;
+    display: flex;
+    
+    align-items: center;
+}
+
+.address-id {
+    grid-area: address-id;
+    display: flex;
+    align-items: center;
+    
+    font-weight: normal;
+}
+
+.phoneNumber {
+    grid-area: phoneNumber;
+    display: flex;
+    
+    align-items: center;
+}
+
+.phoneNumber-id {
+    display: flex;
+    grid-area: phoneNumber-id;
+    
+    font-weight: normal;
+    align-items: center;
+    cursor: pointer;
+}
+
+.content-container-myAccount1{
+    grid-area: content-container-myAccount1;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 20px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.myAccount-box1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0.5em 4em;
+    grid-template-areas: 
+    "email            email-id"
+    "pop-email        pop-email"
+    "password         password-id"
+    "pop-password     pop-password";
+}
+
+.email, .password {
+    padding: 20px;
+    
+}
+
+.pop-email {
+    grid-area: pop-email;
+}
+
+.pop-password {
+    grid-area: pop-password;
+}
+
+.email {
+    grid-area: email;
+    display: flex;
+    
+    align-items: center;
+}
+
+.email-id {
+    grid-area: email-id;
+    display: flex;
+    
+    align-items: center;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.password {
+    grid-area: password;
+    display: flex;
+    
+    align-items: center;
+}
+
+.password-id {
+    grid-area: password-id;
+    display: flex;
+    
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+
+.search-area {
+    display: block;
+}
+
+    /* PERSONAL INFORMATION */
+    .content-container-myAccount {
+        padding: 0;
+    }
+    .myAccount-box {
+        grid-template-columns: 1fr;
+        gap: .5em;
+        grid-template-areas:
+        "profilePicture"
+        "profileIcon" 
+        "name"
+        "name-id"
+        "pop-name"
+        "position"
+        "position-id"
+        "address"
+        "address-id"
+        "pop-address"
+        "phoneNumber"
+        "phoneNumber-id"
+        "pop-phonenum";
+        padding: 0px 15px;
+    }
+
+    .profilePicture, .name-id, .position-id, .address-id, .phoneNumber-id, .password-id, .email-id {
+        padding: 20px;
+    }
+
+    .profileIcon {
+        justify-content: flex-start;
+        padding: 10px;
+    }
+
+    /* ACCOUNT INFORMATION */
+    .myAccount-box1 {
+        grid-template-columns: 1fr;
+        gap: .5em;
+        grid-template-areas:
+        "email"
+        "email-id"
+        "pop-email"
+        "password"
+        "password-id"
+        "pop-password";
+        padding: 0px 15px;
+    }
+
+}

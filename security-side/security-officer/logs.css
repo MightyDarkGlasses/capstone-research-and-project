@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lexend+Deca:wght@100;200;300;400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bayon&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lexend+Deca:wght@100;200;300;400;500;600;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Lexend Deca';
+    box-sizing: border-box;
+  }
+
+.main-container-logs {
+   display:grid;
+}
+
+.dropdownLogs-area {
+    padding: 15px 0px;
+    padding-bottom: 0px;
+
+}
+
+button {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    width: 154px;
+    background-color: black;
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+    justify-content: space-evenly;
+    font-weight: bolder;
+}
+
+
+/* .logs-container-main {
+    
+} */
+
+/* <!-- container with the border --> */
+.logs-container {
+    display: grid;
+    border: 2px solid black;
+    margin-top: 15px;
+    border-radius: 15px;
+    padding: 15px 20px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.5fr 1fr;
+    grid-template-areas: 
+    "upperside-logBox"
+    "logBox";
+}
+
+/* container with elements / two grids */
+
+
+/* date and trash icon  */
+.upperside-logBox {
+    grid-area: upperside-logBox;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bolder;
+}
+
+.trashIcon {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* main log details icon/details/time/button/  */
+.logBox {
+    grid-area: logBox;
+    display: grid;
+    grid-template-columns: 0.2fr 1.5fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 
+    "clockIcon details-box time deleteArea";
+    font-size: 12px;
+    background-color: #D9EDFF;
+    border-radius: 15px;
+    padding: 5px 20px;
+    margin-top: 10px;
+    border-right: 15px solid #1DD000;
+}
+
+.clockIcon {
+    display: flex;
+    grid-area: clockIcon;
+    font-size: 40px;
+    color: #1DD000;
+    align-items: center;
+}
+
+/* details number/time in & out/carinfo */
+.details-box {
+    grid-area: details-box;
+}
+
+.numberInfo {
+    text-transform: uppercase;
+    font-weight: bolder;
+}
+
+/* time in or out */
+.timeType {
+    text-transform: uppercase;
+    color: #1DD000;
+    font-weight: bolder;
+}
+
+.time {
+    grid-area: time;
+    font-weight: bolder;
+}
+
+
+.deleteArea {
+    display: flex;
+    align-items: center;
+    grid-area: deleteArea;
+    justify-content: flex-end;
+}
+
+.deleteRow {
+    align-items: center;
+    font-size: 15px;
+    background-color: red;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+
+
+
+
