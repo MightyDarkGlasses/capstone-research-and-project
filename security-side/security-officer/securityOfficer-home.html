@@ -8,22 +8,32 @@
     <title>Security Officer</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lexend+Deca:wght@100;200;300;400;500;600;700;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js" defer></script>
     <link rel="stylesheet" href="home-main.css" />
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous" defer></script>
-    <!-- <script type="module" src="./scripts/securityOfficer.js" defer></script> -->
-    <!-- <script type="module" src="../qrscanning.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    
+    <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js" defer></script>
     <script src="../../dist/bundle.js" defer></script>
     <script src="./scripts/securityOfficer.js" defer></script>
 
-    <!-- jQuery Modal -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script> -->
+    <link
+               rel="stylesheet"
+               type="text/css"
+               href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css"
+          />
+    <script
+          src="https://code.jquery.com/jquery-3.6.1.min.js"
+          integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+          crossorigin="anonymous"></script>
+     <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"
+          defer></script>
+     <script
+          type="text/javascript"
+          charset="utf8"
+          src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"
+          defer></script>
 
-    <!-- <script src="/dist/bundle.js" defer></script> -->
-    <!-- <script defer src="./vehicle.js"></script> -->
 </head>
 
 <style>
@@ -36,7 +46,8 @@
         grid-template: 1fr / 1fr;
         place-items: center;
 
-        width: 0;
+        /* width: min(100%, 500px); */
+        min-width: 500px;
     }
 
     #video-container>* {
@@ -44,6 +55,10 @@
         grid-row: 1 / 1;
     }
 
+    #placeholder {
+        width: 65%;
+        margin: 0 auto;
+    }
     .scan-region-highlight {
         /* display: inline-block !important; */
         position: relative !important;
@@ -52,7 +67,7 @@
         left: 0 !important;
         top: 0 !important;
 
-        transform: scaleX(-1) translate(-80%, 0%) !important;
+        /* transform: scaleX(-1) translate(-80%, 0%) !important; */
         fill: none;
         stroke: #e9b213;
         stroke-width: 4;
@@ -131,7 +146,7 @@
                     <div class="guard_box">
                         <img src="../images/icons/sg-icon.png" alt="sg" />
                         <div class="guard-title">
-                            <div class="name-sg">RIVERS, Bruce</div>
+                            <div class="name-sg">-----</div>
                             <div class="secTitle">Security Officer</div>
                         </div>
                     </div>
@@ -210,14 +225,26 @@
                     </div>
                 </div>
 
+                <style>
+                    .qr-scanning .qr-scanning-buttons {
+                        display: flex;
+                        gap: 1em;
+                        /* font-size: 1.5em; */
+                    }
+                    .qr-scanning .qr-scanning-buttons > button {
+                        font-size: 1.25em;
+                    }
+                </style>
                 <div class="qr-scanning">
-                    <button id="start-button">Start</button>
-                    <button id="stop-button">Stop</button>
+                    <div class="qr-scanning-buttons">
+                        <button class="btn-scan" id="start-button">Start</button>
+                        <button class="btn-scan" id="stop-button">Stop</button>
+                    </div>
                     <span id="cam-qr-result-timestamp"></span>
                     <h1>Scan from Webcam:</h1>
                     <div id="placeholder">
                         <div id="camera-icon"></div>
-                        <p class="message">Please allow the system to use the camera.</p>
+                        <p class="message">Please allow the system to use the camera or <br/>just simply restart camera instance.</p>
                     </div>
                     <div id="video-container">
                         <video id="qr-video"></video>
@@ -229,53 +256,72 @@
                             </svg>
                         </div>
                     </div>
-    
-                    <div>
-                        <label>
-                            Highlight Style
-                            <select name="b" id="scan-region-highlight-style-select">
-                                <option value="default-style" selected>Default style</option>
-                                <option value="example-style-1">Example custom style 1</option>
+                    
+                    <style>
+                        .scanning-settings :is(select, :not(input[type="checkbox"])) {
+                            width: 100%;
+                            padding: .5em;
+                        }
+
+                        .scanning-settings .selection {
+                            padding: 0 !important;
+                        }
+
+                        .scanning-settings canvas {
+                            width: 200px !important;
+                            height: 200px;
+                        }
+                    </style>
+                    <div class="scanning-settings">
+                        <div>
+                            <p><b>Highlight Style</b></p>
+                            <div class="selection">
+                                <select name="b" id="scan-region-highlight-style-select">
+                                    <option value="default-style" selected>Default style</option>
+                                    <option value="example-style-1">Example custom style 1</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input id="show-scan-region" type="checkbox" />
+                                Show scan region canvas
+                            </div>
+                        </div>
+                        <div>
+                            <select id="inversion-mode-select" autocomplete="off">
+                                <option value="original" selected>
+                                    Scan original (dark QR code on bright background)
+                                </option>
+                                <option value="invert">
+                                    Scan with inverted colors (bright QR code on dark background)
+                                </option>
+                                <option value="both">Scan both</option>
                             </select>
-                        </label>
-                        <label>
-                            <input id="show-scan-region" type="checkbox" />
-                            Show scan region canvas
-                        </label>
-                    </div>
-                    <div>
-                        <select id="inversion-mode-select" autocomplete="off">
-                            <option value="original" selected>
-                                Scan original (dark QR code on bright background)
-                            </option>
-                            <option value="invert">
-                                Scan with inverted colors (bright QR code on dark background)
-                            </option>
-                            <option value="both">Scan both</option>
-                        </select>
+                            <br />
+                        </div>
+
+                        <div>
+                            <p><b>Preferred camera:</b></p>
+                            <select id="cam-list">
+                                <option value="environment" selected>
+                                    Environment Facing (default)
+                                </option>
+                                <option value="user">User Facing</option>
+                            </select>
+                        </div>
+                        <b>Device has camera: </b>
+                        <span id="cam-has-camera">true</span>
                         <br />
+                        <b>Camera has flash: </b>
+                        <span id="cam-has-flash"></span>
+                        <div>
+                            <button id="flash-toggle">
+                                📸 Flash: <span id="flash-state">off</span>
+                            </button>
+                        </div>
+                        <p style="font-size: 1.5em; font-weight: bold">Detected QR code:</p>
+                        <span id="cam-qr-result">None</span>
                     </div>
-                    <b>Device has camera: </b>
-                    <span id="cam-has-camera">true</span>
-                    <br />
-                    <div>
-                        <b>Preferred camera:</b>
-                        <select id="cam-list">
-                            <option value="environment" selected>
-                                Environment Facing (default)
-                            </option>
-                            <option value="user">User Facing</option>
-                        </select>
-                    </div>
-                    <b>Camera has flash: </b>
-                    <span id="cam-has-flash"></span>
-                    <div>
-                        <button id="flash-toggle">
-                            📸 Flash: <span id="flash-state">off</span>
-                        </button>
-                    </div>
-                    <p style="font-size: 1.5em; font-weight: bold">Detected QR code:</p>
-                    <span id="cam-qr-result">None</span>
+
                 </div>
 
 
@@ -293,18 +339,35 @@
                     #popup {
                         padding: 1em;
                     }
+
+
+                    .scanned-information-caption {
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 1.2em;
+                        margin-bottom: 1em;
+                    }
+                    .scanned-information p {
+                        font-weight: bold;
+                    }
+                    .scanned-information span {
+                        padding-left: 1em;
+                    }
                 </style>
                 <div id="ex1" class="modal">
                     <div class="scanned-information">
-                        <h3>Scanned Result</h3>
+                        <div class="scanned-information-caption">
+                            <p>Scanned Information: </p>
+                            <p>TIME IN</p>
+                        </div>
                         <div class="scanned-result">
-                            <div class="user-scanned-vehicle">
+                            <div class="user-scanned-vehicle" style="display: none;">
                                 <p>Vehicle: </p>
                                 <img src="#" alt="" class="user-scanned-vehicle-value">
                             </div>
                             <div class="user-scanned-uid">
                                 <p>User UID:</p>
-                                <p class="user-scanned-uid-value">asdfdasfd187423</p>
+                                <span class="user-scanned-uid-value">asdfdasfd187423</span>
                             </div>
                             <div class="user-scanned-date">
                                 <p>Date of Snapshot:</p>
@@ -338,7 +401,6 @@
                             </div>
                         </div>
                     </div>
-                    <a href="#" rel="modal:close">Close</a>
                 </div>
                 <button id="popup">Popup</button>
             </div>

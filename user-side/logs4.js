@@ -24,9 +24,7 @@ if(windowLocation.indexOf("user-logs") > -1) {
         Object.entries(logsInformation).map((element, index) => {
             if(objSize-1 !== index) {
                 // console.log('time_in:', new Date(element[1]['time_in']['seconds']).toLocaleString('en-GB',{timeZone:'UTC'}));
-                element[1]['time_in'] = new Date(element[1]['time_in']['seconds']).toLocaleString('en-GB',{timeZone:'UTC'})
-
-                
+                element[1]['time_in'] = element[1]['time_in']['seconds'];
                 element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
                 console.log(index, element[1]);
                 logs.push(element[1]);

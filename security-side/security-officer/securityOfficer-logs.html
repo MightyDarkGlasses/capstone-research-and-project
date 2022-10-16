@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,277 +10,55 @@
     <link href='https://fonts.googleapis.com/css?family=Bayon' rel='stylesheet'>
     <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js" defer></script>
     <link rel="stylesheet" href="logs.css">
-    <script
-    src="https://code.jquery.com/jquery-3.6.1.js"
-    integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
-    crossorigin="anonymous" defer>
-    </script>
+    
     <script src="../scripts/securityOfficer.js" defer></script>
-   
+    <script
+          src="https://code.jquery.com/jquery-3.6.1.min.js"
+          integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+          crossorigin="anonymous"></script>
+     <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"
+          defer></script>
+     <script
+          type="text/javascript"
+          charset="utf8"
+          src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"
+          defer></script>
+          
 </head>
-<body>  
-        <!-- main-container -->
-        <div class="main-container-logs">
-            <div class="dropdownLogs-area">
-                <div class="dropdownLogs">
-                    <button type="button">ALL LOGS
-                        <iconify-icon icon="bxs:down-arrow"></iconify-icon>
 
-                    </button>
-                    
-                </div>
+<body>
+    <!-- main-container -->
+    <div class="main-container-logs">
+        <div class="dropdownLogs-area">
+            <div class="dropdownLogs">
+                <button type="button">ALL LOGS
+                    <iconify-icon icon="bxs:down-arrow"></iconify-icon>
+
+                </button>
+
             </div>
-            <!-- container with the border -->
-            <div class="logs-container">
-
-                <!-- date and trash icon -->
-                <div class="upperside-logBox">
-                    <div class="date"> 05/21/22</div>
-                    <div class="trashIcon">
-                        <iconify-icon icon="bi:trash-fill"></iconify-icon>
-                    </div>
-                </div>
-
-                <!-- container with elements / two grids-->
-                <div class="innerBox">
-
-                <!-- main log details icon/details/time/button/ -->
-                <div class="logBox">
-                <div class="clockIcon">
-                    <iconify-icon icon="fe:clock"></iconify-icon>
-                </div>
-                
-                <!-- details number/time in & out/carinfo-->
-                <div class="details-box">
-                <div class="numberInfo">
-                   #12556
-                </div>
-            
-                <div class="timeType">
-                    Time In
-                </div>
-
-                <div class="carInfo">
-                    ABCD 123, Honda Civic 2022, C
-                </div>
-
-                </div>
-                
-                <div class="time">
-                    02:33:21 PM
-                </div>
-
-                <div class="deleteArea">
-                <div class="deleteRow">
-                    <iconify-icon icon="akar-icons:cross"></iconify-icon>
-                </div>
-                </div>
-                </div>   
-            </div>
-
-            <!-- ANOTHER LOG -->
-             <!-- container with elements / two grids-->
-             <div class="innerBox">     
-                <!-- main log details icon/details/time/button/ -->
-                <div class="logBox">
-                <div class="clockIcon">
-                    <iconify-icon icon="fe:clock"></iconify-icon>
-                </div>
-                
-                <!-- details number/time in & out/carinfo-->
-                <div class="details-box">
-                <div class="numberInfo">
-                   #12556
-                </div>
-            
-                <div class="timeType">
-                    Time In
-                </div>
-
-                <div class="carInfo">
-                    ABCD 123, Honda Civic 2022, C
-                </div>
-
-                </div>
-                
-                <div class="time">
-                    02:33:21 PM
-                </div>
-
-                <div class="deleteArea">
-                <div class="deleteRow">
-                    <iconify-icon icon="akar-icons:cross"></iconify-icon>
-                </div>
-                </div>
-                </div>   
-            </div>
-
-            <!-- ANOTHER LOG -->
-             <!-- container with elements / two grids-->
-             <div class="innerBox">     
-                <!-- main log details icon/details/time/button/ -->
-                <div class="logBox">
-                <div class="clockIcon">
-                    <iconify-icon icon="fe:clock"></iconify-icon>
-                </div>
-                
-                <!-- details number/time in & out/carinfo-->
-                <div class="details-box">
-                <div class="numberInfo">
-                   #12556
-                </div>
-            
-                <div class="timeType">
-                    Time In
-                </div>
-
-                <div class="carInfo">
-                    ABCD 123, Honda Civic 2022, C
-                </div>
-
-                </div>
-                
-                <div class="time">
-                    02:33:21 PM
-                </div>
-
-                <div class="deleteArea">
-                <div class="deleteRow">
-                    <iconify-icon icon="akar-icons:cross"></iconify-icon>
-                </div>
-                </div>
-                </div>   
-            </div>
-
-            <!-- ANOTHER LOG -->
-             <!-- container with elements / two grids-->
-             <div class="innerBox">     
-                <!-- main log details icon/details/time/button/ -->
-                <div class="logBox">
-                <div class="clockIcon">
-                    <iconify-icon icon="fe:clock"></iconify-icon>
-                </div>
-                
-                <!-- details number/time in & out/carinfo-->
-                <div class="details-box">
-                <div class="numberInfo">
-                   #12556
-                </div>
-            
-                <div class="timeType">
-                    Time In
-                </div>
-
-                <div class="carInfo">
-                    ABCD 123, Honda Civic 2022, C
-                </div>
-
-                </div>
-                
-                <div class="time">
-                    02:33:21 PM
-                </div>
-
-                <div class="deleteArea">
-                <div class="deleteRow">
-                    <iconify-icon icon="akar-icons:cross"></iconify-icon>
-                </div>
-                </div>
-                </div>   
-            </div>
-            </div>
-
-
-
-            <!-- ANOTHER LOG DATE -->
-
-            <div class="logs-container">
-
-                <!-- container with elements / two grids-->
-                <div class="innerBox">
-
-                <!-- date and trash icon -->
-                <div class="upperside-logBox">
-                    <div class="date"> 05/22/22</div>
-                    <div class="trashIcon">
-                        <iconify-icon icon="bi:trash-fill"></iconify-icon>
-                    </div>
-                </div>
-                
-                <!-- main log details icon/details/time/button/ -->
-                <div class="logBox">
-                <div class="clockIcon">
-                    <iconify-icon icon="fe:clock"></iconify-icon>
-                </div>
-                
-                <!-- details number/time in & out/carinfo-->
-                <div class="details-box">
-                <div class="numberInfo">
-                   #12556
-                </div>
-            
-                <div class="timeType">
-                    Time In
-                </div>
-
-                <div class="carInfo">
-                    ABCD 123, Honda Civic 2022, C
-                </div>
-
-                </div>
-                
-                <div class="time">
-                    02:33:21 PM
-                </div>
-                
-                <div class="deleteArea">
-                <div class="deleteRow">
-                    <iconify-icon icon="akar-icons:cross"></iconify-icon>
-                </div>
-                </div>
-                </div>  
-
-                <!-- ANOTHER LOG -->
-             <!-- container with elements / two grids-->
-             <div class="innerBox">     
-                <!-- main log details icon/details/time/button/ -->
-                <div class="logBox">
-                <div class="clockIcon">
-                    <iconify-icon icon="fe:clock"></iconify-icon>
-                </div>
-                
-                <!-- details number/time in & out/carinfo-->
-                <div class="details-box">
-                <div class="numberInfo">
-                   #12556
-                </div>
-            
-                <div class="timeType">
-                    Time In
-                </div>
-
-                <div class="carInfo">
-                    ABCD 123, Honda Civic 2022, C
-                </div>
-
-                </div>
-                
-                <div class="time">
-                    02:33:21 PM
-                </div>
-
-                <div class="deleteArea">
-                <div class="deleteRow">
-                    <iconify-icon icon="akar-icons:cross"></iconify-icon>
-                </div>
-                </div>
-                </div>   
-            </div> 
-            </div>
-            </div>
-
-            
-
         </div>
+        <!-- container with the border -->
+        <div class="logs-container">
+            <div id="content" class="content user-content">
+                <table
+                     id="table_id"
+                     class="display"
+                     style="width: 100%"
+                     onload="displayLogs()">
+                     <thead>
+                          <tr>
+                               <th>Time In</th>
+                               <th>Time Out</th>
+                               <th>Plate Number</th>
+                               <th>Driver</th>
+                          </tr>
+                     </thead>
+                </table>
+           </div>
+        </div>
+    </div>
 </body>
+
 </html>

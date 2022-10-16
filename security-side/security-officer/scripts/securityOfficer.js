@@ -138,6 +138,7 @@ if (query.matches) {
   SearchHide.slideToggle();
 }
 
+
 // document.addEventListener("DOMContentLoaded", (e) => {
 //   // let inputs = document.querySelector('select');
 //   // inputs.forEach((e) => {

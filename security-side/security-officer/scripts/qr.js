@@ -40,19 +40,6 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             console.log("No such document!");
         }
         
-        /*
-            let accountInformation = undefined, 
-                vehicleInformation = undefined;
-            const promiseScannedAccount = fire.myOnSnapshot(docRefAccountInfo, (doc) => {
-                accountInformation = {...doc.data()};
-                console.log("getAccountInformation", accountInformation, doc.id);
-            });
-            const promiseScannedVehicle = fire.myOnSnapshot(docRefVehicleInfo, (doc) => {
-                vehicleInformation = {...doc.data()};
-                console.log("getVehicleInformation", vehicleInformation, doc.id)
-            });
-        */
-        
         const vehicleValue = document.querySelector('.user-scanned-vehicle-value')
         const userValue = document.querySelector('.user-scanned-uid-value')
         const dateValue = document.querySelector('.user-scanned-date-value')
@@ -138,125 +125,67 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
 
     async function addNewLogs(userUID, fullName, plateNumber) {
         const dateMS = Date.now();
-        // const docData = {
-        //     0: {   
-        //         "userUID": userUID,
-        //         "time_scanned": new Date().toString(),
-        //         "time_in": fire.getServerTimestamp(),
-        //         "time_out": '',
-        //         "owner": fullName,
-        //         "plate_number": plateNumber
-        //     },
-        //     'is_timeout': [false],
-        //     'index': 0
-        // };
-
-
-        const myQuery = fire.doQuery(fire.myCollection(fire.db, 'logs'));
-        fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
-        const unsubCollection = fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
-            // let logs = {};
-            let logs = [];
-
-            let index = 0;
-            snapshot.docs.forEach((doc) => {
-                let unpackData = {...doc.data()};
-                let objSize = Object.keys(unpackData).length;
-                Object.entries(unpackData).map((element, index) => {
-                    if(objSize-1 !== index) {
-                        console.log(index, element[1]);
-                        index += 1; //increment
-                        logs.push(element[1]);
-                    }
-                });
-            });
-            console.log(logs); 
-
-            //Sort the data by time_scanned
-            logs.sort(function(a, b) {
-                return new Date(a.time_scanned) - new Date(b.time_scanned);
-            });
-            console.log('sorted:', logs);   //print the result
-
-            }); //end of function
-        }); //end of snapshot function
         
-        // const querySnapshot = await fire.myGetDocs(q);
-        // console.log('Do the querySnapshot:', querySnapshot)
-        // querySnapshot.forEach((doc) => {
-        //     // doc.data() is never undefined for query doc snapshots
-        //     console.log(doc.id, " => ", doc.data());
-        // });
+        
+        const docRefLogs = fire.myDoc(fire.db, "logs", userUID);
+        const docSnap = await fire.myGetDoc(docRefLogs);
+        //Document logs exists?
+        if (docSnap.exists()) {
+            const selectedUserLogsData = docSnap.data();
+            console.log("Document data:", selectedUserLogsData);
+            console.log('currentIndex:', selectedUserLogsData.index);
+            console.log('currentIndex:', selectedUserLogsData[selectedUserLogsData.index]);
 
-
-        // const myQuery = query(colRef, where("authors", "==", "Rick Astley"));
-        // onSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
-        // const unsubCollection = onSnapshot(myQuery, (snapshot) => {     //based on the query
-        // let books = [];
-        //     snapshot.docs.forEach((doc) => {
-        //     books.push({ ...doc.data(), id: doc.id }); //... -> Spread, get all the data then the id
-        // });
-        // console.log(books); //print the book array
-
-
-
-
-        // const docRefLogs = fire.myDoc(fire.db, "logs", userUID);
-        // const docSnap = await fire.myGetDoc(docRefLogs);
-        // //Document logs exists?
-        // if (docSnap.exists()) {
-        //     const selectedUserLogsData = docSnap.data();
-        //     console.log("Document data:", selectedUserLogsData);
-        //     console.log('currentIndex:', selectedUserLogsData.index);
-        //     console.log('currentIndex:', selectedUserLogsData[selectedUserLogsData.index]);
-
-        //     if(selectedUserLogsData[selectedUserLogsData.index] === undefined) {
-        //         const docData2 = {
-        //             [selectedUserLogsData.index]: {   
-        //                 "userUID": userUID,
-        //                 "time_scanned": new Date().toString(),
-        //                 "time_in": fire.getServerTimestamp(),
-        //                 "time_out": '',
-        //                 "owner": fullName,
-        //                 "plate_number": plateNumber
-        //             },
-        //         };
+            if(selectedUserLogsData[selectedUserLogsData.index] === undefined) {
+                const docData2 = {
+                    [selectedUserLogsData.index]: {   
+                        "userUID": userUID,
+                        "time_scanned": new Date().toString(),
+                        "time_in": fire.getServerTimestamp(),
+                        "time_out": '',
+                        "owner": fullName,
+                        "plate_number": plateNumber
+                    },
+                };
     
-        //         await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData2);
-        //     }
-        //     else {
-        //         if(selectedUserLogsData[selectedUserLogsData.index].time_out === "") {
-        //             // Update the time out.
+                await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData2);
+                alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time Out.`)
+            }
+            else {
+                if(selectedUserLogsData[selectedUserLogsData.index].time_out === "") {
+                    // Update the time out.
     
-        //             // Atomically increment the population of the city by 50.
-        //             const name = `${selectedUserLogsData.index}.time_out`;
-        //             console.log('name:', name)
-        //             await fire.myUpdateDoc(docRefLogs, {
-        //                 // `${selectedUserLogsData.index}.time_out`: new Date().toString();
-        //                 [name]: new Date().toString(),
-        //                 index: fire.doIncrement(1)
-        //             });
-        //         }
-        //         // await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData);
-        //     }
-        // }
-        // else {
-        //     console.log("No such document!");
+                    // Atomically increment the population of the city by 50.
+                    const name = `${selectedUserLogsData.index}.time_out`;
+                    console.log('name:', name)
+                    await fire.myUpdateDoc(docRefLogs, {
+                        // `${selectedUserLogsData.index}.time_out`: new Date().toString();
+                        [name]: new Date().toString(),
+                        index: fire.doIncrement(1)
+                    });
+                    alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time In.`)
+                }
+                // await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData);
+            }
+        }
+        else {
+            console.log("No such document!");
 
-        //     const docData = {
-        //         0: {   
-        //             "userUID": userUID,
-        //             "time_scanned": new Date().toString(),
-        //             "time_in": fire.getServerTimestamp(),
-        //             "time_out": '',
-        //             "owner": fullName,
-        //             "plate_number": plateNumber
-        //         },
-        //         'index': 0
-        //     };
+            const docData = {
+                0: {   
+                    "userUID": userUID,
+                    "time_scanned": new Date().toString(),
+                    "time_in": fire.getServerTimestamp(),
+                    "time_out": '',
+                    "owner": fullName,
+                    "plate_number": plateNumber
+                },
+                'index': 0
+            };
 
-        //     await fire.doSetDoc(fire.myDoc(fire.db, "logs", userUID), docData);
-        // }
+            await fire.doSetDoc(fire.myDoc(fire.db, "logs", userUID), docData);
+            alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time In.`)
+        }
 
 
 
@@ -294,7 +223,6 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         // });
 
         // await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData);
-        console.log(Date.now())
 
         // Add a new document with a generated id.
         // const dateMS = Date.now();
@@ -310,6 +238,58 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         // });
         // console.log("Document written with ID: ", docRef.id);
     } //end of function, addNewLogs
+
+    async function displayLogs() {
+        const myQuery = fire.doQuery(fire.myCollection(fire.db, 'logs'));
+        fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
+            const unsubCollection = fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
+                let logs = [];
+                let index = 0;
+                snapshot.docs.forEach((doc) => {
+                    let unpackData = {...doc.data()};
+                    let objSize = Object.keys(unpackData).length;
+                    Object.entries(unpackData).map((element, index) => {
+                        if(objSize-1 !== index) {
+                            console.log(index, element[1]);
+                            element[1]['time_in'] = Date(new Date(0).setUTCSeconds(element[1]['time_in']['seconds']));
+                            element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
+
+                            index += 1; //increment
+                            logs.push(element[1]);
+                        }
+                    });
+                });
+                console.log(logs); 
+
+                //Sort the data by time_scanned
+                logs.sort(function(a, b) {
+                    return new Date(a.time_scanned) - new Date(b.time_scanned);
+                });
+                console.log('sorted:', logs);   //print the result
+
+                jQuery((e) => {
+                    console.log("DataTable");
+                    $("#table_id").DataTable({
+                        scrollX: true,
+                        "data": logs,
+                        "columns": [
+                            {"data": "time_in"},
+                            {"data": "time_out"},
+                            {"data": "plate_number"},
+                            {"data": "owner"},
+                        ]
+                    });
+                }); //jQuery
+
+
+            }); //end of function
+        }); //end of snapshot function
+    }
+    // displayLogs(); //display logs
+    $('#logs-id').on('click', (e) => {
+        console.log('Logs qr.js');
+        displayLogs();
+    });
 
     // QR Scanner
     document.addEventListener("DOMContentLoaded", (e) => {
@@ -404,8 +384,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     
             document.querySelector(
             ".message"
-            ).innerText = `You denied the permission to activate your camera.
-            You can do file upload instead or allow the camera permission on your browser settings.`;
+            ).innerText = `You denied the permission to activate your camera.`;
     
             document.querySelector("#camera-icon").style.background =
             "url('https://api.iconify.design/humbleicons/camera-off.svg?color=white') no-repeat center center / contain";
