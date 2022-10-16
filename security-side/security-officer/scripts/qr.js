@@ -31,7 +31,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         const docSnap2 = await fire.myGetDoc(docRefVehicleInfo);
         if (docSnap2.exists()) {
             console.log("Document data:", docSnap2.data());
-
+            
             localStorage.setItem('docVehicle', JSON.stringify(docSnap2.data()));
             isSuccessVehicle = true;
         }
@@ -138,18 +138,79 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     async function addNewLogs(userUID, fullName, plateNumber) {
         const dateMS = Date.now();
         // const docData = {
-        //     [dateMS]: {   
+        //     0: {   
         //         "userUID": userUID,
         //         "time_scanned": new Date().toString(),
         //         "time_in": fire.getServerTimestamp(),
         //         "time_out": '',
         //         "owner": fullName,
         //         "plate_number": plateNumber
-        //     }
+        //     },
+        //     'is_timeout': [false],
+        //     'index': 0
         // };
 
-        // await fire.doSetDoc(fire.myDoc(fire.db, "logs", userUID), docData);
 
+        const docRefLogs = fire.myDoc(fire.db, "logs", userUID);
+        const docSnap = await fire.myGetDoc(docRefLogs);
+
+        //Document logs exists?
+        if (docSnap.exists()) {
+            const selectedUserLogsData = docSnap.data();
+            console.log("Document data:", selectedUserLogsData);
+            console.log('currentIndex:', selectedUserLogsData.index);
+            console.log('currentIndex:', selectedUserLogsData[selectedUserLogsData.index]);
+
+            if(selectedUserLogsData[selectedUserLogsData.index] === undefined) {
+                const docData2 = {
+                    [selectedUserLogsData.index]: {   
+                        "userUID": userUID,
+                        "time_scanned": new Date().toString(),
+                        "time_in": fire.getServerTimestamp(),
+                        "time_out": '',
+                        "owner": fullName,
+                        "plate_number": plateNumber
+                    },
+                };
+    
+                await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData2);
+            }
+            else {
+                if(selectedUserLogsData[selectedUserLogsData.index].time_out === "") {
+                    // Update the time out.
+    
+                    // Atomically increment the population of the city by 50.
+                    const name = `${selectedUserLogsData.index}.time_out`;
+                    console.log('name:', name)
+                    await fire.myUpdateDoc(docRefLogs, {
+                        // `${selectedUserLogsData.index}.time_out`: new Date().toString();
+                        [name]: new Date().toString(),
+                        index: fire.doIncrement(1)
+                    });
+                }
+                // await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData);
+            }
+        }
+        else {
+            console.log("No such document!");
+
+            const docData = {
+                0: {   
+                    "userUID": userUID,
+                    "time_scanned": new Date().toString(),
+                    "time_in": fire.getServerTimestamp(),
+                    "time_out": '',
+                    "owner": fullName,
+                    "plate_number": plateNumber
+                },
+                'index': 0
+            };
+
+            await fire.doSetDoc(fire.myDoc(fire.db, "logs", userUID), docData);
+        }
+
+
+        // await fire.myAddDoc(fire.myCollection(fire.db, "logs", userUID), docData);
         // await fire.myAddDoc(fire.myCollection(fire.db, "logs", userUID), docData);
 
         // const docRef = fire.myDoc(fire.db, "logs", userUID, "time_out", dateMS);
@@ -160,24 +221,26 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         //     "owner": fullName,
         //     "plate_number": plateNumber
         // });
-        const docRef = fire.myDoc(fire.db, "logs", userUID);
-        await fire.myUpdateDoc(docRef, {
-            operations: fire.doArrayUnion(0)
-        });
 
-        const colRef = fire.myCollection(docRef, "time-in");
-        fire.myAddDoc(colRef, {
-            [dateMS]: {
-                "userUID": userUID,
-                "time_scanned": new Date().toString(),
-                "time_in": fire.getServerTimestamp(),
-                "owner": fullName,
-                "plate_number": plateNumber
-            }
-        });
-        const colRef2 = fire.myCollection(docRef, "time-out");
-        fire.myAddDoc(colRef2, {
-        });
+        // ##### Subcollection implementation #####
+        // const docRef = fire.myDoc(fire.db, "logs", userUID);
+        // await fire.myUpdateDoc(docRef, {
+        //     operations: fire.doArrayUnion(0)
+        // });
+
+        // const colRef = fire.myCollection(docRef, "time-in");
+        // fire.myAddDoc(colRef, {
+        //     [dateMS]: {
+        //         "userUID": userUID,
+        //         "time_scanned": new Date().toString(),
+        //         "time_in": fire.getServerTimestamp(),
+        //         "owner": fullName,
+        //         "plate_number": plateNumber
+        //     }
+        // });
+        // const colRef2 = fire.myCollection(docRef, "time-out");
+        // fire.myAddDoc(colRef2, {
+        // });
 
         // await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData);
         console.log(Date.now())
