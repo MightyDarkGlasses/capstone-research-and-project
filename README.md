@@ -30,7 +30,9 @@ This is a reference list of the most commonly used Git commands. (You might cons
  in order to exit immediately or reach the end ([END])
  
 **Our Demo**
-# [CLICK ME!](https://meecoa.github.io/capstone/)
+# [Administrator](https://meecoa.github.io/capstone/)
+# [Security Officer](https://mightydarkglasses.github.io/capstone-research-and-project/security-side/security-officer/securityOfficer-home.html)
+
 
 **Repositories**
 # [Administrator](https://github.com/yatonakami/securityOfficer)
