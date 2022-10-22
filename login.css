@@ -211,11 +211,26 @@ button:hover, input[type="submit"]:hover {
         margin: 1em;
         padding: 0;
         height: fit-content;
+        
+    }
+
+    .title span:first-child {
+        display: none;
+    }
+    .title span:nth-child(2) {
+        font-size: 2em;
+    }
+    /* user-input */
+    .user_input input {
+        font-size: .90em;
     }
 
     /* form */
     .right-login-form .title, .forgor, .agreement {
         margin: 1.25em 0;
+        /* overflow-y: auto; */
+        height: fit-content;
+        overflow-y: auto;
     }
 
     .container div {
@@ -230,10 +245,9 @@ button:hover, input[type="submit"]:hover {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: max(90vw, 400px);
-        height: max-content;
+        width: max(90vw, 250px);
+        height: 90%;
         border-radius: 1em;
-        overflow-y: scroll;
     }
 
     .container .right-login-form {
@@ -243,8 +257,6 @@ button:hover, input[type="submit"]:hover {
 
      #user_forgot {
         display: none;
-        /* width: inherit;
-        text-align: right; */
         font-size: .90em;
     }
 
@@ -257,6 +269,13 @@ button:hover, input[type="submit"]:hover {
     .right .login .system {
         flex-direction: column;
         text-align: center;
+    }
+
+    .right .login .system p {
+        font-size: .85em;
+    }
+    .right .login .system h1 {
+        font-size: 1em;
     }
 }
 

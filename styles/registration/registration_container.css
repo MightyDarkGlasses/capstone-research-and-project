@@ -29,9 +29,9 @@
 
 
 /* Caption on what to enter */
-.caption {
+/* .caption {
     display: none;
-}
+} */
 .caption > h1 {
     color: var(--color-primary-btn);
 }
@@ -85,7 +85,7 @@ input[type="password"], input[type="email"] {
     left: 50%;
     transform: translate(-50%, -50%);
     width: max(80vw, 800px);
-    height: fit-content;
+    height: 80%;
     background: white;
     border-radius: 2em;
     display: flex;
@@ -103,20 +103,14 @@ input[type="password"], input[type="email"] {
     flex: 1;
 } */
 
-
-.sign-up-form-1 {
-    overflow-y: scroll !important;
-}
-.left {
+.container .left {
     display: flex;
-    height: fit-content;
-    padding: 1em;
-    margin: auto 3em;
+    height: 100%;
     flex-direction: column;
-    padding: 2.5em 0;
-    
-    overflow-y: scroll;
-    /* justify-content: space-between; */
+    padding: 0 1em;
+    justify-content: center;
+    /* margin: auto 1em; */
+    /* padding: 2.5em 0; */
     
     /* Make it scrollable for other user inputs */
 }
@@ -174,11 +168,51 @@ input[type="password"], input[type="email"] {
     align-items: center;
 }
 
-.user_input {
+/* .user_input {
     margin: 1em 0;
-}
+} */
 
 /* Top navigation, for smaller screens */
 .small-top-nav {
     display: none;
+}
+
+/* User inputs */
+/* .left .sign-up-form-1 .personal-info {
+    height: 100%;
+    overflow-y: scroll;
+} */
+.left .sign-up-form-1 .personal-info > .user_input {
+    display: grid;
+    gap: 1em;
+    padding: 1em 0;
+}
+
+/* Caption */
+.personal-info .caption {
+    margin: .5em 0;
+    font-size: .85em;
+    text-align: center;
+    font-style: italic;
+}
+
+
+/* For buttons */
+button[type="button"] {
+    background-color: white;
+    /* padding: 1em 0; */
+    border: 2px solid black;
+    font-size: 1em;
+    padding: 0.5em 3em;
+    font-weight: bold;
+    margin: 0.2em;
+    transition: all .5s ease;
+    border-radius: 100vmax;
+    width: 98%;
+}
+
+button[type="button"] > * {
+    text-decoration: none;
+    color: black;
+    
 }

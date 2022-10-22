@@ -1,8 +1,6 @@
 @import url("registration_container.css"); /* container */
 
-.sign-up-form-1 {
-    overflow-y: auto;
-}
+
 
 .left {
     /* margin: auto 2em !important; */
@@ -35,6 +33,7 @@
     margin-top: 1em;
     /* width: 135% !important; */
 }
+
 #reg-goto-page2 {
     background: black;
     color: white;
@@ -88,14 +87,23 @@ input[type="tel"] {
     outline: 1px solid black !important;
 }
 /* width for every name input (first, middle, last) */
-.user_input_name input {
-    /* width: 95% !important; */
+/* .user_input_name input {
+    width: 95% !important;
+} */
+
+/* Scrollable */
+/* .container .left .sign-up-form-1 {
+    overflow-y: scroll;
+} */
+
+.container .left .sign-up-form-1  {
+    margin-top: 1em;
+    height: 100%;
+    overflow-y: auto;
 }
 
 
 /* Input, borders and shadow */
-
-
 
 /* User Type -> User input of real name */
 .user_input_name {
@@ -178,9 +186,9 @@ input[type="tel"] {
     background: url("https://api.iconify.design/fluent/mail-28-filled.svg")
 }
 #signup_phone {
-    background: url("https://api.iconify.design/fa/phone-square.svg?width=5&height=5")
+    background: url("https://api.iconify.design/fa-solid/phone-square-alt.svg?width=5&height=5")
 }
-#signup_password, #signup_cpassword {
+#signup_password, #signup-cpassword {
     background: url("https://api.iconify.design/bxs/lock.svg")
 }
 
@@ -242,6 +250,7 @@ Logo for error log
 .error-container {
     width: 95%;
     margin: 0 .5em;
+    display: none;
     /* gap: 1em; */
 }
 
@@ -295,8 +304,18 @@ Logo for error log
     display: none;
 }
 
+.reg-next-page button[type="button"]{
+    display: none;
+}
 /* media queries */
 @media screen and (max-width: 960px) {
+    .reg-next-page button[type="button"]{
+        display: block;
+    }
+
+    .sign-up-form-1 {
+        overflow-y: auto;
+    }
 
     .container  {
         border-radius: .5em;
@@ -307,8 +326,13 @@ Logo for error log
     }
 
     /* Change the margin on left side (visible side on mobile) */
-    .left {
-        margin: auto 1.25em;
+    .container .left {
+        margin: auto .5em auto 1.25em;
+        padding: 0px;
+    }
+
+    .left .sign-up-form-1 {
+        padding-right: .5em;
     }
 
     /* Top navigation, for smaller screens */
