@@ -15,7 +15,8 @@
     <!-- Stylesheet here... -->
     <!-- <link rel="stylesheet" type="text/css" href="styles/registration/style.css"> -->
     <link rel="stylesheet" type="text/css" href="styles/registration/registration_part2.css">
-    <link rel="stylesheet" type="text/css" href="styles/registration/file_drag.css">
+    <!-- <link rel="stylesheet" type="text/css" href="styles/registration/file_drag.css"> -->
+    <link rel="stylesheet" href="file_upload/main.css">
 
 
     <!-- Boxicons CSS -->
@@ -41,16 +42,25 @@
                 <div class="grid2">
                     <button id="reg-goto-3-skip">Skip</button>
                 </div>
-                <p class="caption" style="">
+                <p class="caption">
                     This step is optional but you can immediately upload your vehicle images and set
                     the vehicle model and plate number to serve as your primary party for vehicle entry and exit.
                     <br/><b>Note: QR Code is generated upon signing up the user.</b>
                 </p>
                 <div class="grid3" id="vehicle-front">
-                    <div class="file-drag-area">
+                    <div class="drop-zone" index="1">
+                        <div class="vehicle-front-drop-info">
+                            <div class="icon">
+                                <div class="front-car-view"></div>
+                            </div>
+                            <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                            <p>Front View</p>
+                        </div>
+                        <input type="file" name="vehicle-front" class="drop-zone__input">
+                    </div>
+                    <!-- <div class="file-drag-area">
                         <div class="icon">
                             <div class="front-car-view"></div>
-                            <!-- <box-icon name="rocket"></box-icon> -->
                         </div>
                         <div style="text-align: center;">
                             <span class="drag-caption">Drag & Drop</span>
@@ -62,13 +72,22 @@
                                 <span class="support">Supports: JPEG, JPG, PNG</span>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="grid3" id="vehicle-side">
-                    <div class="file-drag-area">
+                    <div class="drop-zone" index="2">
+                        <div class="vehicle-side-drop-info">
+                            <div class="icon">
+                                <div class="side-car-view"></div>
+                            </div>
+                            <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                            <p>Side View</p>
+                        </div>
+                        <input type="file" name="vehicle-side" class="drop-zone__input">
+                    </div>
+                    <!-- <div class="file-drag-area">
                         <div class="icon">
                             <div class="side-car-view"></div>
-                            <!-- <box-icon name="rocket"></box-icon> -->
                         </div>
                         <div style="text-align: center;">
                             <span class="drag-caption">Drag & Drop</span>
@@ -80,13 +99,22 @@
                                 <span class="support">Supports: JPEG, JPG, PNG</span>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="grid3" id="vehicle-back">
-                    <div class="file-drag-area">
+                    <div class="drop-zone" index="3">
+                        <div class="vehicle-rear-drop-info">
+                            <div class="icon">
+                                <div class="rear-car-view"></div>
+                            </div>
+                            <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                            <p>Rear View</p>
+                        </div>
+                        <input type="file" name="vehicle-rear" class="drop-zone__input">
+                    </div>
+                    <!-- <div class="file-drag-area">
                         <div class="icon">
                             <div class="rear-car-view"></div>
-                            <!-- <box-icon name="rocket"></box-icon> -->
                         </div>
                         <div style="text-align: center;">
                             <span class="drag-caption">Drag & Drop</span>
@@ -98,7 +126,7 @@
                                 <span class="support">Supports: JPEG, JPG, PNG</span>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="grid4">
                     <div class="message">
@@ -135,7 +163,8 @@
 </body>
 
 <!-- <script src="script.js" defer></script> -->
-<script src="scripts/fileupload.js"></script>
+<!-- <script src="scripts/fileupload.js"></script> -->
+<script src="file_upload/main.js" defer></script>
 <script src="src/vehicle.js"></script>
 <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
 <!-- <script src="src/cookies.js"></script> -->

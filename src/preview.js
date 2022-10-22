@@ -17,7 +17,17 @@ document.getElementById("preview_idnum").innerText = idnum;
 document.getElementById("preview_email").innerText = email;
 document.getElementById("preview_phonenum").innerText = phone;
 document.getElementById("preview_vehiclemodel").innerText = model;
+
+console.log('plate: ', plate, plate==='')
+console.log('model: ', model, model==='')
+
 document.getElementById("preview_vehicleplate").innerText = plate;
+model === '' ? document.getElementById("preview_vehiclemodel").innerHTML = `<p><i>Skipped.</i></p>` : document.getElementById("preview_vehiclemodel").innerHTML = '';
+plate === '' ? document.getElementById("preview_vehicleplate").innerHTML = `<p><i>Skipped.</i></p>` : document.getElementById("preview_vehicleplate").innerHTML = '';
+
+
+
+
 
 
 
