@@ -70,32 +70,34 @@ body {
 
 #user_signup {
     width: 98%;
+    color: black;
+    background-color: #fff;
+    border: 2px solid black;
 }
-button, input[type="submit"], #user_signup {
+#user_signup:hover {
+    color: white;
+    background-color: black;
+    border: 2px solid white;
+}
+button, input[type="submit"], input[type="button"] {
     border: none;
     outline: none;
-}
-button, input[type="submit"], #user_signup {
-
 
     background: var(--color-primary-btn);
+    color: white;
+
     border: 2px solid var(--color-text-and-border-1);
-    color: var(--color-text-and-border-1);
-    /* padding: 1em 0; */
-
     border-radius: 2em;
-    font-size: 1.25em;
-    padding: 0.5em 0;
-    font-weight: bold;
-    margin: 0.25em 0;
 
+    margin: 0.25em 0;
+    padding: 0.5em 0;
+    
+    font-size: 1.25em;
+    font-weight: bold;
+    
     transition: all .5s ease;
 }
-button:hover, input[type="submit"]:hover, #user_signup:hover{
-    background: var(--color-primary-btn-hover);
-    border: 2px solid var(--color-text-and-border-2);
-    color: var(--color-text-and-border-1);
-
+button:hover, input[type="submit"]:hover {
     color: black;
     background: white;
     border: 2px solid black;
@@ -120,18 +122,11 @@ button:hover, input[type="submit"]:hover, #user_signup:hover{
     left: 50%;
     transform: translate(-50%, -50%);
     width: max(80vw, 800px);
-    /* width: 70%; max-width: 500px; min(500px, 70%) */
-    /* width: 70%; min-width: 800px; max(800px, 70%) */
-
-
-    height: 650px;
+    height: fit-content;
     background: white;
-
-    border-radius: 60px;
-
+    border-radius: 2em;
     display: flex;
     flex-direction: row;
-
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
 }
 
@@ -171,6 +166,7 @@ button:hover, input[type="submit"]:hover, #user_signup:hover{
     /* padding: 1em; */
     margin: auto 3em;
     flex-direction: column;
+    padding: 3.5em 0;
     /* justify-content: space; */
 }
 
@@ -180,8 +176,28 @@ button:hover, input[type="submit"]:hover, #user_signup:hover{
     align-items: center;
 }
 
+.forgor label {
+    font-size: .80em;
+}
+
 .user_input {
     margin: 1em 0;
+}
+
+/* System Title */
+.right .login .system  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 1em 0;
+}
+.right .login .system img {
+    width: 50px;
+    margin-right: 1em;
+}
+.right .login .system h1 {
+    font-size: 1.25em;
 }
 
 
@@ -191,15 +207,33 @@ button:hover, input[type="submit"]:hover, #user_signup:hover{
         display: none;
     }
 
+    .right {
+        margin: 1em;
+        padding: 0;
+        height: fit-content;
+    }
+
+    /* form */
+    .right-login-form .title, .forgor, .agreement {
+        margin: 1.25em 0;
+    }
+
     .container div {
         flex: none;
     }
 
+    .agreement {
+        font-size: .75em;
+    }
+
     .container {
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
         width: max(90vw, 400px);
-        height: 650px;
-        /* max(max-width, width) */
+        height: max-content;
+        border-radius: 1em;
+        overflow-y: scroll;
     }
 
     .container .right-login-form {
@@ -208,8 +242,21 @@ button:hover, input[type="submit"]:hover, #user_signup:hover{
     }
 
      #user_forgot {
-        width: inherit;
-        text-align: right;
+        display: none;
+        /* width: inherit;
+        text-align: right; */
+        font-size: .90em;
+    }
+
+    .forgor #user_keeplogged {
+        margin: .5em .5em .5em 1em;
+        padding: 0;
+    }
+
+    /* System Title */
+    .right .login .system {
+        flex-direction: column;
+        text-align: center;
     }
 }
 
