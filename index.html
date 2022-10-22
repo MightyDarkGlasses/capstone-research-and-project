@@ -87,6 +87,17 @@ integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="ano
         window.location = "signup1.html";
     });
 
+
+    
+    function deleteCookies() {
+        var allCookies = document.cookie.split(';');
+        for (var i = 0; i < allCookies.length; i++)
+            document.cookie = allCookies[i] + "=;expires="
+            + new Date(0).toUTCString();
+        // displayCookies.innerHTML = document.cookie;
+    }
+    deleteCookies();
+    
     // const auth = getAuth();
     // const user = auth.currentUser;
 

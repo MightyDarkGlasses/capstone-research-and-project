@@ -1,6 +1,6 @@
 import * as fire from "../src/index";
 
-console.log('logs4.js');
+
 
 
 let windowLocation = window.location.pathname;
@@ -9,6 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // console.log(JSON.parse(localStorage.currentUser).uid);
 
 if(windowLocation.indexOf("user-logs") > -1) {
+    console.log('logs4.js');
     // const myQuery = fire.doQuery(fire.myCollection(fire.db, 'logs', JSON.parse(localStorage.currentUser).uid));
     const docReference = fire.myDoc(fire.db, "logs", JSON.parse(localStorage.currentUser).uid);
 

@@ -8,6 +8,16 @@
     /* overflow-y: scroll; */
 }
 
+.caption {
+    grid-column: span 4;
+    width: 80%; 
+    margin: 1em auto;
+    
+    font-size: .85em;
+    text-align: center;
+    font-style: italic;
+}
+
 /* The 1-2-3 */
 .registration-progress {
     width: 135%
@@ -70,14 +80,21 @@
 .grid5 {
     grid-column: span 2;
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+
+    flex-direction: column;
 }
+.vehicle-form .grid5{
+    width: 100%;
+}
+/* .vehicle-form .grid5 div > input {
+    
+} */
 
 .vehicle-formation {
     display: flex;
     flex-direction: row;
     height: fit-content;
-    
 }
 .vehicle-formation div {
     flex: 1;
@@ -257,7 +274,25 @@
     background-color: black;
 }
 
+
+/* Navigation button (back and submit) */
+/* .sign-up-form-2b .vehicle-form .navigation input[type="text"] {
+    margin: 0 auto;
+} */
+.sign-up-form-2b .vehicle-form .navigation :where(#reg-goto-page2, #reg-goto-page3) {
+    width: 300px;
+    margin: 0 auto;
+}
+
 @media screen and (max-width: 960px) {
+
+    .sign-up-form-2b .vehicle-form .navigation {
+        flex-direction: column;   
+        margin: 1em 0; 
+    }
+    .sign-up-form-2b .vehicle-form .navigation > * {
+        width: 98%;
+    }
     /* The 1-2-3 */
     .registration-progress {
         width: 100%

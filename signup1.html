@@ -81,14 +81,14 @@
                             <label >ID Number</label>
                             <input class="logo-text-input" type="text" required="required" 
                             name="signup_id" id="signup_id" required="required"
-                            pattern=".{10,}"
+                            pattern="[0-9]{10,10}"
                             title="Enter the 10-digit school id number."
-                            value="2019123456">
+                            value="">
                         </div>
                         <div class="user_input_name">
                             <div>
                                 <label >First Name</label>
-                                <input type="text" required="required" name="signup_fname" id="signup_fname" value="Rick">
+                                <input type="text" required="required" name="signup_fname" id="signup_fname" value="">
                             </div>
                             <div>
                                 <label >Middle Name</label>
@@ -96,20 +96,20 @@
                             </div>
                             <div>
                                 <label >Last Name</label>
-                                <input type="text" required="required" name="signup_lname" id="signup_lname" value="Ravena">
+                                <input type="text" required="required" name="signup_lname" id="signup_lname" value="">
                             </div>
                         </div>
                         <div class="user_input">
                             <label >E-mail Address</label>
                             <input class="logo-text-input" required="required" type="email" name="signup_email" id="signup_email"
-                            value="cantoria.alexis.p.5055@gmail.com">
+                            value="">
                         </div>
                         <div class="user_input">
                             <label >Phone Number</label>
                             <input class="logo-text-input" required="required" type="tel" name="signup_phone" id="signup_phone"
                             pattern=".{11,}"
                             title="Please enter a 11-digit phone number."
-                            value="09123456789"
+                            value=""
                             >
                         </div>
                         <div class="user_input">
@@ -118,16 +118,17 @@
                             name="signup_password" id="signup_password"
                             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                             title="Must contain at least one a number and one uppercase and lowercase letter, and at least 8 or more characters."
-                            value="J123456a">
+                            value="">
                         </div>
                         <div class="user_input">
                             <label >Confirm Password</label>
-                            <input class="logo-text-input" required="required" type="password"
-                            name="signup_cpassword" id="signup-cpassword"
+                            <input class="logo-text-input " required="required" type="password"
+                            name="signup_cpassword" id="signup_cpassword"
                             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                             title="Must contain at least one a number and one uppercase and lowercase letter, and at least 8 or more characters"
-                            value="J123456a">
+                            value="">
                         </div>
+                        <!-- J123456a -->
                         <div class="error-container">
                             <div class="input-error">
                                 <div class="error-log">Please enter your first name.</div>
@@ -165,18 +166,9 @@
     </div>    
 </body>
 
-
-<script src="dist/bundle.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.slim.min.js" integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
+<!-- <script src="dist/bundle.js"></script> -->
 <script type="text/javascript" src="src/user.js" defer></script>
 <script type="text/javascript" src="src/cookies.js" defer></script>
 
-
-<script>
-// Test for URL redirection
-
-// let reg_goto_page2 = document.getElementById("reg-goto-page2");
-// reg_goto_page2.addEventListener("click", () => {
-//     window.location = "signup2.html";
-// });
-</script>
 </html>

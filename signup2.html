@@ -23,6 +23,10 @@
     <link rel="icon" href="images/icons/bxs-car-garage.svg" type="image/x-icon">
 </head>
 
+
+<style>
+
+</style>
 <body>
     <div class="container">
         <div class="sign-up-form-2">
@@ -37,6 +41,11 @@
                 <div class="grid2">
                     <button id="reg-goto-3-skip">Skip</button>
                 </div>
+                <p class="caption" style="">
+                    This step is optional but you can immediately upload your vehicle images and set
+                    the vehicle model and plate number to serve as your primary party for vehicle entry and exit.
+                    <br/><b>Note: QR Code is generated upon signing up the user.</b>
+                </p>
                 <div class="grid3" id="vehicle-front">
                     <div class="file-drag-area">
                         <div class="icon">
@@ -104,16 +113,16 @@
                             <label >Vehicle Model</label>
                             <input type="text" class="vehicle-icon-1 vehicle-input" 
                             name="signup_vehiclemodel" id="signup-fname" required="required"
-                            value="Honda ABC 4455">
+                            value="">
                         </div>
                         <div>
                             <label >Plate Number</label>
                             <input type="text" class="vehicle-icon-2 vehicle-input" 
                             name="signup_vehicleplatenum" id="signup-fname" required="required"
-                            value="ABC1234">
+                            value="">
                         </div>
                     </div>
-                    <div>
+                    <div class="navigation">
                         <button type="button" id="reg-goto-page2">Back</button>
                         <input type="submit" id="reg-goto-page3" value="Submit"></input>
                     </div>
