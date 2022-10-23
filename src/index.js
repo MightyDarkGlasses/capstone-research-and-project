@@ -158,7 +158,30 @@ function doLoginForm() {
                     // logoutUser();
                     console.log("isUserVerified:", isUserVerified());
             }).catch((err) => {
-                console.log("Sign in error: ", err);
+                // console.log("Sign in error: ", err);
+                console.log('Error Code: ', err.code);
+                console.log('Error Message: ', err.message);
+
+                switch (err.code) {
+                    case 'auth/user-not-found': {
+                        $('.modal-container-main').html(`<p>This user does not exist.</p>`);
+                        console.log('switch case')
+                        break;
+                    }
+                    case 'auth/invalid-email':
+                    case 'auth/wrong-password': {
+                        $('.modal-container-main').html(`<p>Wrong credentials</p>`);
+                        console.log('switch case')
+                        break;
+                    }
+                    default: {  
+                        console.log('switch default')
+                    }
+                }
+
+                $("#error-popup").modal({
+                    fadeDuration: 100
+                });
             });
     //     });
     // }
@@ -204,9 +227,16 @@ function checkCurrentLoggedUser() {
         }
         else {
             console.log("Email is not yet verified.");
-            alert("Please verify your e-mail first.");
+            // alert("Please verify your e-mail first.");
             // sendVerification();
+
+            $('.modal-container-main').html(`<p>The email is not yet verified.</p>
+            <p class="note"><i>Note: Check your <b>Spam</b> section to verify your email.</i></p>`);
+            $("#error-popup").modal({
+                fadeDuration: 100
+            });
         }
+        logoutUser();
     }
     return;
 }
@@ -225,11 +255,11 @@ export function logoutUser() {
     //Temporary only.
     signOut(auth)
         .then(() => {
-            console.log("User signed out.")
             console.log('check logged user:', fire.auth)
+            console.log("User signed out.")
         }).catch((err) => {
             console.log("Logout error message: ", err);
-    }); //auth = getAuth();
+        }); //auth = getAuth();
     // let logoutButton = undefined;
 
     // if (logoutButton !== undefined) {

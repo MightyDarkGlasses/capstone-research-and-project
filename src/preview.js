@@ -11,6 +11,7 @@ let plate = getCookie("plate");
 
 console.log("Cookie: ", document.cookie);
 // console.log();
+//J12345678a
 console.log("id", idnum);
 document.getElementById("preview_fullname").innerText = `${lname}, ${fname} ${mname}`;
 document.getElementById("preview_idnum").innerText = idnum;
