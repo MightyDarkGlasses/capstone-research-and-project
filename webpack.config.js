@@ -4,6 +4,7 @@ module.exports = {              // export the module
   mode: 'development',          // mode, kung ano man
   entry: [
     './src/index.js',
+    './src/user.js',
     './user-side/home1.js',
     './user-side/myaccount2.js',
     './user-side/vehicles3.js',

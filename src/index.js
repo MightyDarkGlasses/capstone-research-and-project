@@ -89,9 +89,11 @@ export const doOrderBy = orderBy;
 
 // Authentication
 export const getServerTimestamp = serverTimestamp;
+export const doCreateUserWithEmailAndPassword = createUserWithEmailAndPassword;
 export const getCreateUserWithEmailAndPassword = createUserWithEmailAndPassword;
 export const getSignOut = signOut;
 export const getSignInWithEmailAndPassword = signInWithEmailAndPassword;
+export const doSignInWithEmailAndPassword = signInWithEmailAndPassword;
 export const getReauthenticateWithCredential = reauthenticateWithCredential;
 export const getUpdateEmail = updateEmail;
 export const getUpdatePassword = updatePassword;
@@ -296,6 +298,16 @@ let registerButtonFinal = document.getElementById("reg-goto-final");
 let imageLinks = [];
 let qrCodeLink = [];
 
+/*
+createUserWithEmailAndPassword(auth, getCookie("email"), getCookie("pass"))
+        .then((cred) => {
+            //
+        }).then((success) => {
+
+        }).catch((err) => {
+});
+*/
+
 if (registerButtonFinal !== null && registerButtonFinal !== undefined) { 
     registerButtonFinal.addEventListener("click", () => {
         createUserWithEmailAndPassword(auth, getCookie("email"), getCookie("pass"))
@@ -324,11 +336,6 @@ if (registerButtonFinal !== null && registerButtonFinal !== undefined) {
         }).catch((err) => {
             console.log("Signup error message: ", err); //e.g password is wrong or too short, invalid email, etc.
         });
-
-        // createNewData("7fjUF7uqknYbx0EvVruxgFWxizq1");
-        
-        // For testing.
-        // createNewData("THISISATEST");
     });
 }
 function createNewData(userUID, flag) {
