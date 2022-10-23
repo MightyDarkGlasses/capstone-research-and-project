@@ -141,13 +141,15 @@
                             <label >Vehicle Model</label>
                             <input type="text" class="vehicle-icon-1 vehicle-input" 
                             name="signup_vehiclemodel" id="signup-fname" required="required"
-                            value="">
+                            pattern="{5,100}"
+                            title="You can only within the range of 5 - 100 character length.">
                         </div>
                         <div>
                             <label >Plate Number</label>
                             <input type="text" class="vehicle-icon-2 vehicle-input" 
                             name="signup_vehicleplatenum" id="signup-fname" required="required"
-                            value="">
+                            pattern="{,10}"
+                            title="You can only enter a maximum of 10 characters.">
                         </div>
                     </div>
                     <div class="navigation">

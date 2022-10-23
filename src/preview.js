@@ -23,9 +23,11 @@ console.log('plate: ', plate, plate==='')
 console.log('model: ', model, model==='')
 
 document.getElementById("preview_vehicleplate").innerText = plate;
-model === '' ? document.getElementById("preview_vehiclemodel").innerHTML = `<p><i>Skipped.</i></p>` : document.getElementById("preview_vehiclemodel").innerHTML = '';
-plate === '' ? document.getElementById("preview_vehicleplate").innerHTML = `<p><i>Skipped.</i></p>` : document.getElementById("preview_vehicleplate").innerHTML = '';
+model === '' ? document.getElementById("preview_vehiclemodel").innerHTML = `<p><i>Skipped.</i></p>` : '';
+plate === '' ? document.getElementById("preview_vehicleplate").innerHTML = `<p><i>Skipped.</i></p>` : '';
 
+localStorage.setItem('email_address', getCookie("email"))
+console.log('localStorage: ', localStorage.getItem('email_address'));
 
 
 

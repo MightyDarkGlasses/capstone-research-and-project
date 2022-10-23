@@ -208,10 +208,13 @@ button:hover, input[type="submit"]:hover {
     }
 
     .right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         margin: 1em;
         padding: 0;
-        height: fit-content;
-        
+        height: 100%;
+        overflow-y: scroll;
     }
 
     .title span:first-child {
@@ -230,7 +233,7 @@ button:hover, input[type="submit"]:hover {
         margin: 1.25em 0;
         /* overflow-y: auto; */
         height: fit-content;
-        overflow-y: auto;
+        /* overflow-y: auto; */
     }
 
     .container div {
@@ -251,8 +254,11 @@ button:hover, input[type="submit"]:hover {
     }
 
     .container .right-login-form {
-        display: flex;
-        align-items: center;
+        /* height: fit-content; */
+        /* overflow-y: scroll; */
+    }
+    .container .right-login-form .login {
+        height: fit-content;
     }
 
      #user_forgot {

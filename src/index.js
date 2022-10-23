@@ -332,7 +332,6 @@ if (registerButtonFinal !== null && registerButtonFinal !== undefined) {
         }).then((success) => {
             console.log('registration successful!');
             // window.location = "signup4.html";
-
         }).catch((err) => {
             console.log("Signup error message: ", err); //e.g password is wrong or too short, invalid email, etc.
         });
@@ -379,21 +378,30 @@ function createNewData(userUID, flag) {
         console.log('qrCodeLink:', qrCodeLink);
 
         const promiseVehicle = setDoc(doc(db, "vehicle-information", userUID), {
-            registered_vehicle: {
-                vehicles: {
-                    qrCode: qrCodeLink,
-                    images: {
-                        0: imageLinks
-                    },
-                    linkages: {}
-                },
-                // qrcode: [qrCodeGenerated],
-                plate: [getCookie("plate")],
+            // registered_vehicle: {
+            //     vehicles: {
+            //         qrCode: qrCodeLink,
+            //         images: {
+            //             0: imageLinks
+            //         },
+            //         linkages: {}
+            //     },
+            //     // qrcode: [qrCodeGenerated],
+            //     plate: [getCookie("plate")],
+            //     model: [getCookie("model")],
+            //     use_types: ['Private']
+            // },
+            // vehicle_length: 1,
+            // createdAt: serverTimestamp()
+
+            [getCookie("plate").replace(" ", "")]: {
+                qrCode: qrCodeLink,
+                images: imageLinks,
                 model: [getCookie("model")],
-                use_types: ['Private']
+                use_types: 'Private',
+                createdAt: serverTimestamp()
             },
             vehicle_length: 1,
-            createdAt: serverTimestamp()
         }).then(() => {
             console.log("Vehicle Information was added in the collection");
         });
@@ -410,18 +418,19 @@ function createNewData(userUID, flag) {
     else {
         // Uncomment these...
         const promiseVehicle = setDoc(doc(db, "vehicle-information", userUID), {
-            registered_vehicle: {
-                vehicles: {
-                    qrCode: [],
-                    images: {},
-                    linkages: {}
-                },
-                plate: [],
-                model: [],
-                use_types: []
-            },
+            // registered_vehicle: {
+            //     vehicles: {
+            //         qrCode: [],
+            //         images: {},
+            //         linkages: {}
+            //     },
+            //     plate: [],
+            //     model: [],
+            //     use_types: []
+            // },
+            // vehicle_length: 0,
+            // createdAt: serverTimestamp()
             vehicle_length: 0,
-            createdAt: serverTimestamp()
         }).then(() => {
             console.log("Vehicle Information was added in the collection");
         });
@@ -474,10 +483,6 @@ function createNewData(userUID, flag) {
 
     } //if statement, are we on signup.html
 }
-
-
-// let promise1, promise2, promise3, promise4; //all of the promises
-
 
 function createVehicleImageData(userId) {
     if(localStorage.getItem("vehicle-front") === null || 
@@ -582,8 +587,6 @@ function createVehicleImageData(userId) {
     return; //return the image link of the provided image
 }
 
-
-//generateVehicleQRCode(userUID, getCookie("plate"), 500)
 async function generateVehicleQRCode(userUID, plateNumber, mySize) {
     // let qrCodeLink = "";
     let generatedOutput;
@@ -595,7 +598,8 @@ async function generateVehicleQRCode(userUID, plateNumber, mySize) {
             height: size,
             colorDark : "#000000",
             colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
+            correctLevel : QRCode.CorrectLevel.H,
+            quietZone: true
         })
         generatedOutput = qrcode._oDrawing._elCanvas.toDataURL("image/png");
     };
@@ -609,10 +613,6 @@ async function generateVehicleQRCode(userUID, plateNumber, mySize) {
     await generateQRCode(JSON.stringify(qrCodeDataObject), mySize);
 
     //  USE THIS FOR GENERATING OBJECT
-    
-    // console.log("generatedOutput:", generatedOutput);
-    // console.log("userUID:", userUID);
-
     const storage = getStorage();
     const storageRef = ref(storage, `vehicle-information/${userUID}/1/qrCode0.PNG`);
     let qrCodeBlob = await base64ToBlob((generatedOutput.replace(/^data:image\/(png|jpeg);base64,/, "")), "image/png");
@@ -642,11 +642,6 @@ async function generateVehicleQRCode(userUID, plateNumber, mySize) {
             });
         } //end of getDownloadURL
     ); //end of on method
-    // Promise.all([uploadTask]).then(() => {
-    //     console.log('QR Code done.');
-    //     console.log('userUID:', userUID)
-    //     createNewData(userUID, true);
-    // });
 }
 
 
@@ -659,7 +654,8 @@ export async function exportGenerateVehicleQRCode(userUID, plateNumber, mySize, 
             height: size,
             colorDark : "#000000",
             colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
+            correctLevel : QRCode.CorrectLevel.H,
+            quietZone: true
         });
         generatedOutput = qrcode._oDrawing._elCanvas.toDataURL("image/png");
     };
@@ -722,26 +718,7 @@ function base64ToBlob(base64, mime)
 /********** END OF REGISTER THE USER **********/
 /********** END OF REGISTER THE USER **********/
 
-
-// let verificationPage = document.getElementById("verification-page");
-// if (verificationPage !== null && verificationPage !== undefined) {
-//     window.onload = function() {
-//         sendVerification();
-//         console.log("An email verification was send successfully.");
-//     }
-// }
-
-
 let windowLocation = window.location.pathname;
-// if(windowLocation.indexOf("signup4") > -1) {
-//     console.log(getAuth());
-//     // Send e-mail verification, to be later verify by user.
-//     // sendEmailVerification(getAuth().currentUser)
-//     //   .then(() => {
-//     //     console.log("User verification was sent.")
-//     //     alert("User verification was sent.")
-//     // });
-// }
 
 if(windowLocation.indexOf('signup4') > -1) {
     let finalVerifyEmail = document.querySelector('#reg-goto-final-verifyemail');
@@ -760,15 +737,3 @@ function sendVerification() {
         alert("User verification was sent.")
     });
 }
-
-
-
-/*********** START OF USER ACCOUNT ************/
-/*********** START OF USER ACCOUNT ************/
-/*********** START OF USER ACCOUNT ************/
-
-
-
-/*********** END OF USER ACCOUNT ************/
-/*********** END OF USER ACCOUNT ************/
-/*********** END OF USER ACCOUNT ************/
