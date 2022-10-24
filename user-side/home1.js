@@ -42,29 +42,34 @@ if(windowLocation.indexOf("user-home") > -1) {
             console.log(Object.keys(vehicleInformation)[1]);
 
             if(Object.keys(vehicleInformation).length > 1) {
-                let firstVehicleData = vehicleInformation[Object.keys(vehicleInformation)[1]];
-                console.log('firstVehicleData: ', firstVehicleData);
+                const vehicleKeysLength = Object.keys(vehicleInformation).length;
+                for(let index=0; index<vehicleKeysLength; index++) {
+                    // console.log('keys: ', Object.keys(vehicleInformation)[index]);
+                    let currentKeyIteration = Object.keys(vehicleInformation)[index];
+                    if("vehicle_length" !== Object.keys(vehicleInformation)[index]) {
+                        // console.log("MyCurrentKey:", currentKeyIteration);
+                        console.log('MyfirstVehicleData: ', vehicleInformation[currentKeyIteration]);
+                        console.log('qrCode: ', vehicleInformation[currentKeyIteration]["qrCode"][0])
+                        console.log("modelVehicle:", vehicleInformation[currentKeyIteration]["model"][0]);
 
-                console.log('qrCode: ', firstVehicleData["qrCode"])
-                console.log("modelVehicle:", firstVehicleData["model"][0]);
-                console.log("plateNumber:", Object.keys(vehicleInformation)[1]);
-                // console.log("vehicleImages:", vehicleInformation.registered_vehicle.vehicles.images[0]); // will be used later
-                console.log("qrCode:", firstVehicleData.qrCode[0]); //default, vehicle #1 
-    
-                localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation)); //store vehicle information
-                localStorage.setItem("qrCodePlaceholder", JSON.stringify(firstVehicleData.qrCode[0]));
-                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]}")`);
-                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]);
-                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]);
-                
-    
-                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-                console.log('vehicleInformation:', vehi);
-                displayVehicleDropdownList(vehi);
-                addEventsInList();
+                        localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation)); //store vehicle information
+                        localStorage.setItem("qrCodePlaceholder", JSON.stringify(vehicleInformation[currentKeyIteration]["qrCode"][0]));
 
-                yesQRCode.style.display = 'flex';
-            }
+                        const qrCodeImageLink =  vehicleInformation[currentKeyIteration]["qrCode"][0];
+                        saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
+                        myQRImage.setAttribute("src", qrCodeImageLink);
+                        myQRImage2.setAttribute("src", qrCodeImageLink);
+            
+                        vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
+                        console.log('vehicleInformation:', vehi);
+                        displayVehicleDropdownList(vehi);
+                        addEventsInList(vehi);
+
+                        yesQRCode.style.display = 'flex';
+                        break;
+                    } //end of if statement, internal
+                } //end of for loop
+            } //end of if statement
             else {
                 let qrCode = document.querySelectorAll('.qr-code');
                 noQrCode.style.display = 'flex';
@@ -90,7 +95,7 @@ if(windowLocation.indexOf("user-home") > -1) {
         console.log('vehicleInformation:', vehi);
         // displayVehicleDropdownList(vehi);
         displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
-        addEventsInList();  //re-add the events
+        addEventsInList(vehi);  //re-add the events
 
         // let noQrCode = document.querySelector('.no-qr-code');
         let yesQRCode = document.querySelector('.yes-qr-code');
@@ -108,34 +113,23 @@ if(windowLocation.indexOf("user-home") > -1) {
         console.log('displayVehicleDropdownList');
         console.log('displayVehicleDropdownList : vehicleData', vehicleData);
 
-        // console.log('qrCode: ', firstVehicleData["qrCode"])
-        // console.log("modelVehicle:", firstVehicleData["model"][0]);
-
-        // Object.keys(JSON.parse(localStorage.vehicleInformation)).length
-
-        // console.log("QR Code:", vehicle.registered_vehicle.vehicles.qrCode);
-        // console.log("Vehicle Images:", vehicle.registered_vehicle.vehicles.images);
-        // console.log("Plate:", vehicle.registered_vehicle.plate);
-        // console.log("Model:", vehicle.registered_vehicle.model);
-        // console.log("User Types:", vehicle.registered_vehicle);
-        // console.log("Length:", vehicle.vehicle_length);
-
         for (let x=0; x<vehicleDataKeys.length; x++) {
             if(vehicleDataKeys[x] !== "vehicle_length") {
                 console.log('x:', vehicleDataKeys[x]);
                 // <li>Vehicle #1 | Toyota Raize 2022, Private</li>
                 //id="vehicle-list"
                 //vehicle-placeholder
-                listOfVehiclesTags += `<li>Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
+                listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
     
                 if(x === 1) { //will be used for placeholder
                     console.log('placeholder');
                     vehiclePlaceholder.innerHTML =  `<p>Vehicle #1</p>
                     <p>${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</p>`;
-    
-                    // myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[x]);
-                    // myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[x]);
-                    // saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))[x]}")`);
+                    
+                    const qrCodeImageLink = vehicleData[vehicleDataKeys[x]]["qrCode"][0];
+                    myQRImage.setAttribute("src", qrCodeImageLink);
+                    myQRImage2.setAttribute("src", qrCodeImageLink);
+                    saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
                 }
             }
         } //end of iteration
@@ -143,11 +137,7 @@ if(windowLocation.indexOf("user-home") > -1) {
         return;
     }  //end of displayVehicleDropdownList
 
-    //     vehicleListUL.innerHTML = listOfVehiclesTags;
-    //     return;
-    // }
-
-    function addEventsInList() {
+    function addEventsInList(vehicleData) {
         let dropdown = document.querySelector('.qr-code-dropdown-clickable');
         let popup = document.querySelector('.popup-dropdown');
         let buttons = document.querySelectorAll('.qr-code .qr-code-common-actions > button');
@@ -155,20 +145,33 @@ if(windowLocation.indexOf("user-home") > -1) {
         let myDropdown = document.querySelector('.popup-dropdown');
         let myLists = document.querySelectorAll('#vehicle-list > li');
         let bool = true;
-    
+        
+
+        // console.log('addEventsInList vehicle', vehicle)
+        // Events in List
         if(myDropdown !== null && myDropdown !== undefined) {
             let vehiclePlaceholder = document.getElementById("vehicle-placeholder");
             myLists.forEach((element, index) => {
                 element.addEventListener('click', (e) => {
                     // console.log('mydropselected:', e.target);
+                    const selectedDataKey = element.getAttribute("data-key");
+                    console.log('list element', element.getAttribute("data-key"), index);
                     popup.style.display = "none";
                     
-                    vehiclePlaceholder.innerHTML =  `<p>Vehicle #${index+1}</p>
-                    <p>${vehi.registered_vehicle.model[index]}, ${vehi.registered_vehicle.use_types[index]}</p>`;
-                    
-                    myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[index]);
-                    myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[index]);
-                    saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))[index]}")`);
+                    // vehiclePlaceholder.innerHTML =  `<p>Vehicle #${index+1}</p>
+                    // <p>${vehi.registered_vehicle.model[index]}, ${vehi.registered_vehicle.use_types[index]}</p>`;
+
+                    console.log('selectedDataKey: ', selectedDataKey)
+                    console.log('vehicleData', vehicleData);
+                    console.log('selectedDataKey w/ data', vehicleData[selectedDataKey])
+                    vehiclePlaceholder.innerHTML = `<p>Vehicle #${index+1}</p>
+                    ${vehicleData[selectedDataKey]["model"][0]}, ${vehicleData[selectedDataKey]["use_types"]}`;
+
+                    console.log('selectedDataKey: ', selectedDataKey)
+                    const qrCodeImageLink = vehicleData[selectedDataKey]["qrCode"][0];
+                    myQRImage.setAttribute("src", qrCodeImageLink);
+                    myQRImage2.setAttribute("src", qrCodeImageLink);
+                    saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
                     
                     buttons.forEach((btn) => {
                         btn.style.pointerEvents = "auto";
@@ -178,7 +181,7 @@ if(windowLocation.indexOf("user-home") > -1) {
             });
         }
 
-
+        // Fixes need in non-refreshed list
         dropdown.addEventListener('click', () => {
             // console.log('clicked.', bool)
             if(bool) {
