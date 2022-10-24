@@ -36,18 +36,27 @@ if(windowLocation.indexOf("user-home") > -1) {
             let noQrCode = document.querySelector('.no-qr-code');
             let yesQRCode = document.querySelector('.yes-qr-code');
 
-            if(vehicleInformation.vehicle_length !== 0) {
-                console.log("modelVehicle:", vehicleInformation.registered_vehicle.model[0]);
-                console.log("plateNumber:", vehicleInformation.registered_vehicle.plate[0]);
+
+            console.log('keys length: ', Object.keys(vehicleInformation).length > 1);
+            console.log('first data: ', Object.keys(vehicleInformation)[1]);
+            console.log(Object.keys(vehicleInformation)[1]);
+
+            if(Object.keys(vehicleInformation).length > 1) {
+                let firstVehicleData = vehicleInformation[Object.keys(vehicleInformation)[1]];
+                console.log('firstVehicleData: ', firstVehicleData);
+
+                console.log('qrCode: ', firstVehicleData["qrCode"])
+                console.log("modelVehicle:", firstVehicleData["model"][0]);
+                console.log("plateNumber:", Object.keys(vehicleInformation)[1]);
                 // console.log("vehicleImages:", vehicleInformation.registered_vehicle.vehicles.images[0]); // will be used later
-                console.log("qrCode:", vehicleInformation.registered_vehicle.vehicles.qrCode[0]); //default, vehicle #1 
+                console.log("qrCode:", firstVehicleData.qrCode[0]); //default, vehicle #1 
     
                 localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation)); //store vehicle information
-                localStorage.setItem("qrCodePlaceholder", JSON.stringify(vehicleInformation.registered_vehicle.vehicles.qrCode));
+                localStorage.setItem("qrCodePlaceholder", JSON.stringify(firstVehicleData.qrCode[0]));
                 saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]}")`);
                 myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]);
                 myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]);
-    
+                
     
                 vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
                 console.log('vehicleInformation:', vehi);
@@ -72,9 +81,9 @@ if(windowLocation.indexOf("user-home") > -1) {
     }
     else {
         console.log("I did the else.")
-        myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]);
-        myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]);
-        saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))[0]}")`);
+        myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+        myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+        saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
         // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
 
         vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
@@ -93,33 +102,50 @@ if(windowLocation.indexOf("user-home") > -1) {
         let vehicleListUL = document.getElementById("vehicle-list");
         let vehiclePlaceholder = document.getElementById("vehicle-placeholder");
 
-        console.log("QR Code:", vehicle.registered_vehicle.vehicles.qrCode);
-        console.log("Vehicle Images:", vehicle.registered_vehicle.vehicles.images);
-        console.log("Plate:", vehicle.registered_vehicle.plate);
-        console.log("Model:", vehicle.registered_vehicle.model);
-        console.log("User Types:", vehicle.registered_vehicle);
-        console.log("Length:", vehicle.vehicle_length);
-        for (let x=0; x<vehicle.vehicle_length; x++) {
-            console.log('x:', x);
+        let vehicleDataKeys = Object.keys(JSON.parse(localStorage.getItem("vehicleInformation")));
+        let vehicleData = JSON.parse(localStorage.getItem("vehicleInformation"));
+        // let vehicleData = Object.keys(JSON.parse(vehicle));
+        console.log('displayVehicleDropdownList');
+        console.log('displayVehicleDropdownList : vehicleData', vehicleData);
 
-            // <li>Vehicle #1 | Toyota Raize 2022, Private</li>
-            //id="vehicle-list"
-            //vehicle-placeholder
-            listOfVehiclesTags += `<li>Vehicle ${x+1} | ${vehicle.registered_vehicle.model[x]}, ${vehicle.registered_vehicle.use_types[x]}</li>`
+        // console.log('qrCode: ', firstVehicleData["qrCode"])
+        // console.log("modelVehicle:", firstVehicleData["model"][0]);
 
-            if(x === 0) { //will be used for placeholder
-                vehiclePlaceholder.innerHTML =  `<p>Vehicle #1</p>
-                <p>${vehicle.registered_vehicle.model[x]}, ${vehicle.registered_vehicle.use_types[x]}</p>`;
+        // Object.keys(JSON.parse(localStorage.vehicleInformation)).length
 
-                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[x]);
-                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[x]);
-                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))[x]}")`);
+        // console.log("QR Code:", vehicle.registered_vehicle.vehicles.qrCode);
+        // console.log("Vehicle Images:", vehicle.registered_vehicle.vehicles.images);
+        // console.log("Plate:", vehicle.registered_vehicle.plate);
+        // console.log("Model:", vehicle.registered_vehicle.model);
+        // console.log("User Types:", vehicle.registered_vehicle);
+        // console.log("Length:", vehicle.vehicle_length);
+
+        for (let x=0; x<vehicleDataKeys.length; x++) {
+            if(vehicleDataKeys[x] !== "vehicle_length") {
+                console.log('x:', vehicleDataKeys[x]);
+                // <li>Vehicle #1 | Toyota Raize 2022, Private</li>
+                //id="vehicle-list"
+                //vehicle-placeholder
+                listOfVehiclesTags += `<li>Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
+    
+                if(x === 1) { //will be used for placeholder
+                    console.log('placeholder');
+                    vehiclePlaceholder.innerHTML =  `<p>Vehicle #1</p>
+                    <p>${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</p>`;
+    
+                    // myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[x]);
+                    // myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder"))[x]);
+                    // saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))[x]}")`);
+                }
             }
-        }
-
+        } //end of iteration
         vehicleListUL.innerHTML = listOfVehiclesTags;
         return;
-    }
+    }  //end of displayVehicleDropdownList
+
+    //     vehicleListUL.innerHTML = listOfVehiclesTags;
+    //     return;
+    // }
 
     function addEventsInList() {
         let dropdown = document.querySelector('.qr-code-dropdown-clickable');

@@ -1,6 +1,5 @@
 import QrScanner from "./qr-scanner.min.js";
 import * as fire from "../../../src/index";
-import e from "./qr-scanner.min.js";
 
 if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     console.log('QrScanner qr.js');
@@ -280,8 +279,6 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         ]
                     });
                 }); //jQuery
-
-
             }); //end of function
         }); //end of snapshot function
     }
@@ -452,10 +449,4 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         //         .catch(e => setResult(fileQrResult, { data: e || 'No QR code found.' }));
         // });
     }); //end of DOMContentLoaded, QR Scanner
-
-
-
-
-
 }
-

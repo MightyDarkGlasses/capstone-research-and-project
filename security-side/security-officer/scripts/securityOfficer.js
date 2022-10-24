@@ -1,10 +1,3 @@
-// QR CODE SUCCESS
-
-// import * as fire from "../src/index.js";
-// import * as fire from "../src/index";
-
-
-
 console.log('securityOfficer.js');
 function loadSecurityOfficerResult() {
   let xhttp = new XMLHttpRequest();

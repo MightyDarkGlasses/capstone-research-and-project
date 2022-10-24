@@ -7,9 +7,8 @@
     padding: 0;
     text-decoration: none;
     list-style: none;
-    font-family: 'Lexend Deca';
     box-sizing: border-box;
-  }
+}
 
 .main-container-logs {
    display:grid;
