@@ -119,8 +119,10 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 personalInfoPlate = vehicleInformation[getSelectedAttrKey],
                 personalInfoModel = vehicleInformation[getSelectedAttrKey]["model"][0];
                 
-                // console.log('working', index);
-                // console.log('vehicleInfo:', vehicleInformation);
+                // console.log('personalInfoPlate:', personalInfoPlate);
+                document.querySelector('.personal-info-plate').innerText = getSelectedAttrKey;
+                document.querySelector('.personal-info-model').innerText = personalInfoModel;
+                document.querySelector('#vehicle-placeholder').innerHTML = `<p>Vehicle #${index+1}</p>`;
 
                 // currentIndexSelectedSubmit = index;
                 // console.log('currentIndexSelectedSubmit', currentIndexSelectedSubmit);

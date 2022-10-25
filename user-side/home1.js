@@ -55,7 +55,7 @@ if(windowLocation.indexOf("user-home") > -1) {
                         localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation)); //store vehicle information
                         localStorage.setItem("qrCodePlaceholder", JSON.stringify(vehicleInformation[currentKeyIteration]["qrCode"][0]));
 
-                        const qrCodeImageLink =  vehicleInformation[currentKeyIteration]["qrCode"][0];
+                        const qrCodeImageLink =  vehicleInformation[currentKeyIteration]["qrCode"];
                         saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
                         myQRImage.setAttribute("src", qrCodeImageLink);
                         myQRImage2.setAttribute("src", qrCodeImageLink);
@@ -120,13 +120,13 @@ if(windowLocation.indexOf("user-home") > -1) {
                 //id="vehicle-list"
                 //vehicle-placeholder
                 listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
-    
+                
                 if(x === 1) { //will be used for placeholder
                     console.log('placeholder');
                     vehiclePlaceholder.innerHTML =  `<p>Vehicle #1</p>
                     <p>${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</p>`;
                     
-                    const qrCodeImageLink = vehicleData[vehicleDataKeys[x]]["qrCode"][0];
+                    const qrCodeImageLink = vehicleData[vehicleDataKeys[x]]["qrCode"];
                     myQRImage.setAttribute("src", qrCodeImageLink);
                     myQRImage2.setAttribute("src", qrCodeImageLink);
                     saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
@@ -168,7 +168,8 @@ if(windowLocation.indexOf("user-home") > -1) {
                     ${vehicleData[selectedDataKey]["model"][0]}, ${vehicleData[selectedDataKey]["use_types"]}`;
 
                     console.log('selectedDataKey: ', selectedDataKey)
-                    const qrCodeImageLink = vehicleData[selectedDataKey]["qrCode"][0];
+                    console.log('qrCodeImageLink: ', vehicleData)
+                    const qrCodeImageLink = vehicleData[selectedDataKey]["qrCode"];
                     myQRImage.setAttribute("src", qrCodeImageLink);
                     myQRImage2.setAttribute("src", qrCodeImageLink);
                     saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
