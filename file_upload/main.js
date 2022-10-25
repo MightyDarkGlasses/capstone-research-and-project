@@ -105,10 +105,11 @@ function updateThumbnail(dropZoneElement, file) {
 function doStoreVehicleData(file, vOrientation, vName, vType) {
     const reader = new FileReader();  //convert the file into data URL.
     reader.addEventListener("load", function() {
-      console.log(reader.result); //print the Blob
+    //   console.log(reader.result); //print the Blob
       localStorage.setItem(vOrientation, reader.result); 
       localStorage.setItem(vName, file.name);
       localStorage.setItem(vType, file.type);
     });
     reader.readAsDataURL(file);
 }
+

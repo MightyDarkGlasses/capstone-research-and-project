@@ -5,13 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <script src="admin.js" defer></script> -->
-    <script
-        src="https://code.jquery.com/jquery-3.6.1.js"
-        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
-        crossorigin="anonymous" defer>
-    </script>
-    <!-- jQuery Modal -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js" defer></script>
+    
+    <!-- JQuery Modal -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     
     <link rel="stylesheet" href="user-home.css">
@@ -497,7 +492,7 @@
 
             <div class="title-with-add">
                 <h2>Vehicle Information</h2>
-                <!-- <button id="add-new-vehicle">Add Vehicle</button> -->
+                <button id="add-new-vehicle">Add Vehicle</button>
             </div>
             <div class="personal-box vehicle-information disable-select">
                 <div class="personal-box-grid">
@@ -578,94 +573,111 @@
             height: 100%;
             /* padding: 1em; */
         } 
+
+        #add-vehicle-modal .add-vehicle-modal-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1em;
+        }
+
+        #add-vehicle-modal .add-vehicle-modal-container .drop-zone {
+            width: 500px;
+            height: 250px;
+        }
+
+        #add-vehicle-modal .add-vehicle-modal-container .drop-zone p {
+            color: #555;
+            text-transform: uppercase;
+            font-size: .75em;
+            font-weight: 800;
+            margin: 0.5em 0;
+        }
+
+        .user-input > div label {
+            display: block;
+            font-weight: 700;
+            margin: 0.3em 0;
+        }
+        .user-input > div input {
+            width: 97%;
+            margin: 0.25em;
+            box-shadow: var(--text-shadow);
+            border-radius: 1em;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            margin: 0.5em 0.1em;
+            outline: none;
+            border: 2px solid black;
+        }
+        
+        #modal-submit-vehicle {
+            border-radius: 2em;
+            background-color: black !important;
+            color: white !important;
+            padding: 0.75em 4em;
+            font-size: 1em;
+            font-weight: bold;
+            margin: 0.2em;
+            transition: all .5s ease;
+            background: url(https://api.iconify.design/eva/arrow-back-outline.svg?color=white&flip=horizontal) no-repeat 85% center / contain;
+            background-size: 30px;
+            width: 98%;
+            cursor: pointer;
+        }
     </style>
     <!-- Modals -->
-    <div id="add-vehicle-modal" class="modal">
-        <div>
-            <div class="sign-up-form-2">
-                <div class="sign-up-form-2a">
-                    <div class="grid3" id="vehicle-front">
-                        <div class="file-drag-area">
-                            <div class="icon">
-                                <div class="front-car-view"></div>
-                                <!-- <box-icon name="rocket"></box-icon> -->
-                            </div>
-                            <div style="text-align: center;">
-                                <span class="drag-caption">Drag &amp; Drop</span>
-                                <div>
-                                    <span class="drag-caption">
-                                    or <span class="button">browse</span>
-                                    </span>
-                                    <input type="file" name="" id="" hidden=""><br>
-                                    <span class="support">Supports: JPEG, JPG, PNG</span>
-                                </div>
-                            </div>
-                        </div>
+    <div id="add-vehicle-modal" class="modal" style="max-width: 750px;">
+        <div class="add-vehicle-modal-container">
+            <div class="drop-zone" index="1">
+                <div class="vehicle-front-drop-info">
+                    <div class="icon">
+                        <div class="front-car-view"></div>
                     </div>
-                    <div class="grid3" id="vehicle-side">
-                        <div class="file-drag-area">
-                            <div class="icon">
-                                <div class="side-car-view"></div>
-                                <!-- <box-icon name="rocket"></box-icon> -->
-                            </div>
-                            <div style="text-align: center;">
-                                <span class="drag-caption">Drag &amp; Drop</span>
-                                <div>
-                                    <span class="drag-caption">
-                                    or <span class="button">browse</span>
-                                    </span>
-                                    <input type="file" name="" id="" hidden=""><br>
-                                    <span class="support">Supports: JPEG, JPG, PNG</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid3" id="vehicle-back">
-                        <div class="file-drag-area">
-                            <div class="icon">
-                                <div class="rear-car-view"></div>
-                                <!-- <box-icon name="rocket"></box-icon> -->
-                            </div>
-                            <div style="text-align: center;">
-                                <span class="drag-caption">Drag &amp; Drop</span>
-                                <div>
-                                    <span class="drag-caption">
-                                    or <span class="button">browse</span>
-                                    </span>
-                                    <input type="file" name="" id="" hidden=""><br>
-                                    <span class="support">Supports: JPEG, JPG, PNG</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid4">
-                        <div class="message">
-                            <p>You can upload a file by clicking the respective view or drag and drop the image. <br><b>PNG, JPEG, GIF</b> up to 25MB each view.</p>
-                        </div>
-                    </div>
+                    <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                    <p>Front View</p>
                 </div>
-                <div class="sign-up-form-2b grid5">
-                    <form class="vehicle-form">
-                        <div class="grid5">
-                            <div>
-                                <label>Vehicle Model</label>
-                                <input type="text" class="vehicle-icon-1 vehicle-input" name="signup_vehiclemodel" id="signup-fname" required="required" value="▃▃▃▃▃">
-                            </div>
-                            <div>
-                                <label>Plate Number</label>
-                                <input type="text" class="vehicle-icon-2 vehicle-input" name="signup_vehicleplatenum" id="signup-fname" required="required" value="▃▃▃▃▃">
-                                <div id="qrcode" style="display: none;"> <!-- QR Code is generated here -->
-                            </div>
-                        </div>
-                        <div>
-                            <input type="submit" id="reg-goto-page3" value="Submit" rel="modal:close">
-                        </div>
-                    </form>
+                <input type="file" name="vehicle-front" class="drop-zone__input">
+            </div>
+            <div class="drop-zone" index="2">
+                <div class="vehicle-side-drop-info">
+                    <div class="icon">
+                        <div class="side-car-view"></div>
+                    </div>
+                    <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                    <p>Side View</p>
                 </div>
-                <!-- <div class="vehicle-formation">
-                </div> -->
+                <input type="file" name="vehicle-side" class="drop-zone__input">
+            </div>
+            <div class="drop-zone" index="3">
+                <div class="vehicle-rear-drop-info">
+                    <div class="icon">
+                        <div class="rear-car-view"></div>
+                    </div>
+                    <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                    <p>Rear View</p>
+                </div>
+                <input type="file" name="vehicle-rear" class="drop-zone__input">
             </div>
         </div>
+        <form class="modal-vehicle-form">
+            <div class="user-input">
+                <div>
+                    <label>Vehicle Model</label>
+                    <input type="text" class="vehicle-icon-1 vehicle-input" name="signup_vehiclemodel" id="vehicle-model" required="required" pattern=".{8,50}" title="You can only within the range of 8 - 50 character length."
+                    value="Random Model">
+                </div>
+                <div>
+                    <label>Plate Number</label>
+                    <input type="text" class="vehicle-icon-2 vehicle-input" name="signup_vehicleplatenum" id="vehicle-platenum" required="required" pattern=".{1,10}" title="You can only enter a maximum of 10 characters."
+                    value="ABC 2233">
+                </div>
+                <div id="qrcode" style="display: none;"> <!-- QR Code is generated here -->
+            </div>
+            <div class="navigation">
+                <input type="submit" id="modal-submit-vehicle" value="Submit">
+            </div>
+        </form>
     </div>
       
     <div id="add-linkages-modal" class="modal">
@@ -674,7 +686,7 @@
                 <span class="drop-zone__prompt">Drop file here or click to upload</span>
                 <input type="file" id="file-selector" name="myFile1" class="drop-zone__input">
             </div>
-        
+            
             <!-- <b>Detected QR code: </b>
 	        <span id="file-qr-result">None</span> -->
         </div>
@@ -683,12 +695,18 @@
     <!-- <p><a href="#ex1" rel="modal:open">Open Modal</a></p> -->
 </body>
 
+<script
+        src="https://code.jquery.com/jquery-3.6.1.js"
+        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+        crossorigin="anonymous" defer>
+</script>
+<!-- jQuery Modal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js" defer></script>
+
 <script src="qrcode.min.js" defer></script>
 <script src="../dist/bundle.js" defer></script>
-<script src="script_users/vehicle.js" defer></script>
-<script src="../scripts/fileupload.js" defer></script>
-<script src="../fileupload-test/main.js" defer></script>
+<!-- <script src="script_users/vehicle.js" defer></script> -->
+<!-- <script src="../fileupload-test/main.js" defer></script> -->
+<script src="../file_upload/main.js" defer></script>
 <script src="./sidebar/sidebar-mobile.js" defer></script>
-
-
 </html>

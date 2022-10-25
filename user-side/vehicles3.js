@@ -22,15 +22,14 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     let vehicleInformation = JSON.parse(localStorage.getItem("vehicleInformation"));
     
     
-    vehicleForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        console.log('This is a test.')
-    });
+    // vehicleForm.addEventListener('submit', (e) => {
+    //     e.preventDefault();
+    //     console.log('This is a test.')
+    // });
 
     let listOfVehiclesTags = '';
     let currentIndexSelectedSubmit = undefined;
     function showVehicleList(vehicle) {
-
         if(vehicle == null || vehicle.vehicle_length == 0) {
             // document.querySelectorAll('.right-container ~ .header').forEach((element) => element.style.display = 'none')
             let abc = document.querySelectorAll('.right-container ~ .header');
@@ -41,88 +40,90 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             document.querySelector('.linkages-box').style.display = 'none';
         }
         else {
-            currentIndexSelectedSubmit = 0;
-            for (let x=0; x<vehicle.vehicle_length; x++) {
-                console.log('x:', x);
-        
-                // <li>Vehicle #1 | Toyota Raize 2022, Private</li>
-                //id="vehicle-list"
-                //vehicle-placeholder
-                listOfVehiclesTags += `<li>Vehicle ${x+1} | ${vehicle.registered_vehicle.model[x]}, ${vehicle.registered_vehicle.use_types[x]}</li>`
-    
+            let vehicleKeys= Object.keys(JSON.parse(localStorage.vehicleInformation));
+            for (let index=0; index<vehicleKeys.length; index++) {
+                // console.log('index:', index);
+                // console.log('vehicleInformation[index]:', vehicleInformation[index]);
+                // console.log('vehicleKeysLength:', vehicleKeys[index]);
                 
-    
-                // console.log('vehicle.registered_vehicle.model[0]', vehicle.registered_vehicle.model[0])
-                // console.log('vehicle.registered_vehicle.plate[0]', vehicle.registered_vehicle.plate[0])
-    
-                if(x === 0) { //will be used for placeholder
+                if(vehicleKeys[index] !== 'vehicle_length') {
+                    console.log('true', vehicleInformation[vehicleKeys[index]])
+
+                    const preSelectedVehicleKey = vehicleInformation[vehicleKeys[index]];
+                    listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${index} | ${preSelectedVehicleKey["model"][0]}, ${vehicleKeys[index]}</li>`;
                     document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
-                    document.querySelector('.personal-info-plate').innerText = vehicleInformation.registered_vehicle.plate[0];
-                    // document.querySelector('.personal-info-plate').innerText = '123';
-                    document.querySelector('.personal-info-model').innerText = vehicleInformation.registered_vehicle.model[0];
-                    // document.querySelector('.personal-info-model').innerText = '456';
+                    document.querySelector('.personal-info-plate').innerText = vehicleKeys[index];
+                    document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"][0];
+                    
+                    // if(x === 1) { //will be used for placeholder
+                    //     document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
+                    //     document.querySelector('.personal-info-plate').innerText = vehicleInformation.registered_vehicle.plate[0];
+                    //     document.querySelector('.personal-info-model').innerText = vehicleInformation.registered_vehicle.model[0];
+                    // }
                 }
             }
             
 
             console.log('currentIndexSelectedSubmit', currentIndexSelectedSubmit)
-
             document.querySelector('.no-vehicle-box').style.display = 'none';
             document.getElementById('vehicle-list').innerHTML = listOfVehiclesTags;
             console.log(listOfVehiclesTags)
         }
     }
     function showLinkagesList(vehicle) {
-        if(vehicle !== null) {
-        //const docRefVehicle = fire.myDoc(fire.db, "vehicle-information", currentUserId);
+        // if(vehicle !== null) {
+        // //const docRefVehicle = fire.myDoc(fire.db, "vehicle-information", currentUserId);
             
-            let myObject = vehicle.registered_vehicle.vehicles.linkages;
-            let myKeys = Object.keys(myObject);
+        //     let myObject = vehicle.registered_vehicle.vehicles.linkages;
+        //     let myKeys = Object.keys(myObject);
 
-            if(myKeys.length > 0) {
-                console.log('Linkages detected!');
+        //     if(myKeys.length > 0) {
+        //         console.log('Linkages detected!');
                 
-                let linkagesOutput = '';
+        //         let linkagesOutput = '';
                 
-                myKeys.forEach((element, index) => {
-                    console.log('test', myObject)
-                    linkagesOutput += `<li>Link #${index}: ${myObject[myKeys]}</li>`;
-                    //     // Last index for setting the list of linkages
-                    //     if(index === myKeys.length-1) { 
-                    //         console.log('index === myKeys.length', index === myKeys.length)
-                    //         document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
-                    //     }
-                });
+        //         myKeys.forEach((element, index) => {
+        //             console.log('test', myObject)
+        //             linkagesOutput += `<li>Link #${index}: ${myObject[myKeys]}</li>`;
+        //             //     // Last index for setting the list of linkages
+        //             //     if(index === myKeys.length-1) { 
+        //             //         console.log('index === myKeys.length', index === myKeys.length)
+        //             //         document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
+        //             //     }
+        //         });
 
-                document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
-                console.log('myKeys:', myKeys);
-                console.log('linkageOutput:', linkagesOutput);
-            }
-            else {
-                console.log('No linked yet.');
-            }
-            console.log('linkages:', vehicle.registered_vehicle.vehicles.linkages);
-            console.log('linkages:', Object.keys(vehicle.registered_vehicle.vehicles.linkages).length);
-        }
+        //         document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
+        //         console.log('myKeys:', myKeys);
+        //         console.log('linkageOutput:', linkagesOutput);
+        //     }
+        //     else {
+        //         console.log('No linked yet.');
+        //     }
+        //     console.log('linkages:', vehicle.registered_vehicle.vehicles.linkages);
+        //     console.log('linkages:', Object.keys(vehicle.registered_vehicle.vehicles.linkages).length);
+        // }
     }
 
 
     
     function clickableVehicleList() {
         let myLists = document.querySelectorAll('#vehicle-list > li');
-
+        const personalInfoPlate = document.querySelector('.personal-info-plate').textContent;
+        const personalInfoModel = document.querySelector('.personal-info-model').textContent;
         myLists.forEach((element, index) => {
             element.addEventListener('click', (e) => {
                 document.querySelector(".popup-dropdown").style.display = 'none'; //toggle out popup
+                console.log('getAttribute', element.getAttribute('data-key'));
 
-                document.querySelector('.personal-info-plate').textContent = vehicleInformation.registered_vehicle.plate[index];
-                document.querySelector('.personal-info-model').textContent = vehicleInformation.registered_vehicle.model[index];
+                const getSelectedAttrKey = element.getAttribute('data-key'),
+                personalInfoPlate = vehicleInformation[getSelectedAttrKey],
+                personalInfoModel = vehicleInformation[getSelectedAttrKey]["model"][0];
                 
-                console.log('working', index);
-                console.log('vehicleInfo:', vehicleInformation);
+                // console.log('working', index);
+                // console.log('vehicleInfo:', vehicleInformation);
 
-                currentIndexSelectedSubmit = index;
-                console.log('currentIndexSelectedSubmit', currentIndexSelectedSubmit);
+                // currentIndexSelectedSubmit = index;
+                // console.log('currentIndexSelectedSubmit', currentIndexSelectedSubmit);
                 if(vehicleInformation['linkages'] === undefined || vehicleInformation["linkages"] == null) {
                     document.querySelector('.vehicle-linkages-list').textContent = 'None';
                 }
@@ -321,82 +322,9 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             
         });
     }
-
-    //generateVehicleQRCode
-    // async function generateVehicleQRCode(userUID, plateNumber, mySize) {
-    //     // let qrCodeLink = "";
-    //     let generatedOutput;
-    
-    //     const generateQRCode = (text, size) => {
-    //         const qrcode = new QRCode('qrcode', {
-    //             text: text,
-    //             width: size,
-    //             height: size,
-    //             colorDark : "#000000",
-    //             colorLight : "#ffffff",
-    //             correctLevel : QRCode.CorrectLevel.H
-    //         })
-    //         generatedOutput = qrcode._oDrawing._elCanvas.toDataURL("image/png");
-    //     };
-    
-    //     let qrCodeDataObject = {
-    //         'uid': userUID,
-    //         'plate_number': plateNumber.replace(" ", "")
-    //     }
-    
-    //     await generateQRCode(JSON.stringify(qrCodeDataObject), mySize);
-    //     const storage = fire.storage;
-    //     const storageRef = ref(storage, `vehicle-information/${userUID}/1/qrCode0.PNG`);
-    //     let qrCodeBlob = await base64ToBlob((generatedOutput.replace(/^data:image\/(png|jpeg);base64,/, "")), "image/png");
-    //     const uploadTask = fire.myUploadBytesResumable(storageRef, qrCodeBlob, "image/png");
-        
-    //     uploadTask.on('state_changed', 
-    //         async (snapshot) => {
-    //             // Progress of fileupload
-    //             const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-    //             console.log("Uploading qr code vehicle");
-    //             console.log('Upload is ' + progress + '% done');    //progress of upload
-    //         }, 
-    //         (error) => {
-    //             // Handle unsuccessful uploads
-    //             console.log(error);
-    //         }, 
-    //         (success) => {
-    //             // If successful, do this.
-    //             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //                 console.log('QR Code - File available at', downloadURL);
-    //                 console.log('QR Code done.');
-    //             });
-    //         } //end of getDownloadURL
-    //     ); //end of on method
-    // }
-
-    // // Convert base64 (generated by FileReader) into Blob (which is supported by Firebase Storage)
-    // function base64ToBlob(base64, mime) 
-    // {
-    //     mime = mime || '';
-    //     var sliceSize = 1024;
-    //     var byteChars = window.atob(base64);
-    //     var byteArrays = [];
-
-    //     for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
-    //         var slice = byteChars.slice(offset, offset + sliceSize);
-    //         var byteNumbers = new Array(slice.length);
-    //         for (var i = 0; i < slice.length; i++) {
-    //             byteNumbers[i] = slice.charCodeAt(i);
-    //         }
-            
-    //         var byteArray = new Uint8Array(byteNumbers);
-    //         byteArrays.push(byteArray);
-    //     }
-
-    //     return new Blob(byteArrays, {type: mime});
-    // }
-
-
 } // end of window.location.pathname
 
 // console.log(fire.db)
 
 
-});
+}); //end of DOMContentLoaded event
