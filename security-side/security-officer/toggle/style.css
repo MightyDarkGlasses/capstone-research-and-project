@@ -1,0 +1,294 @@
+
+.toggle, .checkbox {
+    width: 68px !important;
+    height: 70px;
+}
+.checkbox {
+    padding: 0 !important;
+    margin: .5em 1em;
+}
+.selection-toggle {
+    padding: 0 !important;
+}
+
+.scanning-settings > div :not(input[type="checkbox"]) {
+    width: 100%;
+    padding: .5em 1em;
+}
+
+.scanning-settings .selection {
+    padding: 0 !important;
+}
+
+.scanning-settings canvas {
+    width: 200px !important;
+    height: 200px;
+}
+
+
+/* QR Code Display */
+.scanning-settings .input-row {
+    justify-content: start;
+}
+.scanning-settings {
+    display: grid;
+    gap: .5em;
+}
+.scanning-settings select {
+    border-radius: 1em;
+    font-size: 1em;
+}
+.selection option {
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    padding-left: 30px;
+}
+.selection option[value="default-style"] {
+    background: url('https://api.iconify.design/ic/round-width-normal.svg') no-repeat center center / contain;
+    background-size: 25px;
+    padding: 1em;
+}
+
+select {
+    /* A reset of styles, including removing the default dropdown arrow */
+    appearance: none;
+    /* Additional resets for further consistency */
+    background-color: transparent;
+    border: 2px solid gainsboro !important;
+    outline: none;
+    /* padding: 0 1em 0 0; */
+    
+    margin: 0;
+    width: 100%;
+    /* min-width: 15ch; */
+    /* max-width: 30ch; */
+    border: 1px solid var(--select-border);
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: 1.25rem;
+    cursor: pointer;
+    line-height: 1.25;
+    background-color: #fff;
+    background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+}
+
+.select {
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+}
+.select::after {
+    content: "";
+    /* width: 10px; */
+    height: 0.5em;
+    background-color: cornflowerblue;
+    clip-path: polygon(25% 100%, 0 0, 50% 0);
+
+    padding: 0 1em;
+}
+select,
+.select:after {
+    grid-area: select;
+    justify-self: end;
+}
+
+.scanning-settings {
+    background-color: whitesmoke;
+    padding: 1em 0;
+    border-radius: 1em;
+
+    /* Shadow */
+    -moz-box-shadow:    3px 3px 5px 6px #ccc;
+    -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+    box-shadow:         0px 3px 5px 6px rgba(204, 204, 204, 0.5);
+}
+
+.scanning-settings .scanning-title {
+    font-size: 1.25em;
+    font-weight: 800;
+    text-transform: uppercase;
+    /* text-decoration: underline; */
+    text-align: center;
+}
+
+
+.camera-permissions {
+    display: flex;
+    flex-direction: row;
+}
+.camera-permissions .main-has-camera {
+    display: flex;
+    align-items: center;
+}
+
+
+/* Result */
+#cam-qr-result {
+    background-color: #cccccc;
+    width: 95%;
+    margin: 0 1em;
+    border-radius: 1em;
+}
+
+
+/* Toggle Button and Checkbox Styling */
+.input-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 5px;
+}
+
+.checkbox,
+.radio {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    display: block;
+}
+
+.check,
+.rad {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #e3eefa;
+}
+
+.check {
+    border-radius: 3px;
+    transition: all 0.4s;
+}
+
+.rad {
+    border-radius: 50%;
+    transition: all 0.4s;
+}
+
+.checkbox.on .check,
+.radio.on .rad {
+    background-color: #4287f5;
+}
+
+.checkbox.on .checked-icon,
+.radio.on .rad-icon {
+    opacity: 1;
+    text-align: center;
+    animation-name: eh;
+    animation-duration: 0.3s;
+}
+
+.checkbox .checked-icon,
+.radio .rad-icon {
+    transition: opacity 0.3s ease-out;
+}
+
+.toggle {
+    position: relative;
+    width: 60px;
+    height: 34px;
+    display: inline-block;
+}
+
+.toggle .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.toggle .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.05);
+}
+
+.toggle .slider {
+    background-color: #e3eefa;
+}
+
+.toggle.on .slider {
+    background-color: #4287f5;
+}
+
+.toggle.on .slider:before {
+    transform: translateX(26px);
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2);
+}
+
+.toggle .label {
+    position: absolute;
+    left: 70px;
+    top: 4px;
+    vertical-align: middle;
+}
+
+.checkbox .label,
+.radio .label {
+    position: absolute;
+    left: 50px;
+    top: 4px;
+    vertical-align: middle;
+}
+
+input {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    position: absolute;
+    z-index: 100;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+
+/* Radio button */
+.checkbox,
+.radio {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    display: block;
+}
+
+.check,
+.rad {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #e3eefa;
+}
+
+.check {
+    border-radius: 1em;
+    transition: all 0.4s;
+}
+
+.checkbox.on .check,
+.radio.on .rad {
+    background-color: #4287f5;
+}
+
+.checkbox.on .checked-icon,
+.radio.on .rad-icon {
+    opacity: 1;
+    text-align: center;
+    animation-name: eh;
+    animation-duration: 0.3s;
+}
+
+.checkbox .checked-icon,
+.radio .rad-icon {
+    transition: opacity 0.3s ease-out;
+}

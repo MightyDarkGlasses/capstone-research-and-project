@@ -328,6 +328,7 @@ jQuery(function() {
                         fire.doUpdateDoc(fire.myDoc(fire.db, "vehicle-information", userUID), {
                             vehicle_length: fire.doIncrement(1)
                         }).then((success) => {
+                            // localStorage.removeItem("vehicleInformation");
                             window.location.reload();
                         });
                     });

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="home-main.css" />
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-    
+    <link rel="stylesheet" href="toggle/style.css">
     <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js" defer></script>
     <script src="../../dist/bundle.js" defer></script>
     <script src="./scripts/securityOfficer.js" defer></script>
@@ -33,7 +33,7 @@
           charset="utf8"
           src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"
           defer></script>
-
+    <script src="toggle/custom_toggle.js"></script>
 </head>
 
 <style>
@@ -98,33 +98,35 @@
                 </div>
                 <ul>
                     <li>
-                        <a href="user-home.html" class="menu">
-                        <div class="sidebar-icon-1"></div>
-                        <div class="title">Home</div>
+                        <a href="securityOfficer-home.html" id="menu-id">
+                            <div class="sidebar-logo">
+                                <iconify-icon icon="bxs:dashboard"></iconify-icon>
+                            </div>
+                            <div id="title-home" class="title">Home</div>
                         </a>
                     </li>
                     <li>
-                        <a href="user-account.html" class="menu">
-                            <div class="sidebar-icon-2"></div>
-                            <div class="title">My Account</div>
+                        <a id="account-id">
+                            <div class="sidebar-logo">
+                                <iconify-icon icon="carbon:user-avatar-filled"></iconify-icon>
+                            </div>
+                            <div class="title" id="title-myAccount">My Account</div>
                         </a>
                     </li>
                     <li>
-                        <a href="user-vehicle.html" class="menu">
-                            <div class="sidebar-icon-3"></div>
-                            <div class="title">Vehicles</div>
+                        <a id="logs-id">
+                            <div class="sidebar-logo">
+                                <iconify-icon icon="heroicons:newspaper-solid"></iconify-icon>
+                            </div>
+                            <div class="title" id="title-logs">Logs</div>
                         </a>
                     </li>
                     <li>
-                        <a href="user-logs.html" class="menu">
-                            <div class="sidebar-icon-4"></div>
-                            <div class="title">Logs</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="user-announcements.html" class="menu">
-                            <div class="sidebar-icon-5"></div>
-                            <div class="title">Announcements</div>
+                        <a href="#" id="menu-id">
+                            <div class="sidebar-logo">
+                                <iconify-icon icon="eva:log-out-outline"></iconify-icon>
+                            </div>
+                            <div class="title">Logout</div>
                         </a>
                     </li>
                 </ul>
@@ -301,54 +303,84 @@
                             height: 200px;
                         }
                     </style>
+
                     <div class="scanning-settings">
-                        <div>
+                        <p class="scanning-title">QR Scanning Settings</p>
+                        <div class="highlight-section">
                             <p><b>Highlight Style</b></p>
                             <div class="selection">
-                                <select name="b" id="scan-region-highlight-style-select">
-                                    <option value="default-style" selected>Default style</option>
-                                    <option value="example-style-1">Example custom style 1</option>
+                                <div class="select">
+                                    <select name="b" id="scan-region-highlight-style-select">
+                                        <option value="default-style" selected="">Default style</option>
+                                        <option value="example-style-1">Example custom style 1</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="selection-toggle">
+                            <div class="input-row">
+                                <div class="toggle">
+                                    <input id="show-scan-region" type="checkbox">
+                                    <span class="slider"></span>
+                                </div>
+                                <p class="label">Show scan region canvas</p>
+                            </div>
+                            <canvas style="display: none;"></canvas>
+                        </div>
+                        <div>
+                            <div class="select">
+                                <select id="inversion-mode-select" autocomplete="off">
+                                    <option value="original" selected="">
+                                        Scan original (dark QR code on bright background)
+                                    </option>
+                                    <option value="invert">
+                                        Scan with inverted colors (bright QR code on dark background)
+                                    </option>
+                                    <option value="both">Scan both</option>
                                 </select>
                             </div>
-                            <div>
-                                <input id="show-scan-region" type="checkbox" />
-                                Show scan region canvas
-                            </div>
                         </div>
-                        <div>
-                            <select id="inversion-mode-select" autocomplete="off">
-                                <option value="original" selected>
-                                    Scan original (dark QR code on bright background)
-                                </option>
-                                <option value="invert">
-                                    Scan with inverted colors (bright QR code on dark background)
-                                </option>
-                                <option value="both">Scan both</option>
-                            </select>
-                            <br />
-                        </div>
-
+                
                         <div>
                             <p><b>Preferred camera:</b></p>
-                            <select id="cam-list">
-                                <option value="environment" selected>
-                                    Environment Facing (default)
-                                </option>
-                                <option value="user">User Facing</option>
-                            </select>
+                            <div class="select">
+                                <select id="cam-list">
+                                    <option value="environment" selected="">
+                                        Environment Facing (default)
+                                    </option>
+                                    <option value="user">User Facing</option>
+                                </select>
+                            </div>
                         </div>
-                        <b>Device has camera: </b>
-                        <span id="cam-has-camera">true</span>
-                        <br />
-                        <b>Camera has flash: </b>
-                        <span id="cam-has-flash"></span>
+                        <div class="camera-permissions" style="padding: 0; margin: 0;">
+                            <div>
+                                <p><b>Device has camera: </b></p>
+                                <div class="main-has-camera">
+                                    <div class="checkbox focus">
+                                        <input type="checkbox">
+                                        <span class="check"><i class="checked-icon" data-feather="check"></i></span>
+                                    </div>
+                                    <p id="cam-has-camera">true</p> 
+                                </div>
+                            </div>
+                
+                            <div>
+                                <p><b>Camera has flash: </b></p>
+                                <div>
+                                    <div style="margin: 0; display: flex; flex-direction: column;">
+                                        <span style="display: none;" id="cam-has-flash"></span>
+                                        <button id="flash-toggle">
+                                            Flash: <span id="flash-state">off</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
                         <div>
-                            <button id="flash-toggle">
-                                📸 Flash: <span id="flash-state">off</span>
-                            </button>
+                            <p style="font-size: 1.5em; font-weight: bold">Detected QR code:</p>
+                            <p id="cam-qr-result"><i>None</i></p>
                         </div>
-                        <p style="font-size: 1.5em; font-weight: bold">Detected QR code:</p>
-                        <span id="cam-qr-result">None</span>
                     </div>
 
                 </div>
