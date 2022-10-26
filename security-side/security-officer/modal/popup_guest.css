@@ -1,0 +1,125 @@
+#ex2 {
+    --color: #fff;
+    width: 90%;
+    height: 65%;
+    /* display: grid; */
+    border-top: 1em solid var(--color);
+    border-bottom: 1em solid var(--color);
+}
+
+.guest-caption {
+    text-align: center;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+.guest-container {
+    overflow-y: scroll;
+}
+/* Input */
+.guest-search > div,
+#guest-add-information .guest-add-fullname,
+#guest-add-information .guest-add-vehicle,
+#guest-add-information .guest-add-model {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Input for Guest Vehicle */
+.guest-search input,
+#guest-add-information input {
+    width: 100%;
+    padding: 0.5em 1em;
+
+    border-radius: 1em;
+    font-size: 1em;
+
+    outline: none;
+    border: 2px solid gainsboro;
+}
+
+#guest-add-information 
+:is(.guest-add-fullname, 
+.guest-add-vehicle, 
+.guest-add-model) {
+    display: grid;
+    gap: .25em;
+}
+
+#guest-add-information 
+:is(.guest-add-fullname, 
+.guest-add-vehicle, 
+.guest-add-model) p,
+#guest-search-information p {
+    font-weight: bold;
+
+}
+
+#guest-add-information > * {
+    margin: .5em 0;
+}
+
+/* Guest Form */
+#guest-search-information .guest-search-input {
+    display: flex;
+    gap: .5em;
+}
+#guest-search-information input[type="text"] {
+    flex: 0 0 70%;  /* flex-grow, flex-shrink, flex-basis */
+}
+
+@media (max-width: 768px) {
+    /* Guest Form */
+    #guest-search-information .guest-search-input {
+        flex-direction: column;
+    }
+    #guest-search-information input[type="text"] {
+        flex: 0 0 50%;  /* flex-grow, flex-shrink, flex-basis */
+    }
+
+    .guest-search {
+        margin-bottom: 1.5em;
+    }
+
+    guest-add-information {
+        margin: auto 0;
+    }
+}
+
+.guest-container hr {
+    width: 75%;
+    margin: 1em auto;
+    margin-top: 1.5em;
+    border: 2px solid gray;
+    border-radius: 1em;
+    /* background-color: black; */
+}
+/* Plate Number Lookup */
+.guest-lookup-caption {
+    background: url('https://api.iconify.design/bxs/id-card.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+    margin-bottom: .5em;
+}
+.guest-fullname-caption{
+    background: url('https://api.iconify.design/wpf/name.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+.guest-model-caption {
+    background: url('https://api.iconify.design/fluent/vehicle-car-profile-ltr-16-filled.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+.guest-platenum-caption {
+    background: url('https://api.iconify.design/clarity/credit-card-solid.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+
+#guest-submit-data {
+    padding: 1em 0;
+    margin: 1em 0;
+    outline: none;
+    border: 1px solid gray;
+    border-radius: 1em;
+    cursor: pointer;
+}

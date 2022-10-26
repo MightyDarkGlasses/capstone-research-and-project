@@ -28,6 +28,13 @@ jQuery(function() {
       fadeDuration: 100
     });
   });
+  $('#popup-guest').on('click', () => {
+    $("#ex2").modal({
+      fadeDuration: 100
+    });
+
+    // $('#ex2').css('display', 'grid');
+  });
 })
 
 

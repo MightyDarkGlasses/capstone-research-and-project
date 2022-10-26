@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <link rel="stylesheet" href="toggle/style.css">
     <link rel="stylesheet" href="modal/popup_modal.css">
+    <link rel="stylesheet" href="modal/popup_guest.css">
     <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js" defer></script>
     <script src="../../dist/bundle.js" defer></script>
     <script src="./scripts/securityOfficer.js" defer></script>
@@ -472,14 +473,84 @@
                     </div>
                     <a href="" class="middle-icon"></a>
                 </div>
+
+                <div id="ex2" class="modal">
+                    <p class="guest-caption">Add Guest Information</p>
+                    <div class="guest-container" style="padding-right: 1em;">
+                        <div class="guest-search">
+                            <form id="guest-search-information">
+                                <div>
+                                    <p class="guest-lookup-caption">Plate Number (Lookup): </p>
+                                    <div class="guest-search-input">
+                                        <input type="text" value="" required="required" placeholder="Search...">
+                                        <input type="submit" name="guest-search" value="Search">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <hr>
+                        <form id="guest-add-information">
+                            <div class="guest-add-fullname">
+                                <p class="guest-fullname-caption">Name</p>
+                                <input type="text" name="guest-add-fname" placeholder="First Name" required="required" value="">
+                                <input type="text" name="guest-add-mname" placeholder="Middle Name (Optional)" value="">
+                                <input type="text" name="guest-add-lname" placeholder="Last Name" required="required" value="">
+                            </div>
+                            <div class="guest-add-model">
+                                <p class="guest-model-caption">Vehicle Model</p>
+                                <input type="text" name="guest-add-vehiclemodel" id="">
+                            </div>
+                            <div class="guest-add-vehicle">
+                                <p class="guest-platenum-caption">Plate Number</p>
+                                <input type="text" name="guest-add-platenum" id="" required="required" placeholder="ABC1234">
+                            </div>
+                            <input type="submit" name="guest-add-submit" value="Submit" style="display: none;">
+                            <!-- <input type="submit" value="Time Out"> -->
+                            <p>Data to be submitted: </p>
+                            <ul style="list-style-type: circle; margin-left: 1em;">
+                                <li>Full Name</li>
+                                <li>Vehicle Model</li>
+                                <li>Plate Number</li>
+                                <li>Security (Scanner)</li>
+                                <li>Gate</li>
+                                <li>Timestamp (Time In and Time Out)</li>
+                            </ul>
+                        </form>
+                    </div>
+                    <button id="guest-submit-data">Add Guest Data</button>
+                </div>
+
                 <button id="popup">Popup</button>
+                <button id="popup-guest">Add Guest Information</button>
             </div>
-
-
         </div>
     </div>
 </body>
 
+
+<script defer>
+    // Event for Add Guest Information
+    document.getElementById('guest-submit-data').addEventListener(('click'), () => {
+        console.log('clicked');
+        document.getElementById("guest-add-information").dispatchEvent(new CustomEvent('submit', {cancelable: true}));
+    });
+
+    document.querySelector('#guest-add-information').addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("guest submit:", e);
+
+        e.target.reset();
+    });
+
+    document.querySelector('#guest-search-information').addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("search submit:", e);
+
+        e.target.reset();
+    });
+</script>
 </html>
 <!-- <div class="visitor">
             <button onclick="loadAddVisitor()" id="btn-visitor" type="button">
