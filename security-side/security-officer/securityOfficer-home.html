@@ -12,9 +12,11 @@
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <link rel="stylesheet" href="toggle/style.css">
+    <link rel="stylesheet" href="modal/popup_modal.css">
     <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js" defer></script>
     <script src="../../dist/bundle.js" defer></script>
     <script src="./scripts/securityOfficer.js" defer></script>
+
 
     <link
                rel="stylesheet"
@@ -418,50 +420,57 @@
                 <div id="ex1" class="modal">
                     <div class="scanned-information">
                         <div class="scanned-information-caption">
-                            <p>Scanned Information: </p>
-                            <p>TIME IN</p>
+                            <!-- <p>Scanned Successfully</p> -->
+                            <p class="scanned-message">QR scanned successfully.</p>
+                            <div class="scanned-type"><p>Time In</p></div>
                         </div>
                         <div class="scanned-result">
                             <div class="user-scanned-vehicle" style="display: none;">
-                                <p>Vehicle: </p>
+                                <p>Vehicle</p>
                                 <img src="#" alt="" class="user-scanned-vehicle-value">
                             </div>
                             <div class="user-scanned-uid">
-                                <p>User UID:</p>
+                                <p>User UID</p>
                                 <span class="user-scanned-uid-value">asdfdasfd187423</span>
                             </div>
                             <div class="user-scanned-date">
-                                <p>Date of Snapshot:</p>
-                                <span class="user-scanned-date-value">Jan 1 2000</span>
+                                <p>Date of Snapshot</p>
+                                <span class="user-scanned-date-value">Wed Oct 26 2022 17:35:49 GMT+0800 (Taipei Standard Time)</span>
                             </div>
                         </div>
-
-
-                        
+                    
+                        <!-- 
+                            (new Date(time_posted * 1000)).toLocaleString();
+                            // -> "Wed Aug 22 2012 11:14:21 GMT+0300 (Jerusalem Daylight Time)"
+            
+                            (new Date(time_posted * 1000)).toLocaleDateString();
+                            // -> "Wednesday, August 22, 2012"
+                         -->
                         <h3>Personal Information</h3>
                         <div class="user-personal-info">
                             <div class="user-fullname">
-                                <p>Name: </p>
+                                <p>Name</p>
                                 <span class="user-fullname-value">Mandela, Jackson F.</span>
                             </div>
                             <div class="user-uid">
-                                <p>User Type: </p>
+                                <p>User Type</p>
                                 <span class="user-type-value">Personnel</span>
                             </div>
                         </div>
-
+                    
                         <h3>Vehicle Information</h3>
                         <div class="user-vehicle-info">
                             <div class="vehicle-model">
-                                <p>Vehicle Model:</p>
+                                <p>Vehicle Model</p>
                                 <span class="user-model-value">Honda Honk Honk 123</span>
                             </div>
                             <div class="user-platenum">
-                                <p>Plate Number:</p>
+                                <p>Plate Number</p>
                                 <span class="user-platenum-value">ABC 1234</span>
                             </div>
                         </div>
                     </div>
+                    <a href="" class="middle-icon"></a>
                 </div>
                 <button id="popup">Popup</button>
             </div>

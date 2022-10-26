@@ -1,0 +1,132 @@
+.modal {
+    border-top: 1em solid hsl(120, 59%, 63%);
+    border-bottom: 1em solid hsl(120, 59%, 63%);
+}
+
+.scanned-information {
+    display: block;
+    margin-top: 1em;
+}
+.scanned-information::before {
+    content: "Message: ";
+    font-style: italic;
+}
+.scanned-type {
+    background-color: aquamarine;
+    padding: 0 1em;
+
+    font-weight: bold;
+    border-radius: 1em;
+    display: flex;
+    align-items: center;
+}
+@media (max-width: 768px) {
+    .scanned-information-caption {
+        flex-direction: column;
+    }
+
+    .scanned-message {
+        font-size: .8em;
+    }
+
+    .scanned-type {
+        justify-content: center;
+    }
+}
+.scanned-information .scanned-information-caption {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2em;
+    margin-bottom: 1em;
+}
+.scanned-information h3 {
+    margin: 1em;
+    text-align: center;
+}
+
+/*  */
+.scanned-information 
+:is(.user-personal-info, .scanned-result, .user-vehicle-info) 
+p {
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: 1.2em;
+}
+
+.scanned-information > div {
+    display: grid;
+    gap: 1em;
+}
+
+
+/* Modal */
+.middle-icon {
+    --size: 60px;
+    top: -2.5rem;
+    position: absolute;
+    display: block;
+
+    left: calc(50% - 2em);
+    width: var(--size);
+    height: var(--size);
+    
+    font-weight: 300;
+    border-radius: 1em;
+    padding: .5em;
+    background-color: white;
+    z-index: 999;
+    color: #fff;
+    border: 5px solid hsl(120, 59%, 63%);
+    background-image: url('https://api.iconify.design/entypo/back-in-time.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.scanned-message {
+    background: url('https://api.iconify.design/bi/check-circle-fill.svg?color=hsl(120%2C%2059%25%2C%2050%25)') no-repeat left center / contain;
+    padding-left: 1.5em;
+    margin: .5em;
+}
+
+
+/* User UID */
+.user-scanned-uid > p {
+    background: url('https://api.iconify.design/bxs/id-card.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+
+/* Scanned Date */
+.user-scanned-date > p {
+    background: url('https://api.iconify.design/material-symbols/date-range.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+
+/* Full Name */
+.user-fullname > p {
+    background: url('https://api.iconify.design/wpf/name.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+
+/* User Type */
+.user-uid > p {
+    background: url('https://api.iconify.design/heroicons/user-circle-solid.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+
+/* Vehicle Model */
+.vehicle-model > p {
+    background: url('https://api.iconify.design/fluent/vehicle-car-profile-ltr-16-filled.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+
+/* Plate Number */
+.user-platenum > p {
+    background: url('https://api.iconify.design/clarity/credit-card-solid.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+
+
+.scanned-result span {
+    padding-left: 2em;
+}
