@@ -1,12 +1,15 @@
 #ex2 {
-    --color: #fff;
+    max-width: 500px;
+    box-sizing: border-box;
     width: 90%;
-    height: 65%;
-    /* display: grid; */
-    border-top: 1em solid var(--color);
-    border-bottom: 1em solid var(--color);
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #000;
+    text-align: left;
+    /* opacity: 0; */
+    display: grid;
+    position: relative;
 }
-
 .guest-caption {
     text-align: center;
     font-size: 1.5em;
@@ -30,14 +33,20 @@
 /* Input for Guest Vehicle */
 .guest-search input,
 #guest-add-information input {
+    display: block;
+    position: relative;
     width: 100%;
     padding: 0.5em 1em;
-
     border-radius: 1em;
     font-size: 1em;
-
+    opacity: 1;
     outline: none;
     border: 2px solid gainsboro;
+    cursor: auto;
+}
+.guest-search input::placeholder,
+#guest-add-information input::placeholder {
+    color: rgb(168, 168, 168);
 }
 
 #guest-add-information 
@@ -54,7 +63,10 @@
 .guest-add-model) p,
 #guest-search-information p {
     font-weight: bold;
+}
 
+#guest-submit-data {
+    width: 100%;
 }
 
 #guest-add-information > * {
@@ -92,9 +104,9 @@
     width: 75%;
     margin: 1em auto;
     margin-top: 1.5em;
-    border: 2px solid gray;
+    /* border: 2px solid gray; */
     border-radius: 1em;
-    /* background-color: black; */
+    background-color: black;
 }
 /* Plate Number Lookup */
 .guest-lookup-caption {

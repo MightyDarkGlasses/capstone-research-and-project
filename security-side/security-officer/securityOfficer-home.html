@@ -274,7 +274,7 @@
                         <button class="btn-scan" id="start-button">Start</button>
                         <button class="btn-scan" id="stop-button">Stop</button>
                     </div>
-                    <span id="cam-qr-result-timestamp"></span>
+                    <span id="cam-qr-result-timestamp" style="display: none;"></span>
                     <h1>Scan from Webcam:</h1>
                     <div id="placeholder">
                         <div id="camera-icon"></div>
@@ -292,6 +292,9 @@
                     </div>
                     
                     <style>
+                        .scanning-settings {
+                            margin: 1em;
+                        }
                         .scanning-settings :is(select, :not(input[type="checkbox"])) {
                             width: 100%;
                             padding: .5em;
@@ -400,8 +403,15 @@
                         text-align: center;
                     }
 
-                    #popup {
-                        padding: 1em;
+                    .button-popups {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1em;
+                        margin: 1em 0;
+                    }
+                    #popup, #popup-guest {
+                        padding: 1em 0;
+                        /* height: 50px; */
                     }
 
 
@@ -474,7 +484,7 @@
                     <a href="" class="middle-icon"></a>
                 </div>
 
-                <div id="ex2" class="modal">
+                <div id="ex2" class="modal" style="display: none;">
                     <p class="guest-caption">Add Guest Information</p>
                     <div class="guest-container" style="padding-right: 1em;">
                         <div class="guest-search">
@@ -505,8 +515,8 @@
                                 <input type="text" name="guest-add-platenum" id="" required="required" placeholder="ABC1234">
                             </div>
                             <input type="submit" name="guest-add-submit" value="Submit" style="display: none;">
-                            <!-- <input type="submit" value="Time Out"> -->
-                            <p>Data to be submitted: </p>
+                            <input type="submit" value="Time Out">
+                            <!-- <p>Data to be submitted: </p>
                             <ul style="list-style-type: circle; margin-left: 1em;">
                                 <li>Full Name</li>
                                 <li>Vehicle Model</li>
@@ -514,14 +524,16 @@
                                 <li>Security (Scanner)</li>
                                 <li>Gate</li>
                                 <li>Timestamp (Time In and Time Out)</li>
-                            </ul>
+                            </ul> -->
                         </form>
                     </div>
-                    <button id="guest-submit-data">Add Guest Data</button>
+                    <!-- <button id="guest-submit-data">Add Guest Data</button> -->
                 </div>
 
-                <button id="popup">Popup</button>
-                <button id="popup-guest">Add Guest Information</button>
+                <div class="button-popups">
+                    <button id="popup">Popup</button>
+                    <button id="popup-guest">Add Guest Information</button>
+                </div>
             </div>
         </div>
     </div>
@@ -530,10 +542,10 @@
 
 <script defer>
     // Event for Add Guest Information
-    document.getElementById('guest-submit-data').addEventListener(('click'), () => {
-        console.log('clicked');
-        document.getElementById("guest-add-information").dispatchEvent(new CustomEvent('submit', {cancelable: true}));
-    });
+    // document.getElementById('guest-submit-data').addEventListener(('click'), () => {
+    //     console.log('clicked');
+    //     document.getElementById("guest-add-information").dispatchEvent(new CustomEvent('submit', {cancelable: true}));
+    // });
 
     document.querySelector('#guest-add-information').addEventListener('submit', (e) => {
         e.preventDefault();

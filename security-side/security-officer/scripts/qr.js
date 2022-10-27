@@ -1,54 +1,30 @@
 import QrScanner from "./qr-scanner.min.js";
 import * as fire from "../../../src/index";
+import e from "./qr-scanner.min.js";
 
 if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     console.log('QrScanner qr.js');
 
     let isSuccessPersonal = false;
     let isSuccessVehicle = false;
+
+    
     async function fetchInformation(userUID, plateNumber) {
-        // Google Firebase
-        console.log('fetchInformation:', userUID, plateNumber)
-        
-        console.log('security officer qrscanning.js');
-        const docRefAccountInfo = fire.myDoc(fire.db, "account-information", userUID);
-        const docRefVehicleInfo = fire.myDoc(fire.db, "vehicle-information", userUID);
-        //one-time listener
 
-        const docSnap = await fire.myGetDoc(docRefAccountInfo);
-        let isSuccessPersonal = false, isSuccessVehicle = false;
-        // let accInfoData = '', vehInfoData = '';
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
+        // Success checking
+        let isSuccessPersonal = false;
+        let isSuccessVehicle = false;
 
-            localStorage.setItem('docPersonal', JSON.stringify(docSnap.data()));
-            isSuccessPersonal = true;
-        }
-        else {
-            console.log("No such document!");
-        }
-
-        const docSnap2 = await fire.myGetDoc(docRefVehicleInfo);
-        if (docSnap2.exists()) {
-            console.log("Document data:", docSnap2.data());
-            
-            localStorage.setItem('docVehicle', JSON.stringify(docSnap2.data()));
-            isSuccessVehicle = true;
-        }
-        else {
-            console.log("No such document!");
-        }
-        
-        const vehicleValue = document.querySelector('.user-scanned-vehicle-value')
-        const userValue = document.querySelector('.user-scanned-uid-value')
-        const dateValue = document.querySelector('.user-scanned-date-value')
-        const fullNameValue = document.querySelector('.user-fullname-value')
-        const userTypeValue = document.querySelector('.user-type-value')
-        const modelValue = document.querySelector('.user-model-value')
-        const plateNumValue = document.querySelector('.user-platenum-value')
+        const vehicleValue = document.querySelector('.user-scanned-vehicle-value');
+        const userValue = document.querySelector('.user-scanned-uid-value');
+        const dateValue = document.querySelector('.user-scanned-date-value');
+        const fullNameValue = document.querySelector('.user-fullname-value');
+        const userTypeValue = document.querySelector('.user-type-value');
+        const modelValue = document.querySelector('.user-model-value');
+        const plateNumValue = document.querySelector('.user-platenum-value');
 
         // vehicleValue.innerText = '';
-        vehicleValue.src = '';
+        // vehicleValue.src = '';
         userValue.innerText = '';
         dateValue.innerText = '';
         fullNameValue.innerText = '';
@@ -56,59 +32,110 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         modelValue.innerText = '';
         plateNumValue.innerText = '';
 
-        await Promise.all([docSnap, docSnap2]).then((success) => {
+        // Google Firebase
+        // console.log('fetchInformation:', userUID, plateNumber)
+        console.log('security officer qrscanning.js');
+        const docRefAccountInfo = fire.myDoc(fire.db, "account-information", userUID);
+        const docRefVehicleInfo = fire.myDoc(fire.db, "vehicle-information", userUID);
+
+        const docSnapVehicle = await fire.myGetDoc(docRefVehicleInfo);
+        const docSnapAccount = await fire.myGetDoc(docRefAccountInfo);
+
+        // console.log("Document data:", docSnapVehicle);
+        // console.log(userUID, plateNumber)
+        // console.log("Document data:", docSnapVehicle.data(), typeof(docSnapVehicle.data()));
+        // console.log("Object keys: ", Object.keys(docSnapVehicle.data()));
+
+        // ##### Account Information #####
+        // console.log('docSnapAccount:', docSnapAccount.data());
+        const specificAccountRetrieve = docSnapAccount.data();
+        // console.log(specificAccountRetrieve)
+        // isSuccessPersonal = typeof(specificAccountRetrieve) === undefined ? false : true;
+        
+        // ##### Personal Information #####
+        console.log(specificAccountRetrieve, typeof(specificAccountRetrieve) !== undefined)
+
+        
+        if(typeof(specificAccountRetrieve) !== 'undefined') {
+            // console.log('docSnapAccount:', specificAccountRetrieve);
+            // console.log('User UID:', userUID)
+            // console.log('Date of Snapshot: ', new Date());
+            // console.log('Full Name:', `${specificAccountRetrieve.last_name}, ${specificAccountRetrieve.first_name} ${specificAccountRetrieve.middle_name}`);
+            // console.log('User Type: ', typeof(specificAccountRetrieve.user_type) === undefined ? specificAccountRetrieve.user_type : '');
+
+            userValue.innerText = userUID;
+            dateValue.innerText = new Date();
+            fullNameValue.innerText = `${specificAccountRetrieve.last_name}, ${specificAccountRetrieve.first_name} ${specificAccountRetrieve.middle_name}`;
+            userTypeValue.innerText = typeof(specificAccountRetrieve.user_type) === undefined ? specificAccountRetrieve.user_type : 'Undefined';
+            // console.log('');
+            // console.log('');
+            // console.log();
+            // console.log();
+            isSuccessPersonal = true;
+        }
+        else {
+            console.log("Account Information: No such document!");
+            isSuccessPersonal = false;
+        }
+
+
+        
+
+        // ##### Vehicle Information #####
+        
+        // Check if the vehicle is undefined
+        if(typeof(docSnapVehicle.data()) !== 'undefined') {
+            let objKeys = Object.keys(docSnapVehicle.data());
+            // Check if the document id exist
+            if (objKeys.includes(plateNumber)) {
+                // console.log("Document data:", docSnapVehicle.data(), typeof(docSnapVehicle.data()));
+                
+                // console.log('Specific data retrieved: ', docSnapVehicle.data()[plateNumber])
+                const specificVehicleRetrieve = docSnapVehicle.data()[plateNumber];
+                console.log('Vehicle Model: ', specificVehicleRetrieve.model[specificVehicleRetrieve.model.length-1]);
+                console.log('Plate Number: ', plateNumber);
+    
+                modelValue.innerText = specificVehicleRetrieve.model[specificVehicleRetrieve.model.length-1];
+                plateNumValue.innerText = plateNumber;
+                // console.log();
+                isSuccessVehicle = true;
+            }
+            else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+                isSuccessVehicle = false;
+            }
+            
+            console.log('isSuccessPersonal:', isSuccessPersonal);
+            console.log('isSuccessVehicle:', isSuccessVehicle);
+        }
+        else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+            isSuccessVehicle = false;
+        }
+        await Promise.all([docSnapVehicle, docSnapAccount]).then((success) => {
             console.log("All done");
             // isSuccessPersonal = false, isSuccessVehicle
 
+            
             console.log('isSuccessPersonal:', isSuccessPersonal);
             console.log('isSuccessVehicle:', isSuccessVehicle);
-            if((isSuccessPersonal && isSuccessVehicle) === false) {
-                alert(`
+            if((isSuccessPersonal && isSuccessVehicle) !== false) {
+                //Popup Scanned Information
+                $("#ex1").modal({
+                    fadeDuration: 100
+                });
+            }
+            else {
+                window.alert(`
                 QR Code information does not exist.
                 Probable cause:
                     - The user deactivated its account
                     - Fake one
                     etc.
                 `);
-                isSuccessPersonal = isSuccessVehicle = false;
             }
-            else {
-                // get Information
-                const docPersonal = JSON.parse(localStorage.getItem('docPersonal'));
-                const docVehicle = JSON.parse(localStorage.getItem('docVehicle'));
-
-                console.log('docPersonal:', docPersonal);
-                console.log('docVehicle:', docVehicle);
-                
-                console.log('docVehicle.registered_vehicle.plate:', docVehicle.registered_vehicle.plate);
-                console.log('plateNumber:', plateNumber);
-                
-                let vehicleIndexPosition = 
-                    docVehicle.registered_vehicle.plate.findIndex(e => e === plateNumber);
-
-                console.log('vehicleIndexPosition:', vehicleIndexPosition);
-                if(vehicleIndexPosition > -1) {
-                    // vehicleValue.src = `${docVehicle.registered_vehicle.vehicles[vehicleIndexPosition].images[1]}`;
-                    userValue.innerText = `${userUID}`;
-                    dateValue.innerText = new Date().toString();
-                    fullNameValue.innerText = `${docPersonal.last_name}, ${docPersonal.first_name} ${docPersonal.middle_name}`;
-                    userTypeValue.innerText = docPersonal.user_type === undefined ? 'Personnel' : `${docPersonal.user_type}`;
-                    // modelValue.innerText = `${docVehicle.registered_vehicle.model[vehicleIndexPosition]}`;
-                    plateNumValue.innerText = `${plateNumber}`;
-
-                    addNewLogs(userUID, 
-                        `${docPersonal.last_name}, ${docPersonal.first_name} ${docPersonal.middle_name}`,
-                        `${plateNumber}`);
-                }
-                else {
-                    alert('no no no');
-                }
-
-                localStorage.removeItem('docPersonal');
-                localStorage.removeItem('docVehicle');
-                isSuccessPersonal = isSuccessVehicle = false;
-            }
-            
         }).catch((fail) => {
             console.log('cause of failure:', fail)
             alert(`
@@ -118,9 +145,136 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 - Fake one
                 etc.
             `);
-            isSuccessPersonal = isSuccessVehicle = false;
         });
+
+
+        // const docRefAccountInfo = fire.doQuery(fire.db, "account-information");
+        // const docRefVehicleInfo = fire.doQuery(fire.db, "vehicle-information"), doWhere("");
+        //one-time listener
+
+        /*
+        import { collection, onSnapshot, where, query } from "firebase/firestore"; 
+
+        const q = query(collection(db, "cities"), where("state", "==", "CA"));
+        onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === "added") {
+                    console.log("New city: ", change.doc.data());
+                }
+
+                const source = snapshot.metadata.fromCache ? "local cache" : "server";
+                console.log("Data came from " + source);
+            });
+        });
+        */
+
+        // const docSnap = await fire.myGetDoc(docRefAccountInfo);
+        // let isSuccessPersonal = false, isSuccessVehicle = false;
+        // // let accInfoData = '', vehInfoData = '';
+        // if (docSnap.exists()) {
+        //     console.log("Document data:", docSnap.data());
+
+        //     localStorage.setItem('docPersonal', JSON.stringify(docSnap.data()));
+        //     isSuccessPersonal = true;
+        // }
+        // else {
+        //     console.log("No such document!");
+        // }
+
+        // const docSnap2 = await fire.myGetDoc(docRefVehicleInfo);
+        // if (docSnap2.exists()) {
+        //     console.log("Document data:", docSnap2.data());
+            
+        //     localStorage.setItem('docVehicle', JSON.stringify(docSnap2.data()));
+        //     isSuccessVehicle = true;
+        // }
+        // else {
+        //     console.log("No such document!");
+        // }
+        
+        // const vehicleValue = document.querySelector('.user-scanned-vehicle-value')
+        // const userValue = document.querySelector('.user-scanned-uid-value')
+        // const dateValue = document.querySelector('.user-scanned-date-value')
+        // const fullNameValue = document.querySelector('.user-fullname-value')
+        // const userTypeValue = document.querySelector('.user-type-value')
+        // const modelValue = document.querySelector('.user-model-value')
+        // const plateNumValue = document.querySelector('.user-platenum-value')
+
+        // // vehicleValue.innerText = '';
+        // vehicleValue.src = '';
+        // userValue.innerText = '';
+        // dateValue.innerText = '';
+        // fullNameValue.innerText = '';
+        // userTypeValue.innerText = '';
+        // modelValue.innerText = '';
+        // plateNumValue.innerText = '';
+
+        // await Promise.all([docSnap, docSnap2]).then((success) => {
+        //     console.log("All done");
+        //     // isSuccessPersonal = false, isSuccessVehicle
+
+        //     console.log('isSuccessPersonal:', isSuccessPersonal);
+        //     console.log('isSuccessVehicle:', isSuccessVehicle);
+        //     if((isSuccessPersonal && isSuccessVehicle) === false) {
+        //         alert(`
+        //         QR Code information does not exist.
+        //         Probable cause:
+        //             - The user deactivated its account
+        //             - Fake one
+        //             etc.
+        //         `);
+        //         isSuccessPersonal = isSuccessVehicle = false;
+        //     }
+        //     else {
+        //         // get Information
+        //         const docPersonal = JSON.parse(localStorage.getItem('docPersonal'));
+        //         const docVehicle = JSON.parse(localStorage.getItem('docVehicle'));
+
+        //         console.log('docPersonal:', docPersonal);
+        //         console.log('docVehicle:', docVehicle);
+                
+        //         console.log('docVehicle.registered_vehicle.plate:', docVehicle.registered_vehicle.plate);
+        //         console.log('plateNumber:', plateNumber);
+                
+        //         let vehicleIndexPosition = 
+        //             docVehicle.registered_vehicle.plate.findIndex(e => e === plateNumber);
+
+        //         console.log('vehicleIndexPosition:', vehicleIndexPosition);
+        //         if(vehicleIndexPosition > -1) {
+        //             // vehicleValue.src = `${docVehicle.registered_vehicle.vehicles[vehicleIndexPosition].images[1]}`;
+        //             userValue.innerText = `${userUID}`;
+        //             dateValue.innerText = new Date().toString();
+        //             fullNameValue.innerText = `${docPersonal.last_name}, ${docPersonal.first_name} ${docPersonal.middle_name}`;
+        //             userTypeValue.innerText = docPersonal.user_type === undefined ? 'Personnel' : `${docPersonal.user_type}`;
+        //             // modelValue.innerText = `${docVehicle.registered_vehicle.model[vehicleIndexPosition]}`;
+        //             plateNumValue.innerText = `${plateNumber}`;
+
+        //             addNewLogs(userUID, 
+        //                 `${docPersonal.last_name}, ${docPersonal.first_name} ${docPersonal.middle_name}`,
+        //                 `${plateNumber}`);
+        //         }
+        //         else {
+        //             alert('no no no');
+        //         }
+
+        //         localStorage.removeItem('docPersonal');
+        //         localStorage.removeItem('docVehicle');
+        //         isSuccessPersonal = isSuccessVehicle = false;
+        //     }
+            
+        // }).catch((fail) => {
+        //     console.log('cause of failure:', fail)
+        //     alert(`
+        //     QR Code information does not exist.
+        //     Probable cause:
+        //         - The user deactivated its account
+        //         - Fake one
+        //         etc.
+        //     `);
+        //     isSuccessPersonal = isSuccessVehicle = false;
+        // });
     } // end of function declaration
+    fetchInformation('wIHQmo7nxwceS5dBgma6ukXl2Py1', 'BBC3355'.toUpperCase());
 
     async function addNewLogs(userUID, fullName, plateNumber) {
         const dateMS = Date.now();
@@ -139,11 +293,13 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 const docData2 = {
                     [selectedUserLogsData.index]: {   
                         "userUID": userUID,
+                        "officer_uid": "officerUID",
                         "time_scanned": new Date().toString(),
                         "time_in": fire.getServerTimestamp(),
                         "time_out": '',
                         "owner": fullName,
-                        "plate_number": plateNumber
+                        "plate_number": plateNumber,
+                        "gate_number": "0",
                     },
                 };
     
@@ -314,8 +470,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         function setResult(label, result) {
             let qrResultData = JSON.parse(result.data); //turn it into JSON hehehe
 
-            console.log(result.data);
-            console.log(qrResultData);
+            // console.log(result.data);
+            // console.log(qrResultData);
 
             label.textContent = result.data;
             camQrResultTimestamp.textContent = new Date().toString();
@@ -329,22 +485,23 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             document.querySelector("#placeholder").style.display = "flex";
             document.querySelector("#video-container").style.display = "none";
 
-            fetchInformation(qrResultData.uid, qrResultData.plate_number);
+            // fetchInformation(qrResultData.uid, qrResultData.plate_number);
         }
     
         // ####### Web Cam Scanning #######
-    
+        
+        // If the webcam is scanned.
         const scanner = new QrScanner(
         video,
-        (result) => setResult(camQrResult, result),
-        {
-            onDecodeError: (error) => {
-            camQrResult.textContent = error;
-            camQrResult.style.color = "inherit";
-            },
-            highlightScanRegion: true,
-            highlightCodeOutline: true,
-        }
+        (result) => 
+            setResult(camQrResult, result), {
+                onDecodeError: (error) => {
+                camQrResult.textContent = error;
+                camQrResult.style.color = "inherit";
+                },
+                highlightScanRegion: true,
+                highlightCodeOutline: true,
+            }
         );
     
         const updateFlashAvailability = () => {
