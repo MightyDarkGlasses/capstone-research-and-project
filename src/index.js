@@ -339,7 +339,7 @@ if (registerButtonFinal !== null && registerButtonFinal !== undefined) {
         });
     });
 }
-function createNewData(userUID, flag) {
+async function createNewData(userUID, flag) {
     let windowLocation = window.location.pathname;
     if(windowLocation.indexOf("signup") > -1) {
     
@@ -354,7 +354,7 @@ function createNewData(userUID, flag) {
     console.log('imageLinks: ', imageLinks);
     console.log('qrCodeLink: ', qrCodeLink);
     console.log('qrCodeLink[0]: ', qrCodeLink[0]);
-    const promiseAccount = setDoc(doc(db, "account-information", userUID), {
+    const promiseAccount = await setDoc(doc(db, "account-information", userUID), {
         id_number: getCookie("id"),
         first_name: getCookie("fname"),
         middle_name: getCookie("mname"),
@@ -379,23 +379,7 @@ function createNewData(userUID, flag) {
         console.log('imageLinks:', imageLinks);
         console.log('qrCodeLink:', qrCodeLink);
 
-        const promiseVehicle = setDoc(doc(db, "vehicle-information", userUID), {
-            // registered_vehicle: {
-            //     vehicles: {
-            //         qrCode: qrCodeLink,
-            //         images: {
-            //             0: imageLinks
-            //         },
-            //         linkages: {}
-            //     },
-            //     // qrcode: [qrCodeGenerated],
-            //     plate: [getCookie("plate")],
-            //     model: [getCookie("model")],
-            //     use_types: ['Private']
-            // },
-            // vehicle_length: 1,
-            // createdAt: serverTimestamp()
-
+        const promiseVehicle = await setDoc(doc(db, "vehicle-information", userUID), {
             [getCookie("plate").replace(" ", "")]: {
                 qrCode: qrCodeLink,
                 images: imageLinks,
@@ -407,18 +391,34 @@ function createNewData(userUID, flag) {
         }).then(() => {
             console.log("Vehicle Information was added in the collection");
         });
-
-        Promise.all([promiseAccount, promiseVehicle]).then((success) => {
+        await Promise.all([promiseAccount, promiseVehicle]).then((success) => {
+            console.log("Sucessfully done the promises");
             deleteAllCookies();
             localStorage.clear();
+
             sendVerification();
             logoutUser();
+            console.log('All promises are done!');
             window.location = "signup4.html";
-            console.log('Everything is all set up!');
         });
+
+        // Send e-mail verification, to be later verify by user.
+        // const promiseEmailVerification = sendEmailVerification(user)
+        // .then(() => {
+        //     console.log("User verification was sent.")
+        //     console.log('Everything is all set up!');
+        // });
+        // const promiseSignOut = signOut(auth)
+        // .then(() => {
+        //     console.log('check logged user:', auth)
+        //     console.log("User signed out.")
+        // }).catch((err) => {
+        //     console.log("Logout error message: ", err);
+        // });
     }
     else {
         // Uncomment these...
+        console.log('else statement')
         const promiseVehicle = setDoc(doc(db, "vehicle-information", userUID), {
             // registered_vehicle: {
             //     vehicles: {
@@ -437,14 +437,26 @@ function createNewData(userUID, flag) {
             console.log("Vehicle Information was added in the collection");
         });
 
+
         Promise.all([promiseAccount, promiseVehicle]).then((success) => {
+            console.log("Sucessfully done the promises");
+            
             deleteAllCookies();
             localStorage.clear();
+
             sendVerification();
             logoutUser();
+            console.log('All promises are done!');
             window.location = "signup4.html";
-            console.log('Everything is all set up!');
         });
+        // Promise.all([promiseAccount, promiseVehicle]).then((success) => {
+        //     deleteAllCookies();
+        //     localStorage.clear();
+        //     sendVerification();
+        //     logoutUser();
+        //     window.location = "signup4.html";
+        //     console.log('Everything is all set up!');
+        // });
     }
 
     // function doPrint() {
@@ -617,7 +629,7 @@ async function generateVehicleQRCode(userUID, plateNumber, mySize) {
 
     //  USE THIS FOR GENERATING OBJECT
     const storage = getStorage();
-    const storageRef = ref(storage, `vehicle-information/${userUID}/${index}/qrCode0.PNG`);
+    const storageRef = ref(storage, `vehicle-information/${userUID}/0/qrCode0.PNG`);
     let qrCodeBlob = await base64ToBlob((generatedOutput.replace(/^data:image\/(png|jpeg);base64,/, "")), "image/png");
     const uploadTask = uploadBytesResumable(storageRef, qrCodeBlob, "image/png");
     

@@ -1,0 +1,252 @@
+:root {
+    --rotate-reload-icon: 0deg;
+    --reload-bg-icon: url('https://api.iconify.design/ion/reload-circle.svg?color=white');
+}
+
+body {
+    backdrop-filter: blur(5px);
+}
+
+.container {
+    width: max(80vw, 800px);
+    height: 650px;
+    /* background-color: #181a21; */
+    background-color: #1a1c1d;
+}
+
+
+.white-text { 
+    width: 100%;
+    text-align: center;
+    color: white; 
+}
+.white-shadow { text-shadow: 0px 6px 4px rgba(255, 255, 255, 0.25); }
+
+.security-icon {
+    background: url('https://api.iconify.design/material-symbols/admin-panel-settings-outline.svg?color=white') no-repeat center center / contain;
+    height: 80px;
+}
+
+h1 {
+    font-size: 2.25em;
+    font-weight: 800;
+}
+
+label {
+    width: 100%;
+    display: block;
+    color: white;
+}
+
+/* Username and password input IDs */
+#admin_user, #admin_pass {
+    /* Nakalaan para sa icon ng input */
+    padding-left: 3.5em;
+
+    /* Spacing between the label and input */
+    margin: 0.25em 0;
+}
+
+.icon-wrapper::before {
+    content: "";
+    color: white;
+    position: relative;
+    float: left;
+    right: 0;
+    margin-top: 0.70em;
+    border-radius: 100vmax;
+    left: 0px;
+    top: 2px;
+    left: 50px;
+    width: 0.1em;
+    height: 1.3em;
+    background-color: white;
+    border-right: 3px solid white;
+}
+
+#admin_login {
+    border: 2px solid rgba(255, 255, 255, 0);
+    border-radius: 2em;
+    font-size: 1em;
+    padding: 0.5em 3em;
+    font-weight: bold;
+    /* margin: 0.5em; */
+    transition: all .5s ease;
+    background: black;
+    color: white;
+}
+#admin_login:hover {
+    color: black;
+    background: white;
+    border: 2px solid black;
+    border-color: transparent;
+    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.25);
+}
+
+input[type="text"], input[type="password"],
+input[type="submit"], button {
+    font-size: 1em;
+    padding: 0.5em 0;
+
+    border-radius: 1em;
+    width: 98%;
+    color: white;
+}
+
+
+.right {
+    display: flex;
+    flex-direction: column;
+    margin: auto 0;
+}
+
+/* Logo and Admin Panel title */
+/* .right > div:first-child {
+    margin-top: 4em;
+} */
+
+/* The form thingy */
+.right > div:last-child {
+    margin: 2em 0;
+}
+
+.right form {
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.right form > div {
+    margin: 0.2em 0;
+}
+
+
+
+.logo-1 {
+    background: url('https://api.iconify.design/bxs/user-circle.svg?color=white');
+    height: var(--progress-icon-height);
+    width: var(--progress-icon-size);
+    background-repeat: no-repeat;
+    background-position: 10px 50%;
+    background-size: 25px;
+    padding-left: 40px;
+    padding-right: 15px;
+    display: inline-block;
+}
+.logo-2 {
+    background: url('https://api.iconify.design/bxs/lock.svg?color=white');
+    height: var(--progress-icon-height);
+    width: var(--progress-icon-size);
+    background-repeat: no-repeat;
+    background-position: 10px 50%;
+    background-size: 25px;
+    padding-left: 40px;
+    padding-right: 15px;
+    display: inline-block;
+}
+
+/* Error Screen */
+.error-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-screen button {
+    background-color: rgba(255 255 255 / .1);
+    outline: none;
+    border: 2px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding-left: 1.5em; */
+
+    transition: all ease .5s;
+}
+.error-screen button:hover {
+    background-color: rgba(255 255 255 / .25);
+    outline: none;
+    border: 2px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding-left: 1.5em; */
+    
+    transition: all ease .1s;
+}
+
+.error-screen button::before {
+
+    content: "";
+    float: left;
+    position: relative;
+    left: -10%;
+    /* left: 34vw; */
+
+    width: 25px;
+    height: 25px;
+
+    background: url('https://api.iconify.design/ion/reload-circle.svg?color=white') no-repeat center center / contain;
+    background-size: 28px;
+    transform: rotate(var(--rotate-reload-icon));
+    transition: all ease .5s;
+}
+
+
+/* .error-screen button {
+    
+} */
+/* .error-screen button:hover {
+    background-color: rgba(255 255 255 / .35);
+    background: url('https://api.iconify.design/ion/reload-circle.svg?color=white&rotate=180deg') no-repeat 15% center / contain;
+    background-size: 28px;
+    padding-left: 1.5em;
+} */
+
+/* Error logo */
+.logo {
+    --error-icon-size: 60px;
+
+    background: url('https://api.iconify.design/bxs/message-alt-error.svg?color=%23ba3329&flip=vertical') no-repeat center center / contain;
+    background-size: var(--error-icon-size);
+    height: var(--error-icon-size);
+    width: var(--error-icon-size);
+    transform: rotate(180deg);
+}
+
+.error-screen > * {
+    color: white;
+}
+
+/* The reload button */
+.error-screen #error-screen-reload {
+    width: max(150px, 25%);
+    margin: 1em 0;
+}
+
+.error-screen > p {
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.error-screen {
+    display: none;
+}
+
+/* Issue an error for smaller screen in Administrator Panel */
+@media screen and (max-width: 900px) {
+    .left, .right {
+        display: none;
+    }
+    .error-screen {
+        display: flex;
+    }
+
+    .container {
+        flex-direction: column;
+        width: max(90vw, 400px);
+        height: 650px;
+        background-color: rgb(187, 5, 34, 0.25);
+    }
+}
