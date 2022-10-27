@@ -21,7 +21,7 @@
 
 body {
     height: 100vh;
-    background: url("../images/panel/abstract_background_admin.jpg");
+    background: url("../images/abstract_background_admin.jpg");
     background-size: cover;
     background-repeat: no-repeat;
 
@@ -71,7 +71,7 @@ body::after {
 }
 
 .left {
-    background: url("../images/panel/abstract_panel_design_left.jpg");
+    background: url("../images/abstract_panel_design_left.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: right center;

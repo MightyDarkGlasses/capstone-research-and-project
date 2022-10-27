@@ -11,7 +11,7 @@ module.exports = {              // export the module
     './user-side/logs4.js',
     './user-side/announcement5.js',
     './user-side/script_users/vehicle.js',
-    './security-side/qrscanning.js',
+    './security-side/security_form.js',
     './security-side/security-officer/scripts/qr.js'],      // path, where we should look
   output: {
     

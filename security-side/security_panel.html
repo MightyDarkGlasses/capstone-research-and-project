@@ -16,9 +16,8 @@
     <link rel="stylesheet" href="panel/style.css">
     <link rel="stylesheet" href="panel/securitypanel.css">
 
-    <!-- Boxicons CSS -->
-    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
-    <link rel="icon" href="images/icons/bxs-car-garage.svg" type="image/x-icon">
+    <!-- JQuery Modal Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"/>
 </head>
 <body>
     <div class="container">
@@ -42,23 +41,27 @@
                         <label for="">Username</label>
 
                         <div class="icon-wrapper">
-                            <input class="logo-1" type="text" name="admin_user" id="admin_user">
+                            <input class="logo-1" type="text" name="admin_user" id="admin_user" value="ethoharon@duck.com">
                         </div>
                     </div>
                     <div>
                         <label for="">Password</label>
 
                         <div class="icon-wrapper">
-                            <input class="logo-2" type="password" name="admin_pass" id="admin_pass">
+                            <input class="logo-2" type="password" name="admin_pass" id="admin_pass" value="12345678">
                         </div>
                     </div>
                     <div>
                         <!-- <input type="submit" name="admin_login" id="admin_login"> -->
-                        <button type="button" name="admin_login" id="admin_login">Log In</button>
+                        <button type="submit" name="admin_login" id="admin_login">Log In</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </body>
+
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous" defer> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js" defer></script>
+<script src="../dist/bundle.js"></script>
 </html>

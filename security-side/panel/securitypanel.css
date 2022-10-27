@@ -41,7 +41,8 @@
 }
 
 body {
-    background-image: url("../images/panel/abstract_background_securityofficer.jpg");
+    /* background-image: url("../images/panel/abstract_background_securityofficer.jpg"); */
+    background-image: url("../images/abstract_background_securityofficer.jpg");
 }
 
 h1 {
