@@ -274,12 +274,10 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         //     isSuccessPersonal = isSuccessVehicle = false;
         // });
     } // end of function declaration
-    fetchInformation('wIHQmo7nxwceS5dBgma6ukXl2Py1', 'BBC3355'.toUpperCase());
+    // fetchInformation('wIHQmo7nxwceS5dBgma6ukXl2Py1', 'BBC3355'.toUpperCase());
 
     async function addNewLogs(userUID, fullName, plateNumber) {
         const dateMS = Date.now();
-        
-        
         const docRefLogs = fire.myDoc(fire.db, "logs", userUID);
         const docSnap = await fire.myGetDoc(docRefLogs);
         //Document logs exists?
@@ -342,7 +340,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time In.`)
         }
 
-
+        
 
 
         // await fire.myAddDoc(fire.myCollection(fire.db, "logs", userUID), docData);
@@ -438,6 +436,111 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             }); //end of function
         }); //end of snapshot function
     }
+
+
+    async function addVisitorInformation(officerUID, plateNumber, vehicleModel, fName, mName, lName) {
+        plateNumber = plateNumber.trim().replace(" ", "").toUpperCase();
+        vehicleModel = vehicleModel.trim();
+        fName = fName.trim();
+        mName = mName.trim();
+        lName = lName.trim();
+
+        const docRefLogs = fire.myDoc(fire.db, "visitor-logs", plateNumber);
+        const docSnap = await fire.myGetDoc(docRefLogs);
+        //Document logs exists?
+        if (docSnap.exists()) {
+            console.log("Logs already exists");
+
+            let getVisitorInformation = docSnap.data();
+            // console.log('get', getVisitorInformation[getVisitorInformation.logs_length].time_out.timestamp);
+
+            // Check if the index is undefined, new timestamp logs
+            if(getVisitorInformation[getVisitorInformation.logs_length] === undefined) {
+                console.log('nope');
+                const docData = {
+                    [getVisitorInformation.logs_length]: {
+                        first_name: fName,
+                        middle_name: mName,
+                        last_name: lName,
+                        vehicle_model: vehicleModel,
+                        plate_number: plateNumber,
+                        time_in: {
+                            timestamp: new Date().toString(),
+                            officer_uid: "userUID_timeIn",
+                            gate_number: "gateNumber_timeIn",
+                        },
+                        time_out: {
+                            timestamp: null,
+                            officer_uid: null,
+                            gate_number: null,
+                        },
+                    }
+                };
+                await fire.myUpdateDoc(docRefLogs, docData);
+            }
+            else {
+                if(getVisitorInformation[getVisitorInformation.logs_length].time_out.timestamp === null) {
+                    console.log('null', null);
+    
+                    getVisitorInformation[getVisitorInformation.logs_length]["time_out"] = {
+                        timestamp: new Date().toString(),
+                        officer_uid: "officer_timeOut",
+                        gate_number: "gate_number",
+                    };
+                    getVisitorInformation["logs_length"] += 1;
+                    console.log('updated:', getVisitorInformation);
+    
+                    // const docData = {
+                    //     [getVisitorInformation.logs_length]: {
+                    //         time_out: {
+                    //             timestamp: new Date().toString(),
+                    //             officer_uid: "officer_timeOut",
+                    //             gate_number: "gate_number",
+                    //         },
+                    //     },
+                    //     logs_length: fire.doIncrement(1),
+                    // };
+                    await fire.myUpdateDoc(docRefLogs, getVisitorInformation);
+                }
+                else {
+                    console.log('not null')
+                }
+            }
+
+        }
+        else {
+            console.log("No logs")
+            // Create a new visitor logs information object.
+            const docData = {
+                1: {
+                    first_name: fName,
+                    middle_name: mName,
+                    last_name: lName,
+                    vehicle_model: vehicleModel,
+                    plate_number: plateNumber,
+                    time_in: {
+                        timestamp: new Date().toString(),
+                        officer_uid: "userUID_timeIn",
+                        gate_number: "gateNumber_timeIn",
+                    },
+                    time_out: {
+                        timestamp: null,
+                        officer_uid: null,
+                        gate_number: null,
+                    },
+                },
+                logs_length: 1
+            };
+            await fire.doSetDoc(docRefLogs, docData);
+            
+        }
+        return;
+    } // end of function addVisitorInformation
+    addVisitorInformation("officerUID", "AABBCC", "Vehicle Model", "FirstName", "MiddleName", "LastName");
+
+
+
+     
     // displayLogs(); //display logs
     $('#logs-id').on('click', (e) => {
         console.log('Logs qr.js');
