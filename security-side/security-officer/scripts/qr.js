@@ -290,6 +290,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         "columns": [
                             {"data": "time_in.timestamp"},
                             {"data": "time_out.timestamp"},
+                            {"data": (data, type, dataToSet) => {
+                                return data.time_out.gate_number + ", " + data.time_in.gate_number}
+                            },
                             {"data": "time_out.officer_uid"},
                             {"data": "first_name"},
                             {"data": "last_name"},
