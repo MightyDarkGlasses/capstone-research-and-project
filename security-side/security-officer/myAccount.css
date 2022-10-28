@@ -293,10 +293,11 @@
 }
 
 @media (max-width: 768px) {
+    
 
-.search-area {
-    display: block;
-}
+    .search-area {
+        display: block;
+    }
 
     /* PERSONAL INFORMATION */
     .content-container-myAccount {

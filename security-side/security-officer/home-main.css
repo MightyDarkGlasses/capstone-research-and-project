@@ -1001,6 +1001,13 @@ margin: 0 auto;
 
 
 @media (max-width: 768px){
+  .header-container {
+    width: 100%;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+
   #qr-video {
     width: 100%;
   }

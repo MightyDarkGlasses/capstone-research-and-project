@@ -268,11 +268,31 @@
                     .qr-scanning .qr-scanning-buttons > button {
                         font-size: 1.25em;
                     }
+
+                    .dropdown-gate-number {
+                        margin: 1em 0;
+                    }
+                    .dropdown-gate-number p {
+                        font-weight: bold;
+                        font-size: 1.15em;
+                        margin-bottom: .5em;
+                    }
+
                 </style>
                 <div class="qr-scanning">
                     <div class="qr-scanning-buttons">
                         <button class="btn-scan" id="start-button">Start</button>
                         <button class="btn-scan" id="stop-button">Stop</button>
+                    </div>
+
+                    <div class="dropdown-gate-number">
+                        <p>Gate Number:</p>
+                        <select name="select-gate-number" id="select-gate-number">
+                            <option value="1">Gate #1</option>
+                            <option value="2">Gate #2</option>
+                            <option value="3">Gate #3</option>
+                            <option value="4">Gate #4</option>
+                        </select>
                     </div>
                     <span id="cam-qr-result-timestamp" style="display: none;"></span>
                     <h1>Scan from Webcam:</h1>
@@ -492,8 +512,8 @@
                                 <div>
                                     <p class="guest-lookup-caption">Plate Number (Lookup): </p>
                                     <div class="guest-search-input">
-                                        <input type="text" value="" required="required" placeholder="Search...">
-                                        <input type="submit" name="guest-search" value="Search">
+                                        <input type="text" value="" name="guest-search" required="required" placeholder="Search...">
+                                        <input type="submit"  value="Search">
                                     </div>
                                 </div>
                             </form>
@@ -515,7 +535,7 @@
                                 <input type="text" name="guest-add-platenum" id="" required="required" placeholder="ABC1234">
                             </div>
                             <input type="submit" name="guest-add-submit" value="Submit" style="display: none;">
-                            <input type="submit" value="Time Out">
+                            <input type="submit" value="Submit Visitor Information">
                             <!-- <p>Data to be submitted: </p>
                             <ul style="list-style-type: circle; margin-left: 1em;">
                                 <li>Full Name</li>
@@ -547,21 +567,21 @@
     //     document.getElementById("guest-add-information").dispatchEvent(new CustomEvent('submit', {cancelable: true}));
     // });
 
-    document.querySelector('#guest-add-information').addEventListener('submit', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log("guest submit:", e);
+    // document.querySelector('#guest-add-information').addEventListener('submit', (e) => {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     console.log("guest submit:", e);
 
-        e.target.reset();
-    });
+    //     e.target.reset();
+    // });
 
-    document.querySelector('#guest-search-information').addEventListener('submit', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log("search submit:", e);
+    // document.querySelector('#guest-search-information').addEventListener('submit', (e) => {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     console.log("search submit:", e);
 
-        e.target.reset();
-    });
+    //     e.target.reset();
+    // });
 </script>
 </html>
 <!-- <div class="visitor">

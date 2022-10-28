@@ -21,18 +21,18 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
     
                 
                 // Remove the signOut method later.
-                fire.getSignOut(fire.auth)
-                .then(() => {
-                    console.log('check logged user:', fire.auth)
-                    console.log("User signed out.")
-                    window.location = 'security-officer/securityOfficer-home.html';
-                }).catch((err) => {
-                    console.log("Logout error message: ", err);
-                });
+                // fire.getSignOut(fire.auth)
+                // .then(() => {
+                //     console.log('check logged user:', fire.auth)
+                //     console.log("User signed out.")
+                //     window.location = 'security-officer/securityOfficer-home.html';
+                // }).catch((err) => {
+                //     console.log("Logout error message: ", err);
+                // });
+                window.location = 'security-officer/securityOfficer-home.html';
             }).catch((err) => {
                 console.log("Sign in error: ", err);
             });
         }
     });
-
 }

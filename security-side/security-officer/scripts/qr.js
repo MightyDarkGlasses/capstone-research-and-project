@@ -1,16 +1,25 @@
-import QrScanner from "./qr-scanner.min.js";
 import * as fire from "../../../src/index";
-import e from "./qr-scanner.min.js";
+import QrScanner from "./qr-scanner.min.js";
 
 if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     console.log('QrScanner qr.js');
 
     let isSuccessPersonal = false;
     let isSuccessVehicle = false;
+    // const docRefSecurityOfficer = fire.myDoc(fire.db, "security", fire.auth.currentUser.uid);
+    // const docSnapSecurityOfficer = await fire.myGetDoc(docRefSecurityOfficer);
+    // if (docSnapSecurityOfficer.exists()) {
+    //     const setOfficerName = document.querySelector('.name-sg');
+    //     const securityOfficerInformation = docSnapSecurityOfficer.data();
+    //     console.log('securityOfficerInformation', securityOfficerInformation);
+    // }
+    // else {
+    //     console.log('That security officer does not exist.')
+    // }
+
 
     
     async function fetchInformation(userUID, plateNumber) {
-
         // Success checking
         let isSuccessPersonal = false;
         let isSuccessVehicle = false;
@@ -53,24 +62,14 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         // isSuccessPersonal = typeof(specificAccountRetrieve) === undefined ? false : true;
         
         // ##### Personal Information #####
+        // Check if the account is undefined
         console.log(specificAccountRetrieve, typeof(specificAccountRetrieve) !== undefined)
-
-        
         if(typeof(specificAccountRetrieve) !== 'undefined') {
-            // console.log('docSnapAccount:', specificAccountRetrieve);
-            // console.log('User UID:', userUID)
-            // console.log('Date of Snapshot: ', new Date());
-            // console.log('Full Name:', `${specificAccountRetrieve.last_name}, ${specificAccountRetrieve.first_name} ${specificAccountRetrieve.middle_name}`);
-            // console.log('User Type: ', typeof(specificAccountRetrieve.user_type) === undefined ? specificAccountRetrieve.user_type : '');
-
             userValue.innerText = userUID;
             dateValue.innerText = new Date();
             fullNameValue.innerText = `${specificAccountRetrieve.last_name}, ${specificAccountRetrieve.first_name} ${specificAccountRetrieve.middle_name}`;
             userTypeValue.innerText = typeof(specificAccountRetrieve.user_type) === undefined ? specificAccountRetrieve.user_type : 'Undefined';
-            // console.log('');
-            // console.log('');
-            // console.log();
-            // console.log();
+
             isSuccessPersonal = true;
         }
         else {
@@ -78,11 +77,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             isSuccessPersonal = false;
         }
 
-
-        
-
         // ##### Vehicle Information #####
-        
         // Check if the vehicle is undefined
         if(typeof(docSnapVehicle.data()) !== 'undefined') {
             let objKeys = Object.keys(docSnapVehicle.data());
@@ -118,11 +113,14 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             console.log("All done");
             // isSuccessPersonal = false, isSuccessVehicle
 
-            
             console.log('isSuccessPersonal:', isSuccessPersonal);
             console.log('isSuccessVehicle:', isSuccessVehicle);
             if((isSuccessPersonal && isSuccessVehicle) !== false) {
                 //Popup Scanned Information
+
+
+                // Call the addNewLogs function
+                // addNewLogs(userUID, $('.user-fullname-value').val(), plateNumber, fire.auth.currentUser.uid);
                 $("#ex1").modal({
                     fadeDuration: 100
                 });
@@ -276,8 +274,10 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     } // end of function declaration
     // fetchInformation('wIHQmo7nxwceS5dBgma6ukXl2Py1', 'BBC3355'.toUpperCase());
 
-    async function addNewLogs(userUID, fullName, plateNumber) {
-        const dateMS = Date.now();
+
+    //
+    async function addNewLogs(userUID, lName, fName, mName, vehicleModel, plateNumber, officerUID) {
+        // const dateMS = Date.now();
         const docRefLogs = fire.myDoc(fire.db, "logs", userUID);
         const docSnap = await fire.myGetDoc(docRefLogs);
         //Document logs exists?
@@ -289,60 +289,74 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
 
             if(selectedUserLogsData[selectedUserLogsData.index] === undefined) {
                 const docData2 = {
-                    [selectedUserLogsData.index]: {   
-                        "userUID": userUID,
-                        "officer_uid": "officerUID",
-                        "time_scanned": new Date().toString(),
-                        "time_in": fire.getServerTimestamp(),
-                        "time_out": '',
-                        "owner": fullName,
-                        "plate_number": plateNumber,
-                        "gate_number": "0",
-                    },
+                    [selectedUserLogsData.index]: {
+                        first_name: fName,
+                        middle_name: mName,
+                        last_name: lName,
+                        vehicle_model: vehicleModel,
+                        plate_number: plateNumber,
+                        time_in: {
+                            timestamp: new Date().toString(),
+                            officer_uid: officerUID,
+                            gate_number: $('select[name="select-gate-number"]').val(),
+                        },
+                        time_out: {
+                            timestamp: null,
+                            officer_uid: null,
+                            gate_number: null,
+                        },
+                    }
                 };
     
                 await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData2);
                 alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time Out.`)
             }
             else {
-                if(selectedUserLogsData[selectedUserLogsData.index].time_out === "") {
-                    // Update the time out.
-    
-                    // Atomically increment the population of the city by 50.
-                    const name = `${selectedUserLogsData.index}.time_out`;
-                    console.log('name:', name)
-                    await fire.myUpdateDoc(docRefLogs, {
-                        // `${selectedUserLogsData.index}.time_out`: new Date().toString();
-                        [name]: new Date().toString(),
-                        index: fire.doIncrement(1)
-                    });
-                    alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time In.`)
+                if(selectedUserLogsData[selectedUserLogsData.index].time_out.timestamp === null) {
+                    console.log('null', null);
+                    
+                    selectedUserLogsData[selectedUserLogsData.index]["time_out"] = {
+                        timestamp: new Date().toString(),
+                        officer_uid: officerUID,
+                        gate_number: $('select[name="select-gate-number"]').val(),
+                    };
+
+                    selectedUserLogsData["index"] += 1;
+                    console.log('updated:', selectedUserLogsData);
+
+                    await fire.myUpdateDoc(docRefLogs, selectedUserLogsData);
                 }
-                // await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData);
+                else {
+                    console.log('not null')
+                }
             }
         }
         else {
             console.log("No such document!");
-
+            console.log("reate a new log.");
+            // Create a new visitor logs information object.
             const docData = {
-                0: {   
-                    "userUID": userUID,
-                    "time_scanned": new Date().toString(),
-                    "time_in": fire.getServerTimestamp(),
-                    "time_out": '',
-                    "owner": fullName,
-                    "plate_number": plateNumber
+                1: {
+                    first_name: fName,
+                    middle_name: mName,
+                    last_name: lName,
+                    vehicle_model: vehicleModel,
+                    plate_number: plateNumber,
+                    time_in: {
+                        timestamp: new Date().toString(),
+                        officer_uid: officerUID,
+                        gate_number: $('select[name="select-gate-number"]').val(),
+                    },
+                    time_out: {
+                        timestamp: null,
+                        officer_uid: null,
+                        gate_number: null,
+                    },
                 },
-                'index': 0
+                index: 1
             };
-
-            await fire.doSetDoc(fire.myDoc(fire.db, "logs", userUID), docData);
-            alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time In.`)
+            await fire.doSetDoc(docRefLogs, docData);
         }
-
-        
-
-
         // await fire.myAddDoc(fire.myCollection(fire.db, "logs", userUID), docData);
         // await fire.myAddDoc(fire.myCollection(fire.db, "logs", userUID), docData);
 
@@ -391,6 +405,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         // });
         // console.log("Document written with ID: ", docRef.id);
     } //end of function, addNewLogs
+    
 
     async function displayLogs() {
         const myQuery = fire.doQuery(fire.myCollection(fire.db, 'logs'));
@@ -437,7 +452,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         }); //end of snapshot function
     }
 
-
+    // Add Visitor Information button
     async function addVisitorInformation(officerUID, plateNumber, vehicleModel, fName, mName, lName) {
         plateNumber = plateNumber.trim().replace(" ", "").toUpperCase();
         vehicleModel = vehicleModel.trim();
@@ -466,8 +481,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         plate_number: plateNumber,
                         time_in: {
                             timestamp: new Date().toString(),
-                            officer_uid: "userUID_timeIn",
-                            gate_number: "gateNumber_timeIn",
+                            officer_uid: officerUID,
+                            gate_number: $('select[name="select-gate-number"]').val(),
                         },
                         time_out: {
                             timestamp: null,
@@ -484,22 +499,12 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     
                     getVisitorInformation[getVisitorInformation.logs_length]["time_out"] = {
                         timestamp: new Date().toString(),
-                        officer_uid: "officer_timeOut",
-                        gate_number: "gate_number",
+                        officer_uid: officerUID,
+                        gate_number: $('select[name="select-gate-number"]').val(),
                     };
                     getVisitorInformation["logs_length"] += 1;
                     console.log('updated:', getVisitorInformation);
-    
-                    // const docData = {
-                    //     [getVisitorInformation.logs_length]: {
-                    //         time_out: {
-                    //             timestamp: new Date().toString(),
-                    //             officer_uid: "officer_timeOut",
-                    //             gate_number: "gate_number",
-                    //         },
-                    //     },
-                    //     logs_length: fire.doIncrement(1),
-                    // };
+
                     await fire.myUpdateDoc(docRefLogs, getVisitorInformation);
                 }
                 else {
@@ -520,8 +525,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     plate_number: plateNumber,
                     time_in: {
                         timestamp: new Date().toString(),
-                        officer_uid: "userUID_timeIn",
-                        gate_number: "gateNumber_timeIn",
+                        officer_uid: officerUID,
+                        gate_number: $('select[name="select-gate-number"]').val(),
                     },
                     time_out: {
                         timestamp: null,
@@ -536,8 +541,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         }
         return;
     } // end of function addVisitorInformation
-    addVisitorInformation("officerUID", "AABBCC", "Vehicle Model", "FirstName", "MiddleName", "LastName");
-
+    // addVisitorInformation(fire.auth.currentUser.uid, "AABBCC", "Vehicle Model", "FirstName", "MiddleName", "LastName");
+    
 
 
      
@@ -588,6 +593,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             document.querySelector("#placeholder").style.display = "flex";
             document.querySelector("#video-container").style.display = "none";
 
+            // Call the fetchInformation() function to get the results.
             // fetchInformation(qrResultData.uid, qrResultData.plate_number);
         }
     
@@ -694,19 +700,86 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             document.querySelector("#placeholder").style.display = "flex";
             document.querySelector("#video-container").style.display = "none";
         });
-    
-        // document.getElementById("start-button").click();
+        // ##### End of QrScanner #####
+
         
-        // ####### File Scanning #######
+        // Check if the security officer is existing
+        async function checkSecurityOfficerInformation(authentication) {
+            // console.log(authentication);
+            // console.log("fire.auth: ", fire.auth)
+            const docRefSecurityOfficer = fire.myDoc(fire.db, "security", authentication.uid);
+            const docSnapSecurityOfficer = await fire.myGetDoc(docRefSecurityOfficer);
+            if (docSnapSecurityOfficer.exists()) {
+                const securityOfficerInformation = docSnapSecurityOfficer.data();
+                console.log('securityOfficerInformation', securityOfficerInformation);
+
+                const setOfficerName = document.querySelector('.name-sg');
+                setOfficerName.innerText = 
+                `${securityOfficerInformation.lastname}, ${securityOfficerInformation.firstname} ${securityOfficerInformation.middlename}`
+            }
+            else {
+                console.log('That security officer does not exist.')
+            }
+
+            console.log('select: ', $('select[name="select-gate-number"]').val());
+        }
+
+        // const auth = getAuth();
+        fire.getOnAuthStateChanged(fire.auth, (user) => {
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/firebase.User
+                checkSecurityOfficerInformation(user);
+                addNewLogs("wIHQmo7nxwceS5dBgma6ukXl2Py1", "Mandela", "Jackson",  "F", "Vehicle Model", "ABC2233", fire.auth.currentUser.uid);
+                // addVisitorInformation(user.uid, "AABBCC", "Vehicle Model", "FirstName", "MiddleName", "LastName");
+            } 
+            else {
+                // User is signed out
+                // ...
+            }
+        });
+        
+        document.querySelector('#guest-add-information').addEventListener('submit', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("guest submit:", e);
+            
+            const fname = $('input[name="guest-add-fname"]').val()
+            const mname = $('input[name="guest-add-mname"]').val()
+            const lname = $('input[name="guest-add-lname"]').val()
+            const vehicleModel = $('input[name="guest-add-vehiclemodel"]').val()
+            const plateNum = $('input[name="guest-add-platenum"]').val()
+
+            console.log($('input[name="guest-add-fname"]').val());
+            console.log($('input[name="guest-add-lname"]').val());
+            console.log($('input[name="guest-add-mname"]').val());
+            console.log($('input[name="guest-add-vehiclemodel"]').val());
+            console.log($('input[name="guest-add-platenum"]').val());
+            
+            addVisitorInformation(fire.auth.currentUser.uid, plateNum, vehicleModel, fname, mname, lname);
+            window.alert(`${plateNum}: Information added successfully.`)
+            
+            // $('#ex2').modal().close();
+
+            // click_event = new CustomEvent('click');
+            // btn_element = document.querySelector('.close-modal');
+            // btn_element.dispatchEvent(click_event);
+
+            document.querySelector('.close-modal').click();
+            e.target.reset();
+        });
     
-        // fileSelector.addEventListener('change', event => {
-        //     const file = fileSelector.files[0];
-        //     if (!file) {
-        //         return;
-        //     }
-        //     QrScanner.scanImage(file, { returnDetailedScanResult: true })
-        //         .then(result => setResult(fileQrResult, result))
-        //         .catch(e => setResult(fileQrResult, { data: e || 'No QR code found.' }));
-        // });
+        document.querySelector('#guest-search-information').addEventListener('submit', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("search submit:", e);
+            
+
+            $('input[name="guest-search"]').val();
+            e.target.reset();
+        });
     }); //end of DOMContentLoaded, QR Scanner
+
+
+    
 }
