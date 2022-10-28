@@ -41,20 +41,22 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         }
         else {
             let vehicleKeys= Object.keys(JSON.parse(localStorage.vehicleInformation));
+            let iterator = 1; // count the number of vehicle list
             for (let index=0; index<vehicleKeys.length; index++) {
+                console.log('iterating index: ', index);
                 // console.log('index:', index);
                 // console.log('vehicleInformation[index]:', vehicleInformation[index]);
                 // console.log('vehicleKeysLength:', vehicleKeys[index]);
                 
                 if(vehicleKeys[index] !== 'vehicle_length') {
-                    console.log('true', vehicleInformation[vehicleKeys[index]])
+                    // console.log('true', vehicleInformation[vehicleKeys[index]])
 
                     const preSelectedVehicleKey = vehicleInformation[vehicleKeys[index]];
-                    listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${index} | ${preSelectedVehicleKey["model"][0]}, ${vehicleKeys[index]}</li>`;
+                    listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${iterator} | ${preSelectedVehicleKey["model"][0]}, ${vehicleKeys[index]}</li>`;
                     document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
                     document.querySelector('.personal-info-plate').innerText = vehicleKeys[index];
                     document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"][0];
-                    
+                    iterator += 1;
                     // if(x === 1) { //will be used for placeholder
                     //     document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
                     //     document.querySelector('.personal-info-plate').innerText = vehicleInformation.registered_vehicle.plate[0];

@@ -232,7 +232,7 @@ function checkCurrentLoggedUser() {
         else {
             console.log("Email is not yet verified.");
             // alert("Please verify your e-mail first.");
-            // sendVerification();
+            sendVerification();
 
             $('.modal-container-main').html(`<p>The email is not yet verified.</p>
             <p class="note"><i>Note: Check your <b>Spam</b> section to verify your email.</i></p>`);

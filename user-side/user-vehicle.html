@@ -86,6 +86,8 @@
 
         .vehicle-input {
             font-family: 'Lexend Deca', sans-serif;
+            padding: 0 1em;
+            font-size: 1em;
         }
         /* .vehicle-input {
             font-size: 1em;
@@ -625,9 +627,17 @@
             width: 98%;
             cursor: pointer;
         }
+
+        #add-vehicle-modal p {
+            text-align: center;
+            font-size: 2em;
+        }
     </style>
     <!-- Modals -->
     <div id="add-vehicle-modal" class="modal" style="max-width: 750px;">
+        <div>
+            <p>Add New Vehicle</p>
+        </div>
         <div class="add-vehicle-modal-container">
             <div class="drop-zone" index="1">
                 <div class="vehicle-front-drop-info">
@@ -665,12 +675,12 @@
                 <div>
                     <label>Vehicle Model</label>
                     <input type="text" class="vehicle-icon-1 vehicle-input" name="signup_vehiclemodel" id="vehicle-model" required="required" pattern=".{8,50}" title="You can only within the range of 8 - 50 character length."
-                    value="Random Model">
+                    value="">
                 </div>
                 <div>
                     <label>Plate Number</label>
                     <input type="text" class="vehicle-icon-2 vehicle-input" name="signup_vehicleplatenum" id="vehicle-platenum" required="required" pattern=".{1,10}" title="You can only enter a maximum of 10 characters."
-                    value="ABC 2233">
+                    value="">
                 </div>
                 <div id="qrcode" style="display: none;"> <!-- QR Code is generated here -->
             </div>

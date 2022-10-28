@@ -20,6 +20,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
 
     
     async function fetchInformation(userUID, plateNumber) {
+        console.log('fetchInformation: ', userUID, plateNumber);
         // Success checking
         let isSuccessPersonal = false;
         let isSuccessVehicle = false;
@@ -47,8 +48,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         const docRefAccountInfo = fire.myDoc(fire.db, "account-information", userUID);
         const docRefVehicleInfo = fire.myDoc(fire.db, "vehicle-information", userUID);
 
-        const docSnapVehicle = await fire.myGetDoc(docRefVehicleInfo);
         const docSnapAccount = await fire.myGetDoc(docRefAccountInfo);
+        const docSnapVehicle = await fire.myGetDoc(docRefVehicleInfo);
 
         // console.log("Document data:", docSnapVehicle);
         // console.log(userUID, plateNumber)
@@ -58,12 +59,13 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         // ##### Account Information #####
         // console.log('docSnapAccount:', docSnapAccount.data());
         const specificAccountRetrieve = docSnapAccount.data();
+        console.log(`${specificAccountRetrieve.last_name}, ${specificAccountRetrieve.first_name} ${specificAccountRetrieve.middle_name}`);
         // console.log(specificAccountRetrieve)
         // isSuccessPersonal = typeof(specificAccountRetrieve) === undefined ? false : true;
         
         // ##### Personal Information #####
         // Check if the account is undefined
-        console.log(specificAccountRetrieve, typeof(specificAccountRetrieve) !== undefined)
+        // console.log(specificAccountRetrieve, typeof(specificAccountRetrieve) !== undefined)
         if(typeof(specificAccountRetrieve) !== 'undefined') {
             userValue.innerText = userUID;
             dateValue.innerText = new Date();
@@ -79,38 +81,32 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
 
         // ##### Vehicle Information #####
         // Check if the vehicle is undefined
-        if(typeof(docSnapVehicle.data()) !== 'undefined') {
-            let objKeys = Object.keys(docSnapVehicle.data());
+        const specificVehicleRetrieve = docSnapVehicle.data();
+        // console.log("specificVehicleRetrieve: ", specificVehicleRetrieve)
+        // console.log(specificVehicleRetrieve["ABC2233"]["model"][0]);
+        if(typeof(specificVehicleRetrieve) !== 'undefined') {
+            let objKeys = Object.keys(specificVehicleRetrieve);
             // Check if the document id exist
             if (objKeys.includes(plateNumber)) {
-                // console.log("Document data:", docSnapVehicle.data(), typeof(docSnapVehicle.data()));
-                
-                // console.log('Specific data retrieved: ', docSnapVehicle.data()[plateNumber])
-                const specificVehicleRetrieve = docSnapVehicle.data()[plateNumber];
-                console.log('Vehicle Model: ', specificVehicleRetrieve.model[specificVehicleRetrieve.model.length-1]);
-                console.log('Plate Number: ', plateNumber);
-    
-                modelValue.innerText = specificVehicleRetrieve.model[specificVehicleRetrieve.model.length-1];
+                modelValue.innerText = specificVehicleRetrieve[plateNumber]["model"][0];
                 plateNumValue.innerText = plateNumber;
-                // console.log();
                 isSuccessVehicle = true;
             }
             else {
-                // doc.data() will be undefined in this case
                 console.log("No such document!");
                 isSuccessVehicle = false;
             }
-            
-            console.log('isSuccessPersonal:', isSuccessPersonal);
-            console.log('isSuccessVehicle:', isSuccessVehicle);
         }
         else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
             isSuccessVehicle = false;
         }
+
+
+
         await Promise.all([docSnapVehicle, docSnapAccount]).then((success) => {
-            console.log("All done");
+            // console.log("All done");
             // isSuccessPersonal = false, isSuccessVehicle
 
             console.log('isSuccessPersonal:', isSuccessPersonal);
@@ -118,9 +114,13 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             if((isSuccessPersonal && isSuccessVehicle) !== false) {
                 //Popup Scanned Information
 
-
-                // Call the addNewLogs function
-                // addNewLogs(userUID, $('.user-fullname-value').val(), plateNumber, fire.auth.currentUser.uid);
+                addNewLogs(userUID, 
+                    specificAccountRetrieve.last_name, 
+                    specificAccountRetrieve.first_name, 
+                    specificAccountRetrieve.middle_name, 
+                    specificVehicleRetrieve[plateNumber]["model"][0], 
+                    plateNumber, 
+                    fire.auth.currentUser.uid);
                 $("#ex1").modal({
                     fadeDuration: 100
                 });
@@ -144,135 +144,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 etc.
             `);
         });
-
-
-        // const docRefAccountInfo = fire.doQuery(fire.db, "account-information");
-        // const docRefVehicleInfo = fire.doQuery(fire.db, "vehicle-information"), doWhere("");
-        //one-time listener
-
-        /*
-        import { collection, onSnapshot, where, query } from "firebase/firestore"; 
-
-        const q = query(collection(db, "cities"), where("state", "==", "CA"));
-        onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
-            snapshot.docChanges().forEach((change) => {
-                if (change.type === "added") {
-                    console.log("New city: ", change.doc.data());
-                }
-
-                const source = snapshot.metadata.fromCache ? "local cache" : "server";
-                console.log("Data came from " + source);
-            });
-        });
-        */
-
-        // const docSnap = await fire.myGetDoc(docRefAccountInfo);
-        // let isSuccessPersonal = false, isSuccessVehicle = false;
-        // // let accInfoData = '', vehInfoData = '';
-        // if (docSnap.exists()) {
-        //     console.log("Document data:", docSnap.data());
-
-        //     localStorage.setItem('docPersonal', JSON.stringify(docSnap.data()));
-        //     isSuccessPersonal = true;
-        // }
-        // else {
-        //     console.log("No such document!");
-        // }
-
-        // const docSnap2 = await fire.myGetDoc(docRefVehicleInfo);
-        // if (docSnap2.exists()) {
-        //     console.log("Document data:", docSnap2.data());
-            
-        //     localStorage.setItem('docVehicle', JSON.stringify(docSnap2.data()));
-        //     isSuccessVehicle = true;
-        // }
-        // else {
-        //     console.log("No such document!");
-        // }
-        
-        // const vehicleValue = document.querySelector('.user-scanned-vehicle-value')
-        // const userValue = document.querySelector('.user-scanned-uid-value')
-        // const dateValue = document.querySelector('.user-scanned-date-value')
-        // const fullNameValue = document.querySelector('.user-fullname-value')
-        // const userTypeValue = document.querySelector('.user-type-value')
-        // const modelValue = document.querySelector('.user-model-value')
-        // const plateNumValue = document.querySelector('.user-platenum-value')
-
-        // // vehicleValue.innerText = '';
-        // vehicleValue.src = '';
-        // userValue.innerText = '';
-        // dateValue.innerText = '';
-        // fullNameValue.innerText = '';
-        // userTypeValue.innerText = '';
-        // modelValue.innerText = '';
-        // plateNumValue.innerText = '';
-
-        // await Promise.all([docSnap, docSnap2]).then((success) => {
-        //     console.log("All done");
-        //     // isSuccessPersonal = false, isSuccessVehicle
-
-        //     console.log('isSuccessPersonal:', isSuccessPersonal);
-        //     console.log('isSuccessVehicle:', isSuccessVehicle);
-        //     if((isSuccessPersonal && isSuccessVehicle) === false) {
-        //         alert(`
-        //         QR Code information does not exist.
-        //         Probable cause:
-        //             - The user deactivated its account
-        //             - Fake one
-        //             etc.
-        //         `);
-        //         isSuccessPersonal = isSuccessVehicle = false;
-        //     }
-        //     else {
-        //         // get Information
-        //         const docPersonal = JSON.parse(localStorage.getItem('docPersonal'));
-        //         const docVehicle = JSON.parse(localStorage.getItem('docVehicle'));
-
-        //         console.log('docPersonal:', docPersonal);
-        //         console.log('docVehicle:', docVehicle);
-                
-        //         console.log('docVehicle.registered_vehicle.plate:', docVehicle.registered_vehicle.plate);
-        //         console.log('plateNumber:', plateNumber);
-                
-        //         let vehicleIndexPosition = 
-        //             docVehicle.registered_vehicle.plate.findIndex(e => e === plateNumber);
-
-        //         console.log('vehicleIndexPosition:', vehicleIndexPosition);
-        //         if(vehicleIndexPosition > -1) {
-        //             // vehicleValue.src = `${docVehicle.registered_vehicle.vehicles[vehicleIndexPosition].images[1]}`;
-        //             userValue.innerText = `${userUID}`;
-        //             dateValue.innerText = new Date().toString();
-        //             fullNameValue.innerText = `${docPersonal.last_name}, ${docPersonal.first_name} ${docPersonal.middle_name}`;
-        //             userTypeValue.innerText = docPersonal.user_type === undefined ? 'Personnel' : `${docPersonal.user_type}`;
-        //             // modelValue.innerText = `${docVehicle.registered_vehicle.model[vehicleIndexPosition]}`;
-        //             plateNumValue.innerText = `${plateNumber}`;
-
-        //             addNewLogs(userUID, 
-        //                 `${docPersonal.last_name}, ${docPersonal.first_name} ${docPersonal.middle_name}`,
-        //                 `${plateNumber}`);
-        //         }
-        //         else {
-        //             alert('no no no');
-        //         }
-
-        //         localStorage.removeItem('docPersonal');
-        //         localStorage.removeItem('docVehicle');
-        //         isSuccessPersonal = isSuccessVehicle = false;
-        //     }
-            
-        // }).catch((fail) => {
-        //     console.log('cause of failure:', fail)
-        //     alert(`
-        //     QR Code information does not exist.
-        //     Probable cause:
-        //         - The user deactivated its account
-        //         - Fake one
-        //         etc.
-        //     `);
-        //     isSuccessPersonal = isSuccessVehicle = false;
-        // });
     } // end of function declaration
-    // fetchInformation('wIHQmo7nxwceS5dBgma6ukXl2Py1', 'BBC3355'.toUpperCase());
 
 
     //
@@ -357,53 +229,6 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             };
             await fire.doSetDoc(docRefLogs, docData);
         }
-        // await fire.myAddDoc(fire.myCollection(fire.db, "logs", userUID), docData);
-        // await fire.myAddDoc(fire.myCollection(fire.db, "logs", userUID), docData);
-
-        // const docRef = fire.myDoc(fire.db, "logs", userUID, "time_out", dateMS);
-        // await fire.doSetDoc(docRef, { 
-        //     "userUID": userUID,
-        //     "time_scanned": new Date().toString(),
-        //     "time_in": fire.getServerTimestamp(),
-        //     "owner": fullName,
-        //     "plate_number": plateNumber
-        // });
-
-        // ##### Subcollection implementation #####
-        // const docRef = fire.myDoc(fire.db, "logs", userUID);
-        // await fire.myUpdateDoc(docRef, {
-        //     operations: fire.doArrayUnion(0)
-        // });
-
-        // const colRef = fire.myCollection(docRef, "time-in");
-        // fire.myAddDoc(colRef, {
-        //     [dateMS]: {
-        //         "userUID": userUID,
-        //         "time_scanned": new Date().toString(),
-        //         "time_in": fire.getServerTimestamp(),
-        //         "owner": fullName,
-        //         "plate_number": plateNumber
-        //     }
-        // });
-        // const colRef2 = fire.myCollection(docRef, "time-out");
-        // fire.myAddDoc(colRef2, {
-        // });
-
-        // await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData);
-
-        // Add a new document with a generated id.
-        // const dateMS = Date.now();
-        // const docRef = await fire.myAddDoc(fire.myCollection(fire.db, "logs", userUID), {
-        //     [dateMS]: {   
-        //         "userUID": [userUID],
-        //         "time_scanned": new Date().toString(),
-        //         "time_in": fire.getServerTimestamp(),
-        //         "time_out": '',
-        //         "owner": fullName,
-        //         "plate_number": plateNumber
-        //     }
-        // });
-        // console.log("Document written with ID: ", docRef.id);
     } //end of function, addNewLogs
     
 
@@ -418,10 +243,27 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     let objSize = Object.keys(unpackData).length;
                     Object.entries(unpackData).map((element, index) => {
                         if(objSize-1 !== index) {
-                            console.log(index, element[1]);
-                            element[1]['time_in'] = Date(new Date(0).setUTCSeconds(element[1]['time_in']['seconds']));
-                            element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // let objectDate = new Date();
+                            // let day = objectDate.getDate();
+                            // let month = objectDate.getMonth() + 1;
+                            // let year = objectDate.getFullYear();
+                            
+                            // let format1 = month + "/" + day + "/" + year;
+                            // console.log(format1); // 7/23/2022
 
+                            console.log("time_in", element[1]["time_in"]);
+                            console.log("time_out", element[1]["time_out"]);
+                            // console.log("time_out", element);
+
+                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+
+                            // console.log(index, element[1]);
+                            // element[1]['time_in'] = Date(new Date(0).setUTCSeconds(element[1]['time_in']['seconds']));
+                            // element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
+
+                            // .format('dddd MMM YYYY HH:mm:ss');
+                            
                             index += 1; //increment
                             logs.push(element[1]);
                         }
@@ -430,22 +272,35 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 console.log(logs); 
 
                 //Sort the data by time_scanned
-                logs.sort(function(a, b) {
-                    return new Date(a.time_scanned) - new Date(b.time_scanned);
-                });
+                // logs.sort(function(a, b) {
+                //     return new Date(a.time_scanned) - new Date(b.time_scanned);
+                // });
+
+                // logs.sort(function(a, b) {
+                //     return new Date(a.time_in.time_scanned) - new Date(b.time_in.time_scanned);
+                // });
                 console.log('sorted:', logs);   //print the result
 
                 jQuery((e) => {
                     console.log("DataTable");
                     $("#table_id").DataTable({
                         scrollX: true,
+                        "pageLength": 10,
                         "data": logs,
                         "columns": [
-                            {"data": "time_in"},
-                            {"data": "time_out"},
+                            {"data": "time_in.timestamp"},
+                            {"data": "time_out.timestamp"},
+                            {"data": "time_out.officer_uid"},
+                            {"data": "first_name"},
+                            {"data": "last_name"},
+                            {"data": "middle_name"},
                             {"data": "plate_number"},
-                            {"data": "owner"},
-                        ]
+                            {"data": "vehicle_model"},
+                        ],
+                        "columnDefs": [{
+                            "defaultContent": "-",
+                            "targets": "_all"
+                        }]
                     });
                 }); //jQuery
             }); //end of function
@@ -594,7 +449,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             document.querySelector("#video-container").style.display = "none";
 
             // Call the fetchInformation() function to get the results.
-            // fetchInformation(qrResultData.uid, qrResultData.plate_number);
+            fetchInformation(qrResultData.uid, qrResultData.plate_number);
         }
     
         // ####### Web Cam Scanning #######
@@ -730,7 +585,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
                 checkSecurityOfficerInformation(user);
-                addNewLogs("wIHQmo7nxwceS5dBgma6ukXl2Py1", "Mandela", "Jackson",  "F", "Vehicle Model", "ABC2233", fire.auth.currentUser.uid);
+                // addNewLogs("wIHQmo7nxwceS5dBgma6ukXl2Py1", "Mandela", "Jackson",  "F", "Vehicle Model", "ABC2233", fire.auth.currentUser.uid);
                 // addVisitorInformation(user.uid, "AABBCC", "Vehicle Model", "FirstName", "MiddleName", "LastName");
             } 
             else {
