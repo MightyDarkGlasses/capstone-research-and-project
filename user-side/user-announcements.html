@@ -170,12 +170,138 @@
                               </div>
                          </div>
                     </div>
+
+                    <style>
+                         .right-container .announcements ul{
+                              list-style-type: none;
+                         }
+
+                         .right-container .announcements ul a{
+                              color: floralwhite;
+                              text-decoration: underline;
+                         }
+
+
+                         .right-container .announcements .annoucements-main-container {
+                              display: flex;
+                              gap: 1em;
+                         }
+
+                         .right-container .announcements .announcements-sources::before {
+                              content: 'Sources: ';
+                         }
+                         .right-container .announcements .announcements-file::before {
+                              content: 'Files: ';
+                         }
+
+                         .right-container .announcements {
+                              border: 5px solid white;
+                              border-radius: 1em;
+                              padding: 1em;
+                              font-family: 'Lexend Deca', sans-serif;
+                              display: grid;
+                              gap: 1em;
+                         }
+
+                         .right-container .announcements .announcements-container {
+                              display: grid;
+                              gap: 1em;
+                         }
+                         .right-container .announcements .announcement-priority {
+                              background-color: rgb(197, 14, 14);
+                              width: fit-content;
+                              padding: .5em 1em;
+                              border-radius: 1em;
+                              font-weight: bold;
+                              text-transform: uppercase;
+                              margin: .5em 0;
+                         }
+
+                         .right-container .announcements .announcement-thumbnail {
+                              --size: 250px;
+                              height: var(--size);
+                              width: var(--size);
+                              border-radius: 1em;
+                         }
+                         .right-container .announcements .announcements-timestamp {
+                              font-style: italic;
+                         }
+                         .right-container .announcements .announcements-timestamp::before {
+                              content: 'Posted on: ';
+                         }
+
+                         .right-container .announcements .announcements-person {
+                              font-style: italic;
+                         }
+                         .right-container .announcements .announcements-person::before {
+                              content: 'Posted by: ';
+                         }
+
+
+
+                         .right-container .announcements-headline {
+                              font-size: 1.5em;
+                              text-transform: uppercase;
+                              font-weight: 800;
+                         }
+                         .right-container .announcements-headline::before {
+                              content: 'Re: ';
+                         }
+
+                         .right-container .announcements-message {
+                              /* white-space: pre-line; */
+                              text-align: justify;
+                              
+                         }
+                         .right-container .announcements-message::first-letter {
+                              /* white-space: pre-line; */
+                              padding-left: 2em;
+                         }
+
+                         @media screen and (max-width: 960px) {
+                              .announcement-thumbnail {
+                                   display: none;
+                              }
+                         }
+
+
+                    </style>
                     <div id="content" class="content user-content">
-                         <div class="welcome-box">
+                         
+                         <div class="welcome-box" style="display: none;">
                               <div class="welcome-message">
                                   No announcements yet.
                               </div>
                           </div>
+
+                          <h1 style="font-family: 'Lexend Deca', sans-serif;">Announcements: </h1>
+                          <div class="announcements">
+                              <div>
+                                   <div class="announcement-priority">Important</div>
+                                   <p class="announcements-headline">Temporary Closure of Gate #1</p>
+                                   <p class="announcements-timestamp">October 12, 06:08 PM</p>
+                                   <p class="announcements-person">Administrator</p>
+                              </div>
+                              <div class="annoucements-main-container">
+                                   <div class="announcements-container">
+                                        <p class="announcements-message">
+                                        In celebration of the "Inauguration and Blessing of the BulSU E-Library", the Main Gate will be closed to traffic from 7:00 A.M. - 5:00 P.M., October 13, 2022 (Thursday).
+                                        Parking spaces at the College of Law, CICT, and along Gate 1 and AC are also temporarilty inaccessible.
+                                        <br/>Please take alternate route and parking.<br/>
+                                        Maraming salamat po.</p>
+                                        <ul class="announcements-sources">
+                                             <li><a href="https://www.facebook.com/photo?fbid=436252771945979&set=a.422422443329012">https://www.facebook.com/photo?fbid=436252771945979&set=a.422422443329012</a></li>  
+                                        </ul>
+                                        <ul class="announcements-file">
+                                             <li><a href="announcement_2022-10-12.jpg">announcement_2022-10-12.jpg</a></li>
+                                        </ul>
+                                   </div>
+                                   <div>
+                                        <img class="announcement-thumbnail" src="announcement_2022-10-12.jpg" alt="announcement thumbnail">
+                                   </div>
+                              </div>
+                              
+                         </div>
                     </div>
                </div>
           </div>

@@ -582,6 +582,14 @@
             align-items: center;
             gap: 1em;
         }
+        @media screen and (max-width: 960px) {
+            #add-vehicle-modal .add-vehicle-modal-container {
+                flex-wrap: wrap;
+                width: 100%;
+            }
+        }
+
+
 
         #add-vehicle-modal .add-vehicle-modal-container .drop-zone {
             width: 500px;
@@ -636,58 +644,60 @@
     <!-- Modals -->
     <div id="add-vehicle-modal" class="modal" style="max-width: 750px;">
         <div>
-            <p>Add New Vehicle</p>
+            <div>
+                <p>Add New Vehicle</p>
+            </div>
+            <div class="add-vehicle-modal-container">
+                <div class="drop-zone" index="1">
+                    <div class="vehicle-front-drop-info">
+                        <div class="icon">
+                            <div class="front-car-view"></div>
+                        </div>
+                        <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                        <p>Front View</p>
+                    </div>
+                    <input type="file" name="vehicle-front" class="drop-zone__input">
+                </div>
+                <div class="drop-zone" index="2">
+                    <div class="vehicle-side-drop-info">
+                        <div class="icon">
+                            <div class="side-car-view"></div>
+                        </div>
+                        <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                        <p>Side View</p>
+                    </div>
+                    <input type="file" name="vehicle-side" class="drop-zone__input">
+                </div>
+                <div class="drop-zone" index="3">
+                    <div class="vehicle-rear-drop-info">
+                        <div class="icon">
+                            <div class="rear-car-view"></div>
+                        </div>
+                        <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                        <p>Rear View</p>
+                    </div>
+                    <input type="file" name="vehicle-rear" class="drop-zone__input">
+                </div>
+            </div>
+            <form class="modal-vehicle-form">
+                <div class="user-input">
+                    <div>
+                        <label>Vehicle Model</label>
+                        <input type="text" class="vehicle-icon-1 vehicle-input" name="signup_vehiclemodel" id="vehicle-model" required="required" pattern=".{8,50}" title="You can only within the range of 8 - 50 character length."
+                        value="">
+                    </div>
+                    <div>
+                        <label>Plate Number</label>
+                        <input type="text" class="vehicle-icon-2 vehicle-input" name="signup_vehicleplatenum" id="vehicle-platenum" required="required" pattern=".{1,10}" title="You can only enter a maximum of 10 characters."
+                        value="">
+                    </div>
+                    <div id="qrcode" style="display: none;"> <!-- QR Code is generated here -->
+                </div>
+                <div class="navigation">
+                    <input type="submit" id="modal-submit-vehicle" value="Submit">
+                </div>
+            </form>
         </div>
-        <div class="add-vehicle-modal-container">
-            <div class="drop-zone" index="1">
-                <div class="vehicle-front-drop-info">
-                    <div class="icon">
-                        <div class="front-car-view"></div>
-                    </div>
-                    <span class="drop-zone__prompt">Drop file here or click to upload</span>
-                    <p>Front View</p>
-                </div>
-                <input type="file" name="vehicle-front" class="drop-zone__input">
-            </div>
-            <div class="drop-zone" index="2">
-                <div class="vehicle-side-drop-info">
-                    <div class="icon">
-                        <div class="side-car-view"></div>
-                    </div>
-                    <span class="drop-zone__prompt">Drop file here or click to upload</span>
-                    <p>Side View</p>
-                </div>
-                <input type="file" name="vehicle-side" class="drop-zone__input">
-            </div>
-            <div class="drop-zone" index="3">
-                <div class="vehicle-rear-drop-info">
-                    <div class="icon">
-                        <div class="rear-car-view"></div>
-                    </div>
-                    <span class="drop-zone__prompt">Drop file here or click to upload</span>
-                    <p>Rear View</p>
-                </div>
-                <input type="file" name="vehicle-rear" class="drop-zone__input">
-            </div>
-        </div>
-        <form class="modal-vehicle-form">
-            <div class="user-input">
-                <div>
-                    <label>Vehicle Model</label>
-                    <input type="text" class="vehicle-icon-1 vehicle-input" name="signup_vehiclemodel" id="vehicle-model" required="required" pattern=".{8,50}" title="You can only within the range of 8 - 50 character length."
-                    value="">
-                </div>
-                <div>
-                    <label>Plate Number</label>
-                    <input type="text" class="vehicle-icon-2 vehicle-input" name="signup_vehicleplatenum" id="vehicle-platenum" required="required" pattern=".{1,10}" title="You can only enter a maximum of 10 characters."
-                    value="">
-                </div>
-                <div id="qrcode" style="display: none;"> <!-- QR Code is generated here -->
-            </div>
-            <div class="navigation">
-                <input type="submit" id="modal-submit-vehicle" value="Submit">
-            </div>
-        </form>
     </div>
       
     <div id="add-linkages-modal" class="modal">
@@ -716,7 +726,7 @@
 <script src="qrcode.min.js" defer></script>
 <script src="../dist/bundle.js" defer></script>
 <!-- <script src="script_users/vehicle.js" defer></script> -->
-<!-- <script src="../fileupload-test/main.js" defer></script> -->
+<!-- <script src="../fileupload-test/main.js" defer></script> --> <!-- Add Vehicle Event .modal-vehicle-form -->
 <script src="../file_upload/main.js" defer></script>
 <script src="./sidebar/sidebar-mobile.js" defer></script>
 </html>
