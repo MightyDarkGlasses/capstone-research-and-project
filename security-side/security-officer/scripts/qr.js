@@ -324,43 +324,18 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     let objSize = Object.keys(unpackData).length;
                     Object.entries(unpackData).map((element, index) => {
                         if(objSize-1 !== index) {
-                            // let objectDate = new Date();
-                            // let day = objectDate.getDate();
-                            // let month = objectDate.getMonth() + 1;
-                            // let year = objectDate.getFullYear();
-                            
-                            // let format1 = month + "/" + day + "/" + year;
-                            // console.log(format1); // 7/23/2022
 
                             console.log("time_in", element[1]["time_in"]);
                             console.log("time_out", element[1]["time_out"]);
-                            // console.log("time_out", element);
 
                             element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
                             element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
 
-                            // console.log(index, element[1]);
-                            // element[1]['time_in'] = Date(new Date(0).setUTCSeconds(element[1]['time_in']['seconds']));
-                            // element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
-
-                            // .format('dddd MMM YYYY HH:mm:ss');
-                            
                             index += 1; //increment
                             logs.push(element[1]);
                         }
                     });
                 });
-                console.log(logs); 
-
-                //Sort the data by time_scanned
-                // logs.sort(function(a, b) {
-                //     return new Date(a.time_scanned) - new Date(b.time_scanned);
-                // });
-
-                // logs.sort(function(a, b) {
-                //     return new Date(a.time_in.time_scanned) - new Date(b.time_in.time_scanned);
-                // });
-                console.log('sorted:', logs);   //print the result
 
                 jQuery((e) => {
                     console.log("DataTable");
@@ -491,8 +466,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     // displayLogs(); //display logs
     $('#logs-id').on('click', (e) => {
         console.log('Logs qr.js');
-        // displayLogs();
-        // displayVisitorLogs();
+        displayLogs();
+        displayVisitorLogs();
     });
 
     // QR Scanner
