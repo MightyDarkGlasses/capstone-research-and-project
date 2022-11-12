@@ -14,7 +14,7 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
         const password = $('#admin_pass').val();
         console.log(email, password);
 
-        if(email === 'ethoharon@duck.com') {    
+        if(email === 'ethoharon@duck.com' || email === 'admin@local.com') {    
             fire.doSignInWithEmailAndPassword(fire.auth, email, password)
             .then((cred) => {
                 console.log("User logged in:", cred.user);

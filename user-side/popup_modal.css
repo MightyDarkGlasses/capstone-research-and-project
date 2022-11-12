@@ -1,0 +1,110 @@
+#popup-linkages-modal {
+    max-width: 500px;
+    box-sizing: border-box;
+    width: 90%;
+    background-color: hsl(150, 50%, 92%);
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #000;
+    text-align: left;
+    opacity: 1;
+    display: inline-block;
+    position: relative;
+    border-top: 1em solid hsl(120, 59%, 63%);
+    border-bottom: 1em solid hsl(120, 59%, 63%);
+    font-family: 'Lexend Deca', sans-serif;
+}
+
+.guest-caption {
+    text-align: center;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+.guest-container {
+    overflow-y: auto;
+}
+/* Input */
+.guest-search > div,
+#guest-add-information .guest-add-fullname,
+#guest-add-information .guest-add-vehicle,
+#guest-add-information .guest-add-model {
+    display: flex;
+    flex-direction: column;
+}
+
+#guest-add-information 
+:is(.guest-add-fullname, 
+.guest-add-vehicle, 
+.guest-add-model) p,
+#guest-search-information p {
+    font-weight: bold;
+
+}
+
+/* Plate Number Lookup */
+.guest-useruid-caption {
+    background: url('https://api.iconify.design/icon-park-solid/id-card.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+.guest-date-caption {
+    background: url('https://api.iconify.design/material-symbols/date-range-rounded.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+
+.guest-fullname-caption{
+    background: url('https://api.iconify.design/wpf/name.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+.guest-model-caption {
+    background: url('https://api.iconify.design/fluent/vehicle-car-profile-ltr-16-filled.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+.guest-platenum-caption {
+    background: url('https://api.iconify.design/clarity/credit-card-solid.svg') no-repeat left center / contain;
+    padding-left: 1.5em;
+}
+
+/* Linkages confirmation button (yes, no) */
+.confirm-linkages-button {
+    /* display: flex;
+    gap: 1em; */
+    margin-block: 1em;
+}
+.confirm-linkages-button > div{
+    margin-block: .25em;
+    display: flex;
+    gap: .5em;
+}
+.confirm-linkages-button button {
+    width: 50%;
+    outline: none;
+    border: 1px solid black;
+    border-radius: 1em;
+    padding-block: .5em;
+    cursor: pointer;
+    background-color: white;
+}
+.confirm-caption {
+    text-align: center;
+}
+
+
+/* Linkages main container */
+.scanned-linkages-container {
+    display: grid;
+    gap: 1em;
+}
+.scanned-linkages-container > p {
+    font-weight: 600;
+}
+.scanned-linkages-container div > p {
+    /* font-weight: bold; */
+    font-size: 1.1em;
+}
+.scanned-linkages-container div > p:first-child {
+    font-weight: bold;
+    font-size: 1.25em;
+}

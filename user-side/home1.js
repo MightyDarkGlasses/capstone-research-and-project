@@ -62,8 +62,9 @@ if(windowLocation.indexOf("user-home") > -1) {
             
                         vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
                         console.log('vehicleInformation:', vehi);
-                        displayVehicleDropdownList(vehi);
-                        addEventsInList(vehi);
+                        displayVehicleDropdownList();
+                        
+                        addEventsInList();
 
                         yesQRCode.style.display = 'flex';
                         break;
@@ -95,6 +96,7 @@ if(windowLocation.indexOf("user-home") > -1) {
         console.log('vehicleInformation:', vehi);
         // displayVehicleDropdownList(vehi);
         displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
+        displayLinkagesDropdownList();
         addEventsInList(vehi);  //re-add the events
 
         // let noQrCode = document.querySelector('.no-qr-code');
@@ -102,7 +104,7 @@ if(windowLocation.indexOf("user-home") > -1) {
         yesQRCode.style.display = 'flex';
     }
 
-    function displayVehicleDropdownList(vehicle) {
+    function displayVehicleDropdownList() {
         let listOfVehiclesTags = '';
         let vehicleListUL = document.getElementById("vehicle-list");
         let vehiclePlaceholder = document.getElementById("vehicle-placeholder");
@@ -136,6 +138,46 @@ if(windowLocation.indexOf("user-home") > -1) {
         vehicleListUL.innerHTML = listOfVehiclesTags;
         return;
     }  //end of displayVehicleDropdownList
+
+    function displayLinkagesDropdownList() {
+        console.log("displayLinkagesDropdownList")
+
+        const docRef = fire.myDoc(fire.db, "linkages", "mWzeSivijSUBGM7Goyxx5YHcZgz1");
+        fire.myOnSnapshot(docRef, async (doc) => {
+            // console.log("linkages", doc.data(), doc.id);
+            let linkagesList = {...doc.data()};
+            let listLinkagesKeys = Object.keys(linkagesList);
+
+            // let listOfLinkagesData = [];
+            console.log('linkagesList', linkagesList, Object.keys(linkagesList).length);
+            
+            if(!doc.exists()) {
+                console.log('There are no linked vehicle data.')
+            }
+            else {
+                if(Object.keys(linkagesList).length) {
+                    listLinkagesKeys.forEach(async (data, index) => {
+                        
+                        console.log('looping: ', linkagesList[data], index)
+
+                        const node = document.createElement('li');
+                        const attr = document.createAttribute('data-key');
+                        const attr2 = document.createAttribute('data-linkages');
+                        attr.value = data;
+                        attr2.value = '';
+                        node.setAttributeNode(attr);
+                        node.setAttributeNode(attr2);
+
+                        const textNode = document.createTextNode(`V-Linked #${index+1} | ${'VEHICLE_MODEL'} - ${data}, Shared
+                        Owner: ${"name here..."}`);
+                        node.appendChild(textNode);
+
+                        document.querySelector('#vehicle-list').appendChild(node);
+                    });
+                }
+            }
+        });
+    }
 
     function addEventsInList(vehicleData) {
         let dropdown = document.querySelector('.qr-code-dropdown-clickable');

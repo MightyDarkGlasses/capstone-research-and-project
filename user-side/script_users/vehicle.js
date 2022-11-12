@@ -53,7 +53,6 @@ jQuery(function() {
         });    
 
         $('.mobile-sidebar').css('opacity', 0);
-
     });
     // $('#add-new-vehicle').on($.modal.AFTER_CLOSE, () => {
     //     // $('.mobile-sidebar').css('opacity', 1);
@@ -115,14 +114,52 @@ jQuery(function() {
         async function checkExistingPlateNumber(plateNumber) {
             const docRefLogs = fire.myDoc(fire.db, "vehicle-information", fire.auth.currentUser.uid);
             const docSnap = await fire.myGetDoc(docRefLogs);
+            const listOfRegisteredVehicleData =  Object.keys(docSnap.data());
 
             console.log('Object.keys()', Object.keys(docSnap.data()));
             //Document logs exists?
-            if (docSnap.exists()) {
-                console.log('This user exists.');
+            if (listOfRegisteredVehicleData.includes(plateNumber)) {
+                console.log('This plate number ALREADY EXISTS.');
             }
             else {
-                console.log('This user does not exist.');
+                console.log('This is a UNIQUE PLATE NUMBER.');
+
+                console.log('getVehicleInformation()', );
+                console.log($('#vehicle-platenum').val().trim().replace(" ", "").toUpperCase());
+                if(checkExistingPlateNumber($('#vehicle-platenum').val().trim().replace(" ", "").toUpperCase()) === false) {
+                    console.log('checkExistingPlateNumber() true');
+                }
+                else {
+                    console.log('checkExistingPlateNumber() false');
+                }
+                const a = localStorage.getItem('vehicle-front'),
+                b = localStorage.getItem('vehicle-side'),
+                c = localStorage.getItem('vehicle-rear');
+                
+                const vehicleModel = 
+                console.log([a, b, c]);
+                if([a, b, c].includes(null)) {
+                    console.log('null');
+                    console.log('vehicle-model: ', $('#vehicle-model').val())
+                    console.log('vehicle-platenum: ', $('#vehicle-platenum').val())
+                }
+                else {
+                    console.log('all done!');
+                    console.log('Submitted');
+
+                    console.log('vehicle-model: ', $('#vehicle-model').val())
+                    console.log('vehicle-platenum: ', $('#vehicle-platenum').val())
+                    console.log('currentUser: ', fire.auth.currentUser.uid);
+
+                    const model = $('#vehicle-model').val();
+                    const plateNum = $('#vehicle-platenum').val();
+                    const vehicleLength = JSON.parse(localStorage.vehicleInformation)['vehicle_length'];
+
+                    // Create a new vehicle image data.
+                    createVehicleImageData(fire.auth.currentUser.uid, vehicleLength, plateNum, model);
+                    // generateVehicleQRCode(fire.auth.currentUser.uid, plateNum, 500, vehicleLength+1);
+                }
+
             }
             return Object.keys(docSnap.data());
         }
@@ -132,42 +169,10 @@ jQuery(function() {
             .then((result) => {
                 console.log('result', result);
             })
-        // console.log('getVehicleInformation()', );
-        // console.log($('#vehicle-platenum').val().trim().replace(" ", "").toUpperCase());
-        // if(checkExistingPlateNumber($('#vehicle-platenum').val().trim().replace(" ", "").toUpperCase()) === false) {
-        //     console.log('checkExistingPlateNumber() true');
-        // }
-        // else {
-        //     console.log('checkExistingPlateNumber() false');
-        // }
-        // const a = localStorage.getItem('vehicle-front'),
-        // b = localStorage.getItem('vehicle-side'),
-        // c = localStorage.getItem('vehicle-rear');
+
+
         
-        // const vehicleModel = 
-        // console.log([a, b, c]);
-        // if([a, b, c].includes(null)) {
-        //     console.log('null');
-        //     console.log('vehicle-model: ', $('#vehicle-model').val())
-        //     console.log('vehicle-platenum: ', $('#vehicle-platenum').val())
-        // }
-        // else {
-        //     console.log('all done!');
-        //     console.log('Submitted');
-
-        //     console.log('vehicle-model: ', $('#vehicle-model').val())
-        //     console.log('vehicle-platenum: ', $('#vehicle-platenum').val())
-        //     console.log('currentUser: ', fire.auth.currentUser.uid);
-
-        //     const model = $('#vehicle-model').val();
-        //     const plateNum = $('#vehicle-platenum').val();
-        //     const vehicleLength = JSON.parse(localStorage.vehicleInformation)['vehicle_length'];
-
-        //     // Create a new vehicle image data.
-        //     createVehicleImageData(fire.auth.currentUser.uid, vehicleLength, plateNum, model);
-        //     // generateVehicleQRCode(fire.auth.currentUser.uid, plateNum, 500, vehicleLength+1);
-        // }
-
+        
 
         async function createVehicleImageData(userId, vehicleLength, plateNumber, model) {
             let imageLinks = [];
@@ -380,7 +385,6 @@ jQuery(function() {
             // });
         }
 
-
         // function addNewVehicleInformation() {
         //     console.log('Check for qr code link')
         //     // Add the new vehicle information
@@ -433,8 +437,28 @@ jQuery(function() {
         });
     });
     $('#add-linkages-modal').on($.modal.CLOSE, () => {
-        console.log('closed linkages')
+        console.log('closed linkages');
     });
 
     }); //end of document.ready / jQuery function
+
+
+
+    $('#open-confirmation').on('click', () => {
+
+        $('#error-popup .modal-container-main').html(
+            `<p>You cannot add the plate number to your linkages</p>
+            <p class="note">Already registered on your vehicle list.</p>`
+            );
+        $("#error-popup").modal({
+            fadeDuration: 100
+        });
+    });
+
+
+
+
+    // Popup for linkages
+    
+    
 }   //end of pathname checking

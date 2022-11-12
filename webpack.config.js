@@ -1,6 +1,7 @@
 const path = require('path')                
 
 module.exports = {              // export the module
+  devtool: 'source-map',
   mode: 'development',          // mode, kung ano man
   entry: [
     './src/index.js',

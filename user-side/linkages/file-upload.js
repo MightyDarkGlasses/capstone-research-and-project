@@ -1,8 +1,10 @@
+// import QrScanner from "qr-scanner.min.js";
+
 document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
 	const dropZoneElement = inputElement.closest(".drop-zone");
 	// const dropZoneInfo = document.querySelector('.drop-zone-info');
-	// console.log('dropZoneElement:', dropZoneElement)
-	
+	console.log('dropZoneElement:', dropZoneElement)
+    
 
 	dropZoneElement.addEventListener("click", (e) => {
 		inputElement.click();
@@ -13,16 +15,7 @@ document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
 		if (inputElement.files.length) {
 			// console.log('file index change', e.target.getAttribute('name'))
 			updateThumbnail(dropZoneElement, inputElement.files[0]);
-
-			// console.log(dropZoneElement.classList.contains('drop-qr-code'));
-
-			// Prevent the execution when linkages class is clicked.
-			if(!dropZoneElement.classList.contains('drop-qr-code')) {
-				const doName = e.target.getAttribute('name');
-				doStoreVehicleData(inputElement.files[0], doName, `${doName}-filename`, `${doName}-filetype`);
-				document.querySelector(`.${doName}-drop-info`).style.display = 'none';	
-			}
-			// console.log(doName, doName+'-drop-info', document.querySelector(`.${doName}-drop-info`))
+			const doName = e.target.getAttribute('name');
 		}
 	});
 
@@ -47,8 +40,6 @@ document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
 			inputElement.files = e.dataTransfer.files;
 			updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
 			const doName = e.target.getAttribute('name');
-			doStoreVehicleData(e.dataTransfer.files[0], doName, `${doName}-filename`, `${doName}-filetype`);
-			document.querySelector(`.${doName}-drop-info`).style.display = 'none';
 		}
 		dropZoneElement.classList.remove("drop-zone--over");
 	});
@@ -108,14 +99,3 @@ function updateThumbnail(dropZoneElement, file) {
 		}
 	}
  */
-function doStoreVehicleData(file, vOrientation, vName, vType) {
-    const reader = new FileReader();  //convert the file into data URL.
-    reader.addEventListener("load", function() {
-    //   console.log(reader.result); //print the Blob
-      localStorage.setItem(vOrientation, reader.result); 
-      localStorage.setItem(vName, file.name);
-      localStorage.setItem(vType, file.type);
-    });
-    reader.readAsDataURL(file);
-}
-
