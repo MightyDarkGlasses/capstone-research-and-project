@@ -63,7 +63,7 @@ if(windowLocation.indexOf("user-home") > -1) {
                         vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
                         console.log('vehicleInformation:', vehi);
                         displayVehicleDropdownList();
-                        
+                        displayLinkagesDropdownList();
                         addEventsInList();
 
                         yesQRCode.style.display = 'flex';
@@ -146,6 +146,8 @@ if(windowLocation.indexOf("user-home") > -1) {
         fire.myOnSnapshot(docRef, async (doc) => {
             // console.log("linkages", doc.data(), doc.id);
             let linkagesList = {...doc.data()};
+
+            localStorage.setItem("linkages", linkagesList);
             let listLinkagesKeys = Object.keys(linkagesList);
 
             // let listOfLinkagesData = [];
@@ -171,6 +173,14 @@ if(windowLocation.indexOf("user-home") > -1) {
                         const textNode = document.createTextNode(`V-Linked #${index+1} | ${'VEHICLE_MODEL'} - ${data}, Shared
                         Owner: ${"name here..."}`);
                         node.appendChild(textNode);
+                        node.addEventListener('click', () => {
+                            console.log('linkages clicked: ', linkagesList);
+                            console.log(linkagesList[data].qr);
+
+                            myQRImage.setAttribute("src", linkagesList[data].qr);
+                            myQRImage2.setAttribute("src", linkagesList[data].qr);
+                            saveQR.setAttribute("onclick", `downloadImage("${linkagesList[data].qr}")`);
+                        });
 
                         document.querySelector('#vehicle-list').appendChild(node);
                     });
@@ -196,6 +206,11 @@ if(windowLocation.indexOf("user-home") > -1) {
             myLists.forEach((element, index) => {
                 element.addEventListener('click', (e) => {
                     // console.log('mydropselected:', e.target);
+
+                    if(element.hasAttribute('data-linkages')) {
+                        console.log('data-linkages');
+                    }
+
                     const selectedDataKey = element.getAttribute("data-key");
                     console.log('list element', element.getAttribute("data-key"), index);
                     popup.style.display = "none";
