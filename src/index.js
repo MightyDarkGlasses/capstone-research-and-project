@@ -11,6 +11,7 @@ import {
     query,      //Firestore queries, See line 62
     where,       //used by Firestore queries
     orderBy,      //used by Firestore queries, sorting data
+    limit,          // limit the number of documents
     serverTimestamp,  //create timestamp stored in Firebase
     getDoc,          //grab single document
     updateDoc,        //update single document
@@ -86,6 +87,7 @@ export const doIncrement = increment;
 export const doQuery = query;
 export const doWhere = where;
 export const doOrderBy = orderBy;
+export const doLimit = limit;
 
 
 // Authentication
