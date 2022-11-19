@@ -7,6 +7,7 @@ let windowLocation = window.location.pathname;
 //Check if I am on the user-account.html
 if(windowLocation.indexOf("user-account") > -1) {
 
+
     // document.querySelector('.fullname').innerText = localStorage.personal_info_name === '' ? '' : localStorage.personal_info_name;
     // document.querySelector('.category').innerText = 
     //     localStorage.user_type === '' || localStorage.user_type === undefined || localStorage.user_type === null

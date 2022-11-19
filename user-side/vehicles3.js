@@ -9,6 +9,19 @@ let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', () => {
 
 if(windowLocation.indexOf("user-vehicle") > -1) {
+
+    localStorage.removeItem("vehicle-front");
+    localStorage.removeItem("vehicle-front-filetype");
+    localStorage.removeItem("vehicle-front-filename");
+
+    localStorage.removeItem("vehicle-side");
+    localStorage.removeItem("vehicle-side-filetype");
+    localStorage.removeItem("vehicle-side-filename");
+
+    localStorage.removeItem("vehicle-rear");
+    localStorage.removeItem("vehicle-rear-filetype");
+    localStorage.removeItem("vehicle-rear-filename");
+    
     let logoutUser = document.querySelector('.util-icon-logout');
     logoutUser.addEventListener('click', () => {
         console.log("this is a test.");

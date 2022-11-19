@@ -8,13 +8,74 @@ let vehicleInformation = [];
 if(windowLocation.indexOf("user-home") > -1) {
 
 document.addEventListener('DOMContentLoaded', function() {
-
     // ##### Delete User
     // fire.getOnAuthStateChanged(fire.auth, (user) => {
     //     if (user) {
-    //         fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
-    //     } 
+    //         // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
+    //     }
     // });
+
+
+    // ### Display dropdown list of vehicles and linkages
+    fire.getOnAuthStateChanged(fire.auth, (user) => {
+        if (user) {
+
+            // Display user profile picture.
+
+            const profilePicture = displayProfile(fire.auth.currentUser.uid).then(evt => { 
+                console.log('evt.profilePicture: ' + evt);
+                document.querySelector("#profile-picture").setAttribute('src', evt[0]);
+                document.querySelector(".fullname").textContent = evt[1];
+            });
+            
+            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
+            console.log('fire auth: ', fire.auth.currentUser.uid);
+
+            // Did we download the file?
+            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
+            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
+                getVehicleInformation(docRefVehicle);
+            }
+            else {
+                // console.log("I did the else.")
+                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
+                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
+
+                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
+                // console.log('vehicleInformation:', vehi);
+                // displayVehicleDropdownList(vehi);
+                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
+                displayLinkagesDropdownList(fire.auth.currentUser.uid);
+                addEventsInList(vehi);  //re-add the events
+
+                // let noQrCode = document.querySelector('.no-qr-code');
+                let yesQRCode = document.querySelector('.yes-qr-code');
+                yesQRCode.style.display = 'flex';
+            }
+        } 
+    });
+
+    async function displayProfile(userUID) {
+        let picture = undefined;
+        const docAccountActivity = fire.myDoc(fire.db, "account-information", userUID);
+        const docVSnap = await fire.myGetDoc(docAccountActivity);
+        if (docVSnap.exists()) {
+            // Profile Image
+            if(docVSnap.data()['profile_pic'] === null) {
+                picture = 'https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fprofile-circled.svg?alt=media&token=5d172c80-6cc4-4ddd-841b-8877a6813010'
+            }
+            else {
+                picture = docVSnap.data()['profile_pic'];
+            }
+        }
+        else {
+            picture = "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fprofile-circled.svg?alt=media&token=5d172c80-6cc4-4ddd-841b-8877a6813010";
+        }
+        
+        return [picture, `${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`];
+    }
 
     // console.log("home1.js was called");
     // console.log("home1 auth test:", fire.auth);
@@ -79,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         // vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
                         // console.log('vehicleInformation:', vehi);
                         displayVehicleDropdownList();
-                        displayLinkagesDropdownList();
+                        displayLinkagesDropdownList(fire.auth.currentUser.uid);
                         addEventsInList(vehicleInformation);
 
                         yesQRCode.style.display = 'flex';
@@ -96,29 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // getVehicleInformation(docRefVehicle);
 
-    // Did we download the file?
-    // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
-    if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
-        getVehicleInformation(docRefVehicle);
-    }
-    else {
-        // console.log("I did the else.")
-        myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-        myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-        saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
-        // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
 
-        vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-        // console.log('vehicleInformation:', vehi);
-        // displayVehicleDropdownList(vehi);
-        displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
-        displayLinkagesDropdownList();
-        addEventsInList(vehi);  //re-add the events
-
-        // let noQrCode = document.querySelector('.no-qr-code');
-        let yesQRCode = document.querySelector('.yes-qr-code');
-        yesQRCode.style.display = 'flex';
-    }
 
     function displayVehicleDropdownList() {
         let listOfVehiclesTags = '';
@@ -157,7 +196,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }  //end of displayVehicleDropdownList
 
     var bool = true;
-    function displayLinkagesDropdownList() {
+    function displayLinkagesDropdownList(userUID) {
+        // userUID = 'mWzeSivijSUBGM7Goyxx5YHcZgz1';
         let dropdown = document.querySelector('.qr-code-dropdown-clickable');
         let popup = document.querySelector('.popup-dropdown');
         let buttons = document.querySelectorAll('.qr-code .qr-code-common-actions > button');
@@ -166,7 +206,9 @@ document.addEventListener('DOMContentLoaded', function() {
         let myLists = document.querySelectorAll('#vehicle-list > li');
         // console.log("displayLinkagesDropdownList")
         
-        const docRef = fire.myDoc(fire.db, "linkages", "mWzeSivijSUBGM7Goyxx5YHcZgz1");
+        const docRef = fire.myDoc(fire.db, "linkages", userUID);
+        // const docRef = fire.myDoc(fire.db, "linkages", userUID);
+
         fire.myOnSnapshot(docRef, async (doc) => {
             // console.log("linkages", doc.data(), doc.id);
             let linkagesList = {...doc.data()};
@@ -184,8 +226,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 if(Object.keys(linkagesList).length) {
                     listLinkagesKeys.forEach(async (data, index) => {
                         
-                        // console.log('looping: ', linkagesList[data], index)
+                        let ownerFullName = undefined;
+                        let ownerVehicleModel = undefined;
+                        await getAccountInformationOwner(userUID).then(evt => {
+                            // console.log('event: ', evt)
+                            ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
+                        });
+                        await getVehicleInformationModel(userUID).then(evt => {
+                            console.log('event: ', evt, data)
+                            ownerVehicleModel = evt[data]['model'][0];
+                        });
 
+                        // console.log('looping: ', linkagesList[data], index)
+                        console.log('linked index: ', doc.id)
                         const node = document.createElement('li');
                         const attr = document.createAttribute('data-key');
                         const attr2 = document.createAttribute('data-linkages');
@@ -194,8 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         node.setAttributeNode(attr);
                         node.setAttributeNode(attr2);
 
-                        const textNode = document.createTextNode(`V-Linked #${index+1} | ${'VEHICLE_MODEL'} - ${data}, Shared
-                        Owner: ${"name here..."}`);
+                        const textNode = document.createTextNode(`V-Linked #${index+1} | ${ownerVehicleModel} - ${data}, Shared Owner: ${ownerFullName}`);
                         node.appendChild(textNode);
                         node.addEventListener('click', () => {
                             // console.log('linkages clicked: ', linkagesList);
@@ -211,8 +263,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }); //end of snapshot
+    } // end of function
 
-        
+    async function getAccountInformationOwner(userUID) {
+        let vehicle = undefined;
+        const docVehicleActivity = fire.myDoc(fire.db, "account-information", userUID);
+        const docVSnap = await fire.myGetDoc(docVehicleActivity);
+        if (docVSnap.exists()) {
+            return {...docVSnap.data()};
+        }
+        else {
+            vehicle = "N/A";
+        }
+        return vehicle;
+    }
+    async function getVehicleInformationModel(userUID) {
+        let vehicle = undefined;
+        const docVehicleActivity = fire.myDoc(fire.db, "vehicle-information", userUID);
+        const docVSnap = await fire.myGetDoc(docVehicleActivity);
+        if (docVSnap.exists()) {
+            return {...docVSnap.data()};
+        }
+        else {
+            vehicle = "N/A";
+        }
+        return vehicle;
     }
 
     // Fixes need in non-refreshed list
