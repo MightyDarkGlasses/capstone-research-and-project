@@ -6,6 +6,16 @@ let qrCodes = {};
 let vehicleInformation = [];
 
 if(windowLocation.indexOf("user-home") > -1) {
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ##### Delete User
+    // fire.getOnAuthStateChanged(fire.auth, (user) => {
+    //     if (user) {
+    //         fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
+    //     } 
+    // });
+
     // console.log("home1.js was called");
     // console.log("home1 auth test:", fire.auth);
 
@@ -21,25 +31,31 @@ if(windowLocation.indexOf("user-home") > -1) {
     let myQRImage2 = document.querySelector(".modal-qrcode");
     let saveQR = document.querySelector(".saveQR");
     let vehi = '';
-    
 
-    
-    const auth = fire.auth;
-    console.log("home_currentUser:", auth);
+    fire.getOnAuthStateChanged(fire.auth, (user) => {
+        if (user) {
+            // console.log('current logged user id: ', fire.auth);
+            console.log('current logged user id: ', fire.auth.currentUser.uid);
+        } 
+        else {
+            // User is signed out
+            console.log('Error: User is not logged in');
+        }
+    });
     
     // function getVehicleInformation(element, collectionReference) {
     function getVehicleInformation(docReference) {
         fire.myOnSnapshot(docReference, (doc) => {
             // console.log("vehicleInformation", doc.data(), doc.id);
             let vehicleInformation = {...doc.data()};
-            console.log("vehicleInformation:", vehicleInformation);
+            // console.log("vehicleInformation:", vehicleInformation);
             let noQrCode = document.querySelector('.no-qr-code');
             let yesQRCode = document.querySelector('.yes-qr-code');
 
 
-            console.log('keys length: ', Object.keys(vehicleInformation).length > 1);
-            console.log('first data: ', Object.keys(vehicleInformation)[1]);
-            console.log(Object.keys(vehicleInformation)[1]);
+            // console.log('keys length: ', Object.keys(vehicleInformation).length > 1);
+            // console.log('first data: ', Object.keys(vehicleInformation)[1]);
+            // console.log(Object.keys(vehicleInformation)[1]);
 
             if(Object.keys(vehicleInformation).length > 1) {
                 const vehicleKeysLength = Object.keys(vehicleInformation).length;
@@ -48,9 +64,9 @@ if(windowLocation.indexOf("user-home") > -1) {
                     let currentKeyIteration = Object.keys(vehicleInformation)[index];
                     if("vehicle_length" !== Object.keys(vehicleInformation)[index]) {
                         // console.log("MyCurrentKey:", currentKeyIteration);
-                        console.log('MyfirstVehicleData: ', vehicleInformation[currentKeyIteration]);
-                        console.log('qrCode: ', vehicleInformation[currentKeyIteration]["qrCode"][0])
-                        console.log("modelVehicle:", vehicleInformation[currentKeyIteration]["model"][0]);
+                        // console.log('MyfirstVehicleData: ', vehicleInformation[currentKeyIteration]);
+                        // console.log('qrCode: ', vehicleInformation[currentKeyIteration]["qrCode"][0])
+                        // console.log("modelVehicle:", vehicleInformation[currentKeyIteration]["model"][0]);
 
                         localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation)); //store vehicle information
                         localStorage.setItem("qrCodePlaceholder", JSON.stringify(vehicleInformation[currentKeyIteration]["qrCode"][0]));
@@ -60,11 +76,11 @@ if(windowLocation.indexOf("user-home") > -1) {
                         myQRImage.setAttribute("src", qrCodeImageLink);
                         myQRImage2.setAttribute("src", qrCodeImageLink);
             
-                        vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-                        console.log('vehicleInformation:', vehi);
+                        // vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
+                        // console.log('vehicleInformation:', vehi);
                         displayVehicleDropdownList();
                         displayLinkagesDropdownList();
-                        addEventsInList();
+                        addEventsInList(vehicleInformation);
 
                         yesQRCode.style.display = 'flex';
                         break;
@@ -78,22 +94,22 @@ if(windowLocation.indexOf("user-home") > -1) {
         });
         
     }
-
+    // getVehicleInformation(docRefVehicle);
 
     // Did we download the file?
-    console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
+    // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
     if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
         getVehicleInformation(docRefVehicle);
     }
     else {
-        console.log("I did the else.")
+        // console.log("I did the else.")
         myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
         myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
         saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
         // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
 
         vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-        console.log('vehicleInformation:', vehi);
+        // console.log('vehicleInformation:', vehi);
         // displayVehicleDropdownList(vehi);
         displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
         displayLinkagesDropdownList();
@@ -112,19 +128,20 @@ if(windowLocation.indexOf("user-home") > -1) {
         let vehicleDataKeys = Object.keys(JSON.parse(localStorage.getItem("vehicleInformation")));
         let vehicleData = JSON.parse(localStorage.getItem("vehicleInformation"));
         // let vehicleData = Object.keys(JSON.parse(vehicle));
-        console.log('displayVehicleDropdownList');
-        console.log('displayVehicleDropdownList : vehicleData', vehicleData);
+        // console.log('displayVehicleDropdownList');
+        // console.log('displayVehicleDropdownList : vehicleData', vehicleData);
 
         for (let x=0; x<vehicleDataKeys.length; x++) {
             if(vehicleDataKeys[x] !== "vehicle_length") {
-                console.log('x:', vehicleDataKeys[x]);
+                // console.log('x:', vehicleDataKeys[x]);
                 // <li>Vehicle #1 | Toyota Raize 2022, Private</li>
                 //id="vehicle-list"
                 //vehicle-placeholder
                 listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
                 
                 if(x === 1) { //will be used for placeholder
-                    console.log('placeholder');
+                    // console.log('placeholder');
+
                     vehiclePlaceholder.innerHTML =  `<p>Vehicle #1</p>
                     <p>${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</p>`;
                     
@@ -139,9 +156,16 @@ if(windowLocation.indexOf("user-home") > -1) {
         return;
     }  //end of displayVehicleDropdownList
 
+    var bool = true;
     function displayLinkagesDropdownList() {
-        console.log("displayLinkagesDropdownList")
-
+        let dropdown = document.querySelector('.qr-code-dropdown-clickable');
+        let popup = document.querySelector('.popup-dropdown');
+        let buttons = document.querySelectorAll('.qr-code .qr-code-common-actions > button');
+        let getQRCodeImage = document.querySelector("qr-code-image img");
+        let myDropdown = document.querySelector('.popup-dropdown');
+        let myLists = document.querySelectorAll('#vehicle-list > li');
+        // console.log("displayLinkagesDropdownList")
+        
         const docRef = fire.myDoc(fire.db, "linkages", "mWzeSivijSUBGM7Goyxx5YHcZgz1");
         fire.myOnSnapshot(docRef, async (doc) => {
             // console.log("linkages", doc.data(), doc.id);
@@ -151,7 +175,7 @@ if(windowLocation.indexOf("user-home") > -1) {
             let listLinkagesKeys = Object.keys(linkagesList);
 
             // let listOfLinkagesData = [];
-            console.log('linkagesList', linkagesList, Object.keys(linkagesList).length);
+            // console.log('linkagesList', linkagesList, Object.keys(linkagesList).length);
             
             if(!doc.exists()) {
                 console.log('There are no linked vehicle data.')
@@ -160,7 +184,7 @@ if(windowLocation.indexOf("user-home") > -1) {
                 if(Object.keys(linkagesList).length) {
                     listLinkagesKeys.forEach(async (data, index) => {
                         
-                        console.log('looping: ', linkagesList[data], index)
+                        // console.log('looping: ', linkagesList[data], index)
 
                         const node = document.createElement('li');
                         const attr = document.createAttribute('data-key');
@@ -174,8 +198,8 @@ if(windowLocation.indexOf("user-home") > -1) {
                         Owner: ${"name here..."}`);
                         node.appendChild(textNode);
                         node.addEventListener('click', () => {
-                            console.log('linkages clicked: ', linkagesList);
-                            console.log(linkagesList[data].qr);
+                            // console.log('linkages clicked: ', linkagesList);
+                            // console.log(linkagesList[data].qr);
 
                             myQRImage.setAttribute("src", linkagesList[data].qr);
                             myQRImage2.setAttribute("src", linkagesList[data].qr);
@@ -186,8 +210,32 @@ if(windowLocation.indexOf("user-home") > -1) {
                     });
                 }
             }
-        });
+        }); //end of snapshot
+
+        
     }
+
+    // Fixes need in non-refreshed list
+    // document.querySelectorAll('#vehicle-list > li').forEach((e) => {
+    //     e.addEventListener('click', () => {
+    //         // console.log('clicked.', bool)
+    //         if(bool) {
+    //             document.querySelector('.popup-dropdown').style.display = "block";
+                
+    //             buttons.forEach((btn) => {
+    //                 btn.style.pointerEvents = "none";
+    //             });
+    //         }
+    //         else {
+    //             document.querySelector('.popup-dropdown').style.display = "none";
+        
+    //             buttons.forEach((btn) => {
+    //                 btn.style.pointerEvents = "auto";
+    //             });
+    //         }
+    //         bool = !bool;
+    //     });
+    // });
 
     function addEventsInList(vehicleData) {
         let dropdown = document.querySelector('.qr-code-dropdown-clickable');
@@ -196,11 +244,9 @@ if(windowLocation.indexOf("user-home") > -1) {
         let getQRCodeImage = document.querySelector("qr-code-image img");
         let myDropdown = document.querySelector('.popup-dropdown');
         let myLists = document.querySelectorAll('#vehicle-list > li');
-        let bool = true;
-        
-
         // console.log('addEventsInList vehicle', vehicle)
         // Events in List
+
         if(myDropdown !== null && myDropdown !== undefined) {
             let vehiclePlaceholder = document.getElementById("vehicle-placeholder");
             myLists.forEach((element, index) => {
@@ -218,30 +264,36 @@ if(windowLocation.indexOf("user-home") > -1) {
                     // vehiclePlaceholder.innerHTML =  `<p>Vehicle #${index+1}</p>
                     // <p>${vehi.registered_vehicle.model[index]}, ${vehi.registered_vehicle.use_types[index]}</p>`;
 
-                    console.log('selectedDataKey: ', selectedDataKey)
-                    console.log('vehicleData', vehicleData);
-                    console.log('selectedDataKey w/ data', vehicleData[selectedDataKey])
+                    // console.log('selectedDataKey: ', selectedDataKey)
+                    // console.log('vehicleData', vehicleData);
+                    // console.log('selectedDataKey w/ data', vehicleData[selectedDataKey])
+
+
+
+                    
                     vehiclePlaceholder.innerHTML = `<p>Vehicle #${index+1}</p>
                     ${vehicleData[selectedDataKey]["model"][0]}, ${vehicleData[selectedDataKey]["use_types"]}`;
 
-                    console.log('selectedDataKey: ', selectedDataKey)
-                    console.log('qrCodeImageLink: ', vehicleData)
+                    // console.log('selectedDataKey: ', selectedDataKey)
+                    // console.log('qrCodeImageLink: ', vehicleData)
                     const qrCodeImageLink = vehicleData[selectedDataKey]["qrCode"];
                     myQRImage.setAttribute("src", qrCodeImageLink);
                     myQRImage2.setAttribute("src", qrCodeImageLink);
                     saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
                     
-                    buttons.forEach((btn) => {
-                        btn.style.pointerEvents = "auto";
-                    });
-                    bool = !bool;
+                    
                 });
             });
+
+            buttons.forEach((btn) => {
+                btn.style.pointerEvents = "auto";
+            });
+            bool = !bool;
         }
 
         // Fixes need in non-refreshed list
         dropdown.addEventListener('click', () => {
-            // console.log('clicked.', bool)
+            
             if(bool) {
                 popup.style.display = "block";
                 
@@ -263,16 +315,24 @@ if(windowLocation.indexOf("user-home") > -1) {
 
     let logoutUser = document.querySelector('.util-icon-logout');
     logoutUser.addEventListener('click', () => {
-        console.log("this is a test.");
+        // console.log("this is a test.");
         localStorage.clear();
-        fire.logoutUser();
+        
+
+        // Add activity when user is logged out.
+        fire.addActivity(fire.auth.currentUser.uid, fire.listOfUserLevels[0], fire.listOfPages["auth_login"], fire.listOfActivityContext["user_logout"])
+        .then((success) => {
+            fire.logoutUser();
+            window.location = '../index.html';
+        });
+
         // window.location = '../login.html';
-        window.location = '../index.html';
     });
 
     // document.querySelector('.fullname').innerText = localStorage.personal_info_name === '' ? '' : localStorage.personal_info_name;
     // document.querySelector('.category').innerText = 
     //     localStorage.user_type === '' || localStorage.user_type === undefined || localStorage.user_type === null
     //      ? '' : localStorage.personal_info_name;
+});
 
 }

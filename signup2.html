@@ -22,12 +22,10 @@
     <!-- Boxicons CSS -->
     <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" href="images/icons/bxs-car-garage.svg" type="image/x-icon">
+
+    <link rel="stylesheet" href="styles/modal.css">
 </head>
 
-
-<style>
-
-</style>
 <body>
     <div class="container">
         <div class="sign-up-form-2">
@@ -56,7 +54,7 @@
                             <span class="drop-zone__prompt">Drop file here or click to upload</span>
                             <p>Front View</p>
                         </div>
-                        <input type="file" name="vehicle-front" class="drop-zone__input">
+                        <input type="file" accept=".jpg, .jpeg, .png, .gif" name="vehicle-front" class="drop-zone__input">
                     </div>
                     <!-- <div class="file-drag-area">
                         <div class="icon">
@@ -83,7 +81,7 @@
                             <span class="drop-zone__prompt">Drop file here or click to upload</span>
                             <p>Side View</p>
                         </div>
-                        <input type="file" name="vehicle-side" class="drop-zone__input">
+                        <input type="file" accept=".jpg, .jpeg, .png, .gif" name="vehicle-side" class="drop-zone__input">
                     </div>
                     <!-- <div class="file-drag-area">
                         <div class="icon">
@@ -110,7 +108,7 @@
                             <span class="drop-zone__prompt">Drop file here or click to upload</span>
                             <p>Rear View</p>
                         </div>
-                        <input type="file" name="vehicle-rear" class="drop-zone__input">
+                        <input type="file" accept=".jpg, .jpeg, .png, .gif" name="vehicle-rear" class="drop-zone__input">
                     </div>
                     <!-- <div class="file-drag-area">
                         <div class="icon">
@@ -141,15 +139,15 @@
                             <label >Vehicle Model</label>
                             <input type="text" class="vehicle-icon-1 vehicle-input" 
                             name="signup_vehiclemodel" id="signup-fname" required="required"
-                            pattern="{5,100}"
+                            pattern=".{5,100}"
                             title="You can only within the range of 5 - 100 character length.">
                         </div>
                         <div>
                             <label >Plate Number</label>
                             <input type="text" class="vehicle-icon-2 vehicle-input" 
                             name="signup_vehicleplatenum" id="signup-fname" required="required"
-                            pattern="{,10}"
-                            title="You can only enter a maximum of 10 characters.">
+                            pattern=".{5,10}"
+                            title="You can only within the range of 5 - 10 character length."">
                         </div>
                     </div>
                     <div class="navigation">
@@ -162,12 +160,36 @@
             </div> -->
         </div>
     </div>    
+
+
+    <!-- Modal HTML embedded directly into document -->
+    <div id="error-popup" class="modal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-container-header">
+                <div class="header-icon"></div>
+                <h3>Error</h3>
+            </div>
+            <div class="modal-container-main">
+                <!-- <p>The email is not yet verified.</p>
+                <p class="note"><i>Note: Check your <b>Spam</b> section to verify your email.</i></p> -->
+            </div>
+            <div class="modal-container-footer">
+                <a href="#" rel="modal:close">Close</a>
+            </div>
+        </div>
+    </div>
 </body>
 
 <!-- J1234678a -->
 
 <!-- <script src="script.js" defer></script> -->
 <!-- <script src="scripts/fileupload.js"></script> -->
+
+<script src="https://code.jquery.com/jquery-3.6.1.js" 
+integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous" defer></script>
+<!-- jQuery Modal -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js" defer></script>
 <script src="file_upload/main.js" defer></script>
 <script src="src/vehicle.js"></script>
 <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
@@ -182,6 +204,8 @@ let reg_goto_page2 = document.getElementById("reg-goto-page2");
 reg_goto_page2.addEventListener("click", () => {
     window.location = "signup1.html";
 });
+
+
 
 
 let reg_goto_3_skip = document.getElementById("reg-goto-3-skip");

@@ -1,32 +1,52 @@
 document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
 	const dropZoneElement = inputElement.closest(".drop-zone");
-	// const dropZoneInfo = document.querySelector('.drop-zone-info');
-	// console.log('dropZoneElement:', dropZoneElement)
-	
 
 	dropZoneElement.addEventListener("click", (e) => {
 		inputElement.click();
 	});
 
-	// Clicked
 	inputElement.addEventListener("change", (e) => {
 		if (inputElement.files.length) {
-			// console.log('file index change', e.target.getAttribute('name'))
-			updateThumbnail(dropZoneElement, inputElement.files[0]);
 
-			// console.log(dropZoneElement.classList.contains('drop-qr-code'));
+			
+			let fileName = inputElement.files[0].type;
+			console.log('explorer: ', fileName);
+			let allowedFileTypes = ["image/png", "image/jpeg", "image/gif", "image/jpeg"];
+			
+			let fileSize = ((inputElement.files[0].size/1024)/1024).toFixed(2); // MB
+			console.log(fileSize);
 
-			// Prevent the execution when linkages class is clicked.
-			if(!dropZoneElement.classList.contains('drop-qr-code')) {
-				const doName = e.target.getAttribute('name');
-				doStoreVehicleData(inputElement.files[0], doName, `${doName}-filename`, `${doName}-filetype`);
-				document.querySelector(`.${doName}-drop-info`).style.display = 'none';	
+			// Check if the file is within the allowed file size limit.
+			if(fileSize > 10.0) {
+				$('.modal-container-main').html(`
+				<p>Failure to drop an image<br/>Please upload a file within the alloted file size limit (10 MB).</p>
+				<br/>File size given: <b>${fileSize} MB</b>`);
+				$("#error-popup").modal({
+					fadeDuration: 100
+				});
 			}
-			// console.log(doName, doName+'-drop-info', document.querySelector(`.${doName}-drop-info`))
+			else {
+				if(allowedFileTypes.includes(fileName)) {
+					updateThumbnail(dropZoneElement, inputElement.files[0]);
+					
+					if(!dropZoneElement.classList.contains('drop-qr-code')) {
+						const doName = e.target.getAttribute('name');
+						doStoreVehicleData(inputElement.files[0], doName, `${doName}-filename`, `${doName}-filetype`);
+						document.querySelector(`.${doName}-drop-info`).style.display = 'none';	
+					}
+				}
+				else {
+					$('.modal-container-main').html(`
+					<p>Failure to drop an image<br/>Only <b>.jpeg, .png, and .gif</b> file extensions are allowed.</p>
+					<br/>File extension given: <b>${fileName}</b>`);
+					$("#error-popup").modal({
+						fadeDuration: 100
+					});
+				}
+			}
 		}
 	});
 
-	
 	dropZoneElement.addEventListener("dragover", (e) => {
 		e.preventDefault();
 		dropZoneElement.classList.add("drop-zone--over");
@@ -38,18 +58,47 @@ document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
 		});
 	});
 
-	// Dropped
 	dropZoneElement.addEventListener("drop", (e) => {
 		e.preventDefault();
 
-		if (e.dataTransfer.files.length) {
-			// console.log('file index dropped', e.target.getAttribute('name'))
-			inputElement.files = e.dataTransfer.files;
-			updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
-			const doName = e.target.getAttribute('name');
-			doStoreVehicleData(e.dataTransfer.files[0], doName, `${doName}-filename`, `${doName}-filetype`);
-			document.querySelector(`.${doName}-drop-info`).style.display = 'none';
+		let fileName = e.dataTransfer.files[0].type;
+		console.log('drop: ', fileName);
+		let allowedFileTypes = ["image/png", "image/jpeg", "image/gif", "image/jpeg"];
+
+		let fileSize = ((e.dataTransfer.files[0].size/1024)/1024).toFixed(2); // MB
+		console.log(fileSize);
+
+		// Check if the file is within the allowed file size limit.
+		if(fileSize > 10.0) {
+			$('.modal-container-main').html(`
+			<p>Failure to drop an image<br/>Please upload a file within the alloted file size limit (10 MB).</p>
+			<br/>File size given: <b>${fileSize} MB</b>`);
+			$("#error-popup").modal({
+				fadeDuration: 100
+			});
 		}
+		else {
+			// Check if the file is within the accepted file type.
+			if(allowedFileTypes.includes(fileName)) {
+				if (e.dataTransfer.files.length) {
+					inputElement.files = e.dataTransfer.files;
+					updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
+					
+					const doName = inputElement.getAttribute('name');
+					console.log('drop doName: ', doName);
+					doStoreVehicleData(e.dataTransfer.files[0], doName, `${doName}-filename`, `${doName}-filetype`);
+					document.querySelector(`.${doName}-drop-info`).style.display = 'none';
+				}
+			}
+			else {
+				$('.modal-container-main').html(`
+				<p>Failure to drop an image<br/>Only <b>.jpeg, .png, and .gif</b> file extensions are allowed.</p>
+				<br/>File extension given: <b>${fileName}</b>`);
+				$("#error-popup").modal({
+					fadeDuration: 100
+				});
+			}
+		} //end of if
 		dropZoneElement.classList.remove("drop-zone--over");
 	});
 

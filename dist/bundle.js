@@ -37304,9 +37304,11 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "addActivity": () => (/* binding */ addActivity),
 /* harmony export */   "auth": () => (/* binding */ auth),
 /* harmony export */   "createVehicleImageData": () => (/* binding */ createVehicleImageData),
 /* harmony export */   "db": () => (/* binding */ db),
+/* harmony export */   "deleteUserData": () => (/* binding */ deleteUserData),
 /* harmony export */   "doArrayRemove": () => (/* binding */ doArrayRemove),
 /* harmony export */   "doArrayUnion": () => (/* binding */ doArrayUnion),
 /* harmony export */   "doCreateUserWithEmailAndPassword": () => (/* binding */ doCreateUserWithEmailAndPassword),
@@ -37331,6 +37333,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getSignOut": () => (/* binding */ getSignOut),
 /* harmony export */   "getUpdateEmail": () => (/* binding */ getUpdateEmail),
 /* harmony export */   "getUpdatePassword": () => (/* binding */ getUpdatePassword),
+/* harmony export */   "listOfActivityContext": () => (/* binding */ listOfActivityContext),
+/* harmony export */   "listOfPages": () => (/* binding */ listOfPages),
+/* harmony export */   "listOfUserLevels": () => (/* binding */ listOfUserLevels),
 /* harmony export */   "logoutUser": () => (/* binding */ logoutUser),
 /* harmony export */   "myAddDoc": () => (/* binding */ myAddDoc),
 /* harmony export */   "myCollection": () => (/* binding */ myCollection),
@@ -37430,12 +37435,54 @@ const myUploadBytesResumable = firebase_storage__WEBPACK_IMPORTED_MODULE_3__.upl
 const doUploadBytesResumable = firebase_storage__WEBPACK_IMPORTED_MODULE_3__.uploadBytesResumable;
 const myGetDownloadURL = firebase_storage__WEBPACK_IMPORTED_MODULE_3__.getDownloadURL;
 const doVerifyBeforeUpdateEmail = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.verifyBeforeUpdateEmail;
-// Authentication check.
-// console.log(auth);
 
 
-/************** == LOGIN PAGE == ***************/
-/************** == LOGIN PAGE == ***************/
+// ##### User Level
+const listOfUserLevels = ["User", "Administrator", "Security Officer"];
+// ##### Contexts
+
+const listOfPages = {
+    "auth_login": "Login Page",
+    "auth_signup": "Signup Page",
+
+    "user_home": "Home",
+    "user_account": "My Account",
+    "user_vehicle": "Vehicle",
+    "user_logs": "Logs",
+    "user_announcement": "Announcements",
+
+    "security_home": "Home",
+    "security_account": "Account",
+    "security_logs": "Logs",
+
+    "admin_home": "Dashboard"
+}
+
+const listOfActivityContext = {
+    "user_created": "The account was created.",
+    "user_login": "User logged in.",
+    "user_logout": "User logged out",
+
+    "user_home": "Viewing the Home/Dashboard section",
+    "user_account": "Viewing the Account and Personal Information section",
+    "user_vehicle": "Viewing the Vehicles and Linkages section",
+    "user_logs": "Viewing the Logs section",
+    "user_annouce": "Viewing the Announcements section",
+
+    "user_update_account": "The user updated the account information.",
+    "user_update_personal": "The user updated its personal information.",
+    "user_update_email": "The user requested a new e-mail address",
+    "user_update_pass": "The asked for a new password",
+
+    "user_add_linkages": "The user added a new linked vehicle",
+    "user_add_vehicle": "The user registered a new vehicle",
+
+    "user_get_qr": "The user downloaded its QR code",
+};
+
+
+
+
 /************** == LOGIN PAGE == ***************/
 const loginForm = document.querySelector('.login'); 
 // let allImageLinks = []; //all of the images links are stored here to be uploaded ng Firebase
@@ -37538,7 +37585,19 @@ function checkCurrentLoggedUser() {
             //Store the logged user into the local storage for future reference
             localStorage.setItem('currentUser', JSON.stringify(user));
             localStorage.setItem('currentUserId', user.uid);
-
+            
+            // Add activity when user is logged in.
+            addActivity(user.uid, listOfUserLevels[0], listOfPages["auth_login"], listOfActivityContext["user_login"])
+            .then((success) => {
+                if(window.location.pathname.indexOf('capstone-research-and-project') > -1) {
+                    console.log('GitHub Hosting');
+                    window.location = 'user-side/user-home.html'
+                }
+                else {
+                    console.log('Localhost');
+                    window.location = "../user-side/user-home.html";
+                }
+            });
             
             if(window.location.pathname.indexOf('capstone-research-and-project') > -1) {
                 console.log('GitHub Hosting');
@@ -37580,7 +37639,7 @@ function logoutUser() {
     //Temporary only.
     (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.signOut)(auth)
         .then(() => {
-            console.log('check logged user:', fire.auth)
+            console.log('check logged user:', auth)
             console.log("User signed out.")
         }).catch((err) => {
             console.log("Logout error message: ", err);
@@ -37681,8 +37740,12 @@ async function createNewData(userUID, flag) {
         middle_name: getCookie("mname"),
         last_name: getCookie("lname"),
         phone_num: getCookie("phone"),
-        is_active: false,
-        createdAt: (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.serverTimestamp)()
+        is_activated: false,
+        email: getCookie("email"),
+        user_type: null,
+        createdAt: new Date().toString(),
+        last_login: new Date().toString(),
+        profile_pic: null,
     }).then(() => {
         console.log("Account Information was added in the collection");
     });
@@ -38078,6 +38141,90 @@ function sendVerification() {
     });
 }
 
+
+
+// ##### Add Activity
+async function addActivity(userUID, userLevel, currentPage, activityContext) {
+    // const dateMS = Date.now();
+
+    // const colRef = collection(db, "system-activity");
+    // const linkagesQuery = query(colRef, doLimit(10));
+    // const docsSnap = await getDoc(linkagesQuery);
+
+    const docRefActivity = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, "system-activity", userUID);
+    const docSnap = await (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getDoc)(docRefActivity);
+
+    console.log('exists: ', docSnap.exists())
+    //"system-activity" collection exists?
+    if (docSnap.exists()) {
+        const getIndex = docSnap.data().index;
+
+        console.log('getIndex', getIndex)
+        const activityData = {
+            [getIndex+1]: {
+                "timestamp": new Date().toString(),
+                "user_level": userLevel,
+                "current_page": currentPage,
+                "user_info": (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, '/account-information/' + userUID),
+                "uid": userUID,
+                "context": activityContext
+            },
+            index: (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.increment)(1)
+        };
+
+        await (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.updateDoc)((0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, "system-activity", userUID), activityData);
+    }
+    else {
+        console.log("Create a new log.");
+        // Create a new visitor logs information object.
+        const activityData = {
+            1: {
+                "timestamp": new Date().toString(),
+                "user_level": userLevel,
+                "current_page": currentPage,
+                "user_info": (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, '/account-information/' + userUID),
+                "uid": userUID,
+                "context": activityContext
+            },
+            index: 1
+        };
+        await (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.setDoc)(docRefActivity, activityData);
+    }
+} //end of function, addNewLogs
+
+
+async function deleteUserData(userUID) {
+    const auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.getAuth)();
+    const user = auth.currentUser;
+
+    console.log('delete auth', auth)
+    console.log('delete user', user)
+    ;(0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.deleteUser)(user).then(async () => {
+        // User deleted.
+
+        const delete1 = await (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.deleteDoc)((0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, "account-information", userUID));
+        const delete2 = await (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.deleteDoc)((0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, "vehicle-information", userUID));
+        const delete3 = await (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.deleteDoc)((0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, "linkages", userUID));
+        const delete4 = await (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.deleteDoc)((0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, "logs", userUID));
+        const delete5 = await (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.deleteDoc)((0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, "system-activity", userUID));
+        Promise.all([delete1,delete2,delete3,delete4,delete5]).then((e) => {
+            window.location = 'index.html';
+        });
+
+        console.log('Account deleted: ', error);
+    }).catch((error) => {
+        // An error ocurred
+        // ...
+        console.log('An error occured: ', error);
+    });
+
+    
+}
+
+
+// SbS0eEu4gyCWRiAGplLq 
+// addActivity("123", listOfUserLevels[0], listOfPages["auth_login"], listOfActivityContext["user_login"]);
+
 /***/ }),
 
 /***/ "./src/user.js":
@@ -38241,221 +38388,257 @@ __webpack_require__.r(__webpack_exports__);
 
 let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', async () => {
+// if(windowLocation.indexOf("user-announcement") > -1) {
+//     console.log('announcement5.js');
+    
+    
+//     const colRef = fire.myCollection(fire.db, "announcements");
+//     const linkagesQuery = fire.doQuery(colRef, fire.doLimit(10));
+//     const docsSnap = await fire.myGetDocs(linkagesQuery);
+
+//     let index = 0;
+//     docsSnap.forEach(async doc => {
+//         index = index + 1;
+//         let myData = doc.data();
+//         console.log("data", myData, index);
+        
+//         const announcements = document.querySelector('.announcements');
+//         const toggleAnnouncement = 
+//         `<div class="toggle-announcements" data="announcements-toggle${index}">
+//             <div class="toggle-title">
+//                 <div class="circle"></div>
+//                 <p>${myData.title}</p>
+//             </div>
+//             <div>
+//                 <p>${myData.posted_on}</p>
+//                 <div class="dropdown"></div>
+//             </div>
+//         </div>
+//         `;
+//         // announcements.insertAdjacentElement('beforeend', toggleAnnouncement);
+//         $('.announcements').append(toggleAnnouncement)
+
+//         let listOfSources = '';
+//         myData.sources.forEach((data) => {
+//             listOfSources += `<li><a href="${data}">${data}</a></li>`
+//         });
+        
+//         let listOfFiles = '';
+//         myData.files.forEach((data) => {
+//             let httpsReference = fire.myRef(fire.storage, data).name;
+//             listOfFiles += `<li><a href="${data}">${httpsReference}</a></li>`
+//         });
+//         console.log(listOfSources);
+//         console.log(listOfFiles);
+        
+//         const toggleAnnouncementDetails =
+//         `
+//         <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
+//             <div>
+//                 <div class="announcement-priority">${myData.priority}</div>
+//                 <p class="announcements-headline">${myData.title}</p>
+//                 <p class="announcements-timestamp">${myData.posted_on}</p>
+//                 <p class="announcements-person">${myData.posted_by}</p>
+//             </div>
+//             <div class="annoucements-main-container">
+//                 <div class="announcements-container">
+//                         <p class="announcements-message">
+//                             ${myData.message}
+//                         </p>
+//                         <ul class="announcements-sources">
+//                            ${listOfSources}
+//                         </ul>
+//                         <ul class="announcements-file">
+//                             ${listOfFiles}
+//                         </ul>
+//                 </div>
+//                 <div>
+//                     <img class="announcement-thumbnail" src="${myData.thumbnail}" alt="announcement thumbnail">
+//                 </div>
+//             </div>
+//         </div>
+//         `;
+//         $('.announcements').append(toggleAnnouncementDetails);
+
+
+        
+
+        
+//         // const priorityNode = document.createElement("div");
+//         // const priorityAttr = document.createAttribute("class");
+//         // priorityAttr.value = "announcement-priority";
+//         // priorityNode.setAttribute(priorityAttr);
+
+//         // const headlineNode = document.createElement("p");
+//         // const headlineAttr = document.createAttribute("class");
+//         // headlineAttr.value = "announcement-headline";
+//         // headlineNode.setAttribute(headlineAttr);
+
+//         // const timestampNode = document.createElement("p");
+//         // const timestampAttr = document.createAttribute("class");
+//         // timestampAttr.value = "announcement-timestamp";
+//         // timestampNode.setAttribute(timestampAttr);
+        
+//         // const personNode = document.createElement("p");
+//         // const personAttr = document.createAttribute("class");
+//         // personAttr.value = "announcement-person";
+//         // personNode.setAttribute(personAttr);
+
+//     });
+
+//     document.querySelectorAll('.toggle-announcements').forEach((element) => {
+//         // console.log(element.getAttribute("data"));
+//         const attr = element.getAttribute("data");
+//         console.log(attr);
+//         element.addEventListener('click', () => {
+//             $('#' + attr).animate({
+//                 opacity: "toggle",
+//                 height: "toggle"
+//             }, 250, 'linear', () => {
+//                 // animation complete
+//             });
+//             console.log(attr)
+//         });
+//     });
+
+//     $(`#announcements-toggle1`).on('click', () => {
+//         console.log(`toggle1`);
+//     });
+//     $(`#announcements-toggle2`).on('click', () => {
+//         console.log(`toggle2`);
+//     });
+// }
+
 if(windowLocation.indexOf("user-announcement") > -1) {
     console.log('announcement5.js');
-    
-    
-    const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "announcements");
+
+    const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information");
     const linkagesQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(10));
     const docsSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDocs(linkagesQuery);
 
     let index = 0;
+    let acc = [];
+
+    console.log('docsSnap: ', docsSnap.docs.length)
     docsSnap.forEach(async doc => {
+        let accInfo = {...doc.data()};
+        let objSize = Object.keys(accInfo).length;
+        // console.log('accountInformation', accInfo);
+        // console.log('accountInformation', accInfo.createdAt);
+
+        
+        accInfo['uid'] = doc.id;
+
+        // If middle name is undefined
+        console.log(accInfo['middle_name'])
+        if(typeof(accInfo['middle_name']) === 'undefined' || accInfo['middle_name'].trim() === '') {
+            console.log(true)
+            accInfo['middle_name'] = ' ';
+        }
+        else {
+            console.log(false)
+        }
+
+        accInfo['full_name'] = `${accInfo['last_name']} ${accInfo['first_name']} ${accInfo['middle_name'][0]}`;
+
+        accInfo['last_login'] = accInfo['last_login'] === '' ? '' : new Date(accInfo['last_login']).toLocaleString('en-GB',{timeZone:'UTC'});
+        accInfo['createdAt'] = accInfo['createdAt'] === '' ? '' : new Date(accInfo['createdAt']).toLocaleString('en-GB',{timeZone:'UTC'});
+
+
+        // If there is no user type given
+        // console.log(accInfo['user_type'])
+        if(typeof(accInfo['user_type']) === 'undefined' || accInfo['user_type'] === null) {
+            accInfo['user_type'] = 'N/A';
+        }
+        
+        // If there is no e-mail address added
+        // console.log(typeof(accInfo['email']) === 'undefined')
+        if(typeof(accInfo['email']) === 'undefined') {
+            accInfo['email'] = 'N/A';
+        }
+
+        accInfo['owned_vehicles'] = "";
+        accInfo['linkages'] = "";
+
+        await getVehicleInformationList(doc.id).then(evt => {
+            console.log('event: ', evt)
+            accInfo['owned_vehicles'] = evt;
+        });
+
+        await getLinkagesInformationList(doc.id).then(evt => {
+            console.log('event linkages: ', evt)
+            accInfo['linkages'] = evt;
+        });
+        
+        acc.push(accInfo);
         index = index + 1;
-        let myData = doc.data();
-        console.log("data", myData, index);
-        
-        const announcements = document.querySelector('.announcements');
-        const toggleAnnouncement = 
-        `<div class="toggle-announcements" data="announcements-toggle${index}">
-            <div class="toggle-title">
-                <div class="circle"></div>
-                <p>${myData.title}</p>
-            </div>
-            <div>
-                <p>${myData.posted_on}</p>
-                <div class="dropdown"></div>
-            </div>
-        </div>
-        `;
-        // announcements.insertAdjacentElement('beforeend', toggleAnnouncement);
-        $('.announcements').append(toggleAnnouncement)
+        accInfo['index'] = index;
+        // console.table(acc)
+        // console.log(index);
 
-        let listOfSources = '';
-        myData.sources.forEach((data) => {
-            listOfSources += `<li><a href="${data}">${data}</a></li>`
-        });
-        
-        let listOfFiles = '';
-        myData.files.forEach((data) => {
-            let httpsReference = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, data).name;
-            listOfFiles += `<li><a href="${data}">${httpsReference}</a></li>`
-        });
-        console.log(listOfSources);
-        console.log(listOfFiles);
-        
-        const toggleAnnouncementDetails =
-        `
-        <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
-            <div>
-                <div class="announcement-priority">${myData.priority}</div>
-                <p class="announcements-headline">${myData.title}</p>
-                <p class="announcements-timestamp">${myData.posted_on}</p>
-                <p class="announcements-person">${myData.posted_by}</p>
-            </div>
-            <div class="annoucements-main-container">
-                <div class="announcements-container">
-                        <p class="announcements-message">
-                            ${myData.message}
-                        </p>
-                        <ul class="announcements-sources">
-                           ${listOfSources}
-                        </ul>
-                        <ul class="announcements-file">
-                            ${listOfFiles}
-                        </ul>
-                </div>
-                <div>
-                    <img class="announcement-thumbnail" src="${myData.thumbnail}" alt="announcement thumbnail">
-                </div>
-            </div>
-        </div>
-        `;
-        $('.announcements').append(toggleAnnouncementDetails);
-
-
-        
-
-        
-        // const priorityNode = document.createElement("div");
-        // const priorityAttr = document.createAttribute("class");
-        // priorityAttr.value = "announcement-priority";
-        // priorityNode.setAttribute(priorityAttr);
-
-        // const headlineNode = document.createElement("p");
-        // const headlineAttr = document.createAttribute("class");
-        // headlineAttr.value = "announcement-headline";
-        // headlineNode.setAttribute(headlineAttr);
-
-        // const timestampNode = document.createElement("p");
-        // const timestampAttr = document.createAttribute("class");
-        // timestampAttr.value = "announcement-timestamp";
-        // timestampNode.setAttribute(timestampAttr);
-        
-        // const personNode = document.createElement("p");
-        // const personAttr = document.createAttribute("class");
-        // personAttr.value = "announcement-person";
-        // personNode.setAttribute(personAttr);
-
-    });
-
-    document.querySelectorAll('.toggle-announcements').forEach((element) => {
-        // console.log(element.getAttribute("data"));
-        const attr = element.getAttribute("data");
-        console.log(attr);
-        element.addEventListener('click', () => {
-            $('#' + attr).animate({
-                opacity: "toggle",
-                height: "toggle"
-            }, 250, 'linear', () => {
-                // animation complete
+        if(index == docsSnap.docs.length) {
+            // accInfo = []
+            jQuery((e) => {
+                console.log("DataTable");
+                $("#table_id").DataTable({
+                    scrollX: true,
+                    "data": acc,
+                    "columns": [
+                        {"data": "index"},
+                        {"data": "uid"},
+                        {"data": "full_name"},
+                        {"data": "user_type"},
+                        {"data": "email"},
+                        {"data": "phone_num"},
+                        {"data": "owned_vehicles"},
+                        {"data": "linkages"},
+                        {"data": "createdAt"},
+                    ]
+                });
             });
-            console.log(attr)
-        });
-    });
+        }
+    }); 
 
-    $(`#announcements-toggle1`).on('click', () => {
-        console.log(`toggle1`);
-    });
-    $(`#announcements-toggle2`).on('click', () => {
-        console.log(`toggle2`);
-    });
+    async function getVehicleInformationList(userUID) {
+        let vehicle = undefined;
+        const docVehicleActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", userUID);
+        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docVehicleActivity);
+        if (docVSnap.exists()) {
+            vehicle = Object.keys(docVSnap.data()).filter((e) => {
+                if(e !== 'vehicle_length') {
+                    return e;
+                }
+            }).toString();
+        }
+        else {
+            vehicle = "N/A";
+        }
+        return vehicle;
+    }
+    async function getLinkagesInformationList(userUID) {
+        let linkages = undefined;
 
-    // const colRef = fire.myCollection(fire.db, "vehicle-information");
-    // const vehicleQuery = fire.doQuery(colRef, fire.doLimit(10));
-
-    // const docsSnap = await fire.myGetDocs(vehicleQuery);
-    // docsSnap.forEach(doc => {
-    //     let myData = doc.data();
-    //     // console.log("data", doc.id);
-
-    //     const vehicle = Object.keys(myData)
-    //         .filter((key) => key !== "vehicle_length")
-    //         // .filter((key) => key.includes("Name"))
-    //         .reduce((obj, key) => {
-    //             return Object.assign(obj, {
-    //             [key]: myData[key]
-    //         });
-    //     }, 
-    //     {});
-
-    //     const vehicleKeys = Object.keys(myData);
-    //     vehicleKeys.forEach((data, index) => {
-    //         if(data !== "vehicle_length") {
-    //             const entry = vehicle[data];
-    //             // Id, Plate, Vehicle Owner, Vehicle(Images), Model, QR Code, Use Types
-
-    //             if(typeof(entry.qrCode) === "object") {
-    //                 entry.qrCode = entry.qrCode.toString();
-    //             }
-    //             console.table([doc.id, data, entry.images[1], entry.model[0], entry.qrCode, entry.use_types]);
-    //         }
-    //     });    
-    // });
-
-
+        const docVehicleActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "linkages", userUID);
+        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docVehicleActivity);
+        if (docVSnap.exists()) {
+            linkages = Object.keys(docVSnap.data()).filter((e) => {
+                if(e !== 'vehicle_length') {
+                    return e;
+                }
+            }).toString();
+        }
+        else {
+            linkages = "N/A";
+        }
+        return linkages;
+    }
     
-   
-    // var obje = {
-    //     "vehicle_length": 3,
-    //     "BBC3355": {
-    //         "model": [
-    //             "Random Model"
-    //         ],
-    //         "use_types": "Private",
-    //         "qrCode": "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F5%2FqrCode0.PNG?alt=media&token=d109a02f-03e0-4234-b964-0009a9894b21",
-    //         "images": [
-    //             "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F5%2FvehicleFront.PNG?alt=media&token=b6f7b624-d734-4d6e-837a-522b6deceaed",
-    //             "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F5%2FvehicleRear.PNG?alt=media&token=66171e74-42b2-46b4-a3a6-36335fb92d63"
-    //         ],
-    //         "createdAt": {
-    //             "seconds": 1666692389,
-    //             "nanoseconds": 158000000
-    //         }
-    //     },
-    //     "ABC2233": {
-    //         "qrCode": "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F2%2FqrCode0.PNG?alt=media&token=e3fc2013-2b7c-4ec1-ae25-69204f3805d5",
-    //         "use_types": "Private",
-    //         "images": [
-    //             "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F2%2FvehicleFront.PNG?alt=media&token=70a35486-83e3-48bf-a7c8-9d10ec5df8cb",
-    //             "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F2%2FvehicleRear.PNG?alt=media&token=e1960eae-438d-452c-b7eb-6e166d1ad326",
-    //             "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F2%2FvehicleSide.PNG?alt=media&token=fbaf17d8-2ee3-423d-a359-dc55edec783f"
-    //         ],
-    //         "createdAt": {
-    //             "seconds": 1666678432,
-    //             "nanoseconds": 113000000
-    //         },
-    //         "model": [
-    //             "Random Model"
-    //         ]
-    //     },
-    //     "BCD1133": {
-    //         "use_types": "Private",
-    //         "createdAt": {
-    //             "seconds": 1666691576,
-    //             "nanoseconds": 221000000
-    //         },
-    //         "model": [
-    //             "Random Model"
-    //         ],
-    //         "qrCode": "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F4%2FqrCode0.PNG?alt=media&token=30f6520b-7621-45f7-9701-c362565ba138",
-    //         "images": [
-    //             "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F4%2FvehicleFront.PNG?alt=media&token=ac97e8fa-9ab0-43d9-850d-2faebe628fe0",
-    //             "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F4%2FvehicleRear.PNG?alt=media&token=9746c04b-5737-4082-ac42-a049e27f9010",
-    //             "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/vehicle-information%2FwIHQmo7nxwceS5dBgma6ukXl2Py1%2F4%2FvehicleSide.png?alt=media&token=53c4277d-523a-4f77-9df6-4acae1414425"
-    //         ]
-    //     }
-    // }
     
-    // const vehicle = Object.keys(obje)
-    //     .filter((key) => key !== "vehicle_length")
-    //     .reduce((obj, key) => {
-    //         return Object.assign(obj, {
-    //         [key]: obje[key]
-    //     });
-    // }, 
-    // {});
 }
+
+
+
+
 });
 
 /***/ }),
@@ -38476,6 +38659,16 @@ let qrCodes = {};
 let vehicleInformation = [];
 
 if(windowLocation.indexOf("user-home") > -1) {
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ##### Delete User
+    // fire.getOnAuthStateChanged(fire.auth, (user) => {
+    //     if (user) {
+    //         fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
+    //     } 
+    // });
+
     // console.log("home1.js was called");
     // console.log("home1 auth test:", fire.auth);
 
@@ -38491,25 +38684,31 @@ if(windowLocation.indexOf("user-home") > -1) {
     let myQRImage2 = document.querySelector(".modal-qrcode");
     let saveQR = document.querySelector(".saveQR");
     let vehi = '';
-    
 
-    
-    const auth = _src_index__WEBPACK_IMPORTED_MODULE_0__.auth;
-    console.log("home_currentUser:", auth);
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
+        if (user) {
+            // console.log('current logged user id: ', fire.auth);
+            console.log('current logged user id: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+        } 
+        else {
+            // User is signed out
+            console.log('Error: User is not logged in');
+        }
+    });
     
     // function getVehicleInformation(element, collectionReference) {
     function getVehicleInformation(docReference) {
         _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(docReference, (doc) => {
             // console.log("vehicleInformation", doc.data(), doc.id);
             let vehicleInformation = {...doc.data()};
-            console.log("vehicleInformation:", vehicleInformation);
+            // console.log("vehicleInformation:", vehicleInformation);
             let noQrCode = document.querySelector('.no-qr-code');
             let yesQRCode = document.querySelector('.yes-qr-code');
 
 
-            console.log('keys length: ', Object.keys(vehicleInformation).length > 1);
-            console.log('first data: ', Object.keys(vehicleInformation)[1]);
-            console.log(Object.keys(vehicleInformation)[1]);
+            // console.log('keys length: ', Object.keys(vehicleInformation).length > 1);
+            // console.log('first data: ', Object.keys(vehicleInformation)[1]);
+            // console.log(Object.keys(vehicleInformation)[1]);
 
             if(Object.keys(vehicleInformation).length > 1) {
                 const vehicleKeysLength = Object.keys(vehicleInformation).length;
@@ -38518,9 +38717,9 @@ if(windowLocation.indexOf("user-home") > -1) {
                     let currentKeyIteration = Object.keys(vehicleInformation)[index];
                     if("vehicle_length" !== Object.keys(vehicleInformation)[index]) {
                         // console.log("MyCurrentKey:", currentKeyIteration);
-                        console.log('MyfirstVehicleData: ', vehicleInformation[currentKeyIteration]);
-                        console.log('qrCode: ', vehicleInformation[currentKeyIteration]["qrCode"][0])
-                        console.log("modelVehicle:", vehicleInformation[currentKeyIteration]["model"][0]);
+                        // console.log('MyfirstVehicleData: ', vehicleInformation[currentKeyIteration]);
+                        // console.log('qrCode: ', vehicleInformation[currentKeyIteration]["qrCode"][0])
+                        // console.log("modelVehicle:", vehicleInformation[currentKeyIteration]["model"][0]);
 
                         localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation)); //store vehicle information
                         localStorage.setItem("qrCodePlaceholder", JSON.stringify(vehicleInformation[currentKeyIteration]["qrCode"][0]));
@@ -38530,11 +38729,11 @@ if(windowLocation.indexOf("user-home") > -1) {
                         myQRImage.setAttribute("src", qrCodeImageLink);
                         myQRImage2.setAttribute("src", qrCodeImageLink);
             
-                        vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-                        console.log('vehicleInformation:', vehi);
+                        // vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
+                        // console.log('vehicleInformation:', vehi);
                         displayVehicleDropdownList();
                         displayLinkagesDropdownList();
-                        addEventsInList();
+                        addEventsInList(vehicleInformation);
 
                         yesQRCode.style.display = 'flex';
                         break;
@@ -38548,22 +38747,22 @@ if(windowLocation.indexOf("user-home") > -1) {
         });
         
     }
-
+    // getVehicleInformation(docRefVehicle);
 
     // Did we download the file?
-    console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
+    // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
     if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
         getVehicleInformation(docRefVehicle);
     }
     else {
-        console.log("I did the else.")
+        // console.log("I did the else.")
         myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
         myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
         saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
         // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
 
         vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-        console.log('vehicleInformation:', vehi);
+        // console.log('vehicleInformation:', vehi);
         // displayVehicleDropdownList(vehi);
         displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
         displayLinkagesDropdownList();
@@ -38582,19 +38781,20 @@ if(windowLocation.indexOf("user-home") > -1) {
         let vehicleDataKeys = Object.keys(JSON.parse(localStorage.getItem("vehicleInformation")));
         let vehicleData = JSON.parse(localStorage.getItem("vehicleInformation"));
         // let vehicleData = Object.keys(JSON.parse(vehicle));
-        console.log('displayVehicleDropdownList');
-        console.log('displayVehicleDropdownList : vehicleData', vehicleData);
+        // console.log('displayVehicleDropdownList');
+        // console.log('displayVehicleDropdownList : vehicleData', vehicleData);
 
         for (let x=0; x<vehicleDataKeys.length; x++) {
             if(vehicleDataKeys[x] !== "vehicle_length") {
-                console.log('x:', vehicleDataKeys[x]);
+                // console.log('x:', vehicleDataKeys[x]);
                 // <li>Vehicle #1 | Toyota Raize 2022, Private</li>
                 //id="vehicle-list"
                 //vehicle-placeholder
                 listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
                 
                 if(x === 1) { //will be used for placeholder
-                    console.log('placeholder');
+                    // console.log('placeholder');
+
                     vehiclePlaceholder.innerHTML =  `<p>Vehicle #1</p>
                     <p>${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</p>`;
                     
@@ -38609,9 +38809,16 @@ if(windowLocation.indexOf("user-home") > -1) {
         return;
     }  //end of displayVehicleDropdownList
 
+    var bool = true;
     function displayLinkagesDropdownList() {
-        console.log("displayLinkagesDropdownList")
-
+        let dropdown = document.querySelector('.qr-code-dropdown-clickable');
+        let popup = document.querySelector('.popup-dropdown');
+        let buttons = document.querySelectorAll('.qr-code .qr-code-common-actions > button');
+        let getQRCodeImage = document.querySelector("qr-code-image img");
+        let myDropdown = document.querySelector('.popup-dropdown');
+        let myLists = document.querySelectorAll('#vehicle-list > li');
+        // console.log("displayLinkagesDropdownList")
+        
         const docRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "linkages", "mWzeSivijSUBGM7Goyxx5YHcZgz1");
         _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(docRef, async (doc) => {
             // console.log("linkages", doc.data(), doc.id);
@@ -38621,7 +38828,7 @@ if(windowLocation.indexOf("user-home") > -1) {
             let listLinkagesKeys = Object.keys(linkagesList);
 
             // let listOfLinkagesData = [];
-            console.log('linkagesList', linkagesList, Object.keys(linkagesList).length);
+            // console.log('linkagesList', linkagesList, Object.keys(linkagesList).length);
             
             if(!doc.exists()) {
                 console.log('There are no linked vehicle data.')
@@ -38630,7 +38837,7 @@ if(windowLocation.indexOf("user-home") > -1) {
                 if(Object.keys(linkagesList).length) {
                     listLinkagesKeys.forEach(async (data, index) => {
                         
-                        console.log('looping: ', linkagesList[data], index)
+                        // console.log('looping: ', linkagesList[data], index)
 
                         const node = document.createElement('li');
                         const attr = document.createAttribute('data-key');
@@ -38644,8 +38851,8 @@ if(windowLocation.indexOf("user-home") > -1) {
                         Owner: ${"name here..."}`);
                         node.appendChild(textNode);
                         node.addEventListener('click', () => {
-                            console.log('linkages clicked: ', linkagesList);
-                            console.log(linkagesList[data].qr);
+                            // console.log('linkages clicked: ', linkagesList);
+                            // console.log(linkagesList[data].qr);
 
                             myQRImage.setAttribute("src", linkagesList[data].qr);
                             myQRImage2.setAttribute("src", linkagesList[data].qr);
@@ -38656,8 +38863,32 @@ if(windowLocation.indexOf("user-home") > -1) {
                     });
                 }
             }
-        });
+        }); //end of snapshot
+
+        
     }
+
+    // Fixes need in non-refreshed list
+    // document.querySelectorAll('#vehicle-list > li').forEach((e) => {
+    //     e.addEventListener('click', () => {
+    //         // console.log('clicked.', bool)
+    //         if(bool) {
+    //             document.querySelector('.popup-dropdown').style.display = "block";
+                
+    //             buttons.forEach((btn) => {
+    //                 btn.style.pointerEvents = "none";
+    //             });
+    //         }
+    //         else {
+    //             document.querySelector('.popup-dropdown').style.display = "none";
+        
+    //             buttons.forEach((btn) => {
+    //                 btn.style.pointerEvents = "auto";
+    //             });
+    //         }
+    //         bool = !bool;
+    //     });
+    // });
 
     function addEventsInList(vehicleData) {
         let dropdown = document.querySelector('.qr-code-dropdown-clickable');
@@ -38666,11 +38897,9 @@ if(windowLocation.indexOf("user-home") > -1) {
         let getQRCodeImage = document.querySelector("qr-code-image img");
         let myDropdown = document.querySelector('.popup-dropdown');
         let myLists = document.querySelectorAll('#vehicle-list > li');
-        let bool = true;
-        
-
         // console.log('addEventsInList vehicle', vehicle)
         // Events in List
+
         if(myDropdown !== null && myDropdown !== undefined) {
             let vehiclePlaceholder = document.getElementById("vehicle-placeholder");
             myLists.forEach((element, index) => {
@@ -38688,30 +38917,36 @@ if(windowLocation.indexOf("user-home") > -1) {
                     // vehiclePlaceholder.innerHTML =  `<p>Vehicle #${index+1}</p>
                     // <p>${vehi.registered_vehicle.model[index]}, ${vehi.registered_vehicle.use_types[index]}</p>`;
 
-                    console.log('selectedDataKey: ', selectedDataKey)
-                    console.log('vehicleData', vehicleData);
-                    console.log('selectedDataKey w/ data', vehicleData[selectedDataKey])
+                    // console.log('selectedDataKey: ', selectedDataKey)
+                    // console.log('vehicleData', vehicleData);
+                    // console.log('selectedDataKey w/ data', vehicleData[selectedDataKey])
+
+
+
+                    
                     vehiclePlaceholder.innerHTML = `<p>Vehicle #${index+1}</p>
                     ${vehicleData[selectedDataKey]["model"][0]}, ${vehicleData[selectedDataKey]["use_types"]}`;
 
-                    console.log('selectedDataKey: ', selectedDataKey)
-                    console.log('qrCodeImageLink: ', vehicleData)
+                    // console.log('selectedDataKey: ', selectedDataKey)
+                    // console.log('qrCodeImageLink: ', vehicleData)
                     const qrCodeImageLink = vehicleData[selectedDataKey]["qrCode"];
                     myQRImage.setAttribute("src", qrCodeImageLink);
                     myQRImage2.setAttribute("src", qrCodeImageLink);
                     saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
                     
-                    buttons.forEach((btn) => {
-                        btn.style.pointerEvents = "auto";
-                    });
-                    bool = !bool;
+                    
                 });
             });
+
+            buttons.forEach((btn) => {
+                btn.style.pointerEvents = "auto";
+            });
+            bool = !bool;
         }
 
         // Fixes need in non-refreshed list
         dropdown.addEventListener('click', () => {
-            // console.log('clicked.', bool)
+            
             if(bool) {
                 popup.style.display = "block";
                 
@@ -38733,17 +38968,25 @@ if(windowLocation.indexOf("user-home") > -1) {
 
     let logoutUser = document.querySelector('.util-icon-logout');
     logoutUser.addEventListener('click', () => {
-        console.log("this is a test.");
+        // console.log("this is a test.");
         localStorage.clear();
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.logoutUser();
+        
+
+        // Add activity when user is logged out.
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.addActivity(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfUserLevels[0], _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfPages.auth_login, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfActivityContext.user_logout)
+        .then((success) => {
+            _src_index__WEBPACK_IMPORTED_MODULE_0__.logoutUser();
+            window.location = '../index.html';
+        });
+
         // window.location = '../login.html';
-        window.location = '../index.html';
     });
 
     // document.querySelector('.fullname').innerText = localStorage.personal_info_name === '' ? '' : localStorage.personal_info_name;
     // document.querySelector('.category').innerText = 
     //     localStorage.user_type === '' || localStorage.user_type === undefined || localStorage.user_type === null
     //      ? '' : localStorage.personal_info_name;
+});
 
 }
 
@@ -38823,6 +39066,8 @@ if(windowLocation.indexOf("user-logs") > -1) {
                 }
             });
 
+            console.log('logsInformation', logsInformation)
+            
             jQuery((e) => {
                 $("#table_id").DataTable({
                     scrollX: true,
@@ -38853,11 +39098,59 @@ if(windowLocation.indexOf("user-logs") > -1) {
         }); //end of snapshot function
     }
 
+    async function displayActivityLogs(currentLoggedUserId) {
+        const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "system-activity");
+        const activityQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(10));
+        const docsSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDocs(activityQuery);
+
+        let index = 0;
+        let activity = [];
+        docsSnap.forEach(async doc => {
+            index = index + 1;
+            let activityInformation = {...doc.data()};
+            
+            let objSize = Object.keys(activityInformation).length;
+            Object.entries(activityInformation).map((element, index) => {
+                if(objSize-1 !== index) {
+                    element[1]['timestamp'] = element[1]['timestamp'] === '' ? '' : new Date(element[1]['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
+                    element[1]["id"] = index;
+                    activity.push(element[1]);
+                }
+            });
+
+            
+
+            // console.log('activityInformation', activityInformation);
+            console.table(activity);
+        });
+
+        jQuery((e) => {
+            $("#table_id_activity").DataTable({
+                scrollX: true,
+                "pageLength": 10,
+                "data": activity,
+                "columns": [
+                    {"data": "id"},
+                    {"data": "uid"},
+                    {"data": "user_level"},
+                    {"data": "timestamp"},
+                    {"data": "current_page"},
+                    {"data": "context"},
+                ],
+                "columnDefs": [{
+                    "defaultContent": "-",
+                    "targets": "_all"
+                }]
+            });
+        }); //jQuery
+    }
+
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
         if (user) {
             // console.log('current logged user id: ', fire.auth);
             // console.log('current logged user id: ', fire.auth.currentUser.uid);
-            displayLogs(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+            // displayLogs(fire.auth.currentUser.uid);
+            displayActivityLogs(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid); //display logs in the table
         } 
         else {
             // User is signed out

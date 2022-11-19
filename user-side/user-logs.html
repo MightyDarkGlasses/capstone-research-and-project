@@ -52,6 +52,26 @@
         #table_id_info, #table_id_paginate > a{
             color: white !important;
         }
+
+
+
+     </style>
+
+     <!-- Style for Activity Table -->
+     <style>
+          #activity-content {
+               color: white;
+          }
+          
+          #table_id_length > label,
+          #table_id_filter, #table_id_filter > label > input,
+          #table_id_length > label > select{
+               color: white !important;
+          }
+          #table_id_info, #table_id_paginate > a{
+               color: white !important;
+          }
+          /* table_id_activity */
      </style>
      <body>
           <div class="container user-main">
@@ -186,6 +206,23 @@
                                         <th>Middle Name</th>
                                         <th>Plate Number</th>
                                         <th>Vehicle Model</th>
+                                   </tr>
+                              </thead>
+                         </table>
+                    </div>
+                    <div id="content" class="content user-content">
+                         <table
+                              id="table_id_activity"
+                              class="display"
+                              style="width: 100%">
+                              <thead>
+                                   <tr>
+                                        <th>#</th>
+                                        <th>ID</th>
+                                        <th>User Level</th>
+                                        <th>Activity Date</th>
+                                        <th>Event Page</th>
+                                        <th>Context</th>
                                    </tr>
                               </thead>
                          </table>

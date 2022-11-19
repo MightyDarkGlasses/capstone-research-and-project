@@ -35,7 +35,8 @@ import {
     updateEmail,
     updatePassword,
     sendPasswordResetEmail,
-    verifyBeforeUpdateEmail
+    verifyBeforeUpdateEmail,
+    deleteUser,
 } from 'firebase/auth';
 
 
@@ -111,12 +112,54 @@ export const myUploadBytesResumable = uploadBytesResumable;
 export const doUploadBytesResumable = uploadBytesResumable;
 export const myGetDownloadURL = getDownloadURL;
 export const doVerifyBeforeUpdateEmail = verifyBeforeUpdateEmail;
-// Authentication check.
-// console.log(auth);
 
 
-/************** == LOGIN PAGE == ***************/
-/************** == LOGIN PAGE == ***************/
+// ##### User Level
+export const listOfUserLevels = ["User", "Administrator", "Security Officer"];
+// ##### Contexts
+
+export const listOfPages = {
+    "auth_login": "Login Page",
+    "auth_signup": "Signup Page",
+
+    "user_home": "Home",
+    "user_account": "My Account",
+    "user_vehicle": "Vehicle",
+    "user_logs": "Logs",
+    "user_announcement": "Announcements",
+
+    "security_home": "Home",
+    "security_account": "Account",
+    "security_logs": "Logs",
+
+    "admin_home": "Dashboard"
+}
+
+export const listOfActivityContext = {
+    "user_created": "The account was created.",
+    "user_login": "User logged in.",
+    "user_logout": "User logged out",
+
+    "user_home": "Viewing the Home/Dashboard section",
+    "user_account": "Viewing the Account and Personal Information section",
+    "user_vehicle": "Viewing the Vehicles and Linkages section",
+    "user_logs": "Viewing the Logs section",
+    "user_annouce": "Viewing the Announcements section",
+
+    "user_update_account": "The user updated the account information.",
+    "user_update_personal": "The user updated its personal information.",
+    "user_update_email": "The user requested a new e-mail address",
+    "user_update_pass": "The asked for a new password",
+
+    "user_add_linkages": "The user added a new linked vehicle",
+    "user_add_vehicle": "The user registered a new vehicle",
+
+    "user_get_qr": "The user downloaded its QR code",
+};
+
+
+
+
 /************** == LOGIN PAGE == ***************/
 const loginForm = document.querySelector('.login'); 
 // let allImageLinks = []; //all of the images links are stored here to be uploaded ng Firebase
@@ -219,7 +262,19 @@ function checkCurrentLoggedUser() {
             //Store the logged user into the local storage for future reference
             localStorage.setItem('currentUser', JSON.stringify(user));
             localStorage.setItem('currentUserId', user.uid);
-
+            
+            // Add activity when user is logged in.
+            addActivity(user.uid, listOfUserLevels[0], listOfPages["auth_login"], listOfActivityContext["user_login"])
+            .then((success) => {
+                if(window.location.pathname.indexOf('capstone-research-and-project') > -1) {
+                    console.log('GitHub Hosting');
+                    window.location = 'user-side/user-home.html'
+                }
+                else {
+                    console.log('Localhost');
+                    window.location = "../user-side/user-home.html";
+                }
+            });
             
             if(window.location.pathname.indexOf('capstone-research-and-project') > -1) {
                 console.log('GitHub Hosting');
@@ -261,7 +316,7 @@ export function logoutUser() {
     //Temporary only.
     signOut(auth)
         .then(() => {
-            console.log('check logged user:', fire.auth)
+            console.log('check logged user:', auth)
             console.log("User signed out.")
         }).catch((err) => {
             console.log("Logout error message: ", err);
@@ -362,8 +417,12 @@ async function createNewData(userUID, flag) {
         middle_name: getCookie("mname"),
         last_name: getCookie("lname"),
         phone_num: getCookie("phone"),
-        is_active: false,
-        createdAt: serverTimestamp()
+        is_activated: false,
+        email: getCookie("email"),
+        user_type: null,
+        createdAt: new Date().toString(),
+        last_login: new Date().toString(),
+        profile_pic: null,
     }).then(() => {
         console.log("Account Information was added in the collection");
     });
@@ -758,3 +817,87 @@ function sendVerification() {
         alert("User verification was sent.")
     });
 }
+
+
+
+// ##### Add Activity
+export async function addActivity(userUID, userLevel, currentPage, activityContext) {
+    // const dateMS = Date.now();
+
+    // const colRef = collection(db, "system-activity");
+    // const linkagesQuery = query(colRef, doLimit(10));
+    // const docsSnap = await getDoc(linkagesQuery);
+
+    const docRefActivity = doc(db, "system-activity", userUID);
+    const docSnap = await getDoc(docRefActivity);
+
+    console.log('exists: ', docSnap.exists())
+    //"system-activity" collection exists?
+    if (docSnap.exists()) {
+        const getIndex = docSnap.data().index;
+
+        console.log('getIndex', getIndex)
+        const activityData = {
+            [getIndex+1]: {
+                "timestamp": new Date().toString(),
+                "user_level": userLevel,
+                "current_page": currentPage,
+                "user_info": doc(db, '/account-information/' + userUID),
+                "uid": userUID,
+                "context": activityContext
+            },
+            index: increment(1)
+        };
+
+        await updateDoc(doc(db, "system-activity", userUID), activityData);
+    }
+    else {
+        console.log("Create a new log.");
+        // Create a new visitor logs information object.
+        const activityData = {
+            1: {
+                "timestamp": new Date().toString(),
+                "user_level": userLevel,
+                "current_page": currentPage,
+                "user_info": doc(db, '/account-information/' + userUID),
+                "uid": userUID,
+                "context": activityContext
+            },
+            index: 1
+        };
+        await setDoc(docRefActivity, activityData);
+    }
+} //end of function, addNewLogs
+
+
+export async function deleteUserData(userUID) {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    console.log('delete auth', auth)
+    console.log('delete user', user)
+    deleteUser(user).then(async () => {
+        // User deleted.
+
+        const delete1 = await deleteDoc(doc(db, "account-information", userUID));
+        const delete2 = await deleteDoc(doc(db, "vehicle-information", userUID));
+        const delete3 = await deleteDoc(doc(db, "linkages", userUID));
+        const delete4 = await deleteDoc(doc(db, "logs", userUID));
+        const delete5 = await deleteDoc(doc(db, "system-activity", userUID));
+        Promise.all([delete1,delete2,delete3,delete4,delete5]).then((e) => {
+            window.location = 'index.html';
+        });
+
+        console.log('Account deleted: ', error);
+    }).catch((error) => {
+        // An error ocurred
+        // ...
+        console.log('An error occured: ', error);
+    });
+
+    
+}
+
+
+// SbS0eEu4gyCWRiAGplLq 
+// addActivity("123", listOfUserLevels[0], listOfPages["auth_login"], listOfActivityContext["user_login"]);
