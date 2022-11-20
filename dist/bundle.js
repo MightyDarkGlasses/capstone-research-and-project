@@ -37296,6 +37296,67 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
 
 /***/ }),
 
+/***/ "./src/forgot_password.js":
+/*!********************************!*\
+  !*** ./src/forgot_password.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _src_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../src/index */ "./src/index.js");
+
+
+
+
+let windowLocation = window.location.pathname;
+window.addEventListener('DOMContentLoaded', async () => {
+if(windowLocation.indexOf("forgot_password.html") > -1) {
+
+    document.querySelector(".forgot").addEventListener("submit",  (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.doSignInWithEmailAndPassword(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, 
+            $('#forgot_email').val(), 'password')
+        .then((e) => {
+            //pass;
+        }).catch((error) => {
+            console.log('error: ', error);
+            switch (error.code) {
+                case 'auth/wrong-password': {
+                    $('.modal-container-main').html(`<p>A reset email link is sent.<br/>You can check it on the <b>Spam</b> section.</p>`);
+                    $('.modal-container-title').html('Success');
+                    $('.modal-container-header').css({
+                        'backgroundColor': '#ef7900'
+                    })
+                    $("#error-popup").modal({
+                        fadeDuration: 100
+                    });
+                    console.log('signup err code: ', error.code)
+                    console.log('signup err message: ', error.message);
+                    break;
+                }
+                case 'auth/user-not-found': {
+                    $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
+                    $('.modal-container-title').html('Error');
+                    $('.modal-container-header').css({
+                        'backgroundColor': 'red'
+                    })
+                    $("#error-popup").modal({
+                        fadeDuration: 100
+                    });
+                    break;
+                }
+            }
+        });
+    });
+
+}
+});
+
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -43601,6 +43662,7 @@ const unwrap = (value) => reverseTransformCache.get(value);
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
 /******/ 	__webpack_require__("./src/index.js");
 /******/ 	__webpack_require__("./src/user.js");
+/******/ 	__webpack_require__("./src/forgot_password.js");
 /******/ 	__webpack_require__("./user-side/home1.js");
 /******/ 	__webpack_require__("./user-side/myaccount2.js");
 /******/ 	__webpack_require__("./user-side/vehicles3.js");

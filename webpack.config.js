@@ -6,6 +6,7 @@ module.exports = {              // export the module
   entry: [
     './src/index.js',
     './src/user.js',
+    './src/forgot_password.js',
     './user-side/home1.js',
     './user-side/myaccount2.js',
     './user-side/vehicles3.js',
