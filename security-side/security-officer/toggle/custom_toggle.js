@@ -25,6 +25,20 @@ $(document).ready(function(){
             checkbox.parent().children('.label').text('Off')
         }
     }
+
+
+    $("#autocmp").autocomplete({
+        source: [
+            { label: "Mathematics", value: "MATHS" },
+            { label: "Chemistry", value: "CHEM" },
+            { label: "Physics", value: "PHY" },
+            { label: "English", value: "ENG" },
+            { label: "Environmental Science", value: "EVS" }
+        ],
+        minLength: 5,
+    });
+    console.log('Autocomplete done.')
+
     // else {
 
     // }

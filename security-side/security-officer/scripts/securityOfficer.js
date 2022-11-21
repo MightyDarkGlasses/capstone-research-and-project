@@ -13,6 +13,9 @@ function loadSecurityOfficerResult() {
 }
 
 jQuery(function() {
+
+    
+
   $('#account-id').on('click', (e) => {
     console.log('My Account');
     loadMyAccount();
@@ -35,7 +38,7 @@ jQuery(function() {
 
     // $('#ex2').css('display', 'grid');
   });
-})
+});
 
 
 
@@ -138,6 +141,20 @@ if (query.matches) {
   SearchHide.slideToggle();
 }
 
+
+
+
+// $(function () {
+//     $("#autocmp").autocomplete({
+//       source: [
+//         { label: "Mathematics", value: "MATHS" },
+//         { label: "Chemistry", value: "CHEM" },
+//         { label: "Physics", value: "PHY" },
+//         { label: "English", value: "ENG" },
+//         { label: "Environmental Science", value: "EVS" },
+//       ],
+//     });
+// });
 
 // document.addEventListener("DOMContentLoaded", (e) => {
 //   // let inputs = document.querySelector('select');

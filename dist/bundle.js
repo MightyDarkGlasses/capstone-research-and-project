@@ -36547,6 +36547,79 @@ __webpack_require__.r(__webpack_exports__);
 if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     console.log('QrScanner qr.js');
 
+        // Autocomplete data
+
+        let index = 0;
+        let availableTags = [];
+        async function getVisitorLogsList() {
+            const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "visitor-logs");
+            const visitorLogsQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(10));
+            const docsSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDocs(visitorLogsQuery);
+            
+
+            // var availableTags = [
+            //     { label: "Mathematics", value: "MATHS" },
+            //     { label: "Chemistry", value: "CHEM" },
+            //     { label: "Physics", value: "PHY" },
+            //     { label: "English", value: "ENG" },
+            //     { label: "Environmental Science", value: "EVS" }
+            // ];
+
+            
+            docsSnap.forEach(async doc => {
+                let visitorInfo = doc.data();
+                delete visitorInfo['logs_length'];
+                
+                console.log('plateNumber: ', doc.id);
+                Object.keys(visitorInfo).forEach((element) => {
+                    // console.log('visitorInfo: ', visitorInfo);
+                    let fullname = `${visitorInfo[element].last_name.trim()}, ${visitorInfo[element].first_name.trim()} ${visitorInfo[element].middle_name.trim()}`;
+                    // console.log('fname: ', visitorInfo[element].first_name.trim());
+                    // console.log('lname: ', visitorInfo[element].last_name.trim());
+                    // console.log('mname: ', visitorInfo[element].middle_name.trim());
+
+                    // const obj = {label: doc.id, value: fullname };
+                    // console.log('obj: ', obj);
+
+                    // console.log('some: ', availableTags.some(item => item.fullname === fullname));
+                    if(!availableTags.some(item => item.fullname === fullname)) {
+                        console.log('element: ', visitorInfo)
+                        availableTags.push({label: `${doc.id}, ${fullname}`, 'value': fullname, 'data': visitorInfo[element]});
+
+                    }
+                    // fullname = null;
+                });
+                // visitorInfo.forEach((element) => {
+                // });
+                index = index + 1;
+                if(index == docsSnap.docs.length) {
+                    $( "#tags" ).autocomplete({
+                        source: availableTags,
+                        
+                        select: function (event, ui) {
+                            const selectedItem = ui.item.data;
+                            console.log(selectedItem);
+                            $('input[name="guest-add-fname"]').attr({'value': selectedItem.first_name});
+                            $('input[name="guest-add-mname"]').attr({'value': selectedItem.middle_name});
+                            $('input[name="guest-add-lname"]').attr({'value': selectedItem.last_name});
+                            $('input[name="guest-add-vehiclemodel"]').attr({'value': selectedItem.vehicle_model});
+                            $('input[name="guest-add-platenum"]').attr({'value': selectedItem.plate_number});
+
+
+
+                        }
+                    });
+
+                    
+                    console.log('availableTags', availableTags);
+                }
+            });
+        }
+        getVisitorLogsList();
+
+    
+
+
     let isSuccessPersonal = false;
     let isSuccessVehicle = false;
     // const docRefSecurityOfficer = fire.myDoc(fire.db, "security", fire.auth.currentUser.uid);
@@ -37229,16 +37302,18 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             document.querySelector('.close-modal').click();
             e.target.reset();
         });
-    
-        document.querySelector('#guest-search-information').addEventListener('submit', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log("search submit:", e);
+        
+
+        // Search for recent
+        // document.querySelector('#guest-search-information').addEventListener('submit', (e) => {
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        //     console.log("search submit:", e);
             
 
-            $('input[name="guest-search"]').val();
-            e.target.reset();
-        });
+        //     $('input[name="guest-search"]').val();
+        //     e.target.reset();
+        // });
     }); //end of DOMContentLoaded, QR Scanner
 
 

@@ -78,9 +78,11 @@
     display: flex;
     gap: .5em;
 }
+/*
 #guest-search-information input[type="text"] {
-    flex: 0 0 70%;  /* flex-grow, flex-shrink, flex-basis */
+    flex: 0 0 70%;   flex-grow, flex-shrink, flex-basis 
 }
+*/
 
 @media (max-width: 768px) {
     /* Guest Form */

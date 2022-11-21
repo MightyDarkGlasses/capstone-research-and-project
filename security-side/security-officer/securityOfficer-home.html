@@ -15,19 +15,16 @@
     <link rel="stylesheet" href="modal/popup_modal.css">
     <link rel="stylesheet" href="modal/popup_guest.css">
     <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js" defer></script>
-    <script src="../../dist/bundle.js" defer></script>
-    <script src="./scripts/securityOfficer.js" defer></script>
 
 
-    <link
-               rel="stylesheet"
-               type="text/css"
-               href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css"
-          />
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
     <script
           src="https://code.jquery.com/jquery-3.6.1.min.js"
           integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-          crossorigin="anonymous"></script>
+          crossorigin="anonymous" defer></script>
      <script
           src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"
           defer></script>
@@ -36,7 +33,15 @@
           charset="utf8"
           src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"
           defer></script>
-    <script src="toggle/custom_toggle.js"></script>
+    <script src="toggle/custom_toggle.js" defer></script>
+    <script src="../../dist/bundle.js" defer></script>
+    <script src="./scripts/securityOfficer.js" defer></script>
+
+
+
+
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" defer></script>
+
 </head>
 
 <style>
@@ -508,15 +513,19 @@
                     <p class="guest-caption">Add Visitor Information</p>
                     <div class="guest-container" style="padding-right: 1em;">
                         <div class="guest-search">
-                            <form id="guest-search-information">
+                            <!-- <form id="guest-search-information"> -->
                                 <div>
                                     <p class="guest-lookup-caption">Plate Number (Lookup): </p>
-                                    <div class="guest-search-input">
-                                        <input type="text" value="" name="guest-search" required="required" placeholder="Search...">
-                                        <input type="submit"  value="Search">
+                                    <!-- <div class="guest-search-input">
+                                        <input id="autocomplete-guest" />
+                                    </div> -->
+
+                                    <div class="ui-widget">
+                                        <label for="tags">Tags: </label>
+                                        <input id="tags">
                                     </div>
                                 </div>
-                            </form>
+                            <!-- </form> -->
                         </div>
                         <hr>
                         <form id="guest-add-information">
@@ -561,6 +570,8 @@
 
 
 <script defer>
+    
+
     // Event for Add Guest Information
     // document.getElementById('guest-submit-data').addEventListener(('click'), () => {
     //     console.log('clicked');
