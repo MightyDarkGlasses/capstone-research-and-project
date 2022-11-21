@@ -1,0 +1,310 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("styles/login_form.css");
+@import url("styles/login_text.css");
+
+:root {
+    /* --color-primary-btn: #ef7900;
+    --color-primary-btn-hover: white;
+    --color-border-btn: black; 
+    --color-border-btn-hover: #ef7900;  */
+
+    --color-primary-btn: #ef7900;
+    --color-primary-btn-hover: white;
+    --color-text-and-border-1: white;
+    --color-text-and-border-2: black;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Lexend Deca", "Inter", Arial, sans-serif;
+    overflow: hidden;
+}
+input[type="text"], input[type="email"], input[type="pass"] {
+    outline: none;
+}
+button, input[type="submit"] {
+    border: none;
+    outline: none;
+}
+
+body {
+    height: 100vh;
+    background-color: aliceblue;
+    /* background: rgb(255,255,255);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,254,145,1) 100%); */
+}
+
+/* Title (Proceed to Login) */
+/* .title {
+    
+} */
+
+/* .title {
+    margin: -0.5em 0;
+} */
+.title span:nth-child(1) {
+    font-size: 1.5em;
+    display: block;
+}
+.title span:nth-child(2) {
+    position: relative;
+    top: -0.1em;
+    font-size: 3em;
+    font-weight: 900;
+    color: #EE8100;
+}
+/* .title  {
+    font-size: 1rem;
+}
+.title > span {
+    display: block;
+    font-size: calc(1em - 0.25em);
+} */
+
+
+
+/* Button for Login and Signup */
+
+#user_signup {
+    width: 98%;
+    color: black;
+    background-color: #fff;
+    border: 2px solid black;
+}
+#user_signup:hover {
+    color: white;
+    background-color: black;
+    border: 2px solid white;
+}
+button, input[type="submit"], input[type="button"] {
+    border: none;
+    outline: none;
+
+    background: var(--color-primary-btn);
+    color: white;
+
+    border: 2px solid var(--color-text-and-border-1);
+    border-radius: 2em;
+
+    margin: 0.25em 0;
+    padding: 0.5em 0;
+    
+    font-size: 1.25em;
+    font-weight: bold;
+    
+    transition: all .5s ease;
+}
+button:hover, input[type="submit"]:hover {
+    color: black;
+    background: white;
+    border: 2px solid black;
+    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.25);
+}
+/* .user_input #user_signup {
+    color: var(--color-text-and-border-2);
+    background-color: white;
+    border: 2px solid #ef7900;
+}
+.user_input #user_signup:hover {
+    background: var(--color-primary-btn);
+    border: 2px solid var(--color-text-and-border-1);
+    color: var(--color-text-and-border-1);
+}
+ */
+
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: max(90vw, 800px);
+    height: 75%;
+    background: white;
+    border-radius: 2em;
+    /* display: flex;
+    flex-direction: row; */
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+/* Forgot password link */
+.container .forgor div:last-child {
+    display: flex;
+    justify-content: end;
+}
+
+.divider {
+    width: 5px;
+    background: black;
+}
+
+.container div {
+    flex: 1;
+}
+
+.right {
+    display: flex;
+    height: fit-content;
+
+    /* padding: 1em; */
+    margin: auto 3em;
+    flex-direction: column;
+    padding: 3.5em 0;
+    /* justify-content: space; */
+}
+
+.forgor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.forgor label {
+    font-size: .80em;
+}
+
+.user_input {
+    margin: 1em 0;
+}
+
+/* System Title */
+.right .login .system  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 1em 0;
+}
+.right .login .system img {
+    width: 50px;
+    margin-right: 1em;
+}
+.right .login .system h1 {
+    font-size: 1.25em;
+}
+
+
+/* media queries */
+@media screen and (max-width: 960px) {
+    .left {
+        display: none;
+    }
+
+    .right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1em;
+        padding: 0;
+        height: 100%;
+        overflow-y: scroll;
+    }
+
+    .title span:first-child {
+        display: none;
+    }
+    .title span:nth-child(2) {
+        font-size: 2em;
+    }
+    /* user-input */
+    .user_input input {
+        font-size: .90em;
+    }
+
+    /* form */
+    .right-login-form .title, .forgor, .agreement {
+        margin: 1.25em 0;
+        /* overflow-y: auto; */
+        height: fit-content;
+        /* overflow-y: auto; */
+    }
+
+    .container div {
+        flex: none;
+    }
+
+    .agreement {
+        font-size: .75em;
+    }
+
+    .container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: max(90vw, 250px);
+        height: 90%;
+        border-radius: 1em;
+    }
+
+    .container .right-login-form {
+        /* height: fit-content; */
+        /* overflow-y: scroll; */
+    }
+    .container .right-login-form .login {
+        height: fit-content;
+    }
+
+     #user_forgot {
+        display: none;
+        font-size: .90em;
+    }
+
+    .forgor #user_keeplogged {
+        margin: .5em .5em .5em 1em;
+        padding: 0;
+    }
+
+    /* System Title */
+    .right .login .system {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .right .login .system p {
+        font-size: .85em;
+    }
+    .right .login .system h1 {
+        font-size: 1em;
+    }
+}
+
+/* On screens that are 600px wide or less, the background color is olive */
+/* @media screen and (max-width: 600px) {
+    body {
+        background-color: olive;
+        color: white;
+    }
+} */
+
+/* http://stackoverflow.com/questions/13550541/ddg#13550716 */
+/* default styles here for older browsers. 
+    I tend to go for a 600px - 960px width max but using percentages
+*/
+/* @media only screen and (min-width: 960px) {
+    styles for browsers larger than 960px;
+}
+@media only screen and (min-width: 1440px) {
+    styles for browsers larger than 1440px;
+}
+@media only screen and (min-width: 2000px) {
+    for sumo sized (mac) screens
+}
+@media only screen and (max-device-width: 480px) {
+    styles for mobile browsers smaller than 480px; (iPhone)
+}
+@media only screen and (device-width: 768px) {
+    default iPad screens
+}
+
+Different techniques for iPad screening 
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
+    For portrait layouts only
+}
+
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+    For landscape layouts only
+} 
+*/

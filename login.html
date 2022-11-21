@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="BulSU, Parking, Management System">
+    <meta name="description" content="A system created by ... ">
+    <meta name="author" content="Group #_">
+    <title>BulSU PMS - Login</title>
+
+    <!-- Refresh this document every (num) seconds -->
+    <meta http-equiv="refresh" content="7200">
+
+    <!-- Stylesheet here... -->
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <link rel="stylesheet" href="styles/modal.css">
+
+    <!-- jQuery Modal -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" href="images/icons/bxs-car-garage.svg" type="image/x-icon">
+</head>
+
+
+<body>
+    <div class="container">
+        <div class="left">
+        </div>
+        <div class="right">
+            <div class="right-login-form">
+                <form class="login">
+                    <div class="system">
+                        <!-- <img src="./images/bulsu.png" alt=""> -->
+                        <h1>Bulacan State University<br/>(Main Campus)</h1>
+                        <p>Entry-Exit and Record Management System</p>
+                    </div>
+                    <div class="title">
+                        <span>Proceed to your</span>
+                        <span>Login</span>
+                    </div>
+
+                    <div class="user_input">
+                        <label >E-mail Address</label><br>
+    
+                        <div class="icon-wrapper">
+                            <input class="logo-text-input logo1" type="email" name="email" id="user_email" value="centteedow@gmail.com">
+                        </div>
+                    </div>
+                    <div class="user_input">
+                        <label >Password</label><br>
+
+                        <div class="icon-wrapper">
+                            <input class="logo-text-input logo2" type="password" name="password" id="user_password" value="J123456a">
+                        </div>
+                    </div>
+                    <div class="forgor">
+                        <div>
+                            <input type="checkbox" name="" id="user_keeplogged">
+                            <label >Keep me logged in.</label>
+                        </div>
+                        <div>
+                            <a id="user_forgot" type="" href="forgot_password.html">Forgot Password</a>
+                        </div>
+                    </div>
+                    <div class="user_input">
+                        <input type="submit" id="user_signin" value="SIGN IN"></input>
+                        <input type="button" id="user_signup" value="SIGN UP"><br>
+                    </div>
+                    <p class="agreement">
+                        By logging in to PMS, I confirm that I have read and agree to the BulSU PMS Terms of Service, Privacy Policy, and to recieve emails and updates
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div> 
+    
+    <!-- Modal HTML embedded directly into document -->
+    <div id="error-popup" class="modal">
+        <div class="modal-container">
+            <div class="modal-container-header">
+                <div class="header-icon"></div>
+                <h3>Error</h3>
+            </div>
+            <div class="modal-container-main">
+                <!-- <p>The email is not yet verified.</p>
+                <p class="note"><i>Note: Check your <b>Spam</b> section to verify your email.</i></p> -->
+            </div>
+            <div class="modal-container-footer">
+                <a href="#" rel="modal:close">Close</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- Scripts here...-->
+<script src="dist/bundle.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.1.js" 
+integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous" defer></script>
+<!-- jQuery Modal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js" defer></script>
+<script defer>
+    let user_signup = document.getElementById("user_signup");
+
+    user_signup.addEventListener("click", () => {
+        window.location = "signup1.html";
+    });
+
+    function deleteCookies() {
+        var allCookies = document.cookie.split(';');
+        for (var i = 0; i < allCookies.length; i++)
+            document.cookie = allCookies[i] + "=;expires="
+            + new Date(0).toUTCString();
+    }
+    deleteCookies();
+
+
+</script>
+
+
+</html>

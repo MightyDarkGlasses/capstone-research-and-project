@@ -7,13 +7,13 @@
     <meta name="keywords" content="BulSU, Parking, Management System">
     <meta name="description" content="A system created by ... ">
     <meta name="author" content="Group #_">
-    <title>BulSU PMS - Login</title>
+    <title>BulSU EE & PMS</title>
 
     <!-- Refresh this document every (num) seconds -->
     <meta http-equiv="refresh" content="7200">
 
     <!-- Stylesheet here... -->
-    <link rel="stylesheet" type="text/css" href="login.css">
+    <link rel="stylesheet" type="text/css" href="banner.css">
     <link rel="stylesheet" href="styles/modal.css">
 
     <!-- jQuery Modal -->
@@ -24,100 +24,102 @@
     <link rel="icon" href="images/icons/bxs-car-garage.svg" type="image/x-icon">
 </head>
 
+<style>
+    .container {
+        border-bottom: #f7c959 25px solid;
+    }
+    /* Branding icon */
+    .container .top .top-buttons {
+        text-align: right;
+        padding: 1em;
+    }
+    .container .top .icon {
+        display: flex;
+        padding: 1em;
+        gap: 1em;
+        align-items: center;
+        font-size: 1em;
+        font-weight: bold;
+    }
 
+    /* Header */
+    .container .top {
+        width: 100%;
+        height: 15%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        /* font-family: "Lexend Deca", "Inter", Arial, sans-serif; */
+    } 
+
+    /* Description and Images */
+    main {
+        display: flex;
+        align-items: center;
+        padding: 2em;
+        height: 85%;
+    }
+    main #create_account {
+        text-decoration: none;
+        text-transform: uppercase;
+        border-radius: 1em;
+        font-size: 1em;
+        background-color: #f7c959;
+        color: black;
+        padding: 1em;
+        width: 300px;
+        text-align: center;
+    }
+    main .caption {
+        flex: 1.2;
+        display: grid;
+        gap: 2em;
+    }
+    main .caption .title{
+        font-weight: bold;
+        font-size: 3em;
+    }
+    main .picture {
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        align-items: center;
+        /* border: 4px solid black; */
+    }
+    main .picture img {
+        width: inherit;
+    }
+    /* footer {
+        background-color: #f7c959;
+        height: 10px;
+    } */
+</style>
 <body>
     <div class="container">
-        <div class="left">
-        </div>
-        <div class="right">
-            <div class="right-login-form">
-                <form class="login">
-                    <div class="system">
-                        <!-- <img src="./images/bulsu.png" alt=""> -->
-                        <h1>Bulacan State University<br/>(Main Campus)</h1>
-                        <p>Entry-Exit and Record Management System</p>
-                    </div>
-                    <div class="title">
-                        <span>Proceed to your</span>
-                        <span>Login</span>
-                    </div>
-
-                    <div class="user_input">
-                        <label >E-mail Address</label><br>
-    
-                        <div class="icon-wrapper">
-                            <input class="logo-text-input logo1" type="email" name="email" id="user_email" value="centteedow@gmail.com">
-                        </div>
-                    </div>
-                    <div class="user_input">
-                        <label >Password</label><br>
-
-                        <div class="icon-wrapper">
-                            <input class="logo-text-input logo2" type="password" name="password" id="user_password" value="J123456a">
-                        </div>
-                    </div>
-                    <div class="forgor">
-                        <div>
-                            <input type="checkbox" name="" id="user_keeplogged">
-                            <label >Keep me logged in.</label>
-                        </div>
-                        <div>
-                            <a id="user_forgot" type="" href="forgot_password.html">Forgot Password</a>
-                        </div>
-                    </div>
-                    <div class="user_input">
-                        <input type="submit" id="user_signin" value="SIGN IN"></input>
-                        <input type="button" id="user_signup" value="SIGN UP"><br>
-                    </div>
-                    <p class="agreement">
-                        By logging in to PMS, I confirm that I have read and agree to the BulSU PMS Terms of Service, Privacy Policy, and to recieve emails and updates
-                    </p>
-                </form>
+        <div class="top">
+            <div class="icon">
+                <img src="images/bulsu.png" alt="" width="50" height="50">
+                <div>
+                    <p>QR Code-Based Entry-Exit and<br/>Record Management System of Vehicles</p>
+                    <p style="font-size: .8rem;"><i>BulSU - MAIN CAMPUS</i></p>
+                </div>
+            </div>
+            <div class="top-buttons">
+                <a href="login.html">Log In</a>
             </div>
         </div>
+        <main>
+            <div class="caption">
+                <p class="title">Bulacan State University</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A repellat harum ex maxime atque consectetur, facilis deserunt architecto, voluptates laudantium explicabo! Aut tempore deserunt dolorum nihil in quam, porro quisquam! Magnam incidunt magni numquam eligendi fuga nostrum quod harum sunt eaque nesciunt. Maxime ducimus impedit voluptate! Nisi labore expedita veniam!</p>
+                <a href="signup1.html" id="create_account">Create your Account</a>
+            </div>
+            <div class="picture">
+                <img src="images/qrCodeScanning.png" alt="picture">
+            </div>
+        </main>
     </div> 
-    
-    <!-- Modal HTML embedded directly into document -->
-    <div id="error-popup" class="modal">
-        <div class="modal-container">
-            <div class="modal-container-header">
-                <div class="header-icon"></div>
-                <h3>Error</h3>
-            </div>
-            <div class="modal-container-main">
-                <!-- <p>The email is not yet verified.</p>
-                <p class="note"><i>Note: Check your <b>Spam</b> section to verify your email.</i></p> -->
-            </div>
-            <div class="modal-container-footer">
-                <a href="#" rel="modal:close">Close</a>
-            </div>
-        </div>
-    </div>
 </body>
-
-<!-- Scripts here...-->
-<script src="dist/bundle.js" defer></script>
-<script src="https://code.jquery.com/jquery-3.6.1.js" 
-integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous" defer></script>
-<!-- jQuery Modal -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js" defer></script>
-<script defer>
-    let user_signup = document.getElementById("user_signup");
-
-    user_signup.addEventListener("click", () => {
-        window.location = "signup1.html";
-    });
-
-    function deleteCookies() {
-        var allCookies = document.cookie.split(';');
-        for (var i = 0; i < allCookies.length; i++)
-            document.cookie = allCookies[i] + "=;expires="
-            + new Date(0).toUTCString();
-    }
-    deleteCookies();
-
-
-</script>
-
 
 </html>
