@@ -513,9 +513,9 @@
                             PNG, JPEG, GIF up to 25MB each view.
                         </p>
                         <form action="#" class="form-photo">
-                            <input type="file" name="form_front" id="">
-                            <input type="file" name="form_side" id="">
-                            <input type="file" name="form_rear" id="">
+                            <input type="file" name="form_front" id="" required>
+                            <input type="file" name="form_side" id="" required>
+                            <input type="file" name="form_rear" id="" required>
                             <input type="submit" value="Save Changes">
                         </form>
                     </div>
@@ -527,21 +527,115 @@
                     <div class="popdown pop-plate">
                         <form action="#" class="form-plate">
                             <p>Plate Number</p>
-                            <input type="text" name="form_plate" id="">
+                            <input type="text" name="form_plate" id="" required>
                             <input type="submit" value="Save Changes">
                         </form>
-
                     </div>
+
+
+                    
 
                     <span class="personal-info-title">Vehicle Model</span>
                     <span class="personal-info-model">▃▃▃▃▃</span>
                     <div class="popdown pop-model">
                         <form action="#" class="form-model">
                             <p>Vehicle Model</p>
-                            <input type="text" name="form_model" id="">
+                            <input type="text" name="form_model" id="" required value="">
                             <input type="submit" value="Save Changes">
                         </form>
                     </div>
+
+
+                    <span class="personal-info-title">Classification</span>
+                    <span class="personal-info-classification">▃▃▃▃▃</span>
+                    <div class="popdown pop-classification">
+                        <form action="#" class="form-classification">
+                            <p>Classification</p>
+                            <select name="classification" id="classification" required>
+                                <option value="Private">Private</option>
+                                <option value="For Hire">For Hire</option>
+                                <option value="Government">Government</option>
+                                <option value="Exempt">Exempt</option>
+                            </select>
+                            <input type="submit" value="Save Changes">
+                        </form>
+                    </div>
+
+                    <span class="personal-info-title">Color</span>
+                    <span class="personal-info-color">▃▃▃▃▃</span>
+                    <div class="popdown pop-color">
+                        <form action="#" class="form-color">
+                            <p>Color</p>
+                            <input type="text" name="form_color" id="" required value="">
+                            <input type="submit" value="Save Changes">
+                        </form>
+                    </div>
+
+
+                    <span class="personal-info-title">Year</span>
+                    <span class="personal-info-year">▃▃▃▃▃</span>
+                    <div class="popdown pop-year">
+                        <form action="#" class="form-year">
+                            <p>Year Model</p>
+                            <input type="number" name="form_year" min="1900" max="2099" step="1" value="2016" />
+                            <input type="submit" value="Save Changes">
+                        </form>
+                    </div>
+                    
+                    
+
+                    <span class="personal-info-title">License Code & Vehicle Category</span>
+                    <span class="personal-info-category">▃▃▃▃▃</span>
+                    <div class="popdown pop-category">
+                        <form action="#" class="form-category">
+                            <p>License Code</p>
+                            <select name="vehicle_classification" id="vehicle-classification" required>
+                                <option value="A">A - Motorcycle</option>
+                                <option value="A1">A1 - Tricycle</option>
+                                <option value="B">B - Weighing up to 5,000 kgs GVW with 8 seats</option>
+                                <option value="B1">B1 - Weighing up to 5,000 kg GVW with 9 or more seats</option>
+                                <option value="B2">B2 - Goods less than or equal to 3,500 kg GVW</option>
+                                <option value="C">C - Goods more than 3,500 kg GVW</option>
+                                <option value="D">D - Buses more than 5,000 kg FVW with 9 or more seats</option>
+                                <option value="BE">BE - Trailers less than or equal to 3,500 kg GVW</option>
+                                <option value="CE">CE - Articulated vehicles with more than 3,500 kg combined GVW</option>
+                            </select>
+                            <br/><br/>
+                            <p>Vehicle Categories</p>
+                            <!-- A -->
+                            <select name="vehicle_categories" id="vehicle-classification" required>
+                                <option value="L1">L1 - Two wheels; Maximum Speed: does not exceed to 50 kph</option>
+                                <option value="L2">L2 - Three wheels; Maximum Speed: does not exceed to 50 kph</option>
+                                <option value="L3">L3 - Two wheels; Maximum Speed: exceeds to 50 kph</option>
+                            </select>
+                            <br/><br/>
+                            <input type="submit" value="Save Changes">
+                        </form>
+                    </div>
+
+
+                    <!-- <span class="personal-info-title">Vehicle Type</span>
+                    <span class="personal-info-type">▃▃▃▃▃</span>
+                    <div class="popdown pop-type">
+                        <form action="#" class="form-type">
+                            <p>Vehicle Type</p>
+                            <input type="text" name="form_type" id="" required/>
+                            <input type="submit" value="Save Changes">
+                        </form>
+                    </div> -->
+
+                    <span class="personal-info-title">Remarks</span>
+                    <span class="personal-info-remarks">▃▃▃▃▃</span>
+                    <div class="popdown pop-remarks">
+                        <form action="#" class="form-remarks">
+                            <p>Remarks</p>
+                            <textarea rows="4" cols="40" name="comment" placeholder="Enter additional notes here..." form="form-remarks"></textarea>
+                            <br/>
+                            <input type="submit" value="Save Changes">
+                        </form>
+                    </div>
+                    
+
                 </div>
             </div>
 

@@ -37879,9 +37879,10 @@ async function createNewData(userUID, flag) {
         is_activated: false,
         email: getCookie("email"),
         user_type: null,
-        createdAt: new Date().toString(),
-        last_login: new Date().toString(),
+        createdAt: (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.serverTimestamp)(),
+        last_login: (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.serverTimestamp)(),
         profile_pic: null,
+        college: null,
     }).then(() => {
         console.log("Account Information was added in the collection");
     });
@@ -37905,7 +37906,12 @@ async function createNewData(userUID, flag) {
                 images: imageLinks,
                 model: [getCookie("model")],
                 use_types: 'Private',
-                createdAt: (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.serverTimestamp)()
+                createdAt: (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.serverTimestamp)(),
+                classification: null,
+                color: null,
+                year: null,
+                code_category: null,
+                remarks: null,
             },
             vehicle_length: 1,
         }).then(() => {
@@ -40487,6 +40493,56 @@ jQuery(function() {
 
     $('.personal-info-model').on('click', () => {
         $('.pop-model').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+
+
+    $('.personal-info-classification').on('click', () => {
+        $('.pop-classification').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+    $('.personal-info-color').on('click', () => {
+        $('.pop-color').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+    $('.personal-info-year').on('click', () => {
+        $('.pop-year').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+    $('.personal-info-category').on('click', () => {
+        $('.pop-category').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+    $('.personal-info-type').on('click', () => {
+        $('.pop-type').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+    $('.personal-info-remarks').on('click', () => {
+        $('.pop-remarks').animate({
             opacity: "toggle",
             height: "toggle"
         }, 250, 'linear', () => {

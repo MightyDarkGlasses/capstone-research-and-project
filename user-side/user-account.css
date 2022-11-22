@@ -24,9 +24,15 @@
     margin: 0 auto;
     font-weight: bold;
 }
+
+textarea {
+    resize: none;
+    font-size: 1.5em;
+}
 .popdown form > input,
 #form-reset-email,
-#form-reset-password {
+#form-reset-password,
+select {
     /* Each input inside the form tag */
     border: none;
     outline: 0;

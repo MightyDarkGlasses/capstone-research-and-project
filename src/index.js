@@ -420,9 +420,10 @@ async function createNewData(userUID, flag) {
         is_activated: false,
         email: getCookie("email"),
         user_type: null,
-        createdAt: new Date().toString(),
-        last_login: new Date().toString(),
+        createdAt: serverTimestamp(),
+        last_login: serverTimestamp(),
         profile_pic: null,
+        college: null,
     }).then(() => {
         console.log("Account Information was added in the collection");
     });
@@ -446,7 +447,12 @@ async function createNewData(userUID, flag) {
                 images: imageLinks,
                 model: [getCookie("model")],
                 use_types: 'Private',
-                createdAt: serverTimestamp()
+                createdAt: serverTimestamp(),
+                classification: null,
+                color: null,
+                year: null,
+                code_category: null,
+                remarks: null,
             },
             vehicle_length: 1,
         }).then(() => {

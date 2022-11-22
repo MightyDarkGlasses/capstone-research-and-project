@@ -35,6 +35,56 @@ jQuery(function() {
     });
 
 
+    $('.personal-info-classification').on('click', () => {
+        $('.pop-classification').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+    $('.personal-info-color').on('click', () => {
+        $('.pop-color').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+    $('.personal-info-year').on('click', () => {
+        $('.pop-year').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+    $('.personal-info-category').on('click', () => {
+        $('.pop-category').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+    // $('.personal-info-type').on('click', () => {
+    //     $('.pop-type').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
+    $('.personal-info-remarks').on('click', () => {
+        $('.pop-remarks').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+
+
     // Vehicle list dropdown
     // .vehicle-list-dropdown-clickable
     $('.vehicle-list-dropdown-clickable').on('click', () => {

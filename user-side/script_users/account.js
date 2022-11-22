@@ -44,6 +44,15 @@ jQuery(function() {
         });
     });
 
+    $('.personal-info-college').on('click', () => {
+        $('.pop-college').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+
     $('.personal-info-email').on('click', () => {
         $('.pop-email').animate({
             opacity: "toggle",
