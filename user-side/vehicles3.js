@@ -10,6 +10,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 if(windowLocation.indexOf("user-vehicle") > -1) {
 
+    
     localStorage.removeItem("vehicle-front");
     localStorage.removeItem("vehicle-front-filetype");
     localStorage.removeItem("vehicle-front-filename");
@@ -28,7 +29,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         localStorage.clear();
         window.location = '../index.html';
     });
-
+    
 
     //JSON
 
@@ -66,10 +67,65 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     // console.log('true', vehicleInformation[vehicleKeys[index]])
 
                     const preSelectedVehicleKey = vehicleInformation[vehicleKeys[index]];
-                    listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${iterator} | ${preSelectedVehicleKey["model"][0]}, ${vehicleKeys[index]}</li>`;
+                    console.log('preSelectedVehicleKey: ', preSelectedVehicleKey);
+                    if(!typeof(preSelectedVehicleKey["model"]) === 'undefined') {
+                        listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${iterator} | ${preSelectedVehicleKey["model"][0]}, ${vehicleKeys[index]}</li>`;
+                        document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"][0];
+                    }
+                    else {
+                        listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${iterator} | ${preSelectedVehicleKey["model"]}, ${vehicleKeys[index]}</li>`;
+                        document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"];
+                    }
+
                     document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
                     document.querySelector('.personal-info-plate').innerText = vehicleKeys[index];
-                    document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"][0];
+                    
+
+                    // Classification
+                    if(typeof(preSelectedVehicleKey["classification"]) === 'undefined' || preSelectedVehicleKey["classification"] === null) {
+                        preSelectedVehicleKey["classification"] = "Unspecified.";
+                    }
+
+                    // Vehicle Color
+                    if(typeof(preSelectedVehicleKey["color"]) === 'undefined' || preSelectedVehicleKey["color"] === null) {
+                        preSelectedVehicleKey["color"] = "Unspecified.";
+                    }
+
+                    // Year
+                    if(typeof(preSelectedVehicleKey["year"]) === 'undefined' || preSelectedVehicleKey["year"] === null) {
+                        preSelectedVehicleKey["year"] = "Unspecified.";
+                    }
+
+                    // License Code and Vehicle Category
+                    if(typeof(preSelectedVehicleKey["license_code"]) === 'undefined' || preSelectedVehicleKey["license_code"] === null) {
+                        preSelectedVehicleKey["license_code"] = "Unspecified";
+                    }
+                    if(typeof(preSelectedVehicleKey["code_category"]) === 'undefined' || preSelectedVehicleKey["code_category"] === null) {
+                        preSelectedVehicleKey["code_category"] = "Unspecified";
+                    }
+
+                    // Remarks
+                    if(typeof(preSelectedVehicleKey["remarks"]) === 'undefined' || preSelectedVehicleKey["remarks"] === null) {
+                        preSelectedVehicleKey["remarks"] = "Unspecified";
+                        document.querySelector('.personal-info-remarks').innerText = preSelectedVehicleKey["remarks"];
+                        console.log('Remarks is null or unspecified.', typeof(preSelectedVehicleKey["remarks"]) === 'undefined' || preSelectedVehicleKey["remarks"] === null)
+                    }
+                    else {
+                        document.querySelector('.personal-info-remarks').innerText = "";
+                        document.querySelector('#remarks-block').value = preSelectedVehicleKey["remarks"];
+                    }
+
+
+                    console.log('preSelectedVehicleKey: ', preSelectedVehicleKey["color"]);
+                    document.querySelector('.personal-info-classification').innerText = preSelectedVehicleKey["classification"];
+                    document.querySelector('.personal-info-color').innerText = preSelectedVehicleKey["color"];
+                    document.querySelector('.personal-info-year').innerText = preSelectedVehicleKey["year"];
+                    document.querySelector('#license-code').innerText = preSelectedVehicleKey["license_code"];
+                    document.querySelector('#my-vehicle-categories').innerText = preSelectedVehicleKey["code_category"];
+                    
+                    
+                    
+                    
                     iterator += 1;
                     // if(x === 1) { //will be used for placeholder
                     //     document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
@@ -130,12 +186,54 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
                 const getSelectedAttrKey = element.getAttribute('data-key'),
                 personalInfoPlate = vehicleInformation[getSelectedAttrKey],
-                personalInfoModel = vehicleInformation[getSelectedAttrKey]["model"][0];
+                personalInfoModel = vehicleInformation[getSelectedAttrKey]["model"][0],
+                personalInfoClassification = vehicleInformation[getSelectedAttrKey]["classification"],
+                personalInfoColor = vehicleInformation[getSelectedAttrKey]["color"],
+                personalInfoYear = vehicleInformation[getSelectedAttrKey]["year"],
+                personalInfoLicense = vehicleInformation[getSelectedAttrKey]["license_code"],
+                personalInfoCategory = vehicleInformation[getSelectedAttrKey]["code_category"]
+                // personalInfoRemarks = vehicleInformation[getSelectedAttrKey]["remarks"];
                 
                 // console.log('personalInfoPlate:', personalInfoPlate);
+
+                // Classification
+                if(typeof(personalInfoClassification) === 'undefined' || personalInfoClassification === null) {
+                    personalInfoClassification = "Unspecified.";
+                }
+
+                // Vehicle Color
+                if(typeof(personalInfoColor) === 'undefined' || personalInfoColor === null) {
+                    personalInfoColor = "Unspecified.";
+                }
+
+                // Year
+                if(typeof(personalInfoYear) === 'undefined' || personalInfoYear === null) {
+                    personalInfoYear = "Unspecified.";
+                }
+
+                // License Code and Vehicle Category
+                if(typeof(personalInfoLicense) === 'undefined' || personalInfoLicense === null) {
+                    personalInfoLicense = "Unspecified";
+                }
+                if(typeof(personalInfoCategory) === 'undefined' || personalInfoCategory === null) {
+                    personalInfoCategory = "Unspecified";
+                }
+                
+                // Remarks
+                // if(typeof(personalInfoRemarks) === 'undefined' || personalInfoRemarks === null) {
+                //     personalInfoRemarks = "Unspecified";
+                // }
+
                 document.querySelector('.personal-info-plate').innerText = getSelectedAttrKey;
                 document.querySelector('.personal-info-model').innerText = personalInfoModel;
                 document.querySelector('#vehicle-placeholder').innerHTML = `<p>Vehicle #${index+1}</p>`;
+                document.querySelector('.personal-info-classification').innerHTML = personalInfoClassification;
+                document.querySelector('.personal-info-color').innerHTML = personalInfoColor;
+                document.querySelector('.personal-info-year').innerHTML = personalInfoYear;
+                document.querySelector('#license-code').innerHTML = personalInfoLicense;
+                document.querySelector('#my-vehicle-categories').innerHTML = personalInfoCategory;
+                
+                // document.querySelector('#personal-info-remarks').innerHTML = "...";
 
                 // currentIndexSelectedSubmit = index;
                 // console.log('currentIndexSelectedSubmit', currentIndexSelectedSubmit);
@@ -153,19 +251,118 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     const formPlate = document.querySelector('.form-plate');
     const formModel = document.querySelector('.form-model');
 
+    const formClassification = document.querySelector('.form-classification');
+    const formColor = document.querySelector('.form-color');
+    const formYear = document.querySelector('.form-year');
+    const formLicense_Category = document.querySelector('.form-category');
+    const formRemarks = document.querySelector('.form-remarks');
+    const getPlateNumber = document.querySelector('.personal-info-plate');
     formPlate.addEventListener('submit', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         let plateNumber = formPlate.form_plate.value;
-        updateVehiclePlateNumber(currentUserId, plateNumber, formPlate);
+        // updateVehiclePlateNumber(currentUserId, plateNumber, formPlate);
+        // getVehicleInformation(currentUserId);
     });
 
     formModel.addEventListener('submit', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         let plateModel = formModel.form_model.value;
-        updateVehicleModelNumber(currentUserId, plateModel, formModel)
+        // updateVehicleModelNumber(currentUserId, plateModel, formModel)
+        // getVehicleInformation(currentUserId);
+    });
+
+    formClassification.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let classificationObj = {
+            [`${getPlateNumber.textContent}.classification`]: formClassification.classification.value,
+        }
+
+        console.log('getPlateNumber: ', getPlateNumber.textContent, formClassification.classification.value, classificationObj);
+        updateVehicleInformation(currentUserId, classificationObj, formClassification);
+        getVehicleInformation(currentUserId);
+    });
+    formColor.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let colorObj = {
+            [`${getPlateNumber.textContent}.color`]: formColor.form_color.value
+        }
+        
+        console.log(colorObj, formColor.form_color.value);
+        updateVehicleInformation(currentUserId, colorObj, formColor);
+        getVehicleInformation(currentUserId);
+    });
+    formYear.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let yearObj = {
+            [`${getPlateNumber.textContent}.year`]: formYear.form_year.value
+        }
+
+        console.log('year: ', getPlateNumber.textContent, formYear.form_year.value, yearObj);
+        updateVehicleInformation(currentUserId, yearObj, formYear);
+        getVehicleInformation(currentUserId);
+    });
+    formLicense_Category.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let license_category = {
+            [`${getPlateNumber.textContent}.license_code`]: formLicense_Category.vehicle_classification.value,
+            [`${getPlateNumber.textContent}.code_category`]: formLicense_Category.vehicle_categories.value,
+        }
+
+        updateVehicleInformation(currentUserId, license_category, formLicense_Category);
+        getVehicleInformation(currentUserId);
+    });
+    formRemarks.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+
+        const getRemarks = document.querySelector('#remarks-block').value;
+        console.log(getRemarks === '')
+        if(getRemarks !== '') {
+
+            let remarksObj = {
+                [`${getPlateNumber.textContent}.remarks`]: getRemarks
+            }
+            console.log('remarks: ', remarksObj, getRemarks);
+            updateVehicleInformation(currentUserId, remarksObj, formRemarks);
+            getVehicleInformation(currentUserId);
+        }
+        else {
+            window.alert('Please fill up remarks.');
+        }
     });
 
 
+    function updateVehicleInformation(myId, myObject, myForm) {
+        console.log("vehicle updated: ", myObject);
+        const docRefAccount = fire.myDoc(fire.db, "vehicle-information", myId);
+        
+        fire.myUpdateDoc(docRefAccount, myObject)
+        .then(() => {    
+            myForm.reset();
+            // window.location.href = window.location.href; //reload a page in JS
+            // location.reload();
+        })
+    }
+
+    async function getVehicleInformation(userUID) {
+        console.log('getVehicleInformation function is called.');
+        const docVehicleActivity = fire.myDoc(fire.db, "vehicle-information", userUID);
+        const docVSnap = await fire.myGetDoc(docVehicleActivity);
+        if (docVSnap.exists()) {
+            console.log('Vehicle information updated.');
+            let vehicleInformation = {...docVSnap.data()};
+            // console.log('docVSnap', docVSnap.data());
+            localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation));
+            vehicleInformation = null;
+        }
+    }
     // https://firebase.google.com/docs/firestore/manage-data/add-data#update_elements_in_an_array
     // Update fields in nested objects
     function updateVehicleModelNumber(myId, updateValue, myForm) {

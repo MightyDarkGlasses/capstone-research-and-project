@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="../fileupload-test/main.css">
     <link rel="stylesheet" href="./sidebar/sidebar-mobile.css">
     <link rel="stylesheet" href="linkages.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
     <!-- Styling for popup modal -->
     <link rel="stylesheet" href="popup_modal.css">
 
@@ -500,6 +501,13 @@
             </div>
 
 
+            <style>
+                .select2-container {
+                    width: 90% !important;
+                    font-family: 'Lexend Deca', sans-serif;
+                }
+            </style>
+            
             <div class="title-with-add">
                 <h2>Vehicle Information</h2>
                 <button id="add-new-vehicle">Add Vehicle</button>
@@ -545,7 +553,6 @@
                         </form>
                     </div>
 
-
                     <span class="personal-info-title">Classification</span>
                     <span class="personal-info-classification">▃▃▃▃▃</span>
                     <div class="popdown pop-classification">
@@ -561,18 +568,55 @@
                         </form>
                     </div>
 
-                    <span class="personal-info-title">Color</span>
+
+                    
+                    <!-- <style>
+                        .select2-container {
+                            width: 90% !important;
+                            font-family: 'Lexend Deca', sans-serif;
+                        }
+                    </style>
+                    <span class="personal-info-title">Manufacturer/Maker</span>
+                    <span class="personal-info-manufacturer">▃▃▃▃▃</span>
+                    <div class="popdown pop-manufacturer">
+                        <form action="#" class="form-manufacturer">
+                            <p>Manufacturer/Maker</p>
+                            <select name="manufacturer" id="manufacturer" required>
+                                <option value="Bristol">Bristol</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Honda">Honda</option>
+                                <option value="Hyundai">Hyundai</option>
+                                <option value="Kawasaki">Kawasaki</option>
+                                <option value="Kia">Kia</option>
+                                <option value="MG">MG</option>
+                                <option value="Mitsubishi">Mitsubishi</option>
+                                <option value="Motorstar">Motorstar</option>
+                                <option value="Nissan">Nissan</option>
+                                <option value="Suzuki">Suzuki</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="Vespa">Vespa</option>
+                                <option value="Yamaha">Yamaha</option>
+                                <option value="Others" selected>Others</option>
+                            </select>
+                            <br/><br/>
+                            <input type="submit" value="Save Changes">
+                        </form>
+                    </div> -->
+
+
+
+                    <span class="personal-info-title">Vehicle Color</span>
                     <span class="personal-info-color">▃▃▃▃▃</span>
                     <div class="popdown pop-color">
                         <form action="#" class="form-color">
-                            <p>Color</p>
+                            <p>Vehicle Color</p>
                             <input type="text" name="form_color" id="" required value="">
                             <input type="submit" value="Save Changes">
                         </form>
                     </div>
 
 
-                    <span class="personal-info-title">Year</span>
+                    <span class="personal-info-title">Year Model</span>
                     <span class="personal-info-year">▃▃▃▃▃</span>
                     <div class="popdown pop-year">
                         <form action="#" class="form-year">
@@ -585,7 +629,10 @@
                     
 
                     <span class="personal-info-title">License Code & Vehicle Category</span>
-                    <span class="personal-info-category">▃▃▃▃▃</span>
+                    <span class="personal-info-category">
+                        <p id="license-code">▃▃▃▃▃</p>
+                        <p id="my-vehicle-categories">▃▃▃▃▃</p>
+                    </span>
                     <div class="popdown pop-category">
                         <form action="#" class="form-category">
                             <p>License Code</p>
@@ -603,16 +650,17 @@
                             <br/><br/>
                             <p>Vehicle Categories</p>
                             <!-- A -->
-                            <select name="vehicle_categories" id="vehicle-classification" required>
+                            <select name="vehicle_categories" id="vehicle-categories" required>
                                 <option value="L1">L1 - Two wheels; Maximum Speed: does not exceed to 50 kph</option>
                                 <option value="L2">L2 - Three wheels; Maximum Speed: does not exceed to 50 kph</option>
                                 <option value="L3">L3 - Two wheels; Maximum Speed: exceeds to 50 kph</option>
                             </select>
                             <br/><br/>
+                            
                             <input type="submit" value="Save Changes">
                         </form>
                     </div>
-
+                    
 
                     <!-- <span class="personal-info-title">Vehicle Type</span>
                     <span class="personal-info-type">▃▃▃▃▃</span>
@@ -629,7 +677,7 @@
                     <div class="popdown pop-remarks">
                         <form action="#" class="form-remarks">
                             <p>Remarks</p>
-                            <textarea rows="4" cols="40" name="comment" placeholder="Enter additional notes here..." form="form-remarks"></textarea>
+                            <textarea rows="4" cols="40" name="comment" id="remarks-block" placeholder="Enter additional notes here..." form="form-remarks"></textarea>
                             <br/>
                             <input type="submit" value="Save Changes">
                         </form>
@@ -972,7 +1020,7 @@
 </script>
 <!-- jQuery Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js" defer></script>
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
 <script src="../dist/bundle.js" defer></script>
 <script src="qrcode.min.js" defer></script>
 <script src="../file_upload/main.js" defer></script>

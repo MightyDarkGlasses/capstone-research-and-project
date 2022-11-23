@@ -16,25 +16,40 @@ jQuery(function() {
         });
     });
 
-    $('.personal-info-plate').on('click', () => {
-        $('.pop-plate').animate({
+    // $('.personal-info-plate').on('click', () => {
+    //     $('.pop-plate').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
+
+    // $('.personal-info-model').on('click', () => {
+    //     $('.pop-model').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
+
+
+    // Select2
+    $('#classification').select2();
+    // $('#manufacturer').select2();
+    $('#vehicle-classification').select2();
+    $('#vehicle-categories').select2();
+
+
+    $('.personal-info-manufacturer').on('click', () => {
+        $('.pop-manufacturer').animate({
             opacity: "toggle",
             height: "toggle"
         }, 250, 'linear', () => {
             // animation complete
         });
     });
-
-    $('.personal-info-model').on('click', () => {
-        $('.pop-model').animate({
-            opacity: "toggle",
-            height: "toggle"
-        }, 250, 'linear', () => {
-            // animation complete
-        });
-    });
-
-
     $('.personal-info-classification').on('click', () => {
         $('.pop-classification').animate({
             opacity: "toggle",
@@ -67,6 +82,7 @@ jQuery(function() {
             // animation complete
         });
     });
+
     // $('.personal-info-type').on('click', () => {
     //     $('.pop-type').animate({
     //         opacity: "toggle",
@@ -493,6 +509,56 @@ jQuery(function() {
     }); //end of document.ready / jQuery function
 
 
+    // $('option').on('click', function(e){
+    //     let parentNode = this.parentNode;
+    //     for (let i=0; i < this.parentNode.options.length; i++) {
+    //         if (parentNode.options[i] == this) {
+    //           console.log('Clicked item with index', i);
+    //           break;
+    //         }
+    //     }
+    // });
+    
+    console.log('option');
+    $('#vehicle-classification').on('change', function(e){
+        let value = $(this).val();
+        console.log('value', value);
+        // console.log('clicked!')
+
+        if(value === 'A') {
+            $('#vehicle-categories').html(`<option value="L1">L1 - Two wheels; Maximum Speed: does not exceed to 50 kph</option>
+            <option value="L2">L2 - Three wheels; Maximum Speed: does not exceed to 50 kph</option>
+            <option value="L3">L3 - Two wheels; Maximum Speed: exceeds to 50 kph</option>`);
+        }
+        else if(value === 'A1') {
+            $('#vehicle-categories').html(`<option value="L4">L4 - With sidecars; Maximum Speed: does not exceeds to 50 kph</option>
+            <option value="L5">L5 - Three wheels symmetrically arranged; Maximum Speed: exceeds to 50 kph</option>
+            <option value="L6">L6 - Four wheels; Mass: not more than 350 kg; Maximum Speed: exceeds to 45 kph</option>
+            <option value="L7">L7 - Four wheels; Mass: not more than 550 kg; Maximum Speed: does not exceeds 45 kph</option>`);
+        }
+        else if(value === 'B' || value === 'B1' || value === 'B2') {
+            $('#vehicle-categories').html(`option value="M1">M1 - Mass: up to 5,000 kgs (GVW); Seats: not more than 8 passenger seats.</option>
+            <option value="M2">M2 - Mass: up to 5,000 kgs (GVW); Seats: more than 8 passenger seats.</option>
+            <option value="M3">M3 - Mass: up to 3,500 kgs (GVW); Only for carrying of goods.</option>`);
+        }
+        else if(value === 'C') {
+            $('#vehicle-categories').html(`<option value="N2, N3">N2, N3 - Vehicles exceeding 3,500 kgs GVW for the carriage of goods.</option>`);
+        }
+        else if(value === 'D') {
+            $('#vehicle-categories').html(`<option value="M3">M3 - Vehicles above 5,000 kgs GVW with more than 8 passenger seats.</option>`);
+        }
+        else if(value === 'BE') {
+            $('#vehicle-categories').html(`<option value="01">01 - Does not exceed to 750 kgs GVW</option>
+            <option value="02">02 - Do exceed up to 3,500 kgs GVW</option>`);
+        }
+        else if(value === 'CE') {
+            $('#vehicle-categories').html(`<option value="03, 04">03, 04 - Does not exceed to 3,500 kgs GVW</option>`);
+        }
+
+    });
+
+
+    
 
     $('#open-confirmation').on('click', () => {
 

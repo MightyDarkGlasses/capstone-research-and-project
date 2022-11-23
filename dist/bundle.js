@@ -36848,142 +36848,223 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     } //end of function, addNewLogs
     
 
-    async function displayLogs() {
-        const myQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'logs'));
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
-            const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
-                let logs = [];
-                let index = 0;
-                snapshot.docs.forEach((doc) => {
-                    let unpackData = {...doc.data()};
-                    let objSize = Object.keys(unpackData).length;
-                    Object.entries(unpackData).map((element, index) => {
-                        if(objSize-1 !== index) {
-                            // let objectDate = new Date();
-                            // let day = objectDate.getDate();
-                            // let month = objectDate.getMonth() + 1;
-                            // let year = objectDate.getFullYear();
+    // // ### Display Registered User logs
+    
+    // async function displayLogs() {
+    //     const myQuery = fire.doQuery(fire.myCollection(fire.db, 'logs'));
+    //     fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
+    //         const unsubCollection = fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
+    //             let logs = [];
+    //             let index = 0;
+    //             snapshot.docs.forEach((doc) => {
+    //                 let unpackData = {...doc.data()};
+    //                 let objSize = Object.keys(unpackData).length;
+    //                 Object.entries(unpackData).map((element, index) => {
+    //                     if(objSize-1 !== index) {
+    //                         // let objectDate = new Date();
+    //                         // let day = objectDate.getDate();
+    //                         // let month = objectDate.getMonth() + 1;
+    //                         // let year = objectDate.getFullYear();
                             
-                            // let format1 = month + "/" + day + "/" + year;
-                            // console.log(format1); // 7/23/2022
+    //                         // let format1 = month + "/" + day + "/" + year;
+    //                         // console.log(format1); // 7/23/2022
 
-                            console.log("time_in", element[1]["time_in"]);
-                            console.log("time_out", element[1]["time_out"]);
-                            // console.log("time_out", element);
+    //                         console.log("time_in", element[1]["time_in"]);
+    //                         console.log("time_out", element[1]["time_out"]);
+    //                         // console.log("time_out", element);
 
-                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
-                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+    //                         element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+    //                         element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
 
-                            // console.log(index, element[1]);
-                            // element[1]['time_in'] = Date(new Date(0).setUTCSeconds(element[1]['time_in']['seconds']));
-                            // element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
+    //                         // console.log(index, element[1]);
+    //                         // element[1]['time_in'] = Date(new Date(0).setUTCSeconds(element[1]['time_in']['seconds']));
+    //                         // element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
 
-                            // .format('dddd MMM YYYY HH:mm:ss');
+    //                         // .format('dddd MMM YYYY HH:mm:ss');
                             
-                            index += 1; //increment
-                            logs.push(element[1]);
-                        }
-                    });
+    //                         index += 1; //increment
+    //                         logs.push(element[1]);
+    //                     }
+    //                 });
+    //             });
+    //             console.log(logs); 
+
+    //             //Sort the data by time_scanned
+    //             // logs.sort(function(a, b) {
+    //             //     return new Date(a.time_scanned) - new Date(b.time_scanned);
+    //             // });
+
+    //             // logs.sort(function(a, b) {
+    //             //     return new Date(a.time_in.time_scanned) - new Date(b.time_in.time_scanned);
+    //             // });
+    //             // console.log('sorted:', logs);   //print the result
+
+    //             jQuery((e) => {
+    //                 console.log("DataTable");
+    //                 $("#table_id").DataTable({
+    //                     scrollX: true,
+    //                     "pageLength": 10,
+    //                     "data": logs,
+    //                     "columns": [
+    //                         {"data": "time_in.timestamp"},
+    //                         {"data": "time_out.timestamp"},
+    //                         {"data": (data, type, dataToSet) => {
+    //                             return data.time_in.gate_number + ", " + data.time_out.gate_number}
+    //                         },
+    //                         // {"data": "time_out.officer_uid"},
+    //                         {"data": (data, type, dataToSet) => {
+    //                             return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
+    //                         },
+    //                         {"data": "first_name"},
+    //                         {"data": "last_name"},
+    //                         {"data": "middle_name"},
+    //                         {"data": "plate_number"},
+    //                         {"data": "vehicle_model"},
+    //                     ],
+    //                     "columnDefs": [{
+    //                         "defaultContent": "-",
+    //                         "targets": "_all"
+    //                     }]
+    //                 });
+    //             }); //jQuery
+    //         }); //end of function
+    //     }); //end of snapshot function
+    // }
+
+
+    async function currentlyIn() {
+        const myQueryUserLogs = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'logs'), _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(5));
+        const myQueryVisitorLogs = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'visitor-logs'), _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(5));
+        let logs = [];
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQueryUserLogs, (snapshot) => {     //based on the query, //change this back!
+        const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQueryUserLogs, (snapshot) => {     //based on the query
+            let index = 0;
+            snapshot.docs.forEach((doc) => {
+                let unpackData = {...doc.data()};
+                let objSize = Object.keys(unpackData).length;
+                Object.entries(unpackData).map((element, index) => {
+                    if(objSize-1 !== index) {
+                        element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
+                        element[1]['type'] = "Registered";
+                        
+                        index += 1; //increment
+                        logs.push(element[1]);
+                    }
+                }); //end of foreach
+            }); //end of snapshot
+        });
+        });
+    
+        // Visitor Logs
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQueryVisitorLogs, (snapshot) => {     //based on the query, //change this back!
+        const unsubCollection2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQueryVisitorLogs, (snapshot) => {     //based on the query
+            let index = 0;
+            snapshot.docs.forEach((doc) => {
+                let unpackData = {...doc.data()};
+                let objSize = Object.keys(unpackData).length;
+                Object.entries(unpackData).map((element, index) => {
+                    if(objSize-1 !== index) {
+                        element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
+                        element[1]['type'] = "Visitor";
+                        
+                        index += 1; //increment
+                        logs.push(element[1]);
+                    }
+                }); //end of foreach
+            }); //end of snapshot
+
+            jQuery((e) => {
+                console.log("DataTable");
+                $("#table_inned").DataTable({
+                    scrollX: true,
+                    "pageLength": 10,
+                    "data": logs,
+                    "columns": [
+                        {"data": "time_in.timestamp"},
+                        {"data": (data, type, dataToSet) => 
+                            {
+                                return data.time_in.gate_number;
+                            }
+                        },
+                        {"data": (data, type, dataToSet) => 
+                            {
+                                return data.time_in.officer_uid;
+                            }
+                        },
+                        {"data": "first_name"},
+                        {"data": "last_name"},
+                        // {"data": "middle_name"},
+                        {"data": "plate_number"},
+                        {"data": "vehicle_model"},
+                        {"data": "type"},
+                    ],
+                    "columnDefs": [{
+                        "defaultContent": "-",
+                        "targets": "_all"
+                    }]
                 });
-                console.log(logs); 
+            }); //jQuery
+        });
+        });
 
-                //Sort the data by time_scanned
-                // logs.sort(function(a, b) {
-                //     return new Date(a.time_scanned) - new Date(b.time_scanned);
-                // });
-
-                // logs.sort(function(a, b) {
-                //     return new Date(a.time_in.time_scanned) - new Date(b.time_in.time_scanned);
-                // });
-                // console.log('sorted:', logs);   //print the result
-
-                jQuery((e) => {
-                    console.log("DataTable");
-                    $("#table_id").DataTable({
-                        scrollX: true,
-                        "pageLength": 10,
-                        "data": logs,
-                        "columns": [
-                            {"data": "time_in.timestamp"},
-                            {"data": "time_out.timestamp"},
-                            {"data": (data, type, dataToSet) => {
-                                return data.time_in.gate_number + ", " + data.time_out.gate_number}
-                            },
-                            // {"data": "time_out.officer_uid"},
-                            {"data": (data, type, dataToSet) => {
-                                return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
-                            },
-                            {"data": "first_name"},
-                            {"data": "last_name"},
-                            {"data": "middle_name"},
-                            {"data": "plate_number"},
-                            {"data": "vehicle_model"},
-                        ],
-                        "columnDefs": [{
-                            "defaultContent": "-",
-                            "targets": "_all"
-                        }]
-                    });
-                }); //jQuery
-            }); //end of function
-        }); //end of snapshot function
     }
 
-    async function displayVisitorLogs() {
-        const myQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'visitor-logs'));
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
-            const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
-                let logs = [];
-                let index = 0;
-                snapshot.docs.forEach((doc) => {
-                    let unpackData = {...doc.data()};
-                    let objSize = Object.keys(unpackData).length;
-                    Object.entries(unpackData).map((element, index) => {
-                        if(objSize-1 !== index) {
+    // // ### Display Visitor Information logs
+    // async function displayVisitorLogs() {
+    //     const myQuery = fire.doQuery(fire.myCollection(fire.db, 'visitor-logs'));
+    //     fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
+    //         const unsubCollection = fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
+    //             let logs = [];
+    //             let index = 0;
+    //             snapshot.docs.forEach((doc) => {
+    //                 let unpackData = {...doc.data()};
+    //                 let objSize = Object.keys(unpackData).length;
+    //                 Object.entries(unpackData).map((element, index) => {
+    //                     if(objSize-1 !== index) {
 
-                            console.log("time_in", element[1]["time_in"]);
-                            console.log("time_out", element[1]["time_out"]);
+    //                         console.log("time_in", element[1]["time_in"]);
+    //                         console.log("time_out", element[1]["time_out"]);
 
-                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
-                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+    //                         element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+    //                         element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
 
-                            index += 1; //increment
-                            logs.push(element[1]);
-                        }
-                    });
-                });
+    //                         index += 1; //increment
+    //                         logs.push(element[1]);
+    //                     }
+    //                 });
+    //             });
 
-                jQuery((e) => {
-                    console.log("DataTable");
-                    $("#table_visitor").DataTable({
-                        scrollX: true,
-                        "pageLength": 10,
-                        "data": logs,
-                        "columns": [
-                            {"data": "time_in.timestamp"},
-                            {"data": "time_out.timestamp"},
-                            {"data": (data, type, dataToSet) => {
-                                return data.time_in.gate_number + ", " + data.time_out.gate_number}
-                            },
-                            // {"data": "time_out.officer_uid"},
-                            {"data": (data, type, dataToSet) => {
-                                return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
-                            },
-                            {"data": "first_name"},
-                            {"data": "last_name"},
-                            {"data": "middle_name"},
-                            {"data": "plate_number"},
-                            {"data": "vehicle_model"},
-                        ],
-                        "columnDefs": [{
-                            "defaultContent": "-",
-                            "targets": "_all"
-                        }]
-                    });
-                }); //jQuery
-            }); //end of function
-        }); //end of snapshot function
-    }
+    //             jQuery((e) => {
+    //                 console.log("DataTable");
+    //                 $("#table_visitor").DataTable({
+    //                     scrollX: true,
+    //                     "pageLength": 10,
+    //                     "data": logs,
+    //                     "columns": [
+    //                         {"data": "time_in.timestamp"},
+    //                         {"data": "time_out.timestamp"},
+    //                         {"data": (data, type, dataToSet) => {
+    //                             return data.time_in.gate_number + ", " + data.time_out.gate_number}
+    //                         },
+    //                         // {"data": "time_out.officer_uid"},
+    //                         {"data": (data, type, dataToSet) => {
+    //                             return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
+    //                         },
+    //                         {"data": "first_name"},
+    //                         {"data": "last_name"},
+    //                         {"data": "middle_name"},
+    //                         {"data": "plate_number"},
+    //                         {"data": "vehicle_model"},
+    //                     ],
+    //                     "columnDefs": [{
+    //                         "defaultContent": "-",
+    //                         "targets": "_all"
+    //                     }]
+    //                 });
+    //             }); //jQuery
+    //         }); //end of function
+    //     }); //end of snapshot function
+    // }
 
     // Add Visitor Information button
     async function addVisitorInformation(officerUID, plateNumber, vehicleModel, fName, mName, lName) {
@@ -37082,8 +37163,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     // displayLogs(); //display logs
     $('#logs-id').on('click', (e) => {
         console.log('Logs qr.js');
-        displayLogs();
-        displayVisitorLogs();
+        // displayLogs();
+        // displayVisitorLogs();
+        currentlyIn();
     });
 
     // QR Scanner
@@ -37908,8 +37990,10 @@ async function createNewData(userUID, flag) {
                 use_types: 'Private',
                 createdAt: (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.serverTimestamp)(),
                 classification: null,
+                manufacturer: null,
                 color: null,
                 year: null,
+                license_code: null,
                 code_category: null,
                 remarks: null,
             },
@@ -39023,7 +39107,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 // <li>Vehicle #1 | Toyota Raize 2022, Private</li>
                 //id="vehicle-list"
                 //vehicle-placeholder
-                listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
+                console.log('vehicleData: ', vehicleData);
+                console.log('keys: ', vehicleDataKeys[x], 'vehicleData model: ', vehicleData[vehicleDataKeys[x]]["model"]);
+                listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
                 
                 if(x === 1) { //will be used for placeholder
                     // console.log('placeholder');
@@ -39475,6 +39561,7 @@ if(windowLocation.indexOf("user-account") > -1) {
     let category = document.querySelector(".personal-info-usertype");
     let phoneNum = document.querySelector(".personal-info-phonenum");
     let useremail = document.querySelector(".personal-info-email");
+    let college = document.querySelector(".personal-info-college");
     //getAccountInformation(colRefAccount);
 
     if(!isAny(localStorage.getItem("personal_info_name"), localStorage.getItem("personal_info_id"), 
@@ -39504,7 +39591,15 @@ if(windowLocation.indexOf("user-account") > -1) {
             localStorage.setItem("personal_info_id",   `${accountInformation.id_number}`);
             localStorage.setItem("personal_info_cat",  `Nothing`);
             localStorage.setItem("personal_info_phone",`${accountInformation.phone_num}`);
-            localStorage.setItem('personal_info_email', currentUser.email)
+            localStorage.setItem('personal_info_email', currentUser.email);
+
+            console.log('college: ',accountInformation);
+            if(accountInformation.college == null || typeof(accountInformation.college) == 'undefined') {
+                localStorage.setItem('personal_info_college', 'Unspecified');
+            }
+            else {
+                localStorage.setItem('personal_info_college', accountInformation.college);
+            }
             displayInformation();
             // console.log(localStorage.getItem("personal_info_name"));
             // console.log(localStorage.getItem("personal_info_id"));
@@ -39523,6 +39618,7 @@ if(windowLocation.indexOf("user-account") > -1) {
         category.innerText = localStorage.getItem("personal_info_cat");
         phoneNum.innerText = localStorage.getItem("personal_info_phone");
         useremail.innerText = localStorage.getItem("personal_info_email");
+        college.innerText = localStorage.getItem("personal_info_college");
     }
     // function getAccountInformation(collectionReference) {
     //     // get collection data
@@ -39595,6 +39691,7 @@ if(windowLocation.indexOf("user-account") > -1) {
     let formId = document.querySelector('.form-id');
     let formCategory = document.querySelector('.form-usertype');
     let formPhoneNum = document.querySelector('.form-phonenum');
+    let formCollege = document.querySelector('.form-college');
     let formEmail = document.querySelector('.form-email');
     let formPassword = document.querySelector('.form-password');
     let currentUserId = localStorage.getItem('currentUserId');  
@@ -39651,6 +39748,17 @@ if(windowLocation.indexOf("user-account") > -1) {
         console.log("formPhoneNum:", currentUserId, phoneNumObj, formPhoneNum);
         updatePersonalInformation(currentUserId, phoneNumObj, formPhoneNum)
         localStorage.setItem('personal_info_phone', `${phoneNumObj['phone_num']}`)
+    });
+
+    formCollege.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let collegeObj = {
+            college: formCollege.college_option.value
+        }
+
+        updatePersonalInformation(currentUserId, collegeObj, formCollege);
+        localStorage.setItem('personal_info_college', `${collegeObj['college']}`)
     });
 
 
@@ -40482,25 +40590,40 @@ jQuery(function() {
         });
     });
 
-    $('.personal-info-plate').on('click', () => {
-        $('.pop-plate').animate({
+    // $('.personal-info-plate').on('click', () => {
+    //     $('.pop-plate').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
+
+    // $('.personal-info-model').on('click', () => {
+    //     $('.pop-model').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
+
+
+    // Select2
+    $('#classification').select2();
+    // $('#manufacturer').select2();
+    $('#vehicle-classification').select2();
+    $('#vehicle-categories').select2();
+
+
+    $('.personal-info-manufacturer').on('click', () => {
+        $('.pop-manufacturer').animate({
             opacity: "toggle",
             height: "toggle"
         }, 250, 'linear', () => {
             // animation complete
         });
     });
-
-    $('.personal-info-model').on('click', () => {
-        $('.pop-model').animate({
-            opacity: "toggle",
-            height: "toggle"
-        }, 250, 'linear', () => {
-            // animation complete
-        });
-    });
-
-
     $('.personal-info-classification').on('click', () => {
         $('.pop-classification').animate({
             opacity: "toggle",
@@ -40533,14 +40656,15 @@ jQuery(function() {
             // animation complete
         });
     });
-    $('.personal-info-type').on('click', () => {
-        $('.pop-type').animate({
-            opacity: "toggle",
-            height: "toggle"
-        }, 250, 'linear', () => {
-            // animation complete
-        });
-    });
+
+    // $('.personal-info-type').on('click', () => {
+    //     $('.pop-type').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
     $('.personal-info-remarks').on('click', () => {
         $('.pop-remarks').animate({
             opacity: "toggle",
@@ -40959,6 +41083,56 @@ jQuery(function() {
     }); //end of document.ready / jQuery function
 
 
+    // $('option').on('click', function(e){
+    //     let parentNode = this.parentNode;
+    //     for (let i=0; i < this.parentNode.options.length; i++) {
+    //         if (parentNode.options[i] == this) {
+    //           console.log('Clicked item with index', i);
+    //           break;
+    //         }
+    //     }
+    // });
+    
+    console.log('option');
+    $('#vehicle-classification').on('change', function(e){
+        let value = $(this).val();
+        console.log('value', value);
+        // console.log('clicked!')
+
+        if(value === 'A') {
+            $('#vehicle-categories').html(`<option value="L1">L1 - Two wheels; Maximum Speed: does not exceed to 50 kph</option>
+            <option value="L2">L2 - Three wheels; Maximum Speed: does not exceed to 50 kph</option>
+            <option value="L3">L3 - Two wheels; Maximum Speed: exceeds to 50 kph</option>`);
+        }
+        else if(value === 'A1') {
+            $('#vehicle-categories').html(`<option value="L4">L4 - With sidecars; Maximum Speed: does not exceeds to 50 kph</option>
+            <option value="L5">L5 - Three wheels symmetrically arranged; Maximum Speed: exceeds to 50 kph</option>
+            <option value="L6">L6 - Four wheels; Mass: not more than 350 kg; Maximum Speed: exceeds to 45 kph</option>
+            <option value="L7">L7 - Four wheels; Mass: not more than 550 kg; Maximum Speed: does not exceeds 45 kph</option>`);
+        }
+        else if(value === 'B' || value === 'B1' || value === 'B2') {
+            $('#vehicle-categories').html(`option value="M1">M1 - Mass: up to 5,000 kgs (GVW); Seats: not more than 8 passenger seats.</option>
+            <option value="M2">M2 - Mass: up to 5,000 kgs (GVW); Seats: more than 8 passenger seats.</option>
+            <option value="M3">M3 - Mass: up to 3,500 kgs (GVW); Only for carrying of goods.</option>`);
+        }
+        else if(value === 'C') {
+            $('#vehicle-categories').html(`<option value="N2, N3">N2, N3 - Vehicles exceeding 3,500 kgs GVW for the carriage of goods.</option>`);
+        }
+        else if(value === 'D') {
+            $('#vehicle-categories').html(`<option value="M3">M3 - Vehicles above 5,000 kgs GVW with more than 8 passenger seats.</option>`);
+        }
+        else if(value === 'BE') {
+            $('#vehicle-categories').html(`<option value="01">01 - Does not exceed to 750 kgs GVW</option>
+            <option value="02">02 - Do exceed up to 3,500 kgs GVW</option>`);
+        }
+        else if(value === 'CE') {
+            $('#vehicle-categories').html(`<option value="03, 04">03, 04 - Does not exceed to 3,500 kgs GVW</option>`);
+        }
+
+    });
+
+
+    
 
     $('#open-confirmation').on('click', () => {
 
@@ -41002,6 +41176,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 if(windowLocation.indexOf("user-vehicle") > -1) {
 
+    
     localStorage.removeItem("vehicle-front");
     localStorage.removeItem("vehicle-front-filetype");
     localStorage.removeItem("vehicle-front-filename");
@@ -41020,7 +41195,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         localStorage.clear();
         window.location = '../index.html';
     });
-
+    
 
     //JSON
 
@@ -41058,10 +41233,65 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     // console.log('true', vehicleInformation[vehicleKeys[index]])
 
                     const preSelectedVehicleKey = vehicleInformation[vehicleKeys[index]];
-                    listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${iterator} | ${preSelectedVehicleKey["model"][0]}, ${vehicleKeys[index]}</li>`;
+                    console.log('preSelectedVehicleKey: ', preSelectedVehicleKey);
+                    if(!typeof(preSelectedVehicleKey["model"]) === 'undefined') {
+                        listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${iterator} | ${preSelectedVehicleKey["model"][0]}, ${vehicleKeys[index]}</li>`;
+                        document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"][0];
+                    }
+                    else {
+                        listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${iterator} | ${preSelectedVehicleKey["model"]}, ${vehicleKeys[index]}</li>`;
+                        document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"];
+                    }
+
                     document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
                     document.querySelector('.personal-info-plate').innerText = vehicleKeys[index];
-                    document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"][0];
+                    
+
+                    // Classification
+                    if(typeof(preSelectedVehicleKey["classification"]) === 'undefined' || preSelectedVehicleKey["classification"] === null) {
+                        preSelectedVehicleKey["classification"] = "Unspecified.";
+                    }
+
+                    // Vehicle Color
+                    if(typeof(preSelectedVehicleKey["color"]) === 'undefined' || preSelectedVehicleKey["color"] === null) {
+                        preSelectedVehicleKey["color"] = "Unspecified.";
+                    }
+
+                    // Year
+                    if(typeof(preSelectedVehicleKey["year"]) === 'undefined' || preSelectedVehicleKey["year"] === null) {
+                        preSelectedVehicleKey["year"] = "Unspecified.";
+                    }
+
+                    // License Code and Vehicle Category
+                    if(typeof(preSelectedVehicleKey["license_code"]) === 'undefined' || preSelectedVehicleKey["license_code"] === null) {
+                        preSelectedVehicleKey["license_code"] = "Unspecified";
+                    }
+                    if(typeof(preSelectedVehicleKey["code_category"]) === 'undefined' || preSelectedVehicleKey["code_category"] === null) {
+                        preSelectedVehicleKey["code_category"] = "Unspecified";
+                    }
+
+                    // Remarks
+                    if(typeof(preSelectedVehicleKey["remarks"]) === 'undefined' || preSelectedVehicleKey["remarks"] === null) {
+                        preSelectedVehicleKey["remarks"] = "Unspecified";
+                        document.querySelector('.personal-info-remarks').innerText = preSelectedVehicleKey["remarks"];
+                        console.log('Remarks is null or unspecified.', typeof(preSelectedVehicleKey["remarks"]) === 'undefined' || preSelectedVehicleKey["remarks"] === null)
+                    }
+                    else {
+                        document.querySelector('.personal-info-remarks').innerText = "";
+                        document.querySelector('#remarks-block').value = preSelectedVehicleKey["remarks"];
+                    }
+
+
+                    console.log('preSelectedVehicleKey: ', preSelectedVehicleKey["color"]);
+                    document.querySelector('.personal-info-classification').innerText = preSelectedVehicleKey["classification"];
+                    document.querySelector('.personal-info-color').innerText = preSelectedVehicleKey["color"];
+                    document.querySelector('.personal-info-year').innerText = preSelectedVehicleKey["year"];
+                    document.querySelector('#license-code').innerText = preSelectedVehicleKey["license_code"];
+                    document.querySelector('#my-vehicle-categories').innerText = preSelectedVehicleKey["code_category"];
+                    
+                    
+                    
+                    
                     iterator += 1;
                     // if(x === 1) { //will be used for placeholder
                     //     document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
@@ -41122,12 +41352,54 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
                 const getSelectedAttrKey = element.getAttribute('data-key'),
                 personalInfoPlate = vehicleInformation[getSelectedAttrKey],
-                personalInfoModel = vehicleInformation[getSelectedAttrKey]["model"][0];
+                personalInfoModel = vehicleInformation[getSelectedAttrKey]["model"][0],
+                personalInfoClassification = vehicleInformation[getSelectedAttrKey]["classification"],
+                personalInfoColor = vehicleInformation[getSelectedAttrKey]["color"],
+                personalInfoYear = vehicleInformation[getSelectedAttrKey]["year"],
+                personalInfoLicense = vehicleInformation[getSelectedAttrKey]["license_code"],
+                personalInfoCategory = vehicleInformation[getSelectedAttrKey]["code_category"]
+                // personalInfoRemarks = vehicleInformation[getSelectedAttrKey]["remarks"];
                 
                 // console.log('personalInfoPlate:', personalInfoPlate);
+
+                // Classification
+                if(typeof(personalInfoClassification) === 'undefined' || personalInfoClassification === null) {
+                    personalInfoClassification = "Unspecified.";
+                }
+
+                // Vehicle Color
+                if(typeof(personalInfoColor) === 'undefined' || personalInfoColor === null) {
+                    personalInfoColor = "Unspecified.";
+                }
+
+                // Year
+                if(typeof(personalInfoYear) === 'undefined' || personalInfoYear === null) {
+                    personalInfoYear = "Unspecified.";
+                }
+
+                // License Code and Vehicle Category
+                if(typeof(personalInfoLicense) === 'undefined' || personalInfoLicense === null) {
+                    personalInfoLicense = "Unspecified";
+                }
+                if(typeof(personalInfoCategory) === 'undefined' || personalInfoCategory === null) {
+                    personalInfoCategory = "Unspecified";
+                }
+                
+                // Remarks
+                // if(typeof(personalInfoRemarks) === 'undefined' || personalInfoRemarks === null) {
+                //     personalInfoRemarks = "Unspecified";
+                // }
+
                 document.querySelector('.personal-info-plate').innerText = getSelectedAttrKey;
                 document.querySelector('.personal-info-model').innerText = personalInfoModel;
                 document.querySelector('#vehicle-placeholder').innerHTML = `<p>Vehicle #${index+1}</p>`;
+                document.querySelector('.personal-info-classification').innerHTML = personalInfoClassification;
+                document.querySelector('.personal-info-color').innerHTML = personalInfoColor;
+                document.querySelector('.personal-info-year').innerHTML = personalInfoYear;
+                document.querySelector('#license-code').innerHTML = personalInfoLicense;
+                document.querySelector('#my-vehicle-categories').innerHTML = personalInfoCategory;
+                
+                // document.querySelector('#personal-info-remarks').innerHTML = "...";
 
                 // currentIndexSelectedSubmit = index;
                 // console.log('currentIndexSelectedSubmit', currentIndexSelectedSubmit);
@@ -41145,19 +41417,118 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     const formPlate = document.querySelector('.form-plate');
     const formModel = document.querySelector('.form-model');
 
+    const formClassification = document.querySelector('.form-classification');
+    const formColor = document.querySelector('.form-color');
+    const formYear = document.querySelector('.form-year');
+    const formLicense_Category = document.querySelector('.form-category');
+    const formRemarks = document.querySelector('.form-remarks');
+    const getPlateNumber = document.querySelector('.personal-info-plate');
     formPlate.addEventListener('submit', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         let plateNumber = formPlate.form_plate.value;
-        updateVehiclePlateNumber(currentUserId, plateNumber, formPlate);
+        // updateVehiclePlateNumber(currentUserId, plateNumber, formPlate);
+        // getVehicleInformation(currentUserId);
     });
 
     formModel.addEventListener('submit', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         let plateModel = formModel.form_model.value;
-        updateVehicleModelNumber(currentUserId, plateModel, formModel)
+        // updateVehicleModelNumber(currentUserId, plateModel, formModel)
+        // getVehicleInformation(currentUserId);
+    });
+
+    formClassification.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let classificationObj = {
+            [`${getPlateNumber.textContent}.classification`]: formClassification.classification.value,
+        }
+
+        console.log('getPlateNumber: ', getPlateNumber.textContent, formClassification.classification.value, classificationObj);
+        updateVehicleInformation(currentUserId, classificationObj, formClassification);
+        getVehicleInformation(currentUserId);
+    });
+    formColor.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let colorObj = {
+            [`${getPlateNumber.textContent}.color`]: formColor.form_color.value
+        }
+        
+        console.log(colorObj, formColor.form_color.value);
+        updateVehicleInformation(currentUserId, colorObj, formColor);
+        getVehicleInformation(currentUserId);
+    });
+    formYear.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let yearObj = {
+            [`${getPlateNumber.textContent}.year`]: formYear.form_year.value
+        }
+
+        console.log('year: ', getPlateNumber.textContent, formYear.form_year.value, yearObj);
+        updateVehicleInformation(currentUserId, yearObj, formYear);
+        getVehicleInformation(currentUserId);
+    });
+    formLicense_Category.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let license_category = {
+            [`${getPlateNumber.textContent}.license_code`]: formLicense_Category.vehicle_classification.value,
+            [`${getPlateNumber.textContent}.code_category`]: formLicense_Category.vehicle_categories.value,
+        }
+
+        updateVehicleInformation(currentUserId, license_category, formLicense_Category);
+        getVehicleInformation(currentUserId);
+    });
+    formRemarks.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+
+        const getRemarks = document.querySelector('#remarks-block').value;
+        console.log(getRemarks === '')
+        if(getRemarks !== '') {
+
+            let remarksObj = {
+                [`${getPlateNumber.textContent}.remarks`]: getRemarks
+            }
+            console.log('remarks: ', remarksObj, getRemarks);
+            updateVehicleInformation(currentUserId, remarksObj, formRemarks);
+            getVehicleInformation(currentUserId);
+        }
+        else {
+            window.alert('Please fill up remarks.');
+        }
     });
 
 
+    function updateVehicleInformation(myId, myObject, myForm) {
+        console.log("vehicle updated: ", myObject);
+        const docRefAccount = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", myId);
+        
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefAccount, myObject)
+        .then(() => {    
+            myForm.reset();
+            // window.location.href = window.location.href; //reload a page in JS
+            // location.reload();
+        })
+    }
+
+    async function getVehicleInformation(userUID) {
+        console.log('getVehicleInformation function is called.');
+        const docVehicleActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", userUID);
+        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docVehicleActivity);
+        if (docVSnap.exists()) {
+            console.log('Vehicle information updated.');
+            let vehicleInformation = {...docVSnap.data()};
+            // console.log('docVSnap', docVSnap.data());
+            localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation));
+            vehicleInformation = null;
+        }
+    }
     // https://firebase.google.com/docs/firestore/manage-data/add-data#update_elements_in_an_array
     // Update fields in nested objects
     function updateVehicleModelNumber(myId, updateValue, myForm) {

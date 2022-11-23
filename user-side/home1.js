@@ -176,7 +176,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 // <li>Vehicle #1 | Toyota Raize 2022, Private</li>
                 //id="vehicle-list"
                 //vehicle-placeholder
-                listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
+                console.log('vehicleData: ', vehicleData);
+                console.log('keys: ', vehicleDataKeys[x], 'vehicleData model: ', vehicleData[vehicleDataKeys[x]]["model"]);
+                listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
                 
                 if(x === 1) { //will be used for placeholder
                     // console.log('placeholder');

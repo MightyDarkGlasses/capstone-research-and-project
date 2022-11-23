@@ -30,6 +30,7 @@ if(windowLocation.indexOf("user-account") > -1) {
     let category = document.querySelector(".personal-info-usertype");
     let phoneNum = document.querySelector(".personal-info-phonenum");
     let useremail = document.querySelector(".personal-info-email");
+    let college = document.querySelector(".personal-info-college");
     //getAccountInformation(colRefAccount);
 
     if(!isAny(localStorage.getItem("personal_info_name"), localStorage.getItem("personal_info_id"), 
@@ -59,7 +60,15 @@ if(windowLocation.indexOf("user-account") > -1) {
             localStorage.setItem("personal_info_id",   `${accountInformation.id_number}`);
             localStorage.setItem("personal_info_cat",  `Nothing`);
             localStorage.setItem("personal_info_phone",`${accountInformation.phone_num}`);
-            localStorage.setItem('personal_info_email', currentUser.email)
+            localStorage.setItem('personal_info_email', currentUser.email);
+
+            console.log('college: ',accountInformation);
+            if(accountInformation.college == null || typeof(accountInformation.college) == 'undefined') {
+                localStorage.setItem('personal_info_college', 'Unspecified');
+            }
+            else {
+                localStorage.setItem('personal_info_college', accountInformation.college);
+            }
             displayInformation();
             // console.log(localStorage.getItem("personal_info_name"));
             // console.log(localStorage.getItem("personal_info_id"));
@@ -78,6 +87,7 @@ if(windowLocation.indexOf("user-account") > -1) {
         category.innerText = localStorage.getItem("personal_info_cat");
         phoneNum.innerText = localStorage.getItem("personal_info_phone");
         useremail.innerText = localStorage.getItem("personal_info_email");
+        college.innerText = localStorage.getItem("personal_info_college");
     }
     // function getAccountInformation(collectionReference) {
     //     // get collection data
@@ -150,6 +160,7 @@ if(windowLocation.indexOf("user-account") > -1) {
     let formId = document.querySelector('.form-id');
     let formCategory = document.querySelector('.form-usertype');
     let formPhoneNum = document.querySelector('.form-phonenum');
+    let formCollege = document.querySelector('.form-college');
     let formEmail = document.querySelector('.form-email');
     let formPassword = document.querySelector('.form-password');
     let currentUserId = localStorage.getItem('currentUserId');  
@@ -206,6 +217,17 @@ if(windowLocation.indexOf("user-account") > -1) {
         console.log("formPhoneNum:", currentUserId, phoneNumObj, formPhoneNum);
         updatePersonalInformation(currentUserId, phoneNumObj, formPhoneNum)
         localStorage.setItem('personal_info_phone', `${phoneNumObj['phone_num']}`)
+    });
+
+    formCollege.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let collegeObj = {
+            college: formCollege.college_option.value
+        }
+
+        updatePersonalInformation(currentUserId, collegeObj, formCollege);
+        localStorage.setItem('personal_info_college', `${collegeObj['college']}`)
     });
 
 
