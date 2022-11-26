@@ -37701,6 +37701,30 @@ const listOfActivityContext = {
 };
 
 
+// if(window.location.pathname.indexOf("login.html") > -1) {
+//     if(window.location.pathname.indexOf("user-home") > -1 ||
+//     window.location.pathname.indexOf("user-account") > -1 ||
+//     window.location.pathname.indexOf("user-vehicle") > -1 ||
+//     window.location.pathname.indexOf("user-logs") > -1 ||
+//     window.location.pathname.indexOf("user-announcement") > -1) {
+//         console.log("Check user: ", user);
+//         onAuthStateChanged(auth, (user) => {
+//             if (user) {
+//                 if(window.location.pathname.indexOf('capstone-research-and-project') > -1) {
+//                     console.log('GitHub Hosting');
+//                     window.location = 'user-side/user-home.html'
+//                 }
+//                 else {
+//                     console.log('Localhost');
+//                     window.location = "../user-side/user-home.html";
+//                 }
+//             }
+//             else {
+//                 window.location = "login.html";
+//             }
+//         });
+//     }
+// }
 
 
 /************** == LOGIN PAGE == ***************/
@@ -38673,7 +38697,10 @@ if(windowLocation.indexOf("user-announcement") > -1) {
                 let yesQRCode = document.querySelector('.yes-qr-code');
                 yesQRCode.style.display = 'flex';
             }
-        } 
+        }
+        else {
+            window.location = "../login.html";
+        }
     });
     async function displayProfile(userUID) {
         const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
@@ -39034,7 +39061,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ### Display dropdown list of vehicles and linkages
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
         if (user) {
-
             // Display user profile picture.
             const profilePicture = displayProfile(user.uid).then(evt => { 
                 console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
@@ -39086,7 +39112,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 let yesQRCode = document.querySelector('.yes-qr-code');
                 yesQRCode.style.display = 'flex';
             }
-        } 
+        }
+        else {
+            window.location = "../login.html";
+        }
     });
 
     async function displayProfile(userUID) {
@@ -39427,7 +39456,7 @@ document.addEventListener('DOMContentLoaded', function() {
         _src_index__WEBPACK_IMPORTED_MODULE_0__.addActivity(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfUserLevels[0], _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfPages.auth_login, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfActivityContext.user_logout)
         .then((success) => {
             _src_index__WEBPACK_IMPORTED_MODULE_0__.logoutUser();
-            window.location = '../index.html';
+            window.location = '../login.html';
         });
 
         // window.location = '../login.html';
@@ -39518,7 +39547,10 @@ if(windowLocation.indexOf("user-logs") > -1) {
                 let yesQRCode = document.querySelector('.yes-qr-code');
                 yesQRCode.style.display = 'flex';
             }
-        } 
+        }
+        else {
+            window.location = "../login.html";
+        }
     });
     async function displayProfile(userUID) {
         const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
@@ -39959,7 +39991,10 @@ if(windowLocation.indexOf("user-account") > -1) {
                 let yesQRCode = document.querySelector('.yes-qr-code');
                 yesQRCode.style.display = 'flex';
             }
-        } 
+        }
+        else {
+            window.location = "../login.html";
+        }
     });
     async function displayProfile(userUID) {
         const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "account-information", userUID);
@@ -41634,34 +41669,10 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 }
                 
             });
-            
-            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
-            console.log('fire auth: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-
-            // Did we download the file?
-            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
-            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
-                getVehicleInformation(docRefVehicle);
-            }
-            else {
-                // console.log("I did the else.")
-                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
-                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
-
-                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-                // console.log('vehicleInformation:', vehi);
-                // displayVehicleDropdownList(vehi);
-                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
-                displayLinkagesDropdownList(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-                addEventsInList(vehi);  //re-add the events
-
-                // let noQrCode = document.querySelector('.no-qr-code');
-                let yesQRCode = document.querySelector('.yes-qr-code');
-                yesQRCode.style.display = 'flex';
-            }
         } 
+        else {
+            window.location = "../login.html";
+        }
     });
     async function displayProfile(userUID) {
         const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
@@ -41722,10 +41733,11 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             document.querySelector('.linkages-box').style.display = 'none';
         }
         else {
-            let vehicleKeys= Object.keys(JSON.parse(localStorage.vehicleInformation)).sort();
-
-            console.log("Vehicle keys: ", vehicleKeys);
+            let vehicleKeys = Object.keys(JSON.parse(localStorage.vehicleInformation)).sort();
+            console.log("vehicleKeys: ", vehicleKeys)
+            // console.log("Vehicle keys: ", vehicleKeys);
             let iterator = 1; // count the number of vehicle list
+            let isFirstTime = false;
             for (let index=0; index<vehicleKeys.length; index++) {
                 console.log('iterating index: ', index);
                 // console.log('index:', index);
@@ -41749,85 +41761,85 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
                     document.querySelector('.personal-info-plate').innerText = vehicleKeys[index];
                     
-
-                    // Classification
-                    if(typeof(preSelectedVehicleKey["classification"]) === 'undefined' || preSelectedVehicleKey["classification"] === null) {
-                        preSelectedVehicleKey["classification"] = "Unspecified.";
-                    }
-                    else {
-                        const listOfClassifications = ["Private" ,"For Hire" ,"Government" ,"Exempt"];
-                        const listGetIndex = listOfClassifications.indexOf(preSelectedVehicleKey["classification"].trim());
-                        
-                        console.log("listGetIndex:", listGetIndex, document.querySelector("#classification").selectedIndex);
-                        if(listGetIndex >= 0) {
-                            // document.querySelector("#classification").selectedIndex = listGetIndex;
-                            // $("#classification").val("val", listOfClassifications[listGetIndex]);
-                            // $('#classification').select2('data', {id: listGetIndex, a_key: listOfClassifications[listGetIndex]});
-                            $('#classification').val(listOfClassifications[listGetIndex]).trigger('change');
+                    // First time of execution?
+                    if(!isFirstTime) {
+                        console.log("First time of execution.")
+                        // Classification
+                        if(typeof(preSelectedVehicleKey["classification"]) === 'undefined' || preSelectedVehicleKey["classification"] === null) {
+                            preSelectedVehicleKey["classification"] = "Unspecified.";
                         }
-                    }
-
-                    // Vehicle Color
-                    if(typeof(preSelectedVehicleKey["color"]) === 'undefined' || preSelectedVehicleKey["color"] === null) {
-                        preSelectedVehicleKey["color"] = "Unspecified.";
-                    }
-                    else {
-                        document.querySelector("#form_color").setAttribute("value", preSelectedVehicleKey["color"]);
-                    }
-
-                    // Year
-                    if(typeof(preSelectedVehicleKey["year"]) === 'undefined' || preSelectedVehicleKey["year"] === null) {
-                        preSelectedVehicleKey["year"] = "Unspecified.";
-                    }
-                    else {
-                        document.querySelector("#form_year").setAttribute("value", preSelectedVehicleKey["year"]);
-                    }
-
-                    // License Code and Vehicle Category
-                    if(typeof(preSelectedVehicleKey["license_code"]) === 'undefined' || preSelectedVehicleKey["license_code"] === null) {
-                        preSelectedVehicleKey["license_code"] = "Unspecified";
-                    }
-                    else {
-                        const listOfLicenses = ["A", "A1", "B", "B1", "B2", "C", "D", "BE", "CE"];
-                        const listGetIndex = listOfLicenses.indexOf(preSelectedVehicleKey["license_code"].trim());
+                        else {
+                            const listOfClassifications = ["Private" ,"For Hire" ,"Government" ,"Exempt"];
+                            const listGetIndex = listOfClassifications.indexOf(preSelectedVehicleKey["classification"].trim());
+                            
+                            console.log("listGetIndex:", listGetIndex, document.querySelector("#classification").selectedIndex);
+                            if(listGetIndex >= 0) {
+                                // document.querySelector("#classification").selectedIndex = listGetIndex;
+                                // $("#classification").val("val", listOfClassifications[listGetIndex]);
+                                // $('#classification').select2('data', {id: listGetIndex, a_key: listOfClassifications[listGetIndex]});
+                                $('#classification').val(listOfClassifications[listGetIndex]).trigger('change');
+                            }
+                        }
+    
+                        // Vehicle Color
+                        if(typeof(preSelectedVehicleKey["color"]) === 'undefined' || preSelectedVehicleKey["color"] === null) {
+                            preSelectedVehicleKey["color"] = "Unspecified.";
+                        }
+                        else {
+                            document.querySelector("#form_color").setAttribute("value", preSelectedVehicleKey["color"]);
+                        }
+    
+                        // Year
+                        if(typeof(preSelectedVehicleKey["year"]) === 'undefined' || preSelectedVehicleKey["year"] === null) {
+                            preSelectedVehicleKey["year"] = "Unspecified.";
+                        }
+                        else {
+                            document.querySelector("#form_year").setAttribute("value", preSelectedVehicleKey["year"]);
+                        }
+    
+                        // License Code and Vehicle Category
+                        if(typeof(preSelectedVehicleKey["license_code"]) === 'undefined' || preSelectedVehicleKey["license_code"] === null) {
+                            preSelectedVehicleKey["license_code"] = "Unspecified";
+                        }
+                        else {
+                            const listOfLicenses = ["A", "A1", "B", "B1", "B2", "C", "D", "BE", "CE"];
+                            const listGetIndex = listOfLicenses.indexOf(preSelectedVehicleKey["license_code"].trim());
+                            
+                            console.log("listGetIndex", listOfLicenses[listGetIndex]);
+                            $('#vehicle_classification').val(listOfLicenses[listGetIndex]).trigger('change');
+                        }
+                        if(typeof(preSelectedVehicleKey["code_category"]) === 'undefined' || preSelectedVehicleKey["code_category"] === null) {
+                            preSelectedVehicleKey["code_category"] = "Unspecified";
+                        }
+                        else {
+                            const listOfCategories = 
+                            ["L1", "L2" ,"L3" ,"L5" ,"L6" ,"L7" ,"M1" ,"M2" ,"M3" ,"N2, N3" ,"M3" ,"01" ,"02" ,"03, 04"];
+                            const listGetIndex = listOfCategories.indexOf(preSelectedVehicleKey["code_category"].trim());
+                            
+                            console.log("listGetIndex", listOfCategories[listGetIndex]);
+                            $('#vehicle_categories').val(listOfCategories[listGetIndex]).trigger('change');
+                        }
                         
-                        console.log("listGetIndex", listOfLicenses[listGetIndex]);
-                        $('#vehicle_classification').val(listOfLicenses[listGetIndex]).trigger('change');
-                    }
-                    if(typeof(preSelectedVehicleKey["code_category"]) === 'undefined' || preSelectedVehicleKey["code_category"] === null) {
-                        preSelectedVehicleKey["code_category"] = "Unspecified";
-                    }
-                    else {
-                        const listOfCategories = 
-                        ["L2" ,"L3" ,"L5" ,"L6" ,"L7" ,"M1" ,"M2" ,"M3" ,"N2, N3" ,"M3" ,"01" ,"02" ,"03, 04"];
-                        const listGetIndex = listOfCategories.indexOf(preSelectedVehicleKey["code_category"].trim());
-                        
-                        console.log("listGetIndex", listOfCategories[listGetIndex]);
-                        $('#vehicle_categories').val(listOfCategories[listGetIndex]).trigger('change');
-                    }
-                    
-                    // Remarks
-                    if(typeof(preSelectedVehicleKey["remarks"]) === 'undefined' || preSelectedVehicleKey["remarks"] === null) {
-                        preSelectedVehicleKey["remarks"] = "Unspecified";
-                        document.querySelector('.personal-info-remarks').innerText = preSelectedVehicleKey["remarks"];
-                        console.log('Remarks is null or unspecified.', typeof(preSelectedVehicleKey["remarks"]) === 'undefined' || preSelectedVehicleKey["remarks"] === null)
-                    }
-                    else {
-                        document.querySelector('.personal-info-remarks').innerText = "";
-                        document.querySelector('#form_remarks').value = preSelectedVehicleKey["remarks"];
-                    }
+                        // Remarks
+                        if(typeof(preSelectedVehicleKey["remarks"]) === 'undefined' || preSelectedVehicleKey["remarks"] === null) {
+                            preSelectedVehicleKey["remarks"] = "Unspecified";
+                            document.querySelector('.personal-info-remarks').innerText = preSelectedVehicleKey["remarks"];
+                            console.log('Remarks is null or unspecified.', typeof(preSelectedVehicleKey["remarks"]) === 'undefined' || preSelectedVehicleKey["remarks"] === null)
+                        }
+                        else {
+                            document.querySelector('.personal-info-remarks').innerText = "";
+                            document.querySelector('#form_remarks').value = preSelectedVehicleKey["remarks"];
+                        }
+    
+                        console.log('preSelectedVehicleKey: ', preSelectedVehicleKey["color"]);
+                        document.querySelector('.personal-info-classification').innerText = preSelectedVehicleKey["classification"];
+                        document.querySelector('.personal-info-color').innerText = preSelectedVehicleKey["color"];
+                        document.querySelector('.personal-info-year').innerText = preSelectedVehicleKey["year"];
+                        document.querySelector('#license-code').innerText = preSelectedVehicleKey["license_code"];
+                        document.querySelector('#my-vehicle-categories').innerText = preSelectedVehicleKey["code_category"];
+                        isFirstTime = true;
+                    } //end of isFirstTime
 
-
-                    console.log('preSelectedVehicleKey: ', preSelectedVehicleKey["color"]);
-                    document.querySelector('.personal-info-classification').innerText = preSelectedVehicleKey["classification"];
-                    document.querySelector('.personal-info-color').innerText = preSelectedVehicleKey["color"];
-                    document.querySelector('.personal-info-year').innerText = preSelectedVehicleKey["year"];
-                    document.querySelector('#license-code').innerText = preSelectedVehicleKey["license_code"];
-                    document.querySelector('#my-vehicle-categories').innerText = preSelectedVehicleKey["code_category"];
-                    
-                    
-                    
-                    
                     iterator += 1;
                     // if(x === 1) { //will be used for placeholder
                     //     document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
@@ -41888,7 +41900,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 document.querySelector(".popup-dropdown").style.display = 'none'; //toggle out popup
                 console.log('getAttribute', element.getAttribute('data-key'));
 
-                const getSelectedAttrKey = element.getAttribute('data-key'),
+                let getSelectedAttrKey = element.getAttribute('data-key'),
                 personalInfoPlate = vehicleInformation[getSelectedAttrKey],
                 personalInfoModel = vehicleInformation[getSelectedAttrKey]["model"][0],
                 personalInfoClassification = vehicleInformation[getSelectedAttrKey]["classification"],
@@ -41950,7 +41962,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     }
                     else {
                         const listOfCategories = 
-                        ["L2" ,"L3" ,"L5" ,"L6" ,"L7" ,"M1" ,"M2" ,"M3" ,"N2, N3" ,"M3" ,"01" ,"02" ,"03, 04"];
+                        ["L1", "L2" ,"L3" ,"L5" ,"L6" ,"L7" ,"M1" ,"M2" ,"M3" ,"N2, N3" ,"M3" ,"01" ,"02" ,"03, 04"];
                         const listGetIndex = listOfCategories.indexOf(personalInfoCategory.trim());
                         
                         console.log("listGetIndex", listOfCategories[listGetIndex]);
@@ -41963,6 +41975,9 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 // Remarks
                 if(typeof(personalInfoRemarks) === 'undefined' || personalInfoRemarks === null) {
                     personalInfoRemarks = "Unspecified";
+                }
+                else {
+                    document.querySelector(".personal-info-remarks").innerText = ""
                 }
 
                 document.querySelector('.personal-info-plate').innerText = getSelectedAttrKey;

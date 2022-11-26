@@ -159,6 +159,30 @@ export const listOfActivityContext = {
 };
 
 
+// if(window.location.pathname.indexOf("login.html") > -1) {
+//     if(window.location.pathname.indexOf("user-home") > -1 ||
+//     window.location.pathname.indexOf("user-account") > -1 ||
+//     window.location.pathname.indexOf("user-vehicle") > -1 ||
+//     window.location.pathname.indexOf("user-logs") > -1 ||
+//     window.location.pathname.indexOf("user-announcement") > -1) {
+//         console.log("Check user: ", user);
+//         onAuthStateChanged(auth, (user) => {
+//             if (user) {
+//                 if(window.location.pathname.indexOf('capstone-research-and-project') > -1) {
+//                     console.log('GitHub Hosting');
+//                     window.location = 'user-side/user-home.html'
+//                 }
+//                 else {
+//                     console.log('Localhost');
+//                     window.location = "../user-side/user-home.html";
+//                 }
+//             }
+//             else {
+//                 window.location = "login.html";
+//             }
+//         });
+//     }
+// }
 
 
 /************** == LOGIN PAGE == ***************/

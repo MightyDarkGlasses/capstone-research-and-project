@@ -65,7 +65,10 @@ if(windowLocation.indexOf("user-logs") > -1) {
                 let yesQRCode = document.querySelector('.yes-qr-code');
                 yesQRCode.style.display = 'flex';
             }
-        } 
+        }
+        else {
+            window.location = "../login.html";
+        }
     });
     async function displayProfile(userUID) {
         const docAccountActivity = fire.myDoc(fire.db, "account-information", userUID);

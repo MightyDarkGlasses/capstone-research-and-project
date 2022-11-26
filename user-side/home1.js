@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ### Display dropdown list of vehicles and linkages
     fire.getOnAuthStateChanged(fire.auth, (user) => {
         if (user) {
-
             // Display user profile picture.
             const profilePicture = displayProfile(user.uid).then(evt => { 
                 console.log("current user: ", fire.auth.currentUser)
@@ -71,7 +70,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 let yesQRCode = document.querySelector('.yes-qr-code');
                 yesQRCode.style.display = 'flex';
             }
-        } 
+        }
+        else {
+            window.location = "../login.html";
+        }
     });
 
     async function displayProfile(userUID) {
@@ -412,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fire.addActivity(fire.auth.currentUser.uid, fire.listOfUserLevels[0], fire.listOfPages["auth_login"], fire.listOfActivityContext["user_logout"])
         .then((success) => {
             fire.logoutUser();
-            window.location = '../index.html';
+            window.location = '../login.html';
         });
 
         // window.location = '../login.html';
