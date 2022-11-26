@@ -620,8 +620,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     // displayLogs(); //display logs
     $('#logs-id').on('click', (e) => {
         console.log('Logs qr.js');
-        displayLogs();
-        displayVisitorLogs();
+        // displayLogs();
+        // displayVisitorLogs();
         currentlyIn();
     });
 

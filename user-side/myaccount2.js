@@ -58,7 +58,7 @@ if(windowLocation.indexOf("user-account") > -1) {
 
             localStorage.setItem("personal_info_name", `${accountInformation.last_name}, ${accountInformation.first_name} ${accountInformation.middle_name}`);
             localStorage.setItem("personal_info_id",   `${accountInformation.id_number}`);
-            localStorage.setItem("personal_info_cat",  `Nothing`);
+            localStorage.setItem("personal_info_cat",  `${accountInformation.category}`);
             localStorage.setItem("personal_info_phone",`${accountInformation.phone_num}`);
             localStorage.setItem('personal_info_email', currentUser.email);
 

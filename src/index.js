@@ -444,7 +444,7 @@ async function createNewData(userUID, flag) {
         phone_num: getCookie("phone"),
         is_activated: false,
         email: getCookie("email"),
-        user_type: null,
+        category: getCookie("usertype"),
         createdAt: serverTimestamp(),
         last_login: serverTimestamp(),
         profile_pic: null,

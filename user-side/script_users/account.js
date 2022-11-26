@@ -37,14 +37,14 @@ jQuery(function() {
         
     });
     
-    $('.personal-info-usertype').on('click', () => {
-        $('.pop-usertype').animate({
-            opacity: "toggle",
-            height: "toggle"
-        }, 250, 'linear', () => {
-            // animation complete
-        });
-    });
+    // $('.personal-info-usertype').on('click', () => {
+    //     $('.pop-usertype').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
 
     $('.personal-info-phonenum').on('click', () => {
         $('.pop-phonenum').animate({
