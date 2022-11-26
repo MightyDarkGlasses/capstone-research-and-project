@@ -12,7 +12,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     // DISPLAY THE PROFILE PICTURE...
     fire.getOnAuthStateChanged(fire.auth, (user) => {
         if (user) {
-
             // Display user profile picture.
             const profilePicture = displayProfile(user.uid).then(evt => { 
                 console.log("current user: ", fire.auth.currentUser)
@@ -35,7 +34,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 else {
                     document.querySelector(".category").textContent = "-";
                 }
-                
             });
         } 
         else {
@@ -920,15 +918,15 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
 
     // Get the uid of the currently logged in user.
-    fire.getOnAuthStateChanged(fire.auth, (user) => {
-        if (user) {
-            console.log("Currently logged user: ", user.uid);
-            getLinkagesInfo(user.uid);
-        } 
-        else {
-            console.error("No user was logged in.");
-        }
-    });
+    // fire.getOnAuthStateChanged(fire.auth, (user) => {
+    //     if (user) {
+    //         console.log("Currently logged user: ", user.uid);
+    //         getLinkagesInfo(user.uid);
+    //     } 
+    //     else {
+    //         console.error("No user was logged in.");
+    //     }
+    // });
     
     
     

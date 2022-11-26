@@ -36850,86 +36850,86 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
 
     // // ### Display Registered User logs
     
-    // async function displayLogs() {
-    //     const myQuery = fire.doQuery(fire.myCollection(fire.db, 'logs'));
-    //     fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
-    //         const unsubCollection = fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
-    //             let logs = [];
-    //             let index = 0;
-    //             snapshot.docs.forEach((doc) => {
-    //                 let unpackData = {...doc.data()};
-    //                 let objSize = Object.keys(unpackData).length;
-    //                 Object.entries(unpackData).map((element, index) => {
-    //                     if(objSize-1 !== index) {
-    //                         // let objectDate = new Date();
-    //                         // let day = objectDate.getDate();
-    //                         // let month = objectDate.getMonth() + 1;
-    //                         // let year = objectDate.getFullYear();
+    async function displayLogs() {
+        const myQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'logs'));
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
+            const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
+                let logs = [];
+                let index = 0;
+                snapshot.docs.forEach((doc) => {
+                    let unpackData = {...doc.data()};
+                    let objSize = Object.keys(unpackData).length;
+                    Object.entries(unpackData).map((element, index) => {
+                        if(objSize-1 !== index) {
+                            // let objectDate = new Date();
+                            // let day = objectDate.getDate();
+                            // let month = objectDate.getMonth() + 1;
+                            // let year = objectDate.getFullYear();
                             
-    //                         // let format1 = month + "/" + day + "/" + year;
-    //                         // console.log(format1); // 7/23/2022
+                            // let format1 = month + "/" + day + "/" + year;
+                            // console.log(format1); // 7/23/2022
 
-    //                         console.log("time_in", element[1]["time_in"]);
-    //                         console.log("time_out", element[1]["time_out"]);
-    //                         // console.log("time_out", element);
+                            console.log("time_in", element[1]["time_in"]);
+                            console.log("time_out", element[1]["time_out"]);
+                            // console.log("time_out", element);
 
-    //                         element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
-    //                         element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
 
-    //                         // console.log(index, element[1]);
-    //                         // element[1]['time_in'] = Date(new Date(0).setUTCSeconds(element[1]['time_in']['seconds']));
-    //                         // element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // console.log(index, element[1]);
+                            // element[1]['time_in'] = Date(new Date(0).setUTCSeconds(element[1]['time_in']['seconds']));
+                            // element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
 
-    //                         // .format('dddd MMM YYYY HH:mm:ss');
+                            // .format('dddd MMM YYYY HH:mm:ss');
                             
-    //                         index += 1; //increment
-    //                         logs.push(element[1]);
-    //                     }
-    //                 });
-    //             });
-    //             console.log(logs); 
+                            index += 1; //increment
+                            logs.push(element[1]);
+                        }
+                    });
+                });
+                console.log(logs); 
 
-    //             //Sort the data by time_scanned
-    //             // logs.sort(function(a, b) {
-    //             //     return new Date(a.time_scanned) - new Date(b.time_scanned);
-    //             // });
+                //Sort the data by time_scanned
+                // logs.sort(function(a, b) {
+                //     return new Date(a.time_scanned) - new Date(b.time_scanned);
+                // });
 
-    //             // logs.sort(function(a, b) {
-    //             //     return new Date(a.time_in.time_scanned) - new Date(b.time_in.time_scanned);
-    //             // });
-    //             // console.log('sorted:', logs);   //print the result
+                // logs.sort(function(a, b) {
+                //     return new Date(a.time_in.time_scanned) - new Date(b.time_in.time_scanned);
+                // });
+                // console.log('sorted:', logs);   //print the result
 
-    //             jQuery((e) => {
-    //                 console.log("DataTable");
-    //                 $("#table_id").DataTable({
-    //                     scrollX: true,
-    //                     "pageLength": 10,
-    //                     "data": logs,
-    //                     "columns": [
-    //                         {"data": "time_in.timestamp"},
-    //                         {"data": "time_out.timestamp"},
-    //                         {"data": (data, type, dataToSet) => {
-    //                             return data.time_in.gate_number + ", " + data.time_out.gate_number}
-    //                         },
-    //                         // {"data": "time_out.officer_uid"},
-    //                         {"data": (data, type, dataToSet) => {
-    //                             return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
-    //                         },
-    //                         {"data": "first_name"},
-    //                         {"data": "last_name"},
-    //                         {"data": "middle_name"},
-    //                         {"data": "plate_number"},
-    //                         {"data": "vehicle_model"},
-    //                     ],
-    //                     "columnDefs": [{
-    //                         "defaultContent": "-",
-    //                         "targets": "_all"
-    //                     }]
-    //                 });
-    //             }); //jQuery
-    //         }); //end of function
-    //     }); //end of snapshot function
-    // }
+                jQuery((e) => {
+                    console.log("DataTable");
+                    $("#table_id").DataTable({
+                        scrollX: true,
+                        "pageLength": 10,
+                        "data": logs,
+                        "columns": [
+                            {"data": "time_in.timestamp"},
+                            {"data": "time_out.timestamp"},
+                            {"data": (data, type, dataToSet) => {
+                                return data.time_in.gate_number + ", " + data.time_out.gate_number}
+                            },
+                            // {"data": "time_out.officer_uid"},
+                            {"data": (data, type, dataToSet) => {
+                                return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
+                            },
+                            {"data": "first_name"},
+                            {"data": "last_name"},
+                            {"data": "middle_name"},
+                            {"data": "plate_number"},
+                            {"data": "vehicle_model"},
+                        ],
+                        "columnDefs": [{
+                            "defaultContent": "-",
+                            "targets": "_all"
+                        }]
+                    });
+                }); //jQuery
+            }); //end of function
+        }); //end of snapshot function
+    }
 
 
     async function currentlyIn() {
@@ -37010,61 +37010,61 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     }
 
     // // ### Display Visitor Information logs
-    // async function displayVisitorLogs() {
-    //     const myQuery = fire.doQuery(fire.myCollection(fire.db, 'visitor-logs'));
-    //     fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
-    //         const unsubCollection = fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
-    //             let logs = [];
-    //             let index = 0;
-    //             snapshot.docs.forEach((doc) => {
-    //                 let unpackData = {...doc.data()};
-    //                 let objSize = Object.keys(unpackData).length;
-    //                 Object.entries(unpackData).map((element, index) => {
-    //                     if(objSize-1 !== index) {
+    async function displayVisitorLogs() {
+        const myQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'visitor-logs'));
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
+            const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
+                let logs = [];
+                let index = 0;
+                snapshot.docs.forEach((doc) => {
+                    let unpackData = {...doc.data()};
+                    let objSize = Object.keys(unpackData).length;
+                    Object.entries(unpackData).map((element, index) => {
+                        if(objSize-1 !== index) {
 
-    //                         console.log("time_in", element[1]["time_in"]);
-    //                         console.log("time_out", element[1]["time_out"]);
+                            console.log("time_in", element[1]["time_in"]);
+                            console.log("time_out", element[1]["time_out"]);
 
-    //                         element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
-    //                         element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
 
-    //                         index += 1; //increment
-    //                         logs.push(element[1]);
-    //                     }
-    //                 });
-    //             });
+                            index += 1; //increment
+                            logs.push(element[1]);
+                        }
+                    });
+                });
 
-    //             jQuery((e) => {
-    //                 console.log("DataTable");
-    //                 $("#table_visitor").DataTable({
-    //                     scrollX: true,
-    //                     "pageLength": 10,
-    //                     "data": logs,
-    //                     "columns": [
-    //                         {"data": "time_in.timestamp"},
-    //                         {"data": "time_out.timestamp"},
-    //                         {"data": (data, type, dataToSet) => {
-    //                             return data.time_in.gate_number + ", " + data.time_out.gate_number}
-    //                         },
-    //                         // {"data": "time_out.officer_uid"},
-    //                         {"data": (data, type, dataToSet) => {
-    //                             return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
-    //                         },
-    //                         {"data": "first_name"},
-    //                         {"data": "last_name"},
-    //                         {"data": "middle_name"},
-    //                         {"data": "plate_number"},
-    //                         {"data": "vehicle_model"},
-    //                     ],
-    //                     "columnDefs": [{
-    //                         "defaultContent": "-",
-    //                         "targets": "_all"
-    //                     }]
-    //                 });
-    //             }); //jQuery
-    //         }); //end of function
-    //     }); //end of snapshot function
-    // }
+                jQuery((e) => {
+                    console.log("DataTable");
+                    $("#table_visitor").DataTable({
+                        scrollX: true,
+                        "pageLength": 10,
+                        "data": logs,
+                        "columns": [
+                            {"data": "time_in.timestamp"},
+                            {"data": "time_out.timestamp"},
+                            {"data": (data, type, dataToSet) => {
+                                return data.time_in.gate_number + ", " + data.time_out.gate_number}
+                            },
+                            // {"data": "time_out.officer_uid"},
+                            {"data": (data, type, dataToSet) => {
+                                return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
+                            },
+                            {"data": "first_name"},
+                            {"data": "last_name"},
+                            {"data": "middle_name"},
+                            {"data": "plate_number"},
+                            {"data": "vehicle_model"},
+                        ],
+                        "columnDefs": [{
+                            "defaultContent": "-",
+                            "targets": "_all"
+                        }]
+                    });
+                }); //jQuery
+            }); //end of function
+        }); //end of snapshot function
+    }
 
     // Add Visitor Information button
     async function addVisitorInformation(officerUID, plateNumber, vehicleModel, fName, mName, lName) {
@@ -37163,8 +37163,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     // displayLogs(); //display logs
     $('#logs-id').on('click', (e) => {
         console.log('Logs qr.js');
-        // displayLogs();
-        // displayVisitorLogs();
+        displayLogs();
+        displayVisitorLogs();
         currentlyIn();
     });
 
@@ -37460,9 +37460,7 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../src/index */ "./src/index.js");
-
-
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./src/index.js");
 
 
 let windowLocation = window.location.pathname;
@@ -37473,7 +37471,7 @@ if(windowLocation.indexOf("forgot_password.html") > -1) {
         e.preventDefault();
         e.stopPropagation();
 
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.doSignInWithEmailAndPassword(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, 
+        _index__WEBPACK_IMPORTED_MODULE_0__.doSignInWithEmailAndPassword(_index__WEBPACK_IMPORTED_MODULE_0__.auth, 
             $('#forgot_email').val(), 'password')
         .then((e) => {
             //pass;
@@ -37481,16 +37479,7 @@ if(windowLocation.indexOf("forgot_password.html") > -1) {
             console.log('error: ', error);
             switch (error.code) {
                 case 'auth/wrong-password': {
-                    $('.modal-container-main').html(`<p>A reset email link is sent.<br/>You can check it on the <b>Spam</b> section.</p>`);
-                    $('.modal-container-title').html('Success');
-                    $('.modal-container-header').css({
-                        'backgroundColor': '#ef7900'
-                    })
-                    $("#error-popup").modal({
-                        fadeDuration: 100
-                    });
-                    console.log('signup err code: ', error.code)
-                    console.log('signup err message: ', error.message);
+                    resetPassword($('#forgot_email').val());
                     break;
                 }
                 case 'auth/user-not-found': {
@@ -37505,9 +37494,29 @@ if(windowLocation.indexOf("forgot_password.html") > -1) {
                     break;
                 }
             }
-        });
-    });
+        }); //end of catch block
+    }); //end of submit event
 
+    function resetPassword(resetEmailAddress) {
+        _index__WEBPACK_IMPORTED_MODULE_0__.getSendPasswordResetEmail(_index__WEBPACK_IMPORTED_MODULE_0__.auth, resetEmailAddress)
+        .then(() => {
+            // alert("Password reset email was sent");
+            $('.modal-container-main').html(`<p>A reset email link is sent.<br/>You can check it on the <b>Spam</b> section.</p>`);
+            $('.modal-container-title').html('Success');
+            $('.modal-container-header').css({
+                'backgroundColor': '#ef7900'
+            })
+            $("#error-popup").modal({
+                fadeDuration: 100
+            });
+            console.log('signup err code: ', error.code)
+            console.log('signup err message: ', error.message);
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
+    }
 }
 });
 
@@ -39062,8 +39071,10 @@ document.addEventListener('DOMContentLoaded', function() {
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
         if (user) {
             // Display user profile picture.
+            // console.log("Current authenticated user: ", user.uid);
             const profilePicture = displayProfile(user.uid).then(evt => { 
-                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
+                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser);
+                console.log('current user uid: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
                 console.log('evt.profilePicture: ', evt);
 
                 if(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL !== null) {
@@ -39087,7 +39098,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
-            console.log('fire auth: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+            
 
             // Did we download the file?
             // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
@@ -39149,17 +39160,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let saveQR = document.querySelector(".saveQR");
     let vehi = '';
 
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
-        if (user) {
-            // console.log('current logged user id: ', fire.auth);
-            console.log('current logged user id: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-        } 
-        else {
-            // User is signed out
-            console.log('Error: User is not logged in');
-        }
-    });
-    
     // function getVehicleInformation(element, collectionReference) {
     function getVehicleInformation(docReference) {
         _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(docReference, (doc) => {
@@ -39492,10 +39492,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 if(windowLocation.indexOf("user-logs") > -1) {
 
-    // DISPLAY THE PROFILE PICTURE...
+    // DISPLAY THE PROFILE PICTURE AND LOGS
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
         if (user) {
-
+            displayLogs(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+            displayActivityLogs(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid); //display logs in the table
             // Display user profile picture.
             const profilePicture = displayProfile(user.uid).then(evt => { 
                 console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
@@ -39720,18 +39721,6 @@ if(windowLocation.indexOf("user-logs") > -1) {
 
     }
 
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
-        if (user) {
-            // console.log('current logged user id: ', fire.auth);
-            // console.log('current logged user id: ', fire.auth.currentUser.uid);
-            displayLogs(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-            displayActivityLogs(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid); //display logs in the table
-        } 
-        else {
-            // User is signed out
-            alert('Error: User is not logged in');
-        }
-    });
 
     document.querySelector(".user-activity").style.display = 'none';
 
@@ -41644,7 +41633,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     // DISPLAY THE PROFILE PICTURE...
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
         if (user) {
-
             // Display user profile picture.
             const profilePicture = displayProfile(user.uid).then(evt => { 
                 console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
@@ -41667,7 +41655,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 else {
                     document.querySelector(".category").textContent = "-";
                 }
-                
             });
         } 
         else {
@@ -42552,15 +42539,15 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
 
     // Get the uid of the currently logged in user.
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
-        if (user) {
-            console.log("Currently logged user: ", user.uid);
-            getLinkagesInfo(user.uid);
-        } 
-        else {
-            console.error("No user was logged in.");
-        }
-    });
+    // fire.getOnAuthStateChanged(fire.auth, (user) => {
+    //     if (user) {
+    //         console.log("Currently logged user: ", user.uid);
+    //         getLinkagesInfo(user.uid);
+    //     } 
+    //     else {
+    //         console.error("No user was logged in.");
+    //     }
+    // });
     
     
     

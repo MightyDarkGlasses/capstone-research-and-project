@@ -20,8 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
     fire.getOnAuthStateChanged(fire.auth, (user) => {
         if (user) {
             // Display user profile picture.
+            // console.log("Current authenticated user: ", user.uid);
             const profilePicture = displayProfile(user.uid).then(evt => { 
-                console.log("current user: ", fire.auth.currentUser)
+                console.log("current user: ", fire.auth.currentUser);
+                console.log('current user uid: ', fire.auth.currentUser.uid);
                 console.log('evt.profilePicture: ', evt);
 
                 if(fire.auth.currentUser.photoURL !== null) {
@@ -45,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
-            console.log('fire auth: ', fire.auth.currentUser.uid);
+            
 
             // Did we download the file?
             // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
@@ -107,17 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let saveQR = document.querySelector(".saveQR");
     let vehi = '';
 
-    fire.getOnAuthStateChanged(fire.auth, (user) => {
-        if (user) {
-            // console.log('current logged user id: ', fire.auth);
-            console.log('current logged user id: ', fire.auth.currentUser.uid);
-        } 
-        else {
-            // User is signed out
-            console.log('Error: User is not logged in');
-        }
-    });
-    
     // function getVehicleInformation(element, collectionReference) {
     function getVehicleInformation(docReference) {
         fire.myOnSnapshot(docReference, (doc) => {

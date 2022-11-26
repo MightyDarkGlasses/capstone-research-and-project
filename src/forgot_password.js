@@ -1,6 +1,4 @@
-import * as fire from "../src/index";
-
-
+import * as fire from "./index";
 
 let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', async () => {
@@ -18,16 +16,7 @@ if(windowLocation.indexOf("forgot_password.html") > -1) {
             console.log('error: ', error);
             switch (error.code) {
                 case 'auth/wrong-password': {
-                    $('.modal-container-main').html(`<p>A reset email link is sent.<br/>You can check it on the <b>Spam</b> section.</p>`);
-                    $('.modal-container-title').html('Success');
-                    $('.modal-container-header').css({
-                        'backgroundColor': '#ef7900'
-                    })
-                    $("#error-popup").modal({
-                        fadeDuration: 100
-                    });
-                    console.log('signup err code: ', error.code)
-                    console.log('signup err message: ', error.message);
+                    resetPassword($('#forgot_email').val());
                     break;
                 }
                 case 'auth/user-not-found': {
@@ -42,8 +31,28 @@ if(windowLocation.indexOf("forgot_password.html") > -1) {
                     break;
                 }
             }
-        });
-    });
+        }); //end of catch block
+    }); //end of submit event
 
+    function resetPassword(resetEmailAddress) {
+        fire.getSendPasswordResetEmail(fire.auth, resetEmailAddress)
+        .then(() => {
+            // alert("Password reset email was sent");
+            $('.modal-container-main').html(`<p>A reset email link is sent.<br/>You can check it on the <b>Spam</b> section.</p>`);
+            $('.modal-container-title').html('Success');
+            $('.modal-container-header').css({
+                'backgroundColor': '#ef7900'
+            })
+            $("#error-popup").modal({
+                fadeDuration: 100
+            });
+            console.log('signup err code: ', error.code)
+            console.log('signup err message: ', error.message);
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
+    }
 }
 });

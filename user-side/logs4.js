@@ -10,10 +10,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 if(windowLocation.indexOf("user-logs") > -1) {
 
-    // DISPLAY THE PROFILE PICTURE...
+    // DISPLAY THE PROFILE PICTURE AND LOGS
     fire.getOnAuthStateChanged(fire.auth, (user) => {
         if (user) {
-
+            displayLogs(fire.auth.currentUser.uid);
+            displayActivityLogs(fire.auth.currentUser.uid); //display logs in the table
             // Display user profile picture.
             const profilePicture = displayProfile(user.uid).then(evt => { 
                 console.log("current user: ", fire.auth.currentUser)
@@ -238,18 +239,6 @@ if(windowLocation.indexOf("user-logs") > -1) {
 
     }
 
-    fire.getOnAuthStateChanged(fire.auth, (user) => {
-        if (user) {
-            // console.log('current logged user id: ', fire.auth);
-            // console.log('current logged user id: ', fire.auth.currentUser.uid);
-            displayLogs(fire.auth.currentUser.uid);
-            displayActivityLogs(fire.auth.currentUser.uid); //display logs in the table
-        } 
-        else {
-            // User is signed out
-            alert('Error: User is not logged in');
-        }
-    });
 
     document.querySelector(".user-activity").style.display = 'none';
 
