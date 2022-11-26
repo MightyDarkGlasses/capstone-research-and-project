@@ -38618,7 +38618,77 @@ let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', async () => {
 if(windowLocation.indexOf("user-announcement") > -1) {
     console.log('announcement5.js');
-    
+    // DISPLAY THE PROFILE PICTURE...
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
+        if (user) {
+
+            // Display user profile picture.
+            const profilePicture = displayProfile(user.uid).then(evt => { 
+                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
+                console.log('evt.profilePicture: ', evt);
+
+                if(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL !== null) {
+                    document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL);
+                }
+                else {
+                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
+                }
+
+                // Set the fullname
+                document.querySelector(".fullname").textContent = evt[0];
+
+                // Set the position of user. (NAP or Faculty)
+                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
+                    document.querySelector(".category").textContent = evt[1];
+                }
+                else {
+                    document.querySelector(".category").textContent = "-";
+                }
+                
+            });
+            
+            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
+            console.log('fire auth: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+
+            // Did we download the file?
+            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
+            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
+                getVehicleInformation(docRefVehicle);
+            }
+            else {
+                // console.log("I did the else.")
+                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
+                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
+
+                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
+                // console.log('vehicleInformation:', vehi);
+                // displayVehicleDropdownList(vehi);
+                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
+                displayLinkagesDropdownList(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+                addEventsInList(vehi);  //re-add the events
+
+                // let noQrCode = document.querySelector('.no-qr-code');
+                let yesQRCode = document.querySelector('.yes-qr-code');
+                yesQRCode.style.display = 'flex';
+            }
+        } 
+    });
+    async function displayProfile(userUID) {
+        const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
+        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docAccountActivity);
+        if (docVSnap.exists()) {
+            const position = docVSnap.data()["category"];
+
+            console.log("position: ", position);
+            console.log("position: ", typeof(position) !== "undefined" || position !== null);
+            if(typeof(position) !== "undefined" || position !== null) {
+                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
+            }
+        }
+        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
+    }
     
     const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "announcements");
     const linkagesQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(10));
@@ -38658,6 +38728,18 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         // });
         console.log(listOfSources);
         console.log(listOfFiles);
+
+
+        // If there are no files uplaoded
+        if(listOfFiles === '') {
+            listOfFiles = "<p style='color: rgba(255,255,255,.75);'><i>No files.</i></p>"
+            listOfFiles = "<p><i>No files.</i></p>"
+        }
+        // If there are no sources given
+        if(listOfSources === '') {
+            listOfSources = "<p style='color: rgba(255,255,255,.75)><i>No sources.</i></p>"
+            listOfSources = "<p><i>No sources.</i></p>"
+        }
         
         const toggleAnnouncementDetails =
         `
@@ -39380,6 +39462,79 @@ window.addEventListener('DOMContentLoaded', () => {
 // console.log(JSON.parse(localStorage.currentUser).uid);
 
 if(windowLocation.indexOf("user-logs") > -1) {
+
+    // DISPLAY THE PROFILE PICTURE...
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
+        if (user) {
+
+            // Display user profile picture.
+            const profilePicture = displayProfile(user.uid).then(evt => { 
+                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
+                console.log('evt.profilePicture: ', evt);
+
+                if(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL !== null) {
+                    document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL);
+                }
+                else {
+                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
+                }
+
+                // Set the fullname
+                document.querySelector(".fullname").textContent = evt[0];
+
+                // Set the position of user. (NAP or Faculty)
+                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
+                    document.querySelector(".category").textContent = evt[1];
+                }
+                else {
+                    document.querySelector(".category").textContent = "-";
+                }
+                
+            });
+            
+            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
+            console.log('fire auth: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+
+            // Did we download the file?
+            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
+            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
+                getVehicleInformation(docRefVehicle);
+            }
+            else {
+                // console.log("I did the else.")
+                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
+                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
+
+                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
+                // console.log('vehicleInformation:', vehi);
+                // displayVehicleDropdownList(vehi);
+                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
+                displayLinkagesDropdownList(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+                addEventsInList(vehi);  //re-add the events
+
+                // let noQrCode = document.querySelector('.no-qr-code');
+                let yesQRCode = document.querySelector('.yes-qr-code');
+                yesQRCode.style.display = 'flex';
+            }
+        } 
+    });
+    async function displayProfile(userUID) {
+        const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
+        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docAccountActivity);
+        if (docVSnap.exists()) {
+            const position = docVSnap.data()["category"];
+
+            console.log("position: ", position);
+            console.log("position: ", typeof(position) !== "undefined" || position !== null);
+            if(typeof(position) !== "undefined" || position !== null) {
+                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
+            }
+        }
+        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
+    }
+
     // console.log('logs4.js');
     // const docReference = fire.myDoc(fire.db, "logs", JSON.parse(localStorage.currentUser).uid);
     // fire.myOnSnapshot(docReference, (doc) => {
@@ -39580,7 +39735,7 @@ let windowLocation = window.location.pathname;
 
 //Check if I am on the user-account.html
 if(windowLocation.indexOf("user-account") > -1) {
-
+    
 
     // document.querySelector('.fullname').innerText = localStorage.personal_info_name === '' ? '' : localStorage.personal_info_name;
     // document.querySelector('.category').innerText = 
@@ -39748,6 +39903,80 @@ if(windowLocation.indexOf("user-account") > -1) {
 // My Account - Edit Information
 window.addEventListener('DOMContentLoaded', () => {
 if(windowLocation.indexOf("user-account") > -1) {
+
+    // DISPLAY THE PROFILE PICTURE...
+    _src_index__WEBPACK_IMPORTED_MODULE_1__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth, (user) => {
+        if (user) {
+
+            // Display user profile picture.
+            const profilePicture = displayProfile(user.uid).then(evt => { 
+                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser)
+                console.log('evt.profilePicture: ', evt);
+
+                if(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.photoURL !== null) {
+                    document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.photoURL);
+                }
+                else {
+                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
+                }
+
+                // Set the fullname
+                document.querySelector(".fullname").textContent = evt[0];
+
+                // Set the position of user. (NAP or Faculty)
+                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
+                    document.querySelector(".category").textContent = evt[1];
+                }
+                else {
+                    document.querySelector(".category").textContent = "-";
+                }
+                
+            });
+            
+            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
+            console.log('fire auth: ', _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.uid);
+
+            // Did we download the file?
+            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
+            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
+                getVehicleInformation(docRefVehicle);
+            }
+            else {
+                // console.log("I did the else.")
+                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
+                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
+
+                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
+                // console.log('vehicleInformation:', vehi);
+                // displayVehicleDropdownList(vehi);
+                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
+                displayLinkagesDropdownList(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.uid);
+                addEventsInList(vehi);  //re-add the events
+
+                // let noQrCode = document.querySelector('.no-qr-code');
+                let yesQRCode = document.querySelector('.yes-qr-code');
+                yesQRCode.style.display = 'flex';
+            }
+        } 
+    });
+    async function displayProfile(userUID) {
+        const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "account-information", userUID);
+        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDoc(docAccountActivity);
+        if (docVSnap.exists()) {
+            const position = docVSnap.data()["category"];
+
+            console.log("position: ", position);
+            console.log("position: ", typeof(position) !== "undefined" || position !== null);
+            if(typeof(position) !== "undefined" || position !== null) {
+                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
+            }
+        }
+        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
+    }
+
+
     console.log('My Account - Edit Information');
     const auth = _src_index__WEBPACK_IMPORTED_MODULE_1__.auth;
     console.log("myaccount_auth:", auth);
@@ -41377,7 +41606,77 @@ let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', () => {
 
 if(windowLocation.indexOf("user-vehicle") > -1) {
+    // DISPLAY THE PROFILE PICTURE...
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
+        if (user) {
 
+            // Display user profile picture.
+            const profilePicture = displayProfile(user.uid).then(evt => { 
+                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
+                console.log('evt.profilePicture: ', evt);
+
+                if(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL !== null) {
+                    document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL);
+                }
+                else {
+                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
+                }
+
+                // Set the fullname
+                document.querySelector(".fullname").textContent = evt[0];
+
+                // Set the position of user. (NAP or Faculty)
+                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
+                    document.querySelector(".category").textContent = evt[1];
+                }
+                else {
+                    document.querySelector(".category").textContent = "-";
+                }
+                
+            });
+            
+            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
+            console.log('fire auth: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+
+            // Did we download the file?
+            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
+            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
+                getVehicleInformation(docRefVehicle);
+            }
+            else {
+                // console.log("I did the else.")
+                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
+                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
+
+                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
+                // console.log('vehicleInformation:', vehi);
+                // displayVehicleDropdownList(vehi);
+                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
+                displayLinkagesDropdownList(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+                addEventsInList(vehi);  //re-add the events
+
+                // let noQrCode = document.querySelector('.no-qr-code');
+                let yesQRCode = document.querySelector('.yes-qr-code');
+                yesQRCode.style.display = 'flex';
+            }
+        } 
+    });
+    async function displayProfile(userUID) {
+        const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
+        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docAccountActivity);
+        if (docVSnap.exists()) {
+            const position = docVSnap.data()["category"];
+
+            console.log("position: ", position);
+            console.log("position: ", typeof(position) !== "undefined" || position !== null);
+            if(typeof(position) !== "undefined" || position !== null) {
+                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
+            }
+        }
+        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
+    }
     
     localStorage.removeItem("vehicle-front");
     localStorage.removeItem("vehicle-front-filetype");

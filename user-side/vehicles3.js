@@ -9,7 +9,77 @@ let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', () => {
 
 if(windowLocation.indexOf("user-vehicle") > -1) {
+    // DISPLAY THE PROFILE PICTURE...
+    fire.getOnAuthStateChanged(fire.auth, (user) => {
+        if (user) {
 
+            // Display user profile picture.
+            const profilePicture = displayProfile(user.uid).then(evt => { 
+                console.log("current user: ", fire.auth.currentUser)
+                console.log('evt.profilePicture: ', evt);
+
+                if(fire.auth.currentUser.photoURL !== null) {
+                    document.querySelector("#profile-picture").setAttribute('src', fire.auth.currentUser.photoURL);
+                }
+                else {
+                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
+                }
+
+                // Set the fullname
+                document.querySelector(".fullname").textContent = evt[0];
+
+                // Set the position of user. (NAP or Faculty)
+                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
+                    document.querySelector(".category").textContent = evt[1];
+                }
+                else {
+                    document.querySelector(".category").textContent = "-";
+                }
+                
+            });
+            
+            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
+            console.log('fire auth: ', fire.auth.currentUser.uid);
+
+            // Did we download the file?
+            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
+            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
+                getVehicleInformation(docRefVehicle);
+            }
+            else {
+                // console.log("I did the else.")
+                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
+                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
+
+                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
+                // console.log('vehicleInformation:', vehi);
+                // displayVehicleDropdownList(vehi);
+                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
+                displayLinkagesDropdownList(fire.auth.currentUser.uid);
+                addEventsInList(vehi);  //re-add the events
+
+                // let noQrCode = document.querySelector('.no-qr-code');
+                let yesQRCode = document.querySelector('.yes-qr-code');
+                yesQRCode.style.display = 'flex';
+            }
+        } 
+    });
+    async function displayProfile(userUID) {
+        const docAccountActivity = fire.myDoc(fire.db, "account-information", userUID);
+        const docVSnap = await fire.myGetDoc(docAccountActivity);
+        if (docVSnap.exists()) {
+            const position = docVSnap.data()["category"];
+
+            console.log("position: ", position);
+            console.log("position: ", typeof(position) !== "undefined" || position !== null);
+            if(typeof(position) !== "undefined" || position !== null) {
+                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
+            }
+        }
+        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
+    }
     
     localStorage.removeItem("vehicle-front");
     localStorage.removeItem("vehicle-front-filetype");
