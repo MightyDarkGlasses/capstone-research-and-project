@@ -27,45 +27,54 @@
           
 </head>
 
+
+<style>
+    .main-container-logs > p {
+        margin-top: 2em;
+    }
+    .logs-buttons {
+        display: flex;
+        gap: 1em;
+        margin-top: 1em;
+    }
+</style>
 <body>
     <!-- main-container -->
     <div class="main-container-logs">
-        <div class="dropdownLogs-area">
-            <div class="dropdownLogs">
-                <button type="button">ALL LOGS
-                    <iconify-icon icon="bxs:down-arrow"></iconify-icon>
 
-                </button>
-
-            </div>
-        </div>
         <!-- container with the border -->
+        <p>Change Logs View: </p>
+        <div class="logs-buttons">
+            <button id="do_logs">User Logs</button>
+            <button id="do_visitor">Visitor Logs</button>
+            <button id="do_currently">Current In</button>
+        </div>
         <div class="logs-container">
-            <div id="content" class="content user-content">
+            <div id="content" class="content user-content show-logs" >
                 <h3>User Logs</h3>
                 <table
-                     id="table_id"
-                     class="display"
-                     style="width: 100%"
-                     onload="displayLogs()">
-                     <thead>
-                          <tr>
-                               <th>Time In</th>
-                               <th>Time Out</th>
-                               <th>Gate Number</th>
-                               <th>Security UID</th>
-                               <th>First Name</th>
-                               <th>Last Name</th>
-                               <th>Middle Name</th>
-                               <th>Plate Number</th>
-                               <th>Vehicle Model</th>
-                          </tr>
-                     </thead>
+                        id="table_id"
+                        class="display"
+                        style="width: 100%"
+                        onload="displayLogs()">
+                        <thead>
+                            <tr>
+                                <th>Time In</th>
+                                <th>Time Out</th>
+                                <th>Gate Number</th>
+                                <th>Security UID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Middle Name</th>
+                                <th>Plate Number</th>
+                                <th>Vehicle Model</th>
+                            </tr>
+                        </thead>
                 </table>
-           </div>
+            </div>
 
-           <div id="content" class="content user-content">
-               <h3>Visitor Information</h3>
+            <div id="content" class="content user-content show-visitor" style="display: none;">
+                <h3>Visitor Information</h3>
                 <table
                         id="table_visitor"
                         class="display"
@@ -86,10 +95,10 @@
                             </tr>
                         </thead>
                 </table>
-           </div>
+            </div>
 
-           <div id="content" class="content user-content">
-               <h3>Currently In</h3>
+            <div id="content" class="content user-content show-currently-in" style="display: none;">
+                <h3>Currently In</h3>
                 <table
                         id="table_inned"
                         class="display"
@@ -107,7 +116,7 @@
                             </tr>
                         </thead>
                 </table>
-           </div>
+            </div>
         </div>
     </div>
 </body>

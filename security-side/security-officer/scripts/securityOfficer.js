@@ -78,9 +78,27 @@ function loadLogs() {
   let xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("content-container").innerHTML =
-        this.responseText;
+      document.getElementById("content-container").innerHTML = this.responseText;
+        $("#do_logs").on("click", () => {
+          console.log("#do_logs clicked");
+          $(".show-logs").css("display", "block");
+          $(".show-visitor").css("display", "none");
+          $(".show-currently-in").css("display", "none");
+        });
+        $("#do_visitor").on("click", () => {
+            console.log("#do_visitor clicked");
+            $(".show-logs").css("display", "none");
+            $(".show-visitor").css("display", "block");
+            $(".show-currently-in").css("display", "none");
+        });
+        $("#do_currently").on("click", () => {
+            console.log("#do_currently clicked");
+            $(".show-logs").css("display", "none");
+            $(".show-visitor").css("display", "none");
+            $(".show-currently-in").css("display", "block");
+        });
     }
+
   };
   xhttp.open("GET", "securityOfficer-logs.html", true);
   xhttp.send();

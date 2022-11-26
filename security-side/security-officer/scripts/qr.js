@@ -2,77 +2,81 @@ import * as fire from "../../../src/index";
 import QrScanner from "./qr-scanner.min.js";
 
 if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
+
+    document.addEventListener('DOMContentLoaded', function() {
+    });
+
     console.log('QrScanner qr.js');
 
-        // Autocomplete data
+    // Autocomplete data
 
-        let index = 0;
-        let availableTags = [];
-        async function getVisitorLogsList() {
-            const colRef = fire.myCollection(fire.db, "visitor-logs");
-            const visitorLogsQuery = fire.doQuery(colRef, fire.doLimit(10));
-            const docsSnap = await fire.myGetDocs(visitorLogsQuery);
+    let index = 0;
+    let availableTags = [];
+    async function getVisitorLogsList() {
+        const colRef = fire.myCollection(fire.db, "visitor-logs");
+        const visitorLogsQuery = fire.doQuery(colRef, fire.doLimit(10));
+        const docsSnap = await fire.myGetDocs(visitorLogsQuery);
+        
+
+        // var availableTags = [
+        //     { label: "Mathematics", value: "MATHS" },
+        //     { label: "Chemistry", value: "CHEM" },
+        //     { label: "Physics", value: "PHY" },
+        //     { label: "English", value: "ENG" },
+        //     { label: "Environmental Science", value: "EVS" }
+        // ];
+
+        
+        docsSnap.forEach(async doc => {
+            let visitorInfo = doc.data();
+            delete visitorInfo['logs_length'];
             
+            console.log('plateNumber: ', doc.id);
+            Object.keys(visitorInfo).forEach((element) => {
+                // console.log('visitorInfo: ', visitorInfo);
+                let fullname = `${visitorInfo[element].last_name.trim()}, ${visitorInfo[element].first_name.trim()} ${visitorInfo[element].middle_name.trim()}`;
+                // console.log('fname: ', visitorInfo[element].first_name.trim());
+                // console.log('lname: ', visitorInfo[element].last_name.trim());
+                // console.log('mname: ', visitorInfo[element].middle_name.trim());
 
-            // var availableTags = [
-            //     { label: "Mathematics", value: "MATHS" },
-            //     { label: "Chemistry", value: "CHEM" },
-            //     { label: "Physics", value: "PHY" },
-            //     { label: "English", value: "ENG" },
-            //     { label: "Environmental Science", value: "EVS" }
-            // ];
+                // const obj = {label: doc.id, value: fullname };
+                // console.log('obj: ', obj);
 
-            
-            docsSnap.forEach(async doc => {
-                let visitorInfo = doc.data();
-                delete visitorInfo['logs_length'];
-                
-                console.log('plateNumber: ', doc.id);
-                Object.keys(visitorInfo).forEach((element) => {
-                    // console.log('visitorInfo: ', visitorInfo);
-                    let fullname = `${visitorInfo[element].last_name.trim()}, ${visitorInfo[element].first_name.trim()} ${visitorInfo[element].middle_name.trim()}`;
-                    // console.log('fname: ', visitorInfo[element].first_name.trim());
-                    // console.log('lname: ', visitorInfo[element].last_name.trim());
-                    // console.log('mname: ', visitorInfo[element].middle_name.trim());
+                // console.log('some: ', availableTags.some(item => item.fullname === fullname));
+                if(!availableTags.some(item => item.fullname === fullname)) {
+                    console.log('element: ', visitorInfo)
+                    availableTags.push({label: `${doc.id}, ${fullname}`, 'value': fullname, 'data': visitorInfo[element]});
 
-                    // const obj = {label: doc.id, value: fullname };
-                    // console.log('obj: ', obj);
+                }
+                // fullname = null;
+            });
+            // visitorInfo.forEach((element) => {
+            // });
+            index = index + 1;
+            if(index == docsSnap.docs.length) {
+                $( "#tags" ).autocomplete({
+                    source: availableTags,
+                    
+                    select: function (event, ui) {
+                        const selectedItem = ui.item.data;
+                        console.log(selectedItem);
+                        $('input[name="guest-add-fname"]').attr({'value': selectedItem.first_name});
+                        $('input[name="guest-add-mname"]').attr({'value': selectedItem.middle_name});
+                        $('input[name="guest-add-lname"]').attr({'value': selectedItem.last_name});
+                        $('input[name="guest-add-vehiclemodel"]').attr({'value': selectedItem.vehicle_model});
+                        $('input[name="guest-add-platenum"]').attr({'value': selectedItem.plate_number});
 
-                    // console.log('some: ', availableTags.some(item => item.fullname === fullname));
-                    if(!availableTags.some(item => item.fullname === fullname)) {
-                        console.log('element: ', visitorInfo)
-                        availableTags.push({label: `${doc.id}, ${fullname}`, 'value': fullname, 'data': visitorInfo[element]});
+
 
                     }
-                    // fullname = null;
                 });
-                // visitorInfo.forEach((element) => {
-                // });
-                index = index + 1;
-                if(index == docsSnap.docs.length) {
-                    $( "#tags" ).autocomplete({
-                        source: availableTags,
-                        
-                        select: function (event, ui) {
-                            const selectedItem = ui.item.data;
-                            console.log(selectedItem);
-                            $('input[name="guest-add-fname"]').attr({'value': selectedItem.first_name});
-                            $('input[name="guest-add-mname"]').attr({'value': selectedItem.middle_name});
-                            $('input[name="guest-add-lname"]').attr({'value': selectedItem.last_name});
-                            $('input[name="guest-add-vehiclemodel"]').attr({'value': selectedItem.vehicle_model});
-                            $('input[name="guest-add-platenum"]').attr({'value': selectedItem.plate_number});
 
-
-
-                        }
-                    });
-
-                    
-                    console.log('availableTags', availableTags);
-                }
-            });
-        }
-        getVisitorLogsList();
+                
+                console.log('availableTags', availableTags);
+            }
+        });
+    }
+    getVisitorLogsList();
 
     
 
@@ -326,8 +330,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                             // let format1 = month + "/" + day + "/" + year;
                             // console.log(format1); // 7/23/2022
 
-                            console.log("time_in", element[1]["time_in"]);
-                            console.log("time_out", element[1]["time_out"]);
+                            // console.log("time_in", element[1]["time_in"]);
+                            // console.log("time_out", element[1]["time_out"]);
                             // console.log("time_out", element);
 
                             element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
@@ -616,12 +620,17 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     
 
 
-     
+    // const showLogs = document.querySelector("#show-logs");
+    // const showVisitor = document.querySelector("#show-visitor");
+    // const showCurrentlyIn = document.querySelector("#show-currently-in");
+    
+    
+
     // displayLogs(); //display logs
     $('#logs-id').on('click', (e) => {
         console.log('Logs qr.js');
-        // displayLogs();
-        // displayVisitorLogs();
+        displayLogs();
+        displayVisitorLogs();
         currentlyIn();
     });
 
