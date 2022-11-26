@@ -97,17 +97,17 @@ if(windowLocation.indexOf("user-logs") > -1) {
     }
 
     async function displayActivityLogs(currentLoggedUserId) {
-        const colRef = fire.myCollection(fire.db, "system-activity");
-        const activityQuery = fire.doQuery(colRef, fire.doLimit(10));
-        const docsSnap = await fire.myGetDocs(activityQuery);
+        // const colRef = fire.myCollection(fire.db, "system-activity");
+        // const activityQuery = fire.doQuery(colRef, fire.doLimit(10));
+        // const docsSnap = await fire.myGetDocs(activityQuery);
 
-        let index = 0;
+        const docReference = fire.myDoc(fire.db, "system-activity", currentLoggedUserId);
+
         let activity = [];
-        docsSnap.forEach(async doc => {
-            index = index + 1;
+        fire.myOnSnapshot(docReference, (doc) => {     //based on the query, //change this back!
             let activityInformation = {...doc.data()};
-            
             let objSize = Object.keys(activityInformation).length;
+
             Object.entries(activityInformation).map((element, index) => {
                 if(objSize-1 !== index) {
                     element[1]['timestamp'] = element[1]['timestamp'] === '' ? '' : new Date(element[1]['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
@@ -116,38 +116,57 @@ if(windowLocation.indexOf("user-logs") > -1) {
                 }
             });
 
+            jQuery((e) => {
+                $("#table_id_activity").DataTable({
+                    scrollX: true,
+                    "pageLength": 10,
+                    "data": activity,
+                    "columns": [
+                        {"data": "id"},
+                        {"data": "uid"},
+                        {"data": "user_level"},
+                        {"data": "timestamp"},
+                        {"data": "current_page"},
+                        {"data": "context"},
+                    ],
+                    "columnDefs": [{
+                        "defaultContent": "-",
+                        "targets": "_all"
+                    }]
+                });
+            }); //jQuery
+        });
+        console.log("activity: ", activity);
+
+        // let index = 0;
+        // let activity = [];
+        // docsSnap.forEach(async doc => {
+        //     index = index + 1;
+        //     let activityInformation = {...doc.data()};
+            
+        //     let objSize = Object.keys(activityInformation).length;
+        //     Object.entries(activityInformation).map((element, index) => {
+        //         if(objSize-1 !== index) {
+        //             element[1]['timestamp'] = element[1]['timestamp'] === '' ? '' : new Date(element[1]['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
+        //             element[1]["id"] = index;
+        //             activity.push(element[1]);
+        //         }
+        //     });
+
             
 
-            // console.log('activityInformation', activityInformation);
-            console.table(activity);
-        });
+        //     // console.log('activityInformation', activityInformation);
+        //     console.table(activity);
+        // });
 
-        jQuery((e) => {
-            $("#table_id_activity").DataTable({
-                scrollX: true,
-                "pageLength": 10,
-                "data": activity,
-                "columns": [
-                    {"data": "id"},
-                    {"data": "uid"},
-                    {"data": "user_level"},
-                    {"data": "timestamp"},
-                    {"data": "current_page"},
-                    {"data": "context"},
-                ],
-                "columnDefs": [{
-                    "defaultContent": "-",
-                    "targets": "_all"
-                }]
-            });
-        }); //jQuery
+
     }
 
     fire.getOnAuthStateChanged(fire.auth, (user) => {
         if (user) {
             // console.log('current logged user id: ', fire.auth);
             // console.log('current logged user id: ', fire.auth.currentUser.uid);
-            // displayLogs(fire.auth.currentUser.uid);
+            displayLogs(fire.auth.currentUser.uid);
             displayActivityLogs(fire.auth.currentUser.uid); //display logs in the table
         } 
         else {
@@ -156,6 +175,16 @@ if(windowLocation.indexOf("user-logs") > -1) {
         }
     });
 
+    document.querySelector(".user-activity").style.display = 'none';
+
+    document.querySelector("#site-logs").addEventListener("click", () => {
+        document.querySelector(".user-activity").style.display = 'none';
+        document.querySelector(".user-logs").style.display = 'block';
+    });
+    document.querySelector("#site-activities").addEventListener("click", () => {
+        document.querySelector(".user-activity").style.display = 'block';
+        document.querySelector(".user-logs").style.display = 'none';
+    });
     
 }
 }); //end DOMContentLoaded

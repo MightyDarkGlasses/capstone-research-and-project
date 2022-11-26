@@ -151,6 +151,15 @@
                         <div class="personal-box-grid">
                             <span class="personal-category personal-info-title">Profile Picture</span>
                             <span class="personal-info-profile"></span>
+                            <div class="popdown pop-profile">
+                                <form action="#" class="form-userprofile">
+                                    <input type="file" name="profile" class="profile-image" required accept=".png, .jpg, .jpeg, .gif">
+
+                                    <input type="submit" value="Save Changes">
+                                </form>
+                            </div>
+
+
                             <span class="personal-info-title">Full Name</span>
                             <span class="personal-info-name">▃▃▃▃▃</span>
                             <div class="popdown pop-name">
@@ -182,11 +191,11 @@
                             <div class="popdown pop-usertype">
                                 <form action="#" class="form-usertype">
                                     <div class="">
-                                        <input type="radio" name="user_type" value="FACULTY">
+                                        <input type="radio" id="usertype_1" name="user_type" value="FACULTY">
                                         <label>Faculty Member</label>
                                     </div>
                                     <div class="">
-                                        <input type="radio" name="user_type" value="NAP">
+                                        <input type="radio" id="usertype_2" name="user_type" value="NAP">
                                         <label>Non-academic Personnel</label>
                                     </div>
 
@@ -210,7 +219,7 @@
                             <div class="popdown pop-college">
                                 <form action="#" class="form-college">
                                     <label>College</label>
-                                    <select name="college_option" id="">
+                                    <select name="college_option" id="college_option">
                                         <option value="CAFA">College of Architecture and Fine Arts (CAFA)</option>
                                         <option value="CAL">College of Arts and Letters (CAL)</option>
                                         <option value="CBA">College of Business Administration (CBA)</option>

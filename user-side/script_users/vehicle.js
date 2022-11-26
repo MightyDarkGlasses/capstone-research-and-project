@@ -38,9 +38,67 @@ jQuery(function() {
     // Select2
     $('#classification').select2();
     // $('#manufacturer').select2();
-    $('#vehicle-classification').select2();
-    $('#vehicle-categories').select2();
+    $('#vehicle_classification').select2();
+    $('#vehicle_categories').select2();
+    $('#vehicle_classification').on("change", (e) => {
+        console.log($("#vehicle_classification").prop('selectedIndex'));
 
+        let currentIndex = $("#vehicle_classification").prop('selectedIndex');
+        switch(currentIndex) {
+            case 0: {
+                // A
+                $("#vehicle_categories").html(`<option value="L1">L1 - Two wheels; Maximum Speed: does not exceed to 50 kph</option>
+                <option value="L2">L2 - Three wheels; Maximum Speed: does not exceed to 50 kph</option>
+                <option value="L3">L3 - Two wheels; Maximum Speed: exceeds to 50 kph</option>`);
+                break;
+            }
+            case 1: {
+                // A1
+                $("#vehicle_categories").html(`<option value="L4">L4 - With sidecars; Maximum Speed: does not exceeds to 50 kph</option>
+                <option value="L5">L5 - Three wheels symmetrically arranged; Maximum Speed: exceeds to 50 kph</option>
+                <option value="L6">L6 - Four wheels; Mass: not more than 350 kg; Maximum Speed: exceeds to 45 kph</option>
+                <option value="L7">L7 - Four wheels; Mass: not more than 550 kg; Maximum Speed: does not exceeds 45 kph</option>`);
+                break;
+            }
+            case 2: 
+            case 3: 
+            case 4: {
+                // B, B1, B2
+                $("#vehicle_categories").html(`<option value="M1">M1 - Mass: up to 5,000 kgs (GVW); Seats: not more than 8 passenger seats.</option>
+                <option value="M2">M2 - Mass: up to 5,000 kgs (GVW); Seats: more than 8 passenger seats.</option>
+                <option value="M3">M3 - Mass: up to 3,500 kgs (GVW); Only for carrying of goods.</option>`);
+                break;
+            }
+            case 5: {
+                // C
+                $("#vehicle_categories").html(`<option value="N2, N3" selected>N2, N3 - Vehicles exceeding 3,500 kgs GVW for the carriage of goods.</option>`);
+                break;
+            }
+            case 6: {
+                // D
+                $("#vehicle_categories").html(`<option value="M3" selected>M3 - Vehicles above 5,000 kgs GVW with more than 8 passenger seats.</option>`);
+                break;
+            }
+            case 7: {
+                // BE
+                $("#vehicle_categories").html(`<option value="01">01 - Does not exceed to 750 kgs GVW</option>
+                <option value="02">02 - Do exceed up to 3,500 kgs GVW</option>`);
+                break;
+            }
+            case 8: {
+                // CE
+                $("#vehicle_categories").html(`<option value="03, 04" selected>03, 04 - Does not exceed to 3,500 kgs GVW</option>`);
+                break;
+            }
+            default: {
+                $("#vehicle_categories").html(`<option value="L1">L1 - Two wheels; Maximum Speed: does not exceed to 50 kph</option>
+                <option value="L2">L2 - Three wheels; Maximum Speed: does not exceed to 50 kph</option>
+                <option value="L3">L3 - Two wheels; Maximum Speed: exceeds to 50 kph</option>`);
+            }
+        }
+    });
+
+    
 
     $('.personal-info-manufacturer').on('click', () => {
         $('.pop-manufacturer').animate({

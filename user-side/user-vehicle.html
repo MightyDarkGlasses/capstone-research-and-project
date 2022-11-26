@@ -610,7 +610,7 @@
                     <div class="popdown pop-color">
                         <form action="#" class="form-color">
                             <p>Vehicle Color</p>
-                            <input type="text" name="form_color" id="" required value="">
+                            <input type="text" name="form_color" id="form_color" required value="">
                             <input type="submit" value="Save Changes">
                         </form>
                     </div>
@@ -621,7 +621,7 @@
                     <div class="popdown pop-year">
                         <form action="#" class="form-year">
                             <p>Year Model</p>
-                            <input type="number" name="form_year" min="1900" max="2099" step="1" value="2016" />
+                            <input type="number" name="form_year" id="form_year" min="1900" max="2099" step="1" value="2016" />
                             <input type="submit" value="Save Changes">
                         </form>
                     </div>
@@ -636,7 +636,7 @@
                     <div class="popdown pop-category">
                         <form action="#" class="form-category">
                             <p>License Code</p>
-                            <select name="vehicle_classification" id="vehicle-classification" required>
+                            <select name="vehicle_classification" id="vehicle_classification" required>
                                 <option value="A">A - Motorcycle</option>
                                 <option value="A1">A1 - Tricycle</option>
                                 <option value="B">B - Weighing up to 5,000 kgs GVW with 8 seats</option>
@@ -650,7 +650,7 @@
                             <br/><br/>
                             <p>Vehicle Categories</p>
                             <!-- A -->
-                            <select name="vehicle_categories" id="vehicle-categories" required>
+                            <select name="vehicle_categories" id="vehicle_categories" required>
                                 <option value="L1">L1 - Two wheels; Maximum Speed: does not exceed to 50 kph</option>
                                 <option value="L2">L2 - Three wheels; Maximum Speed: does not exceed to 50 kph</option>
                                 <option value="L3">L3 - Two wheels; Maximum Speed: exceeds to 50 kph</option>
@@ -677,7 +677,7 @@
                     <div class="popdown pop-remarks">
                         <form action="#" class="form-remarks">
                             <p>Remarks</p>
-                            <textarea rows="4" cols="40" name="comment" id="remarks-block" placeholder="Enter additional notes here..." form="form-remarks"></textarea>
+                            <textarea rows="4" cols="40" name="comment" id="form_remarks" placeholder="Enter additional notes here..." form="form-remarks"></textarea>
                             <br/>
                             <input type="submit" value="Save Changes">
                         </form>

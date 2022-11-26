@@ -15,6 +15,17 @@ jQuery(function() {
             // animation complete
         });
     });
+    
+    $('.personal-info-profile').on('click', () => {
+        $('.pop-profile').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
+
+
 
     $('.personal-info-id').on('click', () => {
         $('.pop-id').animate({

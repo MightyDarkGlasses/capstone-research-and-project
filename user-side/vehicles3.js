@@ -55,7 +55,9 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             document.querySelector('.linkages-box').style.display = 'none';
         }
         else {
-            let vehicleKeys= Object.keys(JSON.parse(localStorage.vehicleInformation));
+            let vehicleKeys= Object.keys(JSON.parse(localStorage.vehicleInformation)).sort();
+
+            console.log("Vehicle keys: ", vehicleKeys);
             let iterator = 1; // count the number of vehicle list
             for (let index=0; index<vehicleKeys.length; index++) {
                 console.log('iterating index: ', index);
@@ -85,25 +87,58 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     if(typeof(preSelectedVehicleKey["classification"]) === 'undefined' || preSelectedVehicleKey["classification"] === null) {
                         preSelectedVehicleKey["classification"] = "Unspecified.";
                     }
+                    else {
+                        const listOfClassifications = ["Private" ,"For Hire" ,"Government" ,"Exempt"];
+                        const listGetIndex = listOfClassifications.indexOf(preSelectedVehicleKey["classification"].trim());
+                        
+                        console.log("listGetIndex:", listGetIndex, document.querySelector("#classification").selectedIndex);
+                        if(listGetIndex >= 0) {
+                            // document.querySelector("#classification").selectedIndex = listGetIndex;
+                            // $("#classification").val("val", listOfClassifications[listGetIndex]);
+                            // $('#classification').select2('data', {id: listGetIndex, a_key: listOfClassifications[listGetIndex]});
+                            $('#classification').val(listOfClassifications[listGetIndex]).trigger('change');
+                        }
+                    }
 
                     // Vehicle Color
                     if(typeof(preSelectedVehicleKey["color"]) === 'undefined' || preSelectedVehicleKey["color"] === null) {
                         preSelectedVehicleKey["color"] = "Unspecified.";
+                    }
+                    else {
+                        document.querySelector("#form_color").setAttribute("value", preSelectedVehicleKey["color"]);
                     }
 
                     // Year
                     if(typeof(preSelectedVehicleKey["year"]) === 'undefined' || preSelectedVehicleKey["year"] === null) {
                         preSelectedVehicleKey["year"] = "Unspecified.";
                     }
+                    else {
+                        document.querySelector("#form_year").setAttribute("value", preSelectedVehicleKey["year"]);
+                    }
 
                     // License Code and Vehicle Category
                     if(typeof(preSelectedVehicleKey["license_code"]) === 'undefined' || preSelectedVehicleKey["license_code"] === null) {
                         preSelectedVehicleKey["license_code"] = "Unspecified";
                     }
+                    else {
+                        const listOfLicenses = ["A", "A1", "B", "B1", "B2", "C", "D", "BE", "CE"];
+                        const listGetIndex = listOfLicenses.indexOf(preSelectedVehicleKey["license_code"].trim());
+                        
+                        console.log("listGetIndex", listOfLicenses[listGetIndex]);
+                        $('#vehicle_classification').val(listOfLicenses[listGetIndex]).trigger('change');
+                    }
                     if(typeof(preSelectedVehicleKey["code_category"]) === 'undefined' || preSelectedVehicleKey["code_category"] === null) {
                         preSelectedVehicleKey["code_category"] = "Unspecified";
                     }
-
+                    else {
+                        const listOfCategories = 
+                        ["L2" ,"L3" ,"L5" ,"L6" ,"L7" ,"M1" ,"M2" ,"M3" ,"N2, N3" ,"M3" ,"01" ,"02" ,"03, 04"];
+                        const listGetIndex = listOfCategories.indexOf(preSelectedVehicleKey["code_category"].trim());
+                        
+                        console.log("listGetIndex", listOfCategories[listGetIndex]);
+                        $('#vehicle_categories').val(listOfCategories[listGetIndex]).trigger('change');
+                    }
+                    
                     // Remarks
                     if(typeof(preSelectedVehicleKey["remarks"]) === 'undefined' || preSelectedVehicleKey["remarks"] === null) {
                         preSelectedVehicleKey["remarks"] = "Unspecified";
@@ -112,7 +147,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     }
                     else {
                         document.querySelector('.personal-info-remarks').innerText = "";
-                        document.querySelector('#remarks-block').value = preSelectedVehicleKey["remarks"];
+                        document.querySelector('#form_remarks').value = preSelectedVehicleKey["remarks"];
                     }
 
 
@@ -175,6 +210,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             console.log('linkages:', Object.keys(vehicle.registered_vehicle.vehicles.linkages).length);
         }
     }
+
+    // Event for selecting a list of vehicles
     function clickableVehicleList() {
         let myLists = document.querySelectorAll('#vehicle-list > li');
         const personalInfoPlate = document.querySelector('.personal-info-plate').textContent;
@@ -191,8 +228,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 personalInfoColor = vehicleInformation[getSelectedAttrKey]["color"],
                 personalInfoYear = vehicleInformation[getSelectedAttrKey]["year"],
                 personalInfoLicense = vehicleInformation[getSelectedAttrKey]["license_code"],
-                personalInfoCategory = vehicleInformation[getSelectedAttrKey]["code_category"]
-                // personalInfoRemarks = vehicleInformation[getSelectedAttrKey]["remarks"];
+                personalInfoCategory = vehicleInformation[getSelectedAttrKey]["code_category"],
+                personalInfoRemarks = vehicleInformation[getSelectedAttrKey]["remarks"];
                 
                 // console.log('personalInfoPlate:', personalInfoPlate);
 
@@ -200,29 +237,66 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 if(typeof(personalInfoClassification) === 'undefined' || personalInfoClassification === null) {
                     personalInfoClassification = "Unspecified.";
                 }
+                else {
+                    const listOfClassifications = ["Private" ,"For Hire" ,"Government" ,"Exempt"];
+                    const listGetIndex = listOfClassifications.indexOf(personalInfoClassification.trim());
+                    
+                    console.log("listGetIndex:", listGetIndex, document.querySelector("#classification").selectedIndex);
+                    if(listGetIndex >= 0) {
+                        // document.querySelector("#classification").selectedIndex = listGetIndex;
+                        // $("#classification").val("val", listOfClassifications[listGetIndex]);
+                        // $('#classification').select2('data', {id: listGetIndex, a_key: listOfClassifications[listGetIndex]});
+                        $('#classification').val(listOfClassifications[listGetIndex]).trigger('change');
+                    }
+                }
 
                 // Vehicle Color
+                console.log("vehicle color: ", personalInfoColor);
                 if(typeof(personalInfoColor) === 'undefined' || personalInfoColor === null) {
                     personalInfoColor = "Unspecified.";
+                }
+                else {
+                    document.querySelector("#form_color").setAttribute("value", personalInfoColor);
                 }
 
                 // Year
                 if(typeof(personalInfoYear) === 'undefined' || personalInfoYear === null) {
                     personalInfoYear = "Unspecified.";
                 }
+                else {
+                    document.querySelector("#form_year").setAttribute("value", personalInfoYear);
+                }
 
                 // License Code and Vehicle Category
                 if(typeof(personalInfoLicense) === 'undefined' || personalInfoLicense === null) {
                     personalInfoLicense = "Unspecified";
                 }
-                if(typeof(personalInfoCategory) === 'undefined' || personalInfoCategory === null) {
-                    personalInfoCategory = "Unspecified";
+                else {
+                    const listOfLicenses = ["A", "A1", "B", "B1", "B2", "C", "D", "BE", "CE"];
+                    const listGetIndex = listOfLicenses.indexOf(personalInfoLicense.trim());
+                    
+                    console.log("listGetIndex", listOfLicenses[listGetIndex]);
+                    $('#vehicle_classification').val(listOfLicenses[listGetIndex]).trigger('change');
+
+                    if(typeof(personalInfoCategory) === 'undefined' || personalInfoCategory === null) {
+                        personalInfoCategory = "Unspecified";
+                    }
+                    else {
+                        const listOfCategories = 
+                        ["L2" ,"L3" ,"L5" ,"L6" ,"L7" ,"M1" ,"M2" ,"M3" ,"N2, N3" ,"M3" ,"01" ,"02" ,"03, 04"];
+                        const listGetIndex = listOfCategories.indexOf(personalInfoCategory.trim());
+                        
+                        console.log("listGetIndex", listOfCategories[listGetIndex]);
+                        $('#vehicle_categories').val(listOfCategories[listGetIndex]).trigger('change');
+                    }
                 }
                 
+
+                
                 // Remarks
-                // if(typeof(personalInfoRemarks) === 'undefined' || personalInfoRemarks === null) {
-                //     personalInfoRemarks = "Unspecified";
-                // }
+                if(typeof(personalInfoRemarks) === 'undefined' || personalInfoRemarks === null) {
+                    personalInfoRemarks = "Unspecified";
+                }
 
                 document.querySelector('.personal-info-plate').innerText = getSelectedAttrKey;
                 document.querySelector('.personal-info-model').innerText = personalInfoModel;
@@ -232,8 +306,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 document.querySelector('.personal-info-year').innerHTML = personalInfoYear;
                 document.querySelector('#license-code').innerHTML = personalInfoLicense;
                 document.querySelector('#my-vehicle-categories').innerHTML = personalInfoCategory;
-                
-                // document.querySelector('#personal-info-remarks').innerHTML = "...";
+                document.querySelector('#form_remarks').innerHTML = personalInfoRemarks;
 
                 // currentIndexSelectedSubmit = index;
                 // console.log('currentIndexSelectedSubmit', currentIndexSelectedSubmit);
@@ -264,7 +337,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         // updateVehiclePlateNumber(currentUserId, plateNumber, formPlate);
         // getVehicleInformation(currentUserId);
     });
-
     formModel.addEventListener('submit', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -272,7 +344,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         // updateVehicleModelNumber(currentUserId, plateModel, formModel)
         // getVehicleInformation(currentUserId);
     });
-
     formClassification.addEventListener('submit', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -321,8 +392,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         e.preventDefault();
         e.stopPropagation();
         
-
-        const getRemarks = document.querySelector('#remarks-block').value;
+        const getRemarks = document.querySelector('#form_remarks').value;
         console.log(getRemarks === '')
         if(getRemarks !== '') {
 
@@ -338,7 +408,17 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         }
     });
 
-
+    
+    function changeListOfVehicleCategory() {
+        console.log("college_option: ", document.querySelector("#college_option"));
+        document.querySelector("#college_option").addEventListener("change", (e) => {
+            console.log("college_option: ", e);
+        });
+    }
+    
+    // document.querySelector("#college_option").addEventListener("change", (e) => {
+    //     console.log("college_option: ", e);
+    // });
     function updateVehicleInformation(myId, myObject, myForm) {
         console.log("vehicle updated: ", myObject);
         const docRefAccount = fire.myDoc(fire.db, "vehicle-information", myId);
@@ -346,8 +426,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         fire.myUpdateDoc(docRefAccount, myObject)
         .then(() => {    
             myForm.reset();
-            // window.location.href = window.location.href; //reload a page in JS
-            // location.reload();
+            window.location.href = window.location.href; //reload a page in JS
+            location.reload();
         })
     }
 

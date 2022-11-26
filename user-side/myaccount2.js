@@ -80,7 +80,7 @@ if(windowLocation.indexOf("user-account") > -1) {
     }
 
     function displayInformation() {
-        console.log("cookies time")
+        console.log("cookies time, displayInformation()")
         console.log(localStorage.getItem("personal_info_email"))
         fullName.innerText = localStorage.getItem("personal_info_name");
         userid.innerText   = localStorage.getItem("personal_info_id");
@@ -88,6 +88,29 @@ if(windowLocation.indexOf("user-account") > -1) {
         phoneNum.innerText = localStorage.getItem("personal_info_phone");
         useremail.innerText = localStorage.getItem("personal_info_email");
         college.innerText = localStorage.getItem("personal_info_college");
+
+        // document.getElementById("Mobility").selectedIndex = 12; //Option 10
+        // document.querySelector("#college_option").selectedIndex = 0; //Option
+
+        // Select the user type upon opening
+
+        console.log("cate: ", localStorage.getItem("personal_info_cat"));
+        if(localStorage.getItem("personal_info_cat") === "FACULTY") {
+            document.getElementById("usertype_1").checked = true;
+        }
+        if(localStorage.getItem("personal_info_cat") === "NAP") {
+            document.getElementById("usertype_2").checked = true;
+        }
+        
+
+        // Select the college option upon opening
+        let colleges = ["CAFA" ,"CAL" ,"CBA" ,"CCJE" ,"CHTM" ,"CICT" ,"CIT" ,"CLaw" ,"CN" ,"COE" ,"COED" ,"CS" ,"CSER" ,"CSSP"];
+        const collegeIndex = colleges.indexOf(localStorage.getItem("personal_info_college"));
+        console.log(collegeIndex);
+
+        if(collegeIndex >= 0) {
+            document.querySelector("#college_option").selectedIndex = collegeIndex;
+        }
     }
     // function getAccountInformation(collectionReference) {
     //     // get collection data
@@ -352,6 +375,82 @@ if(windowLocation.indexOf("user-account") > -1) {
         });
     }
 
+    const formProfile = document.querySelector(".form-userprofile");
+    formProfile.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        console.log("User get profile form: ", formProfile);
+        console.log("formProfile profile: ", formProfile.profile.files);
+
+        updateProfilePicture(formProfile.profile);
+    });
+    function updateProfilePicture(fileUpload) {
+        let fileName = fileUpload.files[0].type;
+        console.log('explorer: ', fileName);
+        let allowedFileTypes = ["image/png", "image/jpeg", "image/gif", "image/jpeg"];
+        
+        let fileSize = ((fileUpload.files[0].size/1024)/1024).toFixed(2); // MB
+        console.log(fileSize);
+
+        // Check if the file is within the allowed file size limit.
+        if(fileSize > 10.0) {
+            $('.modal-container-main').html(`
+            <p>Failure to drop an image<br/>Please upload a file within the alloted file size limit (10 MB).</p>
+            <br/>File size given: <b>${fileSize} MB</b>`);
+            $("#error-popup").modal({
+                fadeDuration: 100
+            });
+        }
+        else {
+            if(allowedFileTypes.includes(fileName)) {
+                /** UNCOMMENT THIS IS FOR FILE UPLOAD */
+                const storage = fire.myGetStorage();
+                const metadata = { 
+                    contentType: fileUpload.files[0].type, 
+                };
+                const storageRef1 = fire.myRef(storage, `account-information/profile_pic/profile`);
+                const uploadTask1 = fire.doUploadBytesResumable(storageRef1, fileUpload.files[0], metadata);
+
+                // Upload the profile picture.
+                const uploadProfilePromise = uploadTask1.on('state_changed', (snapshot) => {
+                    // Progress of fileupload
+                    const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    console.log("Uploading vehicle front.");
+                    console.log('Upload is ' + progress + '% done');    //progress of upload
+                }, 
+                (error) => {
+                    // Handle unsuccessful uploads
+                    console.log(error);
+                }, 
+                (success) => {
+                    // If successful, do this.
+                    fire.myGetDownloadURL(uploadTask1.snapshot.ref).then(async (downloadURL) => {
+                        console.log('File available at', downloadURL);
+
+                        const updateProfile = await fire.doUpdateProfile(fire.auth.currentUser, {
+                            'photoURL': downloadURL,
+                        });
+                    });
+                } //end of getDownloadURL
+                );
+            }
+            else {
+                $('.modal-container-main').html(`
+                <p>Failure to drop an image<br/>Only <b>.jpeg, .png, and .gif</b> file extensions are allowed.</p>
+                <br/>File extension given: <b>${fileName}</b>`);
+                $("#error-popup").modal({
+                    fadeDuration: 100
+                });
+            }
+        }
+
+
+        
+
+        
+    }
+
 
 
     // function signWithUserToken() {
@@ -380,7 +479,9 @@ if(windowLocation.indexOf("user-account") > -1) {
     //     });
     // }
         // let docRef = doc(db, 'books', updateForm.id.value)
-        
     
-}
-});
+
+    
+    
+} //end of link conditional
+}); //153, end of DOMContentLoaded function

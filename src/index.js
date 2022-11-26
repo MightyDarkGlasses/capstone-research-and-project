@@ -81,6 +81,7 @@ export const myDoc = doc;
 export const myUpdateDoc = updateDoc;
 export const doUpdateDoc = updateDoc;
 export const doSetDoc = setDoc;
+export const doUpdateProfile = updateProfile;
 
 export const doArrayUnion = arrayUnion;
 export const doArrayRemove = arrayRemove;

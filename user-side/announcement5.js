@@ -35,15 +35,15 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         $('.announcements').append(toggleAnnouncement)
 
         let listOfSources = '';
-        myData.sources.forEach((data) => {
-            listOfSources += `<li><a href="${data}">${data}</a></li>`
-        });
+        // myData.sources.forEach((data) => {
+        //     listOfSources += `<li><a href="${data}">${data}</a></li>`
+        // });
         
         let listOfFiles = '';
-        myData.files.forEach((data) => {
-            let httpsReference = fire.myRef(fire.storage, data).name;
-            listOfFiles += `<li><a href="${data}">${httpsReference}</a></li>`
-        });
+        // myData.files.forEach((data) => {
+        //     let httpsReference = fire.myRef(fire.storage, data).name;
+        //     listOfFiles += `<li><a href="${data}">${httpsReference}</a></li>`
+        // });
         console.log(listOfSources);
         console.log(listOfFiles);
         

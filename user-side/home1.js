@@ -21,11 +21,28 @@ document.addEventListener('DOMContentLoaded', function() {
         if (user) {
 
             // Display user profile picture.
+            const profilePicture = displayProfile(user.uid).then(evt => { 
+                console.log("current user: ", fire.auth.currentUser)
+                console.log('evt.profilePicture: ', evt);
 
-            const profilePicture = displayProfile(fire.auth.currentUser.uid).then(evt => { 
-                console.log('evt.profilePicture: ' + evt);
-                document.querySelector("#profile-picture").setAttribute('src', evt[0]);
-                document.querySelector(".fullname").textContent = evt[1];
+                if(fire.auth.currentUser.photoURL !== null) {
+                    document.querySelector("#profile-picture").setAttribute('src', fire.auth.currentUser.photoURL);
+                }
+                else {
+                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
+                }
+
+                // Set the fullname
+                document.querySelector(".fullname").textContent = evt[0];
+
+                // Set the position of user. (NAP or Faculty)
+                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
+                    document.querySelector(".category").textContent = evt[1];
+                }
+                else {
+                    document.querySelector(".category").textContent = "-";
+                }
+                
             });
             
             // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
@@ -58,23 +75,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     async function displayProfile(userUID) {
-        let picture = undefined;
         const docAccountActivity = fire.myDoc(fire.db, "account-information", userUID);
         const docVSnap = await fire.myGetDoc(docAccountActivity);
         if (docVSnap.exists()) {
-            // Profile Image
-            if(docVSnap.data()['profile_pic'] === null) {
-                picture = 'https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fprofile-circled.svg?alt=media&token=5d172c80-6cc4-4ddd-841b-8877a6813010'
-            }
-            else {
-                picture = docVSnap.data()['profile_pic'];
+            const position = docVSnap.data()["category"];
+
+            console.log("position: ", position);
+            console.log("position: ", typeof(position) !== "undefined" || position !== null);
+            if(typeof(position) !== "undefined" || position !== null) {
+                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
             }
         }
-        else {
-            picture = "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fprofile-circled.svg?alt=media&token=5d172c80-6cc4-4ddd-841b-8877a6813010";
-        }
-        
-        return [picture, `${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`];
+        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
     }
 
     // console.log("home1.js was called");

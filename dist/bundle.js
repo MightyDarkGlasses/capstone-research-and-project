@@ -37537,6 +37537,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "doSetDoc": () => (/* binding */ doSetDoc),
 /* harmony export */   "doSignInWithEmailAndPassword": () => (/* binding */ doSignInWithEmailAndPassword),
 /* harmony export */   "doUpdateDoc": () => (/* binding */ doUpdateDoc),
+/* harmony export */   "doUpdateProfile": () => (/* binding */ doUpdateProfile),
 /* harmony export */   "doUploadBytesResumable": () => (/* binding */ doUploadBytesResumable),
 /* harmony export */   "doVerifyBeforeUpdateEmail": () => (/* binding */ doVerifyBeforeUpdateEmail),
 /* harmony export */   "doWhere": () => (/* binding */ doWhere),
@@ -37622,6 +37623,7 @@ const myDoc = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc;
 const myUpdateDoc = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.updateDoc;
 const doUpdateDoc = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.updateDoc;
 const doSetDoc = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.setDoc;
+const doUpdateProfile = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.updateProfile;
 
 const doArrayUnion = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.arrayUnion;
 const doArrayRemove = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.arrayRemove;
@@ -38645,15 +38647,15 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         $('.announcements').append(toggleAnnouncement)
 
         let listOfSources = '';
-        myData.sources.forEach((data) => {
-            listOfSources += `<li><a href="${data}">${data}</a></li>`
-        });
+        // myData.sources.forEach((data) => {
+        //     listOfSources += `<li><a href="${data}">${data}</a></li>`
+        // });
         
         let listOfFiles = '';
-        myData.files.forEach((data) => {
-            let httpsReference = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, data).name;
-            listOfFiles += `<li><a href="${data}">${httpsReference}</a></li>`
-        });
+        // myData.files.forEach((data) => {
+        //     let httpsReference = fire.myRef(fire.storage, data).name;
+        //     listOfFiles += `<li><a href="${data}">${httpsReference}</a></li>`
+        // });
         console.log(listOfSources);
         console.log(listOfFiles);
         
@@ -38952,11 +38954,28 @@ document.addEventListener('DOMContentLoaded', function() {
         if (user) {
 
             // Display user profile picture.
+            const profilePicture = displayProfile(user.uid).then(evt => { 
+                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
+                console.log('evt.profilePicture: ', evt);
 
-            const profilePicture = displayProfile(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid).then(evt => { 
-                console.log('evt.profilePicture: ' + evt);
-                document.querySelector("#profile-picture").setAttribute('src', evt[0]);
-                document.querySelector(".fullname").textContent = evt[1];
+                if(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL !== null) {
+                    document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL);
+                }
+                else {
+                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
+                }
+
+                // Set the fullname
+                document.querySelector(".fullname").textContent = evt[0];
+
+                // Set the position of user. (NAP or Faculty)
+                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
+                    document.querySelector(".category").textContent = evt[1];
+                }
+                else {
+                    document.querySelector(".category").textContent = "-";
+                }
+                
             });
             
             // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
@@ -38989,23 +39008,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     async function displayProfile(userUID) {
-        let picture = undefined;
         const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
         const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docAccountActivity);
         if (docVSnap.exists()) {
-            // Profile Image
-            if(docVSnap.data()['profile_pic'] === null) {
-                picture = 'https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fprofile-circled.svg?alt=media&token=5d172c80-6cc4-4ddd-841b-8877a6813010'
-            }
-            else {
-                picture = docVSnap.data()['profile_pic'];
+            const position = docVSnap.data()["category"];
+
+            console.log("position: ", position);
+            console.log("position: ", typeof(position) !== "undefined" || position !== null);
+            if(typeof(position) !== "undefined" || position !== null) {
+                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
             }
         }
-        else {
-            picture = "https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fprofile-circled.svg?alt=media&token=5d172c80-6cc4-4ddd-841b-8877a6813010";
-        }
-        
-        return [picture, `${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`];
+        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
     }
 
     // console.log("home1.js was called");
@@ -39454,17 +39468,17 @@ if(windowLocation.indexOf("user-logs") > -1) {
     }
 
     async function displayActivityLogs(currentLoggedUserId) {
-        const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "system-activity");
-        const activityQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(10));
-        const docsSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDocs(activityQuery);
+        // const colRef = fire.myCollection(fire.db, "system-activity");
+        // const activityQuery = fire.doQuery(colRef, fire.doLimit(10));
+        // const docsSnap = await fire.myGetDocs(activityQuery);
 
-        let index = 0;
+        const docReference = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "system-activity", currentLoggedUserId);
+
         let activity = [];
-        docsSnap.forEach(async doc => {
-            index = index + 1;
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(docReference, (doc) => {     //based on the query, //change this back!
             let activityInformation = {...doc.data()};
-            
             let objSize = Object.keys(activityInformation).length;
+
             Object.entries(activityInformation).map((element, index) => {
                 if(objSize-1 !== index) {
                     element[1]['timestamp'] = element[1]['timestamp'] === '' ? '' : new Date(element[1]['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
@@ -39473,38 +39487,57 @@ if(windowLocation.indexOf("user-logs") > -1) {
                 }
             });
 
+            jQuery((e) => {
+                $("#table_id_activity").DataTable({
+                    scrollX: true,
+                    "pageLength": 10,
+                    "data": activity,
+                    "columns": [
+                        {"data": "id"},
+                        {"data": "uid"},
+                        {"data": "user_level"},
+                        {"data": "timestamp"},
+                        {"data": "current_page"},
+                        {"data": "context"},
+                    ],
+                    "columnDefs": [{
+                        "defaultContent": "-",
+                        "targets": "_all"
+                    }]
+                });
+            }); //jQuery
+        });
+        console.log("activity: ", activity);
+
+        // let index = 0;
+        // let activity = [];
+        // docsSnap.forEach(async doc => {
+        //     index = index + 1;
+        //     let activityInformation = {...doc.data()};
+            
+        //     let objSize = Object.keys(activityInformation).length;
+        //     Object.entries(activityInformation).map((element, index) => {
+        //         if(objSize-1 !== index) {
+        //             element[1]['timestamp'] = element[1]['timestamp'] === '' ? '' : new Date(element[1]['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
+        //             element[1]["id"] = index;
+        //             activity.push(element[1]);
+        //         }
+        //     });
+
             
 
-            // console.log('activityInformation', activityInformation);
-            console.table(activity);
-        });
+        //     // console.log('activityInformation', activityInformation);
+        //     console.table(activity);
+        // });
 
-        jQuery((e) => {
-            $("#table_id_activity").DataTable({
-                scrollX: true,
-                "pageLength": 10,
-                "data": activity,
-                "columns": [
-                    {"data": "id"},
-                    {"data": "uid"},
-                    {"data": "user_level"},
-                    {"data": "timestamp"},
-                    {"data": "current_page"},
-                    {"data": "context"},
-                ],
-                "columnDefs": [{
-                    "defaultContent": "-",
-                    "targets": "_all"
-                }]
-            });
-        }); //jQuery
+
     }
 
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
         if (user) {
             // console.log('current logged user id: ', fire.auth);
             // console.log('current logged user id: ', fire.auth.currentUser.uid);
-            // displayLogs(fire.auth.currentUser.uid);
+            displayLogs(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
             displayActivityLogs(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid); //display logs in the table
         } 
         else {
@@ -39513,6 +39546,16 @@ if(windowLocation.indexOf("user-logs") > -1) {
         }
     });
 
+    document.querySelector(".user-activity").style.display = 'none';
+
+    document.querySelector("#site-logs").addEventListener("click", () => {
+        document.querySelector(".user-activity").style.display = 'none';
+        document.querySelector(".user-logs").style.display = 'block';
+    });
+    document.querySelector("#site-activities").addEventListener("click", () => {
+        document.querySelector(".user-activity").style.display = 'block';
+        document.querySelector(".user-logs").style.display = 'none';
+    });
     
 }
 }); //end DOMContentLoaded
@@ -39611,7 +39654,7 @@ if(windowLocation.indexOf("user-account") > -1) {
     }
 
     function displayInformation() {
-        console.log("cookies time")
+        console.log("cookies time, displayInformation()")
         console.log(localStorage.getItem("personal_info_email"))
         fullName.innerText = localStorage.getItem("personal_info_name");
         userid.innerText   = localStorage.getItem("personal_info_id");
@@ -39619,6 +39662,29 @@ if(windowLocation.indexOf("user-account") > -1) {
         phoneNum.innerText = localStorage.getItem("personal_info_phone");
         useremail.innerText = localStorage.getItem("personal_info_email");
         college.innerText = localStorage.getItem("personal_info_college");
+
+        // document.getElementById("Mobility").selectedIndex = 12; //Option 10
+        // document.querySelector("#college_option").selectedIndex = 0; //Option
+
+        // Select the user type upon opening
+
+        console.log("cate: ", localStorage.getItem("personal_info_cat"));
+        if(localStorage.getItem("personal_info_cat") === "FACULTY") {
+            document.getElementById("usertype_1").checked = true;
+        }
+        if(localStorage.getItem("personal_info_cat") === "NAP") {
+            document.getElementById("usertype_2").checked = true;
+        }
+        
+
+        // Select the college option upon opening
+        let colleges = ["CAFA" ,"CAL" ,"CBA" ,"CCJE" ,"CHTM" ,"CICT" ,"CIT" ,"CLaw" ,"CN" ,"COE" ,"COED" ,"CS" ,"CSER" ,"CSSP"];
+        const collegeIndex = colleges.indexOf(localStorage.getItem("personal_info_college"));
+        console.log(collegeIndex);
+
+        if(collegeIndex >= 0) {
+            document.querySelector("#college_option").selectedIndex = collegeIndex;
+        }
     }
     // function getAccountInformation(collectionReference) {
     //     // get collection data
@@ -39883,6 +39949,82 @@ if(windowLocation.indexOf("user-account") > -1) {
         });
     }
 
+    const formProfile = document.querySelector(".form-userprofile");
+    formProfile.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        console.log("User get profile form: ", formProfile);
+        console.log("formProfile profile: ", formProfile.profile.files);
+
+        updateProfilePicture(formProfile.profile);
+    });
+    function updateProfilePicture(fileUpload) {
+        let fileName = fileUpload.files[0].type;
+        console.log('explorer: ', fileName);
+        let allowedFileTypes = ["image/png", "image/jpeg", "image/gif", "image/jpeg"];
+        
+        let fileSize = ((fileUpload.files[0].size/1024)/1024).toFixed(2); // MB
+        console.log(fileSize);
+
+        // Check if the file is within the allowed file size limit.
+        if(fileSize > 10.0) {
+            $('.modal-container-main').html(`
+            <p>Failure to drop an image<br/>Please upload a file within the alloted file size limit (10 MB).</p>
+            <br/>File size given: <b>${fileSize} MB</b>`);
+            $("#error-popup").modal({
+                fadeDuration: 100
+            });
+        }
+        else {
+            if(allowedFileTypes.includes(fileName)) {
+                /** UNCOMMENT THIS IS FOR FILE UPLOAD */
+                const storage = _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetStorage();
+                const metadata = { 
+                    contentType: fileUpload.files[0].type, 
+                };
+                const storageRef1 = _src_index__WEBPACK_IMPORTED_MODULE_1__.myRef(storage, `account-information/profile_pic/profile`);
+                const uploadTask1 = _src_index__WEBPACK_IMPORTED_MODULE_1__.doUploadBytesResumable(storageRef1, fileUpload.files[0], metadata);
+
+                // Upload the profile picture.
+                const uploadProfilePromise = uploadTask1.on('state_changed', (snapshot) => {
+                    // Progress of fileupload
+                    const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    console.log("Uploading vehicle front.");
+                    console.log('Upload is ' + progress + '% done');    //progress of upload
+                }, 
+                (error) => {
+                    // Handle unsuccessful uploads
+                    console.log(error);
+                }, 
+                (success) => {
+                    // If successful, do this.
+                    _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDownloadURL(uploadTask1.snapshot.ref).then(async (downloadURL) => {
+                        console.log('File available at', downloadURL);
+
+                        const updateProfile = await _src_index__WEBPACK_IMPORTED_MODULE_1__.doUpdateProfile(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser, {
+                            'photoURL': downloadURL,
+                        });
+                    });
+                } //end of getDownloadURL
+                );
+            }
+            else {
+                $('.modal-container-main').html(`
+                <p>Failure to drop an image<br/>Only <b>.jpeg, .png, and .gif</b> file extensions are allowed.</p>
+                <br/>File extension given: <b>${fileName}</b>`);
+                $("#error-popup").modal({
+                    fadeDuration: 100
+                });
+            }
+        }
+
+
+        
+
+        
+    }
+
 
 
     // function signWithUserToken() {
@@ -39911,10 +40053,12 @@ if(windowLocation.indexOf("user-account") > -1) {
     //     });
     // }
         // let docRef = doc(db, 'books', updateForm.id.value)
-        
     
-}
-});
+
+    
+    
+} //end of link conditional
+}); //153, end of DOMContentLoaded function
 
 /***/ }),
 
@@ -40612,9 +40756,67 @@ jQuery(function() {
     // Select2
     $('#classification').select2();
     // $('#manufacturer').select2();
-    $('#vehicle-classification').select2();
-    $('#vehicle-categories').select2();
+    $('#vehicle_classification').select2();
+    $('#vehicle_categories').select2();
+    $('#vehicle_classification').on("change", (e) => {
+        console.log($("#vehicle_classification").prop('selectedIndex'));
 
+        let currentIndex = $("#vehicle_classification").prop('selectedIndex');
+        switch(currentIndex) {
+            case 0: {
+                // A
+                $("#vehicle_categories").html(`<option value="L1">L1 - Two wheels; Maximum Speed: does not exceed to 50 kph</option>
+                <option value="L2">L2 - Three wheels; Maximum Speed: does not exceed to 50 kph</option>
+                <option value="L3">L3 - Two wheels; Maximum Speed: exceeds to 50 kph</option>`);
+                break;
+            }
+            case 1: {
+                // A1
+                $("#vehicle_categories").html(`<option value="L4">L4 - With sidecars; Maximum Speed: does not exceeds to 50 kph</option>
+                <option value="L5">L5 - Three wheels symmetrically arranged; Maximum Speed: exceeds to 50 kph</option>
+                <option value="L6">L6 - Four wheels; Mass: not more than 350 kg; Maximum Speed: exceeds to 45 kph</option>
+                <option value="L7">L7 - Four wheels; Mass: not more than 550 kg; Maximum Speed: does not exceeds 45 kph</option>`);
+                break;
+            }
+            case 2: 
+            case 3: 
+            case 4: {
+                // B, B1, B2
+                $("#vehicle_categories").html(`<option value="M1">M1 - Mass: up to 5,000 kgs (GVW); Seats: not more than 8 passenger seats.</option>
+                <option value="M2">M2 - Mass: up to 5,000 kgs (GVW); Seats: more than 8 passenger seats.</option>
+                <option value="M3">M3 - Mass: up to 3,500 kgs (GVW); Only for carrying of goods.</option>`);
+                break;
+            }
+            case 5: {
+                // C
+                $("#vehicle_categories").html(`<option value="N2, N3" selected>N2, N3 - Vehicles exceeding 3,500 kgs GVW for the carriage of goods.</option>`);
+                break;
+            }
+            case 6: {
+                // D
+                $("#vehicle_categories").html(`<option value="M3" selected>M3 - Vehicles above 5,000 kgs GVW with more than 8 passenger seats.</option>`);
+                break;
+            }
+            case 7: {
+                // BE
+                $("#vehicle_categories").html(`<option value="01">01 - Does not exceed to 750 kgs GVW</option>
+                <option value="02">02 - Do exceed up to 3,500 kgs GVW</option>`);
+                break;
+            }
+            case 8: {
+                // CE
+                $("#vehicle_categories").html(`<option value="03, 04" selected>03, 04 - Does not exceed to 3,500 kgs GVW</option>`);
+                break;
+            }
+            default: {
+                $("#vehicle_categories").html(`<option value="L1">L1 - Two wheels; Maximum Speed: does not exceed to 50 kph</option>
+                <option value="L2">L2 - Three wheels; Maximum Speed: does not exceed to 50 kph</option>
+                <option value="L3">L3 - Two wheels; Maximum Speed: exceeds to 50 kph</option>`);
+            }
+        }
+    });
+
+    
 
     $('.personal-info-manufacturer').on('click', () => {
         $('.pop-manufacturer').animate({
@@ -41221,7 +41423,9 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             document.querySelector('.linkages-box').style.display = 'none';
         }
         else {
-            let vehicleKeys= Object.keys(JSON.parse(localStorage.vehicleInformation));
+            let vehicleKeys= Object.keys(JSON.parse(localStorage.vehicleInformation)).sort();
+
+            console.log("Vehicle keys: ", vehicleKeys);
             let iterator = 1; // count the number of vehicle list
             for (let index=0; index<vehicleKeys.length; index++) {
                 console.log('iterating index: ', index);
@@ -41251,25 +41455,58 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     if(typeof(preSelectedVehicleKey["classification"]) === 'undefined' || preSelectedVehicleKey["classification"] === null) {
                         preSelectedVehicleKey["classification"] = "Unspecified.";
                     }
+                    else {
+                        const listOfClassifications = ["Private" ,"For Hire" ,"Government" ,"Exempt"];
+                        const listGetIndex = listOfClassifications.indexOf(preSelectedVehicleKey["classification"].trim());
+                        
+                        console.log("listGetIndex:", listGetIndex, document.querySelector("#classification").selectedIndex);
+                        if(listGetIndex >= 0) {
+                            // document.querySelector("#classification").selectedIndex = listGetIndex;
+                            // $("#classification").val("val", listOfClassifications[listGetIndex]);
+                            // $('#classification').select2('data', {id: listGetIndex, a_key: listOfClassifications[listGetIndex]});
+                            $('#classification').val(listOfClassifications[listGetIndex]).trigger('change');
+                        }
+                    }
 
                     // Vehicle Color
                     if(typeof(preSelectedVehicleKey["color"]) === 'undefined' || preSelectedVehicleKey["color"] === null) {
                         preSelectedVehicleKey["color"] = "Unspecified.";
+                    }
+                    else {
+                        document.querySelector("#form_color").setAttribute("value", preSelectedVehicleKey["color"]);
                     }
 
                     // Year
                     if(typeof(preSelectedVehicleKey["year"]) === 'undefined' || preSelectedVehicleKey["year"] === null) {
                         preSelectedVehicleKey["year"] = "Unspecified.";
                     }
+                    else {
+                        document.querySelector("#form_year").setAttribute("value", preSelectedVehicleKey["year"]);
+                    }
 
                     // License Code and Vehicle Category
                     if(typeof(preSelectedVehicleKey["license_code"]) === 'undefined' || preSelectedVehicleKey["license_code"] === null) {
                         preSelectedVehicleKey["license_code"] = "Unspecified";
                     }
+                    else {
+                        const listOfLicenses = ["A", "A1", "B", "B1", "B2", "C", "D", "BE", "CE"];
+                        const listGetIndex = listOfLicenses.indexOf(preSelectedVehicleKey["license_code"].trim());
+                        
+                        console.log("listGetIndex", listOfLicenses[listGetIndex]);
+                        $('#vehicle_classification').val(listOfLicenses[listGetIndex]).trigger('change');
+                    }
                     if(typeof(preSelectedVehicleKey["code_category"]) === 'undefined' || preSelectedVehicleKey["code_category"] === null) {
                         preSelectedVehicleKey["code_category"] = "Unspecified";
                     }
-
+                    else {
+                        const listOfCategories = 
+                        ["L2" ,"L3" ,"L5" ,"L6" ,"L7" ,"M1" ,"M2" ,"M3" ,"N2, N3" ,"M3" ,"01" ,"02" ,"03, 04"];
+                        const listGetIndex = listOfCategories.indexOf(preSelectedVehicleKey["code_category"].trim());
+                        
+                        console.log("listGetIndex", listOfCategories[listGetIndex]);
+                        $('#vehicle_categories').val(listOfCategories[listGetIndex]).trigger('change');
+                    }
+                    
                     // Remarks
                     if(typeof(preSelectedVehicleKey["remarks"]) === 'undefined' || preSelectedVehicleKey["remarks"] === null) {
                         preSelectedVehicleKey["remarks"] = "Unspecified";
@@ -41278,7 +41515,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     }
                     else {
                         document.querySelector('.personal-info-remarks').innerText = "";
-                        document.querySelector('#remarks-block').value = preSelectedVehicleKey["remarks"];
+                        document.querySelector('#form_remarks').value = preSelectedVehicleKey["remarks"];
                     }
 
 
@@ -41341,6 +41578,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             console.log('linkages:', Object.keys(vehicle.registered_vehicle.vehicles.linkages).length);
         }
     }
+
+    // Event for selecting a list of vehicles
     function clickableVehicleList() {
         let myLists = document.querySelectorAll('#vehicle-list > li');
         const personalInfoPlate = document.querySelector('.personal-info-plate').textContent;
@@ -41357,8 +41596,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 personalInfoColor = vehicleInformation[getSelectedAttrKey]["color"],
                 personalInfoYear = vehicleInformation[getSelectedAttrKey]["year"],
                 personalInfoLicense = vehicleInformation[getSelectedAttrKey]["license_code"],
-                personalInfoCategory = vehicleInformation[getSelectedAttrKey]["code_category"]
-                // personalInfoRemarks = vehicleInformation[getSelectedAttrKey]["remarks"];
+                personalInfoCategory = vehicleInformation[getSelectedAttrKey]["code_category"],
+                personalInfoRemarks = vehicleInformation[getSelectedAttrKey]["remarks"];
                 
                 // console.log('personalInfoPlate:', personalInfoPlate);
 
@@ -41366,29 +41605,66 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 if(typeof(personalInfoClassification) === 'undefined' || personalInfoClassification === null) {
                     personalInfoClassification = "Unspecified.";
                 }
+                else {
+                    const listOfClassifications = ["Private" ,"For Hire" ,"Government" ,"Exempt"];
+                    const listGetIndex = listOfClassifications.indexOf(personalInfoClassification.trim());
+                    
+                    console.log("listGetIndex:", listGetIndex, document.querySelector("#classification").selectedIndex);
+                    if(listGetIndex >= 0) {
+                        // document.querySelector("#classification").selectedIndex = listGetIndex;
+                        // $("#classification").val("val", listOfClassifications[listGetIndex]);
+                        // $('#classification').select2('data', {id: listGetIndex, a_key: listOfClassifications[listGetIndex]});
+                        $('#classification').val(listOfClassifications[listGetIndex]).trigger('change');
+                    }
+                }
 
                 // Vehicle Color
+                console.log("vehicle color: ", personalInfoColor);
                 if(typeof(personalInfoColor) === 'undefined' || personalInfoColor === null) {
                     personalInfoColor = "Unspecified.";
+                }
+                else {
+                    document.querySelector("#form_color").setAttribute("value", personalInfoColor);
                 }
 
                 // Year
                 if(typeof(personalInfoYear) === 'undefined' || personalInfoYear === null) {
                     personalInfoYear = "Unspecified.";
                 }
+                else {
+                    document.querySelector("#form_year").setAttribute("value", personalInfoYear);
+                }
 
                 // License Code and Vehicle Category
                 if(typeof(personalInfoLicense) === 'undefined' || personalInfoLicense === null) {
                     personalInfoLicense = "Unspecified";
                 }
-                if(typeof(personalInfoCategory) === 'undefined' || personalInfoCategory === null) {
-                    personalInfoCategory = "Unspecified";
+                else {
+                    const listOfLicenses = ["A", "A1", "B", "B1", "B2", "C", "D", "BE", "CE"];
+                    const listGetIndex = listOfLicenses.indexOf(personalInfoLicense.trim());
+                    
+                    console.log("listGetIndex", listOfLicenses[listGetIndex]);
+                    $('#vehicle_classification').val(listOfLicenses[listGetIndex]).trigger('change');
+
+                    if(typeof(personalInfoCategory) === 'undefined' || personalInfoCategory === null) {
+                        personalInfoCategory = "Unspecified";
+                    }
+                    else {
+                        const listOfCategories = 
+                        ["L2" ,"L3" ,"L5" ,"L6" ,"L7" ,"M1" ,"M2" ,"M3" ,"N2, N3" ,"M3" ,"01" ,"02" ,"03, 04"];
+                        const listGetIndex = listOfCategories.indexOf(personalInfoCategory.trim());
+                        
+                        console.log("listGetIndex", listOfCategories[listGetIndex]);
+                        $('#vehicle_categories').val(listOfCategories[listGetIndex]).trigger('change');
+                    }
                 }
                 
+
+                
                 // Remarks
-                // if(typeof(personalInfoRemarks) === 'undefined' || personalInfoRemarks === null) {
-                //     personalInfoRemarks = "Unspecified";
-                // }
+                if(typeof(personalInfoRemarks) === 'undefined' || personalInfoRemarks === null) {
+                    personalInfoRemarks = "Unspecified";
+                }
 
                 document.querySelector('.personal-info-plate').innerText = getSelectedAttrKey;
                 document.querySelector('.personal-info-model').innerText = personalInfoModel;
@@ -41398,8 +41674,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 document.querySelector('.personal-info-year').innerHTML = personalInfoYear;
                 document.querySelector('#license-code').innerHTML = personalInfoLicense;
                 document.querySelector('#my-vehicle-categories').innerHTML = personalInfoCategory;
-                
-                // document.querySelector('#personal-info-remarks').innerHTML = "...";
+                document.querySelector('#form_remarks').innerHTML = personalInfoRemarks;
 
                 // currentIndexSelectedSubmit = index;
                 // console.log('currentIndexSelectedSubmit', currentIndexSelectedSubmit);
@@ -41430,7 +41705,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         // updateVehiclePlateNumber(currentUserId, plateNumber, formPlate);
         // getVehicleInformation(currentUserId);
     });
-
     formModel.addEventListener('submit', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -41438,7 +41712,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         // updateVehicleModelNumber(currentUserId, plateModel, formModel)
         // getVehicleInformation(currentUserId);
     });
-
     formClassification.addEventListener('submit', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -41487,8 +41760,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         e.preventDefault();
         e.stopPropagation();
         
-
-        const getRemarks = document.querySelector('#remarks-block').value;
+        const getRemarks = document.querySelector('#form_remarks').value;
         console.log(getRemarks === '')
         if(getRemarks !== '') {
 
@@ -41504,7 +41776,17 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         }
     });
 
-
+    
+    function changeListOfVehicleCategory() {
+        console.log("college_option: ", document.querySelector("#college_option"));
+        document.querySelector("#college_option").addEventListener("change", (e) => {
+            console.log("college_option: ", e);
+        });
+    }
+    
+    // document.querySelector("#college_option").addEventListener("change", (e) => {
+    //     console.log("college_option: ", e);
+    // });
     function updateVehicleInformation(myId, myObject, myForm) {
         console.log("vehicle updated: ", myObject);
         const docRefAccount = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", myId);
@@ -41512,8 +41794,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefAccount, myObject)
         .then(() => {    
             myForm.reset();
-            // window.location.href = window.location.href; //reload a page in JS
-            // location.reload();
+            window.location.href = window.location.href; //reload a page in JS
+            location.reload();
         })
     }
 
