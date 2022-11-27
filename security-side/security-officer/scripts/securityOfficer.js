@@ -79,24 +79,47 @@ function loadLogs() {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById("content-container").innerHTML = this.responseText;
+
+        $(".show-logs").css("display", "initial");
+        $(".show-visitor").css("display", "none");
+        $(".show-currently-in").css("display", "none");
+
         $("#do_logs").on("click", () => {
           console.log("#do_logs clicked");
-          $(".show-logs").css("display", "block");
+          $(".show-logs").css("display", "initial");
           $(".show-visitor").css("display", "none");
           $(".show-currently-in").css("display", "none");
+
+          // $("#table_id").css("display", "initial");
+          // $("#table_visitor").css("display", "none");
+          // $("#table_inned").css("display", "none");
         });
         $("#do_visitor").on("click", () => {
             console.log("#do_visitor clicked");
+
+            $("#table_visitor_wrapper > div.dataTables_scroll > div.dataTables_scrollHead > div > table > thead > tr > th.sorting.sorting_asc").trigger("click");
             $(".show-logs").css("display", "none");
-            $(".show-visitor").css("display", "block");
+            $(".show-visitor").css("display", "initial");
             $(".show-currently-in").css("display", "none");
+            // $("#table_id").css("display", "none");
+            // $("#table_visitor").css("display", "initial");
+            // $("#table_inned").css("display", "none");
         });
         $("#do_currently").on("click", () => {
             console.log("#do_currently clicked");
+
+            $("#table_inned_wrapper > div.dataTables_scroll > div.dataTables_scrollHead > div > table > thead > tr > th.sorting.sorting_asc").trigger("click");
             $(".show-logs").css("display", "none");
             $(".show-visitor").css("display", "none");
-            $(".show-currently-in").css("display", "block");
+            $(".show-currently-in").css("display", "initial");
+
+            // $("#table_id").css("display", "none");
+            // $("#table_visitor").css("display", "none");
+            // $("#table_inned").css("display", "initial");
         });
+        // table_id
+        // table_visitor
+        // table_inned
     }
 
   };

@@ -486,7 +486,14 @@ jQuery(function() {
                             images: imageLinks,
                             model: [model],
                             use_types: 'Private',
-                            createdAt: fire.getServerTimestamp()
+                            createdAt: fire.getServerTimestamp(),
+                            classification: null,
+                            manufacturer: null,
+                            color: null,
+                            year: null,
+                            license_code: null,
+                            code_category: null,
+                            remarks: null,
                         },
                         }).then(() => {
                             console.log("Vehicle Information was added in the collection");

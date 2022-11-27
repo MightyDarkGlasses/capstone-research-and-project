@@ -36539,8 +36539,10 @@ e._workerMessageId = 0;
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../src/index */ "./src/index.js");
-/* harmony import */ var _qr_scanner_min_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./qr-scanner.min.js */ "./security-side/security-officer/scripts/qr-scanner.min.js");
+/* harmony import */ var firebase_firestore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/firestore */ "./node_modules/firebase/firestore/dist/index.esm.js");
+/* harmony import */ var _src_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../src/index */ "./src/index.js");
+/* harmony import */ var _qr_scanner_min_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./qr-scanner.min.js */ "./security-side/security-officer/scripts/qr-scanner.min.js");
+
 
 
 
@@ -36551,9 +36553,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     document.querySelector("#logout").addEventListener("click", () => {
         console.log("user logged out");
         localStorage.clear();
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.getSignOut(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth)
+        _src_index__WEBPACK_IMPORTED_MODULE_1__.getSignOut(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth)
         .then(() => {
-            console.log('check logged user:', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth)
+            console.log('check logged user:', _src_index__WEBPACK_IMPORTED_MODULE_1__.auth)
             console.log("User signed out.")
             window.location = '../security_panel.html';
         }).catch((err) => {
@@ -36571,9 +36573,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     let index = 0;
     let availableTags = [];
     async function getVisitorLogsList() {
-        const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "visitor-logs");
-        const visitorLogsQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(10));
-        const docsSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDocs(visitorLogsQuery);
+        const colRef = _src_index__WEBPACK_IMPORTED_MODULE_1__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "visitor-logs");
+        const visitorLogsQuery = _src_index__WEBPACK_IMPORTED_MODULE_1__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_1__.doLimit(10));
+        const docsSnap = await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDocs(visitorLogsQuery);
         
 
         // var availableTags = [
@@ -36680,11 +36682,11 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         // Google Firebase
         // console.log('fetchInformation:', userUID, plateNumber)
         console.log('security officer qrscanning.js');
-        const docRefAccountInfo = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
-        const docRefVehicleInfo = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", userUID);
+        const docRefAccountInfo = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "account-information", userUID);
+        const docRefVehicleInfo = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "vehicle-information", userUID);
 
-        const docSnapAccount = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docRefAccountInfo);
-        const docSnapVehicle = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docRefVehicleInfo);
+        const docSnapAccount = await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDoc(docRefAccountInfo);
+        const docSnapVehicle = await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDoc(docRefVehicleInfo);
 
         // console.log("Document data:", docSnapVehicle);
         // console.log(userUID, plateNumber)
@@ -36755,7 +36757,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     specificAccountRetrieve.middle_name, 
                     specificVehicleRetrieve[plateNumber]["model"][0], 
                     plateNumber, 
-                    _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+                    _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.uid);
                 $("#ex1").modal({
                     fadeDuration: 100
                 });
@@ -36785,8 +36787,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     //
     async function addNewLogs(userUID, lName, fName, mName, vehicleModel, plateNumber, officerUID) {
         // const dateMS = Date.now();
-        const docRefLogs = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "logs", userUID);
-        const docSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docRefLogs);
+        const docRefLogs = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "logs", userUID);
+        const docSnap = await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDoc(docRefLogs);
         //Document logs exists?
         if (docSnap.exists()) {
             const selectedUserLogsData = docSnap.data();
@@ -36803,7 +36805,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         vehicle_model: vehicleModel,
                         plate_number: plateNumber,
                         time_in: {
-                            timestamp: new Date().toString(),
+                            timestamp: _src_index__WEBPACK_IMPORTED_MODULE_1__.getServerTimestamp(),
                             officer_uid: officerUID,
                             gate_number: $('select[name="select-gate-number"]').val(),
                         },
@@ -36815,15 +36817,15 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     }
                 };
     
-                await _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "logs", userUID), docData2);
-                alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time Out.`)
+                await _src_index__WEBPACK_IMPORTED_MODULE_1__.myUpdateDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "logs", userUID), docData2);
+                // alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time Out.`)
             }
             else {
                 if(selectedUserLogsData[selectedUserLogsData.index].time_out.timestamp === null) {
                     console.log('null', null);
                     
                     selectedUserLogsData[selectedUserLogsData.index]["time_out"] = {
-                        timestamp: new Date().toString(),
+                        timestamp: _src_index__WEBPACK_IMPORTED_MODULE_1__.getServerTimestamp(),
                         officer_uid: officerUID,
                         gate_number: $('select[name="select-gate-number"]').val(),
                     };
@@ -36831,7 +36833,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     selectedUserLogsData["index"] += 1;
                     console.log('updated:', selectedUserLogsData);
 
-                    await _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefLogs, selectedUserLogsData);
+                    await _src_index__WEBPACK_IMPORTED_MODULE_1__.myUpdateDoc(docRefLogs, selectedUserLogsData);
                 }
                 else {
                     console.log('not null')
@@ -36850,7 +36852,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     vehicle_model: vehicleModel,
                     plate_number: plateNumber,
                     time_in: {
-                        timestamp: new Date().toString(),
+                        timestamp: _src_index__WEBPACK_IMPORTED_MODULE_1__.getServerTimestamp(),
                         officer_uid: officerUID,
                         gate_number: $('select[name="select-gate-number"]').val(),
                     },
@@ -36862,7 +36864,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 },
                 index: 1
             };
-            await _src_index__WEBPACK_IMPORTED_MODULE_0__.doSetDoc(docRefLogs, docData);
+            await _src_index__WEBPACK_IMPORTED_MODULE_1__.doSetDoc(docRefLogs, docData);
         }
     } //end of function, addNewLogs
     
@@ -36870,36 +36872,30 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     // // ### Display Registered User logs
     
     async function displayLogs() {
-        const myQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'logs'));
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
-            const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
+        const myQuery = _src_index__WEBPACK_IMPORTED_MODULE_1__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_1__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, 'logs'));
+        _src_index__WEBPACK_IMPORTED_MODULE_1__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
+            const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_1__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
                 let logs = [];
                 let index = 0;
                 snapshot.docs.forEach((doc) => {
                     let unpackData = {...doc.data()};
                     let objSize = Object.keys(unpackData).length;
+                    
+                    /** Change date formatting. */
                     Object.entries(unpackData).map((element, index) => {
                         if(objSize-1 !== index) {
-                            // let objectDate = new Date();
-                            // let day = objectDate.getDate();
-                            // let month = objectDate.getMonth() + 1;
-                            // let year = objectDate.getFullYear();
-                            
-                            // let format1 = month + "/" + day + "/" + year;
-                            // console.log(format1); // 7/23/2022
 
-                            // console.log("time_in", element[1]["time_in"]);
-                            // console.log("time_out", element[1]["time_out"]);
-                            // console.log("time_out", element);
+                            // ********************************
+                            // element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // element[1]['time_in']['timestamp'] = ""
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString();
+                            element[1]['time_out']['gate_number'] = element[1]['time_out']['gate_number'] === null ? '-' : element[1]['time_out']['gate_number'];
+                            element[1]['time_out']['officer_uid'] = element[1]['time_out']['officer_uid'] === null ? '-' : element[1]['time_out']['officer_uid'];
 
-                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
-                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '' : element[1]['time_out']['timestamp'];
+                            // ********************************
 
-                            // console.log(index, element[1]);
-                            // element[1]['time_in'] = Date(new Date(0).setUTCSeconds(element[1]['time_in']['seconds']));
-                            // element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
-
-                            // .format('dddd MMM YYYY HH:mm:ss');
                             
                             index += 1; //increment
                             logs.push(element[1]);
@@ -36924,9 +36920,22 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         scrollX: true,
                         "pageLength": 10,
                         "data": logs,
+                        initComplete : function() {
+                            $('#table').parents('div.dataTables_wrapper').first().hide();
+                        },
                         "columns": [
-                            {"data": "time_in.timestamp"},
-                            {"data": "time_out.timestamp"},
+                            // {"data": "time_in.timestamp"},
+                            // {"data": "time_out.timestamp"},
+                            {"data": (data, type, dataToSet) => {
+                                console.log("data.time_in: ", data.time_in);
+                                return data.time_in.timestamp.toDate().toLocaleString(); }
+                                // return "Time In"; }
+                            },
+                            {"data": (data, type, dataToSet) => {
+                                console.log("data.time_out: ", data.time_out);
+                                return data.time_out.timestamp; }
+                                // return "Time Out"; }
+                            },
                             {"data": (data, type, dataToSet) => {
                                 return data.time_in.gate_number + ", " + data.time_out.gate_number}
                             },
@@ -36952,18 +36961,18 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
 
 
     async function currentlyIn() {
-        const myQueryUserLogs = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'logs'), _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(5));
-        const myQueryVisitorLogs = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'visitor-logs'), _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(5));
+        const myQueryUserLogs = _src_index__WEBPACK_IMPORTED_MODULE_1__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_1__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, 'logs'), _src_index__WEBPACK_IMPORTED_MODULE_1__.doLimit(5));
+        const myQueryVisitorLogs = _src_index__WEBPACK_IMPORTED_MODULE_1__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_1__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, 'visitor-logs'), _src_index__WEBPACK_IMPORTED_MODULE_1__.doLimit(5));
         let logs = [];
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQueryUserLogs, (snapshot) => {     //based on the query, //change this back!
-        const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQueryUserLogs, (snapshot) => {     //based on the query
+        _src_index__WEBPACK_IMPORTED_MODULE_1__.myOnSnapshot(myQueryUserLogs, (snapshot) => {     //based on the query, //change this back!
+        const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_1__.myOnSnapshot(myQueryUserLogs, (snapshot) => {     //based on the query
             let index = 0;
             snapshot.docs.forEach((doc) => {
                 let unpackData = {...doc.data()};
                 let objSize = Object.keys(unpackData).length;
                 Object.entries(unpackData).map((element, index) => {
                     if(objSize-1 !== index) {
-                        element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
+                        element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
                         element[1]['type'] = "Registered";
                         
                         index += 1; //increment
@@ -36975,15 +36984,15 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         });
     
         // Visitor Logs
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQueryVisitorLogs, (snapshot) => {     //based on the query, //change this back!
-        const unsubCollection2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQueryVisitorLogs, (snapshot) => {     //based on the query
+        _src_index__WEBPACK_IMPORTED_MODULE_1__.myOnSnapshot(myQueryVisitorLogs, (snapshot) => {     //based on the query, //change this back!
+        const unsubCollection2 = _src_index__WEBPACK_IMPORTED_MODULE_1__.myOnSnapshot(myQueryVisitorLogs, (snapshot) => {     //based on the query
             let index = 0;
             snapshot.docs.forEach((doc) => {
                 let unpackData = {...doc.data()};
                 let objSize = Object.keys(unpackData).length;
                 Object.entries(unpackData).map((element, index) => {
                     if(objSize-1 !== index) {
-                        element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
+                        element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
                         element[1]['type'] = "Visitor";
                         
                         index += 1; //increment
@@ -36996,6 +37005,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 console.log("DataTable");
                 $("#table_inned").DataTable({
                     scrollX: true,
+                    initComplete : function() {
+                        $('#table').parents('div.dataTables_wrapper').first().hide();
+                    },
                     "pageLength": 10,
                     "data": logs,
                     "columns": [
@@ -37030,9 +37042,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
 
     // // ### Display Visitor Information logs
     async function displayVisitorLogs() {
-        const myQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'visitor-logs'));
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
-            const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
+        const myQuery = _src_index__WEBPACK_IMPORTED_MODULE_1__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_1__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, 'visitor-logs'));
+        _src_index__WEBPACK_IMPORTED_MODULE_1__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
+            const unsubCollection = _src_index__WEBPACK_IMPORTED_MODULE_1__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
                 let logs = [];
                 let index = 0;
                 snapshot.docs.forEach((doc) => {
@@ -37041,11 +37053,18 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     Object.entries(unpackData).map((element, index) => {
                         if(objSize-1 !== index) {
 
-                            console.log("time_in", element[1]["time_in"]);
-                            console.log("time_out", element[1]["time_out"]);
+                            // console.log("time_in", element[1]["time_in"]);
+                            // console.log("time_out", element[1]["time_out"]);
 
-                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
-                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            
+
+                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString();
+                            element[1]['time_out']['gate_number'] = element[1]['time_out']['gate_number'] === null ? '-' : element[1]['time_out']['gate_number'];
+                            element[1]['time_out']['officer_uid'] = element[1]['time_out']['officer_uid'] === null ? '-' : element[1]['time_out']['officer_uid'];
+
 
                             index += 1; //increment
                             logs.push(element[1]);
@@ -37093,8 +37112,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         mName = mName.trim();
         lName = lName.trim();
 
-        const docRefLogs = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "visitor-logs", plateNumber);
-        const docSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docRefLogs);
+        const docRefLogs = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "visitor-logs", plateNumber);
+        const docSnap = await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDoc(docRefLogs);
         //Document logs exists?
         if (docSnap.exists()) {
             console.log("Logs already exists");
@@ -37113,7 +37132,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         vehicle_model: vehicleModel,
                         plate_number: plateNumber,
                         time_in: {
-                            timestamp: new Date().toString(),
+                            timestamp: _src_index__WEBPACK_IMPORTED_MODULE_1__.getServerTimestamp(),
                             officer_uid: officerUID,
                             gate_number: $('select[name="select-gate-number"]').val(),
                         },
@@ -37124,21 +37143,21 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         },
                     }
                 };
-                await _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefLogs, docData);
+                await _src_index__WEBPACK_IMPORTED_MODULE_1__.myUpdateDoc(docRefLogs, docData);
             }
             else {
                 if(getVisitorInformation[getVisitorInformation.logs_length].time_out.timestamp === null) {
                     console.log('null', null);
     
                     getVisitorInformation[getVisitorInformation.logs_length]["time_out"] = {
-                        timestamp: new Date().toString(),
+                        timestamp: _src_index__WEBPACK_IMPORTED_MODULE_1__.getServerTimestamp(),
                         officer_uid: officerUID,
                         gate_number: $('select[name="select-gate-number"]').val(),
                     };
                     getVisitorInformation["logs_length"] += 1;
                     console.log('updated:', getVisitorInformation);
 
-                    await _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefLogs, getVisitorInformation);
+                    await _src_index__WEBPACK_IMPORTED_MODULE_1__.myUpdateDoc(docRefLogs, getVisitorInformation);
                 }
                 else {
                     console.log('not null')
@@ -37157,7 +37176,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     vehicle_model: vehicleModel,
                     plate_number: plateNumber,
                     time_in: {
-                        timestamp: new Date().toString(),
+                        timestamp: _src_index__WEBPACK_IMPORTED_MODULE_1__.getServerTimestamp(),
                         officer_uid: officerUID,
                         gate_number: $('select[name="select-gate-number"]').val(),
                     },
@@ -37169,7 +37188,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 },
                 logs_length: 1
             };
-            await _src_index__WEBPACK_IMPORTED_MODULE_0__.doSetDoc(docRefLogs, docData);
+            await _src_index__WEBPACK_IMPORTED_MODULE_1__.doSetDoc(docRefLogs, docData);
             
         }
         return;
@@ -37240,7 +37259,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         // ####### Web Cam Scanning #######
         
         // If the webcam is scanned.
-        const scanner = new _qr_scanner_min_js__WEBPACK_IMPORTED_MODULE_1__["default"](
+        const scanner = new _qr_scanner_min_js__WEBPACK_IMPORTED_MODULE_2__["default"](
         video,
         (result) => 
             setResult(camQrResult, result), {
@@ -37270,7 +37289,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             // at the same time which can result in listCamera's unconstrained stream also being offered to the scanner.
             // Note that we can also start the scanner after listCameras, we just have it this way around in the demo to
             // start the scanner earlier.
-            _qr_scanner_min_js__WEBPACK_IMPORTED_MODULE_1__["default"].listCameras(true).then((cameras) =>
+            _qr_scanner_min_js__WEBPACK_IMPORTED_MODULE_2__["default"].listCameras(true).then((cameras) =>
             cameras.forEach((camera) => {
                 const option = document.createElement("option");
                 option.value = camera.id;
@@ -37294,7 +37313,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             // background: url('https://api.iconify.design/humbleicons/camera-off.svg?color=white') no-repeat center center / contain;
         });
     
-        _qr_scanner_min_js__WEBPACK_IMPORTED_MODULE_1__["default"].hasCamera().then(
+        _qr_scanner_min_js__WEBPACK_IMPORTED_MODULE_2__["default"].hasCamera().then(
         (hasCamera) => (camHasCamera.textContent = hasCamera)
         );
     
@@ -37347,8 +37366,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         async function checkSecurityOfficerInformation(authentication) {
             // console.log(authentication);
             // console.log("fire.auth: ", fire.auth)
-            const docRefSecurityOfficer = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "security", authentication.uid);
-            const docSnapSecurityOfficer = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docRefSecurityOfficer);
+            const docRefSecurityOfficer = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "security", authentication.uid);
+            const docSnapSecurityOfficer = await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDoc(docRefSecurityOfficer);
             if (docSnapSecurityOfficer.exists()) {
                 const securityOfficerInformation = docSnapSecurityOfficer.data();
                 console.log('securityOfficerInformation', securityOfficerInformation);
@@ -37367,7 +37386,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         // const auth = getAuth();
 
         // Check if the user is autheticated, else log out...
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
+        _src_index__WEBPACK_IMPORTED_MODULE_1__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth, (user) => {
             if (user) {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
@@ -37399,7 +37418,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             console.log($('input[name="guest-add-vehiclemodel"]').val());
             console.log($('input[name="guest-add-platenum"]').val());
             
-            addVisitorInformation(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid, plateNum, vehicleModel, fname, mname, lname);
+            addVisitorInformation(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.uid, plateNum, vehicleModel, fname, mname, lname);
             window.alert(`${plateNum}: Information added successfully.`)
             
             // $('#ex2').modal().close();
@@ -37438,11 +37457,21 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../src/index */ "./src/index.js");
+/* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/auth */ "./node_modules/firebase/auth/dist/index.esm.js");
+/* harmony import */ var _src_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../src/index */ "./src/index.js");
 
+
+// import { initializeApp, applicationDefault } from 'firebase-admin/app';
+
+// import { getAuth, logout } from 'auth';
 
 if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
-    console.log('security.js', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth);
+    console.log('security.js', _src_index__WEBPACK_IMPORTED_MODULE_1__.auth);
+
+    // const defaultApp = initializeApp(defaultAppConfig);
+    // console.log(defaultApp.name);
+    
+    
 
     const securityLoginForm = document.querySelector('#security-officer-form');
     securityLoginForm.addEventListener('submit', (e) => {
@@ -37456,16 +37485,32 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
         console.log(email, password);
 
         // if(email === 'ethoharon@duck.com' || email === 'admin@local.com') {    
-            _src_index__WEBPACK_IMPORTED_MODULE_0__.doSignInWithEmailAndPassword(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, email, password)
+            _src_index__WEBPACK_IMPORTED_MODULE_1__.doSignInWithEmailAndPassword(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth, email, password)
             .then(async (cred) => {
                 console.log("User logged in:", cred.user);
                 
-                const myRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'security', cred.user.uid); 
-                await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(myRef).then((snapshot) => { 
+
+                // if(cred.user.uid === "aqkfBzQp1YTxXVohFDSkCXO2esR2") {
+                //     console.log("match")
+
+                    
+                    // fire.doUpdateProfile(cred.user, {
+                    //     disabled: true
+                    // });
+
+                    // getAuth().updateCurrentUser(cred.user.uid, {
+                    //     disabled: true,
+                    // }).then((e) => {
+                    //     console.log("User updated");
+                    // });
+                // }
+
+                const myRef = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, 'security', cred.user.uid); 
+                await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDoc(myRef).then((snapshot) => { 
                     console.log(snapshot.data(), snapshot.id);
 
                     if(snapshot.data() === undefined) {
-                        _src_index__WEBPACK_IMPORTED_MODULE_0__.getSignOut(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth)
+                        _src_index__WEBPACK_IMPORTED_MODULE_1__.getSignOut(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth)
                         .then(() => {
                             console.log("Done checking auth.");
                         }).catch((err) => {
@@ -37527,18 +37572,18 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
 
 
     // Check if the user is already logged in.
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, async (user) => {
-        if (user) {
-            const myRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'security', user.uid); 
-            await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(myRef).then((snapshot) => { 
-                console.log(snapshot.data(), snapshot.id);
+    // fire.getOnAuthStateChanged(fire.auth, async (user) => {
+    //     if (user) {
+    //         const myRef = fire.myDoc(fire.db, 'security', user.uid); 
+    //         await fire.myGetDoc(myRef).then((snapshot) => { 
+    //             console.log(snapshot.data(), snapshot.id);
 
-                if(snapshot.data() !== undefined) {
-                    window.location = 'security-officer/securityOfficer-home.html';
-                }
-            });
-        } 
-    });
+    //             if(snapshot.data() !== undefined) {
+    //                 window.location = 'security-officer/securityOfficer-home.html';
+    //             }
+    //         });
+    //     }
+    // });
 }
 
 /***/ }),
@@ -41564,7 +41609,14 @@ jQuery(function() {
                             images: imageLinks,
                             model: [model],
                             use_types: 'Private',
-                            createdAt: _src_index__WEBPACK_IMPORTED_MODULE_0__.getServerTimestamp()
+                            createdAt: _src_index__WEBPACK_IMPORTED_MODULE_0__.getServerTimestamp(),
+                            classification: null,
+                            manufacturer: null,
+                            color: null,
+                            year: null,
+                            license_code: null,
+                            code_category: null,
+                            remarks: null,
                         },
                         }).then(() => {
                             console.log("Vehicle Information was added in the collection");

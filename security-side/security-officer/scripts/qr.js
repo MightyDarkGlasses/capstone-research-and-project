@@ -1,3 +1,4 @@
+import { serverTimestamp } from "firebase/firestore";
 import * as fire from "../../../src/index";
 import QrScanner from "./qr-scanner.min.js";
 
@@ -260,7 +261,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         vehicle_model: vehicleModel,
                         plate_number: plateNumber,
                         time_in: {
-                            timestamp: new Date().toString(),
+                            timestamp: fire.getServerTimestamp(),
                             officer_uid: officerUID,
                             gate_number: $('select[name="select-gate-number"]').val(),
                         },
@@ -273,14 +274,14 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 };
     
                 await fire.myUpdateDoc(fire.myDoc(fire.db, "logs", userUID), docData2);
-                alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time Out.`)
+                // alert(`${plateNumber}, ${new Date().toString()}: Vehicle Time Out.`)
             }
             else {
                 if(selectedUserLogsData[selectedUserLogsData.index].time_out.timestamp === null) {
                     console.log('null', null);
                     
                     selectedUserLogsData[selectedUserLogsData.index]["time_out"] = {
-                        timestamp: new Date().toString(),
+                        timestamp: fire.getServerTimestamp(),
                         officer_uid: officerUID,
                         gate_number: $('select[name="select-gate-number"]').val(),
                     };
@@ -307,7 +308,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     vehicle_model: vehicleModel,
                     plate_number: plateNumber,
                     time_in: {
-                        timestamp: new Date().toString(),
+                        timestamp: fire.getServerTimestamp(),
                         officer_uid: officerUID,
                         gate_number: $('select[name="select-gate-number"]').val(),
                     },
@@ -335,28 +336,22 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 snapshot.docs.forEach((doc) => {
                     let unpackData = {...doc.data()};
                     let objSize = Object.keys(unpackData).length;
+                    
+                    /** Change date formatting. */
                     Object.entries(unpackData).map((element, index) => {
                         if(objSize-1 !== index) {
-                            // let objectDate = new Date();
-                            // let day = objectDate.getDate();
-                            // let month = objectDate.getMonth() + 1;
-                            // let year = objectDate.getFullYear();
-                            
-                            // let format1 = month + "/" + day + "/" + year;
-                            // console.log(format1); // 7/23/2022
 
-                            // console.log("time_in", element[1]["time_in"]);
-                            // console.log("time_out", element[1]["time_out"]);
-                            // console.log("time_out", element);
+                            // ********************************
+                            // element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // element[1]['time_in']['timestamp'] = ""
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString();
+                            element[1]['time_out']['gate_number'] = element[1]['time_out']['gate_number'] === null ? '-' : element[1]['time_out']['gate_number'];
+                            element[1]['time_out']['officer_uid'] = element[1]['time_out']['officer_uid'] === null ? '-' : element[1]['time_out']['officer_uid'];
 
-                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
-                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '' : element[1]['time_out']['timestamp'];
+                            // ********************************
 
-                            // console.log(index, element[1]);
-                            // element[1]['time_in'] = Date(new Date(0).setUTCSeconds(element[1]['time_in']['seconds']));
-                            // element[1]['time_out'] = element[1]['time_out'] === '' ? '' : new Date(element[1]['time_out']).toLocaleString('en-GB',{timeZone:'UTC'})
-
-                            // .format('dddd MMM YYYY HH:mm:ss');
                             
                             index += 1; //increment
                             logs.push(element[1]);
@@ -381,9 +376,22 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         scrollX: true,
                         "pageLength": 10,
                         "data": logs,
+                        initComplete : function() {
+                            $('#table').parents('div.dataTables_wrapper').first().hide();
+                        },
                         "columns": [
-                            {"data": "time_in.timestamp"},
-                            {"data": "time_out.timestamp"},
+                            // {"data": "time_in.timestamp"},
+                            // {"data": "time_out.timestamp"},
+                            {"data": (data, type, dataToSet) => {
+                                console.log("data.time_in: ", data.time_in);
+                                return data.time_in.timestamp.toDate().toLocaleString(); }
+                                // return "Time In"; }
+                            },
+                            {"data": (data, type, dataToSet) => {
+                                console.log("data.time_out: ", data.time_out);
+                                return data.time_out.timestamp; }
+                                // return "Time Out"; }
+                            },
                             {"data": (data, type, dataToSet) => {
                                 return data.time_in.gate_number + ", " + data.time_out.gate_number}
                             },
@@ -420,7 +428,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 let objSize = Object.keys(unpackData).length;
                 Object.entries(unpackData).map((element, index) => {
                     if(objSize-1 !== index) {
-                        element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
+                        element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
                         element[1]['type'] = "Registered";
                         
                         index += 1; //increment
@@ -440,7 +448,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 let objSize = Object.keys(unpackData).length;
                 Object.entries(unpackData).map((element, index) => {
                     if(objSize-1 !== index) {
-                        element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
+                        element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
                         element[1]['type'] = "Visitor";
                         
                         index += 1; //increment
@@ -453,6 +461,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 console.log("DataTable");
                 $("#table_inned").DataTable({
                     scrollX: true,
+                    initComplete : function() {
+                        $('#table').parents('div.dataTables_wrapper').first().hide();
+                    },
                     "pageLength": 10,
                     "data": logs,
                     "columns": [
@@ -498,11 +509,18 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     Object.entries(unpackData).map((element, index) => {
                         if(objSize-1 !== index) {
 
-                            console.log("time_in", element[1]["time_in"]);
-                            console.log("time_out", element[1]["time_out"]);
+                            // console.log("time_in", element[1]["time_in"]);
+                            // console.log("time_out", element[1]["time_out"]);
 
-                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
-                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
+                            
+
+                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString();
+                            element[1]['time_out']['gate_number'] = element[1]['time_out']['gate_number'] === null ? '-' : element[1]['time_out']['gate_number'];
+                            element[1]['time_out']['officer_uid'] = element[1]['time_out']['officer_uid'] === null ? '-' : element[1]['time_out']['officer_uid'];
+
 
                             index += 1; //increment
                             logs.push(element[1]);
@@ -570,7 +588,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         vehicle_model: vehicleModel,
                         plate_number: plateNumber,
                         time_in: {
-                            timestamp: new Date().toString(),
+                            timestamp: fire.getServerTimestamp(),
                             officer_uid: officerUID,
                             gate_number: $('select[name="select-gate-number"]').val(),
                         },
@@ -588,7 +606,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     console.log('null', null);
     
                     getVisitorInformation[getVisitorInformation.logs_length]["time_out"] = {
-                        timestamp: new Date().toString(),
+                        timestamp: fire.getServerTimestamp(),
                         officer_uid: officerUID,
                         gate_number: $('select[name="select-gate-number"]').val(),
                     };
@@ -614,7 +632,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     vehicle_model: vehicleModel,
                     plate_number: plateNumber,
                     time_in: {
-                        timestamp: new Date().toString(),
+                        timestamp: fire.getServerTimestamp(),
                         officer_uid: officerUID,
                         gate_number: $('select[name="select-gate-number"]').val(),
                     },
