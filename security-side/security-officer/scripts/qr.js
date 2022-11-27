@@ -2,6 +2,21 @@ import * as fire from "../../../src/index";
 import QrScanner from "./qr-scanner.min.js";
 
 if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
+    // Remove the signOut method later.
+    
+
+    document.querySelector("#logout").addEventListener("click", () => {
+        console.log("user logged out");
+        localStorage.clear();
+        fire.getSignOut(fire.auth)
+        .then(() => {
+            console.log('check logged user:', fire.auth)
+            console.log("User signed out.")
+            window.location = '../security_panel.html';
+        }).catch((err) => {
+            console.log("Logout error message: ", err);
+        });
+    });
 
     document.addEventListener('DOMContentLoaded', function() {
     });
@@ -807,6 +822,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         }
 
         // const auth = getAuth();
+
+        // Check if the user is autheticated, else log out...
         fire.getOnAuthStateChanged(fire.auth, (user) => {
             if (user) {
                 // User is signed in, see docs for a list of available properties
@@ -818,6 +835,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             else {
                 // User is signed out
                 // ...
+                window.location = '../security_panel.html';
             }
         });
         

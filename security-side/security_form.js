@@ -14,24 +14,87 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
         const password = $('#admin_pass').val();
         console.log(email, password);
 
-        if(email === 'ethoharon@duck.com' || email === 'admin@local.com') {    
+        // if(email === 'ethoharon@duck.com' || email === 'admin@local.com') {    
             fire.doSignInWithEmailAndPassword(fire.auth, email, password)
-            .then((cred) => {
+            .then(async (cred) => {
                 console.log("User logged in:", cred.user);
-    
                 
-                // Remove the signOut method later.
-                // fire.getSignOut(fire.auth)
-                // .then(() => {
-                //     console.log('check logged user:', fire.auth)
-                //     console.log("User signed out.")
-                //     window.location = 'security-officer/securityOfficer-home.html';
-                // }).catch((err) => {
-                //     console.log("Logout error message: ", err);
-                // });
-                window.location = 'security-officer/securityOfficer-home.html';
-            }).catch((err) => {
-                console.log("Sign in error: ", err);
+                const myRef = fire.myDoc(fire.db, 'security', cred.user.uid); 
+                await fire.myGetDoc(myRef).then((snapshot) => { 
+                    console.log(snapshot.data(), snapshot.id);
+
+                    if(snapshot.data() === undefined) {
+                        fire.getSignOut(fire.auth)
+                        .then(() => {
+                            console.log("Done checking auth.");
+                        }).catch((err) => {
+                        });
+
+                        $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
+                        $('.modal-container-title').html('Error');
+                        $('.modal-container-header').css({
+                            'backgroundColor': 'red'
+                        })
+                        $("#error-popup").modal({
+                            fadeDuration: 100
+                        });
+                    }
+                    else {
+                        window.location = 'security-officer/securityOfficer-home.html';
+                    }
+                });
+                
+            }).catch((error) => {
+                console.log('error: ', error);
+                switch (error.code) {
+                    case 'auth/wrong-password': {
+                        $('.modal-container-main').html(`<p>User credentials is wrong.<br/>Consider re-checking and enter the correct and valid input.</p>`);
+                        $('.modal-container-title').html('Error');
+                        $('.modal-container-header').css({
+                            'backgroundColor': 'red'
+                        })
+                        $("#error-popup").modal({
+                            fadeDuration: 100
+                        });
+                        break;
+                    }
+                    case 'auth/user-not-found': {
+                        $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
+                        $('.modal-container-title').html('Error');
+                        $('.modal-container-header').css({
+                            'backgroundColor': 'red'
+                        })
+                        $("#error-popup").modal({
+                            fadeDuration: 100
+                        });
+                        break;
+                    }
+                    default: {
+                        $('.modal-container-main').html(`<p>${error.code}</p>`);
+                        $('.modal-container-title').html('Error');
+                        $('.modal-container-header').css({
+                            'backgroundColor': 'red'
+                        })
+                        $("#error-popup").modal({
+                            fadeDuration: 100
+                        });
+                    }
+                }
+            });
+        // } // end if condition
+    });
+
+
+    // Check if the user is already logged in.
+    fire.getOnAuthStateChanged(fire.auth, async (user) => {
+        if (user) {
+            const myRef = fire.myDoc(fire.db, 'security', user.uid); 
+            await fire.myGetDoc(myRef).then((snapshot) => { 
+                console.log(snapshot.data(), snapshot.id);
+
+                if(snapshot.data() !== undefined) {
+                    window.location = 'security-officer/securityOfficer-home.html';
+                }
             });
         }
     });

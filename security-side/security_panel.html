@@ -15,10 +15,12 @@
     <!-- Stylesheet here... -->
     <link rel="stylesheet" href="panel/style.css">
     <link rel="stylesheet" href="panel/securitypanel.css">
+    <link rel="stylesheet" href="../styles/modal.css">
 
     <!-- JQuery Modal Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"/>
 </head>
+
 <body>
     <div class="container">
         <div class="error-screen">
@@ -56,6 +58,23 @@
                         <button type="submit" name="admin_login" id="admin_login">Log In</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal HTML embedded directly into document -->
+    <div id="error-popup" class="modal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-container-header">
+                <div class="header-icon"></div>
+                <h3>Error</h3>
+            </div>
+            <div class="modal-container-main">
+                <!-- <p>The email is not yet verified.</p>
+                <p class="note"><i>Note: Check your <b>Spam</b> section to verify your email.</i></p> -->
+            </div>
+            <div class="modal-container-footer">
+                <a href="#" rel="modal:close">Close</a>
             </div>
         </div>
     </div>

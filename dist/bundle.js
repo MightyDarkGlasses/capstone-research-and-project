@@ -36545,6 +36545,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
+    // Remove the signOut method later.
+    
+
+    document.querySelector("#logout").addEventListener("click", () => {
+        console.log("user logged out");
+        localStorage.clear();
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.getSignOut(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth)
+        .then(() => {
+            console.log('check logged user:', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth)
+            console.log("User signed out.")
+            window.location = '../security_panel.html';
+        }).catch((err) => {
+            console.log("Logout error message: ", err);
+        });
+    });
 
     document.addEventListener('DOMContentLoaded', function() {
     });
@@ -37350,6 +37365,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         }
 
         // const auth = getAuth();
+
+        // Check if the user is autheticated, else log out...
         _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
             if (user) {
                 // User is signed in, see docs for a list of available properties
@@ -37361,6 +37378,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             else {
                 // User is signed out
                 // ...
+                window.location = '../security_panel.html';
             }
         });
         
@@ -37437,26 +37455,89 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
         const password = $('#admin_pass').val();
         console.log(email, password);
 
-        if(email === 'ethoharon@duck.com' || email === 'admin@local.com') {    
+        // if(email === 'ethoharon@duck.com' || email === 'admin@local.com') {    
             _src_index__WEBPACK_IMPORTED_MODULE_0__.doSignInWithEmailAndPassword(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, email, password)
-            .then((cred) => {
+            .then(async (cred) => {
                 console.log("User logged in:", cred.user);
-    
                 
-                // Remove the signOut method later.
-                // fire.getSignOut(fire.auth)
-                // .then(() => {
-                //     console.log('check logged user:', fire.auth)
-                //     console.log("User signed out.")
-                //     window.location = 'security-officer/securityOfficer-home.html';
-                // }).catch((err) => {
-                //     console.log("Logout error message: ", err);
-                // });
-                window.location = 'security-officer/securityOfficer-home.html';
-            }).catch((err) => {
-                console.log("Sign in error: ", err);
+                const myRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'security', cred.user.uid); 
+                await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(myRef).then((snapshot) => { 
+                    console.log(snapshot.data(), snapshot.id);
+
+                    if(snapshot.data() === undefined) {
+                        _src_index__WEBPACK_IMPORTED_MODULE_0__.getSignOut(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth)
+                        .then(() => {
+                            console.log("Done checking auth.");
+                        }).catch((err) => {
+                        });
+
+                        $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
+                        $('.modal-container-title').html('Error');
+                        $('.modal-container-header').css({
+                            'backgroundColor': 'red'
+                        })
+                        $("#error-popup").modal({
+                            fadeDuration: 100
+                        });
+                    }
+                    else {
+                        window.location = 'security-officer/securityOfficer-home.html';
+                    }
+                });
+                
+            }).catch((error) => {
+                console.log('error: ', error);
+                switch (error.code) {
+                    case 'auth/wrong-password': {
+                        $('.modal-container-main').html(`<p>User credentials is wrong.<br/>Consider re-checking and enter the correct and valid input.</p>`);
+                        $('.modal-container-title').html('Error');
+                        $('.modal-container-header').css({
+                            'backgroundColor': 'red'
+                        })
+                        $("#error-popup").modal({
+                            fadeDuration: 100
+                        });
+                        break;
+                    }
+                    case 'auth/user-not-found': {
+                        $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
+                        $('.modal-container-title').html('Error');
+                        $('.modal-container-header').css({
+                            'backgroundColor': 'red'
+                        })
+                        $("#error-popup").modal({
+                            fadeDuration: 100
+                        });
+                        break;
+                    }
+                    default: {
+                        $('.modal-container-main').html(`<p>${error.code}</p>`);
+                        $('.modal-container-title').html('Error');
+                        $('.modal-container-header').css({
+                            'backgroundColor': 'red'
+                        })
+                        $("#error-popup").modal({
+                            fadeDuration: 100
+                        });
+                    }
+                }
             });
-        }
+        // } // end if condition
+    });
+
+
+    // Check if the user is already logged in.
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, async (user) => {
+        if (user) {
+            const myRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, 'security', user.uid); 
+            await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(myRef).then((snapshot) => { 
+                console.log(snapshot.data(), snapshot.id);
+
+                if(snapshot.data() !== undefined) {
+                    window.location = 'security-officer/securityOfficer-home.html';
+                }
+            });
+        } 
     });
 }
 
