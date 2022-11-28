@@ -702,13 +702,29 @@
             </div>
 
             <style>
+                .remove-linkages {
+                    color: black;
+                    background-color: white;
+                    /* width: 100px; */
+                    padding-inline: 1em;
+                    padding-block: .5em;
+                    border-radius: 1em;
+                    cursor: pointer;
+                    text-align: center;
+                }
                 .linkages-box .vehicle-linkages-entry {
                     display: flex;
                 }
                 .linkages-box .vehicle-linkages-entry .linkages-thumbnail img {
+                    outline: none;
+                    border: none;
+                    font-family: 'Lexend Deca', sans-serif;
+                    color: white;
                     width: 150px;
-                    border-radius: 1em;
-                    border: 5px solid white;
+                    background-color: #000000;
+                    box-shadow: 0px 7px 6px 1px rgb(0 0 0 / 25%);
+                    border-radius: 40px;
+                    cursor: pointer;
                 }
 
                 .linkages-box .vehicle-linkages-entry,
@@ -735,7 +751,7 @@
                                     <th>Vehicle Model</th>
                                     <th>Plate Number</th>
                                     <th>Vehicle Owner</th>
-                                    <th></th>
+                                    <th>-</th>
                                 </thead>
                                 <tbody class="linkages-data-body">
                                     <tr>
@@ -903,6 +919,7 @@
     <div id="add-linkages-modal" class="modal" style="max-width: 750px;">
         <div class="linkages-qr-caption">
             <p>Linkages</p>
+            <!-- <p>You can drop or use the file explorer to upload the qr code.</p> -->
         </div>
         <div>
             <div>
@@ -950,7 +967,7 @@
                     </select>
                 </div>
             </div>
-            <button class="linkages-scan-method-toggle" id="linkages-scan-method-toggle">Switch to QR Scanning</button>
+            <!-- <button class="linkages-scan-method-toggle" id="linkages-scan-method-toggle">Switch to QR Scanning</button> -->
         </div>
     </div>
 

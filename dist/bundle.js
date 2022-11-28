@@ -41768,6 +41768,9 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     document.querySelector(".category").textContent = "-";
                 }
             });
+            showVehicleList(vehicleInformation);  // display the list
+            showLinkagesList(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid); // display the linkages
+            clickableVehicleList();
         } 
         else {
             window.location = "../login.html";
@@ -41955,38 +41958,113 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             console.log(listOfVehiclesTags)
         }
     }
-    function showLinkagesList(vehicle) {
-        if(vehicle !== null) {
-        //const docRefVehicle = fire.myDoc(fire.db, "vehicle-information", currentUserId);
+    function showLinkagesList(userUID) {
+        console.log("showLinkagesList")
+        const docRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "linkages", userUID);
+        // const docRef = fire.myDoc(fire.db, "linkages", userUID);
+
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(docRef, async (doc) => {
+            // console.log("linkages", doc.data(), doc.id);
+            let linkagesList = {...doc.data()};
+            let listLinkagesKeys = Object.keys(linkagesList);
+            let linkagesDataLI = ``;
+
+
             
-            let myObject = vehicle.registered_vehicle.vehicles.linkages;
-            let myKeys = Object.keys(myObject);
-
-            if(myKeys.length > 0) {
-                console.log('Linkages detected!');
-                
-                let linkagesOutput = '';
-                
-                myKeys.forEach((element, index) => {
-                    console.log('test', myObject)
-                    linkagesOutput += `<li>Link #${index}: ${myObject[myKeys]}</li>`;
-                    //     // Last index for setting the list of linkages
-                    //     if(index === myKeys.length-1) { 
-                    //         console.log('index === myKeys.length', index === myKeys.length)
-                    //         document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
-                    //     }
-                });
-
-                document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
-                console.log('myKeys:', myKeys);
-                console.log('linkageOutput:', linkagesOutput);
+            if(!doc.exists()) {
+                console.log('There are no linked vehicle data.')
             }
             else {
-                console.log('No linked yet.');
+                if(Object.keys(linkagesList).length) {
+                    listLinkagesKeys.forEach(async (data, index) => {
+                        let ownerFullName = undefined;
+                        let ownerVehicleModel = undefined;
+                        await getAccountInformationOwner(userUID).then(evt => {
+                            // console.log('event: ', evt)
+                            ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
+                        });
+                        await getVehicleInformationModel(userUID).then(evt => {
+                            console.log('event: ', evt, data)
+                            ownerVehicleModel = evt[data]['model'][0];
+                        });
+
+                        linkagesDataLI += 
+                        `<tr>
+                            <td>${ownerVehicleModel}</td>
+                            <td>${data}</td>
+                            <td>${ownerFullName}</td>
+                            <td>
+                                <button data-key="${data}" class="remove-linkages">Remove</button>
+                            </td>
+                        </tr>`;
+                        console.log("linkages: ", linkagesDataLI, index);
+                        if(index+1 === Object.keys(linkagesList).length) {
+                            // Set the linkages data.
+                            $(".linkages-data-body").html(linkagesDataLI);
+                            addRemoveLinkagesButton();
+                        }
+                    });
+                }
             }
-            console.log('linkages:', vehicle.registered_vehicle.vehicles.linkages);
-            console.log('linkages:', Object.keys(vehicle.registered_vehicle.vehicles.linkages).length);
+
+            
+        });
+            
+        // if(vehicle !== null) {
+        // //const docRefVehicle = fire.myDoc(fire.db, "vehicle-information", currentUserId);
+            
+        //     let myObject = vehicle.registered_vehicle.vehicles.linkages;
+        //     let myKeys = Object.keys(myObject);
+
+        //     if(myKeys.length > 0) {
+        //         console.log('Linkages detected!');
+                
+        //         let linkagesOutput = '';
+                
+        //         myKeys.forEach((element, index) => {
+        //             console.log('test', myObject)
+        //             linkagesOutput += `<li>Link #${index}: ${myObject[myKeys]}</li>`;
+        //             //     // Last index for setting the list of linkages
+        //             //     if(index === myKeys.length-1) { 
+        //             //         console.log('index === myKeys.length', index === myKeys.length)
+        //             //         document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
+        //             //     }
+        //         });
+
+        //         document.querySelector('.vehicle-linkages-list').innerHTML = linkagesOutput;
+        //         console.log('myKeys:', myKeys);
+        //         console.log('linkageOutput:', linkagesOutput);
+        //     }
+        //     else {
+        //         console.log('No linked yet.');
+        //     }
+        //     console.log('linkages:', vehicle.registered_vehicle.vehicles.linkages);
+        //     console.log('linkages:', Object.keys(vehicle.registered_vehicle.vehicles.linkages).length);
+        // }
+    }
+    async function getAccountInformationOwner(userUID) {
+        let vehicle = undefined;
+        const docVehicleActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
+        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docVehicleActivity);
+        if (docVSnap.exists()) {
+            return {...docVSnap.data()};
         }
+        else {
+            vehicle = "N/A";
+        }
+        return vehicle;
+    }
+    async function getVehicleInformationModel(userUID) {
+        let vehicle = undefined;
+        const docVehicleActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", userUID);
+        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docVehicleActivity);
+        if (docVSnap.exists()) {
+            return {...docVSnap.data()};
+        }
+        else {
+            vehicle = "N/A";
+        }
+        return vehicle;
     }
 
     // Event for selecting a list of vehicles
@@ -42097,9 +42175,16 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             });
         });
     }
-    showVehicleList(vehicleInformation);  // display the list
-    // showLinkagesList(vehicleInformation); // display the linkages
-    clickableVehicleList();
+
+
+    function addRemoveLinkagesButton() {
+        document.querySelectorAll('.remove-linkages').forEach((element) => {
+            element.addEventListener('click', (e) => {
+                console.log(element.getAttribute('data-key'));
+            });
+        });
+    }
+
 
     let currentUserId = localStorage.getItem('currentUserId');   
     const formPlate = document.querySelector('.form-plate');
@@ -42650,7 +42735,9 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         })
         .catch(e => {
             // setResult(fileQrResult, { data: e || 'No QR code found.' })
-            console.info('No QR code found.', e)
+
+            swal("Oops", e , "error");
+            // console.info('No QR code found.', e)
         });
     }
     // ####### Linkages: Read QR by Upload
