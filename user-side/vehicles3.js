@@ -1,6 +1,7 @@
 import * as fire from "../src/index";
 import e from "./script_users/qr-scanner.min.js";
 import QrScanner from './script_users/qr-scanner.min.js'; 
+// import swal from 'sweetalert';
 
 let vehicleForm = document.querySelector('.vehicle-form');
 
@@ -79,7 +80,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
     // let vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
     let vehicleInformation = JSON.parse(localStorage.getItem("vehicleInformation"));
-    
+    console.log("checkVehicle: ", vehicleInformation);
     
     // vehicleForm.addEventListener('submit', (e) => {
     //     e.preventDefault();
@@ -124,7 +125,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                         document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"];
                     }
 
-                    document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
+                    document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #${vehicleKeys.length-1}</p>`;
                     document.querySelector('.personal-info-plate').innerText = vehicleKeys[index];
                     
                     // First time of execution?
@@ -473,11 +474,15 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         
         fire.myUpdateDoc(docRefAccount, myObject)
         .then(() => {    
-            myForm.reset();
-            window.location.href = window.location.href; //reload a page in JS
-            location.reload();
+            swal("Success!", "Vehicle information updated.", "success").then(() => {
+                myForm.reset();
+                window.location.href = window.location.href; //reload a page in JS
+                location.reload();
+            });
         })
     }
+
+    // swal("Success!", "Vehicle informatioinformationn updated.", "success");
 
     async function getVehicleInformation(userUID) {
         console.log('getVehicleInformation function is called.');
@@ -485,6 +490,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         const docVSnap = await fire.myGetDoc(docVehicleActivity);
         if (docVSnap.exists()) {
             console.log('Vehicle information updated.');
+            
+
             let vehicleInformation = {...docVSnap.data()};
             // console.log('docVSnap', docVSnap.data());
             localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation));

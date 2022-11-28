@@ -205,6 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var bool = true;
     function displayLinkagesDropdownList(userUID) {
         // userUID = 'mWzeSivijSUBGM7Goyxx5YHcZgz1';
+        console.log("displayLinkagesDropdownList");
+
         let dropdown = document.querySelector('.qr-code-dropdown-clickable');
         let popup = document.querySelector('.popup-dropdown');
         let buttons = document.querySelectorAll('.qr-code .qr-code-common-actions > button');
@@ -254,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         node.setAttributeNode(attr);
                         node.setAttributeNode(attr2);
 
-                        const textNode = document.createTextNode(`V-Linked #${index+1} | ${ownerVehicleModel} - ${data}, Shared Owner: ${ownerFullName}`);
+                        const textNode = document.createTextNode(`Linkages #${index+1} | ${ownerVehicleModel} - ${data}, Shared Owner: ${ownerFullName}`);
                         node.appendChild(textNode);
                         node.addEventListener('click', () => {
                             // console.log('linkages clicked: ', linkagesList);

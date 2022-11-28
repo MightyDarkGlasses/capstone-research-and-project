@@ -12,7 +12,7 @@
 
 :root {
   --sidebar-width: 250px;
-  --main-container-width:  calc(100vw - var(--sidebar-width));
+  --main-container-width:  calc(98vw - var(--sidebar-width));
 }
 
 .container {
@@ -25,6 +25,7 @@
   font-family: 'Lexend Deca';
   height: 100vh;
   overflow: hidden;
+  gap: 1em;
 }
 
 .main-container {
@@ -35,8 +36,9 @@
   "header"
   "search-area"
   "content-container";
-  margin-left: 15px;
+  /* margin-left: 15px; */
   overflow-y: scroll;
+  width: var(--main-container-width);
 }
 
 
@@ -999,13 +1001,19 @@ margin: 0 auto;
 }
 /* ######## Unregistered HyperCam 2 ########*/
 
-
+.mobile-sidebar {
+  display: none;
+}
 @media (max-width: 768px){
   .header-container {
     width: 100%;
     padding: 1em;
-    margin-bottom: 1em;
-}
+      margin-bottom: 1em;
+  }
+
+  .mobile-sidebar {
+    display: block;
+  }
 
 
   #qr-video {
@@ -1025,7 +1033,8 @@ margin: 0 auto;
   .main-container {
     margin-left: 0px;
     overflow: visible;
-    width: 100%;
+    /* width: 100%; */
+    width: 768px;
   }
 
   /* WHOLE SIDEBAR AREA MOBILE VERSION */

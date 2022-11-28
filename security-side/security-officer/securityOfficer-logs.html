@@ -24,7 +24,13 @@
           charset="utf8"
           src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"
           defer></script>
-    
+          
+          
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.1/b-2.3.3/b-colvis-2.3.3/b-html5-2.3.3/b-print-2.3.3/datatables.min.css"/>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.1/b-2.3.3/b-colvis-2.3.3/b-html5-2.3.3/b-print-2.3.3/datatables.min.js"></script>
 
 </head>
 
@@ -51,7 +57,7 @@
             <button id="do_currently">Current In</button>
         </div>
         <div class="logs-container">
-            <div id="content" class="content user-content show-logs" >
+            <div id="content" class="content user-content show-logs" style="width: 100%">
                 <h3>User Logs</h3>
                 <table
                         id="table_id"
@@ -74,7 +80,7 @@
                 </table>
             </div>
 
-            <div id="content" class="content user-content show-visitor">
+            <div id="content" class="content user-content show-visitor" style="width: 100%">
                 <h3>Visitor Information</h3>
                 <table
                         id="table_visitor"
@@ -97,7 +103,7 @@
                 </table>
             </div>
 
-            <div id="content" class="content user-content show-currently-in">
+            <div id="content" class="content user-content show-currently-in" style="width: 100%">
                 <h3>Currently In</h3>
                 <table
                         id="table_inned"

@@ -36563,30 +36563,19 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         });
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-    });
+    // document.addEventListener('DOMContentLoaded', function() {
+    // });
 
     console.log('QrScanner qr.js');
 
     // Autocomplete data
-
     let index = 0;
     let availableTags = [];
     async function getVisitorLogsList() {
         const colRef = _src_index__WEBPACK_IMPORTED_MODULE_1__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "visitor-logs");
         const visitorLogsQuery = _src_index__WEBPACK_IMPORTED_MODULE_1__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_1__.doLimit(10));
         const docsSnap = await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDocs(visitorLogsQuery);
-        
 
-        // var availableTags = [
-        //     { label: "Mathematics", value: "MATHS" },
-        //     { label: "Chemistry", value: "CHEM" },
-        //     { label: "Physics", value: "PHY" },
-        //     { label: "English", value: "ENG" },
-        //     { label: "Environmental Science", value: "EVS" }
-        // ];
-
-        
         docsSnap.forEach(async doc => {
             let visitorInfo = doc.data();
             delete visitorInfo['logs_length'];
@@ -36639,22 +36628,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     getVisitorLogsList();
 
     
-
-
     let isSuccessPersonal = false;
     let isSuccessVehicle = false;
-    // const docRefSecurityOfficer = fire.myDoc(fire.db, "security", fire.auth.currentUser.uid);
-    // const docSnapSecurityOfficer = await fire.myGetDoc(docRefSecurityOfficer);
-    // if (docSnapSecurityOfficer.exists()) {
-    //     const setOfficerName = document.querySelector('.name-sg');
-    //     const securityOfficerInformation = docSnapSecurityOfficer.data();
-    //     console.log('securityOfficerInformation', securityOfficerInformation);
-    // }
-    // else {
-    //     console.log('That security officer does not exist.')
-    // }
-
-
     
     async function fetchInformation(userUID, plateNumber) {
         console.log('fetchInformation: ', userUID, plateNumber);
@@ -36869,8 +36844,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     } //end of function, addNewLogs
     
 
-    // // ### Display Registered User logs
-    
+    // ### Display Registered User logs
     async function displayLogs() {
         const myQuery = _src_index__WEBPACK_IMPORTED_MODULE_1__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_1__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, 'logs'));
         _src_index__WEBPACK_IMPORTED_MODULE_1__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
@@ -36914,10 +36888,13 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 // });
                 // console.log('sorted:', logs);   //print the result
 
+                /** Display User DataTable */
                 jQuery((e) => {
                     console.log("DataTable");
                     $("#table_id").DataTable({
                         scrollX: true,
+                        "autoWidth": false,
+                        buttons: [ "colvis" ],
                         "pageLength": 10,
                         "data": logs,
                         initComplete : function() {
@@ -36952,14 +36929,27 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         "columnDefs": [{
                             "defaultContent": "-",
                             "targets": "_all"
-                        }]
+                        }],
+                        responsive: {
+                            breakpoints: [
+                            {name: 'bigdesktop', width: Infinity},
+                            {name: 'meddesktop', width: 1480},
+                            {name: 'smalldesktop', width: 1280},
+                            {name: 'medium', width: 1188},
+                            {name: 'tabletl', width: 1024},
+                            {name: 'btwtabllandp', width: 848},
+                            {name: 'tabletp', width: 768},
+                            {name: 'mobilel', width: 480},
+                            {name: 'mobilep', width: 320}
+                            ]
+                        },
                     });
                 }); //jQuery
             }); //end of function
         }); //end of snapshot function
     }
 
-
+    // ### Display Current In Logs
     async function currentlyIn() {
         const myQueryUserLogs = _src_index__WEBPACK_IMPORTED_MODULE_1__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_1__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, 'logs'), _src_index__WEBPACK_IMPORTED_MODULE_1__.doLimit(5));
         const myQueryVisitorLogs = _src_index__WEBPACK_IMPORTED_MODULE_1__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_1__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, 'visitor-logs'), _src_index__WEBPACK_IMPORTED_MODULE_1__.doLimit(5));
@@ -37001,13 +36991,14 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 }); //end of foreach
             }); //end of snapshot
 
+
+            // CurrentlyIN DataTable
             jQuery((e) => {
                 console.log("DataTable");
                 $("#table_inned").DataTable({
                     scrollX: true,
-                    initComplete : function() {
-                        $('#table').parents('div.dataTables_wrapper').first().hide();
-                    },
+                    "autoWidth": false,
+                    buttons: [ 'colvis' ],
                     "pageLength": 10,
                     "data": logs,
                     "columns": [
@@ -37032,7 +37023,20 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     "columnDefs": [{
                         "defaultContent": "-",
                         "targets": "_all"
-                    }]
+                    }],
+                    responsive: {
+                        breakpoints: [
+                          {name: 'bigdesktop', width: Infinity},
+                          {name: 'meddesktop', width: 1480},
+                          {name: 'smalldesktop', width: 1280},
+                          {name: 'medium', width: 1188},
+                          {name: 'tabletl', width: 1024},
+                          {name: 'btwtabllandp', width: 848},
+                          {name: 'tabletp', width: 768},
+                          {name: 'mobilel', width: 480},
+                          {name: 'mobilep', width: 320}
+                        ]
+                    },
                 });
             }); //jQuery
         });
@@ -37040,7 +37044,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
 
     }
 
-    // // ### Display Visitor Information logs
+    // ### Display Visitor Information logs
     async function displayVisitorLogs() {
         const myQuery = _src_index__WEBPACK_IMPORTED_MODULE_1__.doQuery(_src_index__WEBPACK_IMPORTED_MODULE_1__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, 'visitor-logs'));
         _src_index__WEBPACK_IMPORTED_MODULE_1__.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
@@ -37072,10 +37076,14 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     });
                 });
 
+
+
                 jQuery((e) => {
                     console.log("DataTable");
                     $("#table_visitor").DataTable({
                         scrollX: true,
+                        "autoWidth": false,
+                        buttons: [ 'colvis' ],
                         "pageLength": 10,
                         "data": logs,
                         "columns": [
@@ -37097,14 +37105,27 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         "columnDefs": [{
                             "defaultContent": "-",
                             "targets": "_all"
-                        }]
+                        }],
+                        responsive: {
+                            breakpoints: [
+                              {name: 'bigdesktop', width: Infinity},
+                              {name: 'meddesktop', width: 1480},
+                              {name: 'smalldesktop', width: 1280},
+                              {name: 'medium', width: 1188},
+                              {name: 'tabletl', width: 1024},
+                              {name: 'btwtabllandp', width: 848},
+                              {name: 'tabletp', width: 768},
+                              {name: 'mobilel', width: 480},
+                              {name: 'mobilep', width: 320}
+                            ]
+                        },
                     });
                 }); //jQuery
             }); //end of function
         }); //end of snapshot function
     }
 
-    // Add Visitor Information button
+    // ## Add Visitor Information button
     async function addVisitorInformation(officerUID, plateNumber, vehicleModel, fName, mName, lName) {
         plateNumber = plateNumber.trim().replace(" ", "").toUpperCase();
         vehicleModel = vehicleModel.trim();
@@ -37193,15 +37214,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         }
         return;
     } // end of function addVisitorInformation
-    // addVisitorInformation(fire.auth.currentUser.uid, "AABBCC", "Vehicle Model", "FirstName", "MiddleName", "LastName");
-    
 
-
-    // const showLogs = document.querySelector("#show-logs");
-    // const showVisitor = document.querySelector("#show-visitor");
-    // const showCurrentlyIn = document.querySelector("#show-currently-in");
-    
-    
 
     // displayLogs(); //display logs
     $('#logs-id').on('click', (e) => {
@@ -39408,6 +39421,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var bool = true;
     function displayLinkagesDropdownList(userUID) {
         // userUID = 'mWzeSivijSUBGM7Goyxx5YHcZgz1';
+        console.log("displayLinkagesDropdownList");
+
         let dropdown = document.querySelector('.qr-code-dropdown-clickable');
         let popup = document.querySelector('.popup-dropdown');
         let buttons = document.querySelectorAll('.qr-code .qr-code-common-actions > button');
@@ -39457,7 +39472,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         node.setAttributeNode(attr);
                         node.setAttributeNode(attr2);
 
-                        const textNode = document.createTextNode(`V-Linked #${index+1} | ${ownerVehicleModel} - ${data}, Shared Owner: ${ownerFullName}`);
+                        const textNode = document.createTextNode(`Linkages #${index+1} | ${ownerVehicleModel} - ${data}, Shared Owner: ${ownerFullName}`);
                         node.appendChild(textNode);
                         node.addEventListener('click', () => {
                             // console.log('linkages clicked: ', linkagesList);
@@ -39990,6 +40005,8 @@ if(windowLocation.indexOf("user-account") > -1) {
         phoneNum.innerText = localStorage.getItem("personal_info_phone");
         useremail.innerText = localStorage.getItem("personal_info_email");
         college.innerText = localStorage.getItem("personal_info_college");
+        $("#form_id").val(localStorage.getItem("personal_info_id"));
+        $("#form_phonenum").val(localStorage.getItem("personal_info_phone"));
 
         // document.getElementById("Mobility").selectedIndex = 12; //Option 10
         // document.querySelector("#college_option").selectedIndex = 0; //Option
@@ -40005,13 +40022,16 @@ if(windowLocation.indexOf("user-account") > -1) {
         }
         
 
+        // form_phonenum
+        
+        
         // Select the college option upon opening
         let colleges = ["CAFA" ,"CAL" ,"CBA" ,"CCJE" ,"CHTM" ,"CICT" ,"CIT" ,"CLaw" ,"CN" ,"COE" ,"COED" ,"CS" ,"CSER" ,"CSSP"];
         const collegeIndex = colleges.indexOf(localStorage.getItem("personal_info_college"));
         console.log(collegeIndex);
 
         if(collegeIndex >= 0) {
-            document.querySelector("#college_option").selectedIndex = collegeIndex;
+            $('#college_option').val(colleges[collegeIndex]).trigger('change');
         }
     }
     // function getAccountInformation(collectionReference) {
@@ -40080,7 +40100,6 @@ if(windowLocation.indexOf("user-account") > -1) {
     // DISPLAY THE PROFILE PICTURE...
     _src_index__WEBPACK_IMPORTED_MODULE_1__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth, (user) => {
         if (user) {
-
             // Display user profile picture.
             const profilePicture = displayProfile(user.uid).then(evt => { 
                 console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser)
@@ -40166,18 +40185,9 @@ if(windowLocation.indexOf("user-account") > -1) {
     let formEmail = document.querySelector('.form-email');
     let formPassword = document.querySelector('.form-password');
     let currentUserId = localStorage.getItem('currentUserId');  
-    
     let formresetPassword = document.getElementById('form-reset-password');
     let formresetEmail = document.getElementById('form-reset-email');
-    // console.log(localStorage.getItem("personal_info_email"))
-    // fullName.innerText = localStorage.getItem("personal_info_name");
-    // userid.innerText   = localStorage.getItem("personal_info_id");
-    // category.innerText = localStorage.getItem("personal_info_cat");
-    // phoneNum.innerText = localStorage.getItem("personal_info_phone");
-    // useremail.innerText = localStorage.getItem("personal_info_email");
-    // updating a document
 
-    
     formFullName.addEventListener('submit', (e) => {
         e.preventDefault();
         let fullNameObj = {
@@ -40220,7 +40230,6 @@ if(windowLocation.indexOf("user-account") > -1) {
         updatePersonalInformation(currentUserId, phoneNumObj, formPhoneNum)
         localStorage.setItem('personal_info_phone', `${phoneNumObj['phone_num']}`)
     });
-
     formCollege.addEventListener('submit', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -40231,24 +40240,6 @@ if(windowLocation.indexOf("user-account") > -1) {
         updatePersonalInformation(currentUserId, collegeObj, formCollege);
         localStorage.setItem('personal_info_college', `${collegeObj['college']}`)
     });
-
-
-    /** 
-    I believe what you want is Firebase's getIdToken or getIdTokenResult. As mentioned in the docs passing true to getIdToken should automatically refresh it:
-
-    firebase.auth().currentUser.getIdToken() 
-      .then((token) => {
-        console.log('the token is', token)
-      })
-      .catch((err) => {
-        console.error('Error refreshing id token', err)
-      })
-
-    Going to close since this is part of Firebase's JS SDK and not react-redux-firebase directly. If you have ideas around how to make this more clear, please feel free to post.
-    */
-
-
-      
     formEmail.addEventListener('submit', (e) => {
         e.preventDefault();
         console.log('email change was clicked!');
@@ -40258,43 +40249,30 @@ if(windowLocation.indexOf("user-account") > -1) {
 
         let passEmail = formEmail.form_email.value;
         let passUser = _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser;
-        //export declare function verifyBeforeUpdateEmail(user: User, newEmail: string, actionCodeSettings?: ActionCodeSettings | null): Promise<void>;
         doVerifyEmailBeforeUpdate(passUser, passEmail);
     });
-
-    // formresetEmail.addEventListener('click', () => {
-    //     console.log('email address reset was clicked! yay!')
-    //     verifyEmailBeforeUpdate();
-    // });
     formresetPassword.addEventListener('click', () => {
         console.log('password reset was clicked!')
         resetPassword();
     });
-    
-    // formPassword.addEventListener('submit', (e) => {
-    //     e.preventDefault();
-    //     let idObj = {
-            
-    //     }
-    // });
 
     function doVerifyEmailBeforeUpdate(user, email) {
-
+        console.log("check email: ", user)
         _src_index__WEBPACK_IMPORTED_MODULE_1__.doVerifyBeforeUpdateEmail(user, email)
         .then(function() {
-            alert('Verification email sent.\nClicking the link in email will update the email address.', email)
-            window.reload();
-            // Verification email sent. 
-            // Clicking the link in email will update the email address.
+            swal("Success!", "Verification email sent.\nClicking the link in email will update the email address.", "success").then((e) => {
+                // window.location.href = window.location.href; //reload a page in JS
+                // location.reload();
+            });
         })
         .catch(function(error) {
-            console.log(error)
-            // console.log('myVerifyBeforeUpdateEmail: Error occurred. Inspect error.code.', email)
-            // // Error occurred. Inspect error.code.
-            // const errorCode = error.code;
-            // const errorMessage = error.message;
-            // console.log("errorCode:", errorCode);
-            // console.log("errorMessage:", errorMessage);
+            console.log(error);
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            swal("Oops", "Something went wrong!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+                // window.location.href = window.location.href; //reload a page in JS
+                // location.reload();
+            });
         });
     }
     function resetPassword() {
@@ -40302,11 +40280,18 @@ if(windowLocation.indexOf("user-account") > -1) {
         let resetEmailAddress = _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.email;
         _src_index__WEBPACK_IMPORTED_MODULE_1__.getSendPasswordResetEmail(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth, resetEmailAddress)
         .then(() => {
-            alert("Password reset email was sent");
+            swal("Success!", "Verification email sent.\nClicking the link in email will update the email address.", "success").then((e) => {
+                // window.location.href = window.location.href; //reload a page in JS
+                // location.reload();
+            });
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            swal("Oops", "Something went wrong!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+                // window.location.href = window.location.href; //reload a page in JS
+                // location.reload();
+            });
         });
     }
 
@@ -40317,10 +40302,12 @@ if(windowLocation.indexOf("user-account") > -1) {
         
         _src_index__WEBPACK_IMPORTED_MODULE_1__.myUpdateDoc(docRefAccount, myObject)
         .then(() => {    
-            myForm.reset();
-            // window.location.href = window.location.href; //reload a page in JS
-            location.reload();
-        })
+            swal("Success!", "Account information updated.", "success").then(() => {
+                myForm.reset();
+                window.location.href = window.location.href; //reload a page in JS
+                location.reload();
+            });
+        });
     }
     function updateEmailInformation(myId, myObject, myForm) {
         updateEmail(auth.currentUser, "user@example.com").then(() => {
@@ -40429,39 +40416,6 @@ if(windowLocation.indexOf("user-account") > -1) {
 
         
     }
-
-
-
-    // function signWithUserToken() {
-    //     fire.getSignInWithCustomToken(auth, token)
-    //     .then((credential) => {
-    //         console.log(credential.user);
-    //     });
-    // }
-
-
-    // function reauthenticateUser() {
-    //     // import { getAuth, reauthenticateWithCredential } from "firebase/auth";
-
-    //     // const auth = getAuth();
-
-    //     const user = auth.currentUser;
-
-    //     // TODO(you): prompt the user to re-provide their sign-in credentials
-    //     const credential = promptForCredentials();
-
-    //     reauthenticateWithCredential(user, credential).then(() => {
-    //         // User re-authenticated.
-    //     }).catch((error) => {
-    //         // An error ocurred
-    //         // ...
-    //     });
-    // }
-        // let docRef = doc(db, 'books', updateForm.id.value)
-    
-
-    
-    
 } //end of link conditional
 }); //153, end of DOMContentLoaded function
 
@@ -41383,12 +41337,11 @@ jQuery(function() {
                 b = localStorage.getItem('vehicle-side'),
                 c = localStorage.getItem('vehicle-rear');
                 
-                const vehicleModel = 
-                console.log([a, b, c]);
                 if([a, b, c].includes(null)) {
                     console.log('null');
-                    console.log('vehicle-model: ', $('#vehicle-model').val())
-                    console.log('vehicle-platenum: ', $('#vehicle-platenum').val())
+                    console.log('vehicle-model: ', $('#vehicle-model').val());
+                    console.log('vehicle-platenum: ', $('#vehicle-platenum').val());
+                    window.reload();
                 }
                 else {
                     console.log('all done!');
@@ -41520,18 +41473,16 @@ jQuery(function() {
                 
                 //Wait for everything to be uploaded.
                 Promise.all([uploadTask1, uploadTask2, uploadTask3]).then((output) => {
-                    console.log("All uploaded done.")
-                    console.log(output);
+                    // console.log("All uploaded done.")
+                    // console.log(output);
                     
-                    console.log("imageLinks:", imageLinks);
+                    // console.log("imageLinks:", imageLinks);
 
                     generateVehicleQRCode(userId, plateNumber, 500, vehicleLength, model, imageLinks);
                     // console.log("generatedQRCodeLink:", generatedQRCodeLink);
                 });
                 console.log("BeforeReturn_Image Links: ", imageLinks);
             }
-
-
             // Add the new vehicle information
             // const promiseVehicle = fire.doUpdateDoc(fire.myDoc(fire.db, "vehicle-information", userId), {
             // [plateNumber.replace(" ", "")]: {
@@ -41550,8 +41501,6 @@ jQuery(function() {
             // fire.doUpdateDoc(fire.myDoc(db, "vehicle-information", userId), {
             //     vehicle_length: fire.doIncrement(1)
             // });
-
-            return; //return the image link of the provided image
         } // end of function declaration
 
         async function generateVehicleQRCode(userUID, plateNumber, mySize, index, model, imageLinks) {
@@ -41626,8 +41575,11 @@ jQuery(function() {
                         _src_index__WEBPACK_IMPORTED_MODULE_0__.doUpdateDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", userUID), {
                             vehicle_length: _src_index__WEBPACK_IMPORTED_MODULE_0__.doIncrement(1)
                         }).then((success) => {
-                            // localStorage.removeItem("vehicleInformation");
-                            window.location.reload();
+                            _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid), (doc) => {
+                                let vehicleInformation = {...doc.data()};
+                                localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation));
+                                window.location.reload();
+                            });
                         });
                     });
                 } //end of getDownloadURL
@@ -41781,6 +41733,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  
+// import swal from 'sweetalert';
 
 let vehicleForm = document.querySelector('.vehicle-form');
 
@@ -41859,7 +41812,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
     // let vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
     let vehicleInformation = JSON.parse(localStorage.getItem("vehicleInformation"));
-    
+    console.log("checkVehicle: ", vehicleInformation);
     
     // vehicleForm.addEventListener('submit', (e) => {
     //     e.preventDefault();
@@ -41904,7 +41857,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                         document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"];
                     }
 
-                    document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #1</p>`;
+                    document.getElementById('vehicle-placeholder').innerHTML = `<p>Vehicle #${vehicleKeys.length-1}</p>`;
                     document.querySelector('.personal-info-plate').innerText = vehicleKeys[index];
                     
                     // First time of execution?
@@ -42253,11 +42206,15 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         
         _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefAccount, myObject)
         .then(() => {    
-            myForm.reset();
-            window.location.href = window.location.href; //reload a page in JS
-            location.reload();
+            swal("Success!", "Vehicle information updated.", "success").then(() => {
+                myForm.reset();
+                window.location.href = window.location.href; //reload a page in JS
+                location.reload();
+            });
         })
     }
+
+    // swal("Success!", "Vehicle informatioinformationn updated.", "success");
 
     async function getVehicleInformation(userUID) {
         console.log('getVehicleInformation function is called.');
@@ -42265,6 +42222,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docVehicleActivity);
         if (docVSnap.exists()) {
             console.log('Vehicle information updated.');
+            
+
             let vehicleInformation = {...docVSnap.data()};
             // console.log('docVSnap', docVSnap.data());
             localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation));

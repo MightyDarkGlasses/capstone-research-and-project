@@ -88,6 +88,8 @@ if(windowLocation.indexOf("user-account") > -1) {
         phoneNum.innerText = localStorage.getItem("personal_info_phone");
         useremail.innerText = localStorage.getItem("personal_info_email");
         college.innerText = localStorage.getItem("personal_info_college");
+        $("#form_id").val(localStorage.getItem("personal_info_id"));
+        $("#form_phonenum").val(localStorage.getItem("personal_info_phone"));
 
         // document.getElementById("Mobility").selectedIndex = 12; //Option 10
         // document.querySelector("#college_option").selectedIndex = 0; //Option
@@ -103,13 +105,16 @@ if(windowLocation.indexOf("user-account") > -1) {
         }
         
 
+        // form_phonenum
+        
+        
         // Select the college option upon opening
         let colleges = ["CAFA" ,"CAL" ,"CBA" ,"CCJE" ,"CHTM" ,"CICT" ,"CIT" ,"CLaw" ,"CN" ,"COE" ,"COED" ,"CS" ,"CSER" ,"CSSP"];
         const collegeIndex = colleges.indexOf(localStorage.getItem("personal_info_college"));
         console.log(collegeIndex);
 
         if(collegeIndex >= 0) {
-            document.querySelector("#college_option").selectedIndex = collegeIndex;
+            $('#college_option').val(colleges[collegeIndex]).trigger('change');
         }
     }
     // function getAccountInformation(collectionReference) {
@@ -178,7 +183,6 @@ if(windowLocation.indexOf("user-account") > -1) {
     // DISPLAY THE PROFILE PICTURE...
     fire.getOnAuthStateChanged(fire.auth, (user) => {
         if (user) {
-
             // Display user profile picture.
             const profilePicture = displayProfile(user.uid).then(evt => { 
                 console.log("current user: ", fire.auth.currentUser)
@@ -264,18 +268,9 @@ if(windowLocation.indexOf("user-account") > -1) {
     let formEmail = document.querySelector('.form-email');
     let formPassword = document.querySelector('.form-password');
     let currentUserId = localStorage.getItem('currentUserId');  
-    
     let formresetPassword = document.getElementById('form-reset-password');
     let formresetEmail = document.getElementById('form-reset-email');
-    // console.log(localStorage.getItem("personal_info_email"))
-    // fullName.innerText = localStorage.getItem("personal_info_name");
-    // userid.innerText   = localStorage.getItem("personal_info_id");
-    // category.innerText = localStorage.getItem("personal_info_cat");
-    // phoneNum.innerText = localStorage.getItem("personal_info_phone");
-    // useremail.innerText = localStorage.getItem("personal_info_email");
-    // updating a document
 
-    
     formFullName.addEventListener('submit', (e) => {
         e.preventDefault();
         let fullNameObj = {
@@ -318,7 +313,6 @@ if(windowLocation.indexOf("user-account") > -1) {
         updatePersonalInformation(currentUserId, phoneNumObj, formPhoneNum)
         localStorage.setItem('personal_info_phone', `${phoneNumObj['phone_num']}`)
     });
-
     formCollege.addEventListener('submit', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -329,24 +323,6 @@ if(windowLocation.indexOf("user-account") > -1) {
         updatePersonalInformation(currentUserId, collegeObj, formCollege);
         localStorage.setItem('personal_info_college', `${collegeObj['college']}`)
     });
-
-
-    /** 
-    I believe what you want is Firebase's getIdToken or getIdTokenResult. As mentioned in the docs passing true to getIdToken should automatically refresh it:
-
-    firebase.auth().currentUser.getIdToken() 
-      .then((token) => {
-        console.log('the token is', token)
-      })
-      .catch((err) => {
-        console.error('Error refreshing id token', err)
-      })
-
-    Going to close since this is part of Firebase's JS SDK and not react-redux-firebase directly. If you have ideas around how to make this more clear, please feel free to post.
-    */
-
-
-      
     formEmail.addEventListener('submit', (e) => {
         e.preventDefault();
         console.log('email change was clicked!');
@@ -356,43 +332,30 @@ if(windowLocation.indexOf("user-account") > -1) {
 
         let passEmail = formEmail.form_email.value;
         let passUser = fire.auth.currentUser;
-        //export declare function verifyBeforeUpdateEmail(user: User, newEmail: string, actionCodeSettings?: ActionCodeSettings | null): Promise<void>;
         doVerifyEmailBeforeUpdate(passUser, passEmail);
     });
-
-    // formresetEmail.addEventListener('click', () => {
-    //     console.log('email address reset was clicked! yay!')
-    //     verifyEmailBeforeUpdate();
-    // });
     formresetPassword.addEventListener('click', () => {
         console.log('password reset was clicked!')
         resetPassword();
     });
-    
-    // formPassword.addEventListener('submit', (e) => {
-    //     e.preventDefault();
-    //     let idObj = {
-            
-    //     }
-    // });
 
     function doVerifyEmailBeforeUpdate(user, email) {
-
+        console.log("check email: ", user)
         fire.doVerifyBeforeUpdateEmail(user, email)
         .then(function() {
-            alert('Verification email sent.\nClicking the link in email will update the email address.', email)
-            window.reload();
-            // Verification email sent. 
-            // Clicking the link in email will update the email address.
+            swal("Success!", "Verification email sent.\nClicking the link in email will update the email address.", "success").then((e) => {
+                // window.location.href = window.location.href; //reload a page in JS
+                // location.reload();
+            });
         })
         .catch(function(error) {
-            console.log(error)
-            // console.log('myVerifyBeforeUpdateEmail: Error occurred. Inspect error.code.', email)
-            // // Error occurred. Inspect error.code.
-            // const errorCode = error.code;
-            // const errorMessage = error.message;
-            // console.log("errorCode:", errorCode);
-            // console.log("errorMessage:", errorMessage);
+            console.log(error);
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            swal("Oops", "Something went wrong!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+                // window.location.href = window.location.href; //reload a page in JS
+                // location.reload();
+            });
         });
     }
     function resetPassword() {
@@ -400,11 +363,18 @@ if(windowLocation.indexOf("user-account") > -1) {
         let resetEmailAddress = fire.auth.currentUser.email;
         fire.getSendPasswordResetEmail(fire.auth, resetEmailAddress)
         .then(() => {
-            alert("Password reset email was sent");
+            swal("Success!", "Verification email sent.\nClicking the link in email will update the email address.", "success").then((e) => {
+                // window.location.href = window.location.href; //reload a page in JS
+                // location.reload();
+            });
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            swal("Oops", "Something went wrong!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+                // window.location.href = window.location.href; //reload a page in JS
+                // location.reload();
+            });
         });
     }
 
@@ -415,10 +385,12 @@ if(windowLocation.indexOf("user-account") > -1) {
         
         fire.myUpdateDoc(docRefAccount, myObject)
         .then(() => {    
-            myForm.reset();
-            // window.location.href = window.location.href; //reload a page in JS
-            location.reload();
-        })
+            swal("Success!", "Account information updated.", "success").then(() => {
+                myForm.reset();
+                window.location.href = window.location.href; //reload a page in JS
+                location.reload();
+            });
+        });
     }
     function updateEmailInformation(myId, myObject, myForm) {
         updateEmail(auth.currentUser, "user@example.com").then(() => {
@@ -527,38 +499,5 @@ if(windowLocation.indexOf("user-account") > -1) {
 
         
     }
-
-
-
-    // function signWithUserToken() {
-    //     fire.getSignInWithCustomToken(auth, token)
-    //     .then((credential) => {
-    //         console.log(credential.user);
-    //     });
-    // }
-
-
-    // function reauthenticateUser() {
-    //     // import { getAuth, reauthenticateWithCredential } from "firebase/auth";
-
-    //     // const auth = getAuth();
-
-    //     const user = auth.currentUser;
-
-    //     // TODO(you): prompt the user to re-provide their sign-in credentials
-    //     const credential = promptForCredentials();
-
-    //     reauthenticateWithCredential(user, credential).then(() => {
-    //         // User re-authenticated.
-    //     }).catch((error) => {
-    //         // An error ocurred
-    //         // ...
-    //     });
-    // }
-        // let docRef = doc(db, 'books', updateForm.id.value)
-    
-
-    
-    
 } //end of link conditional
 }); //153, end of DOMContentLoaded function

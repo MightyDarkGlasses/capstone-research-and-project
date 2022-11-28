@@ -260,12 +260,11 @@ jQuery(function() {
                 b = localStorage.getItem('vehicle-side'),
                 c = localStorage.getItem('vehicle-rear');
                 
-                const vehicleModel = 
-                console.log([a, b, c]);
                 if([a, b, c].includes(null)) {
                     console.log('null');
-                    console.log('vehicle-model: ', $('#vehicle-model').val())
-                    console.log('vehicle-platenum: ', $('#vehicle-platenum').val())
+                    console.log('vehicle-model: ', $('#vehicle-model').val());
+                    console.log('vehicle-platenum: ', $('#vehicle-platenum').val());
+                    window.reload();
                 }
                 else {
                     console.log('all done!');
@@ -397,18 +396,16 @@ jQuery(function() {
                 
                 //Wait for everything to be uploaded.
                 Promise.all([uploadTask1, uploadTask2, uploadTask3]).then((output) => {
-                    console.log("All uploaded done.")
-                    console.log(output);
+                    // console.log("All uploaded done.")
+                    // console.log(output);
                     
-                    console.log("imageLinks:", imageLinks);
+                    // console.log("imageLinks:", imageLinks);
 
                     generateVehicleQRCode(userId, plateNumber, 500, vehicleLength, model, imageLinks);
                     // console.log("generatedQRCodeLink:", generatedQRCodeLink);
                 });
                 console.log("BeforeReturn_Image Links: ", imageLinks);
             }
-
-
             // Add the new vehicle information
             // const promiseVehicle = fire.doUpdateDoc(fire.myDoc(fire.db, "vehicle-information", userId), {
             // [plateNumber.replace(" ", "")]: {
@@ -427,8 +424,6 @@ jQuery(function() {
             // fire.doUpdateDoc(fire.myDoc(db, "vehicle-information", userId), {
             //     vehicle_length: fire.doIncrement(1)
             // });
-
-            return; //return the image link of the provided image
         } // end of function declaration
 
         async function generateVehicleQRCode(userUID, plateNumber, mySize, index, model, imageLinks) {
@@ -503,8 +498,11 @@ jQuery(function() {
                         fire.doUpdateDoc(fire.myDoc(fire.db, "vehicle-information", userUID), {
                             vehicle_length: fire.doIncrement(1)
                         }).then((success) => {
-                            // localStorage.removeItem("vehicleInformation");
-                            window.location.reload();
+                            fire.myOnSnapshot(fire.myDoc(fire.db, "vehicle-information", fire.auth.currentUser.uid), (doc) => {
+                                let vehicleInformation = {...doc.data()};
+                                localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation));
+                                window.location.reload();
+                            });
                         });
                     });
                 } //end of getDownloadURL

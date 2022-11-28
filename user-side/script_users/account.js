@@ -7,6 +7,8 @@ jQuery(function() {
     //     });
     // })
 
+    $("#college_option").select2();
+
     $('.personal-info-name').on('click', () => {
         $('.pop-name').animate({
             opacity: "toggle",

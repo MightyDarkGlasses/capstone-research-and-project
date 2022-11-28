@@ -19,30 +19,19 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         });
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-    });
+    // document.addEventListener('DOMContentLoaded', function() {
+    // });
 
     console.log('QrScanner qr.js');
 
     // Autocomplete data
-
     let index = 0;
     let availableTags = [];
     async function getVisitorLogsList() {
         const colRef = fire.myCollection(fire.db, "visitor-logs");
         const visitorLogsQuery = fire.doQuery(colRef, fire.doLimit(10));
         const docsSnap = await fire.myGetDocs(visitorLogsQuery);
-        
 
-        // var availableTags = [
-        //     { label: "Mathematics", value: "MATHS" },
-        //     { label: "Chemistry", value: "CHEM" },
-        //     { label: "Physics", value: "PHY" },
-        //     { label: "English", value: "ENG" },
-        //     { label: "Environmental Science", value: "EVS" }
-        // ];
-
-        
         docsSnap.forEach(async doc => {
             let visitorInfo = doc.data();
             delete visitorInfo['logs_length'];
@@ -95,22 +84,8 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     getVisitorLogsList();
 
     
-
-
     let isSuccessPersonal = false;
     let isSuccessVehicle = false;
-    // const docRefSecurityOfficer = fire.myDoc(fire.db, "security", fire.auth.currentUser.uid);
-    // const docSnapSecurityOfficer = await fire.myGetDoc(docRefSecurityOfficer);
-    // if (docSnapSecurityOfficer.exists()) {
-    //     const setOfficerName = document.querySelector('.name-sg');
-    //     const securityOfficerInformation = docSnapSecurityOfficer.data();
-    //     console.log('securityOfficerInformation', securityOfficerInformation);
-    // }
-    // else {
-    //     console.log('That security officer does not exist.')
-    // }
-
-
     
     async function fetchInformation(userUID, plateNumber) {
         console.log('fetchInformation: ', userUID, plateNumber);
@@ -325,8 +300,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     } //end of function, addNewLogs
     
 
-    // // ### Display Registered User logs
-    
+    // ### Display Registered User logs
     async function displayLogs() {
         const myQuery = fire.doQuery(fire.myCollection(fire.db, 'logs'));
         fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
@@ -370,10 +344,13 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 // });
                 // console.log('sorted:', logs);   //print the result
 
+                /** Display User DataTable */
                 jQuery((e) => {
                     console.log("DataTable");
                     $("#table_id").DataTable({
                         scrollX: true,
+                        "autoWidth": false,
+                        buttons: [ "colvis" ],
                         "pageLength": 10,
                         "data": logs,
                         initComplete : function() {
@@ -408,14 +385,27 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         "columnDefs": [{
                             "defaultContent": "-",
                             "targets": "_all"
-                        }]
+                        }],
+                        responsive: {
+                            breakpoints: [
+                            {name: 'bigdesktop', width: Infinity},
+                            {name: 'meddesktop', width: 1480},
+                            {name: 'smalldesktop', width: 1280},
+                            {name: 'medium', width: 1188},
+                            {name: 'tabletl', width: 1024},
+                            {name: 'btwtabllandp', width: 848},
+                            {name: 'tabletp', width: 768},
+                            {name: 'mobilel', width: 480},
+                            {name: 'mobilep', width: 320}
+                            ]
+                        },
                     });
                 }); //jQuery
             }); //end of function
         }); //end of snapshot function
     }
 
-
+    // ### Display Current In Logs
     async function currentlyIn() {
         const myQueryUserLogs = fire.doQuery(fire.myCollection(fire.db, 'logs'), fire.doLimit(5));
         const myQueryVisitorLogs = fire.doQuery(fire.myCollection(fire.db, 'visitor-logs'), fire.doLimit(5));
@@ -457,13 +447,14 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 }); //end of foreach
             }); //end of snapshot
 
+
+            // CurrentlyIN DataTable
             jQuery((e) => {
                 console.log("DataTable");
                 $("#table_inned").DataTable({
                     scrollX: true,
-                    initComplete : function() {
-                        $('#table').parents('div.dataTables_wrapper').first().hide();
-                    },
+                    "autoWidth": false,
+                    buttons: [ 'colvis' ],
                     "pageLength": 10,
                     "data": logs,
                     "columns": [
@@ -488,7 +479,20 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     "columnDefs": [{
                         "defaultContent": "-",
                         "targets": "_all"
-                    }]
+                    }],
+                    responsive: {
+                        breakpoints: [
+                          {name: 'bigdesktop', width: Infinity},
+                          {name: 'meddesktop', width: 1480},
+                          {name: 'smalldesktop', width: 1280},
+                          {name: 'medium', width: 1188},
+                          {name: 'tabletl', width: 1024},
+                          {name: 'btwtabllandp', width: 848},
+                          {name: 'tabletp', width: 768},
+                          {name: 'mobilel', width: 480},
+                          {name: 'mobilep', width: 320}
+                        ]
+                    },
                 });
             }); //jQuery
         });
@@ -496,7 +500,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
 
     }
 
-    // // ### Display Visitor Information logs
+    // ### Display Visitor Information logs
     async function displayVisitorLogs() {
         const myQuery = fire.doQuery(fire.myCollection(fire.db, 'visitor-logs'));
         fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query, //change this back!
@@ -528,10 +532,14 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                     });
                 });
 
+
+
                 jQuery((e) => {
                     console.log("DataTable");
                     $("#table_visitor").DataTable({
                         scrollX: true,
+                        "autoWidth": false,
+                        buttons: [ 'colvis' ],
                         "pageLength": 10,
                         "data": logs,
                         "columns": [
@@ -553,14 +561,27 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         "columnDefs": [{
                             "defaultContent": "-",
                             "targets": "_all"
-                        }]
+                        }],
+                        responsive: {
+                            breakpoints: [
+                              {name: 'bigdesktop', width: Infinity},
+                              {name: 'meddesktop', width: 1480},
+                              {name: 'smalldesktop', width: 1280},
+                              {name: 'medium', width: 1188},
+                              {name: 'tabletl', width: 1024},
+                              {name: 'btwtabllandp', width: 848},
+                              {name: 'tabletp', width: 768},
+                              {name: 'mobilel', width: 480},
+                              {name: 'mobilep', width: 320}
+                            ]
+                        },
                     });
                 }); //jQuery
             }); //end of function
         }); //end of snapshot function
     }
 
-    // Add Visitor Information button
+    // ## Add Visitor Information button
     async function addVisitorInformation(officerUID, plateNumber, vehicleModel, fName, mName, lName) {
         plateNumber = plateNumber.trim().replace(" ", "").toUpperCase();
         vehicleModel = vehicleModel.trim();
@@ -649,15 +670,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
         }
         return;
     } // end of function addVisitorInformation
-    // addVisitorInformation(fire.auth.currentUser.uid, "AABBCC", "Vehicle Model", "FirstName", "MiddleName", "LastName");
-    
 
-
-    // const showLogs = document.querySelector("#show-logs");
-    // const showVisitor = document.querySelector("#show-visitor");
-    // const showCurrentlyIn = document.querySelector("#show-currently-in");
-    
-    
 
     // displayLogs(); //display logs
     $('#logs-id').on('click', (e) => {

@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="./sidebar/sidebar-mobile.css">
 
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.iconify.design/iconify-icon/1.0.0/iconify-icon.min.js"></script>
     <title>Welcome To BulSU VMS</title>
 </head>
@@ -26,6 +28,17 @@
         - table layout
         - pie chart 
  -->
+
+ <style>
+    .select2 {
+        width: 90% !important;
+        font-family: "Lexend Deca", sans-serif;
+    }
+
+    .select2 .select2-results__option {
+        font-family: "Lexend Deca", sans-serif;
+    }
+ </style>
 
 <body>
     <div class="container user-main" id="user-account-information"> <!-- user-account-information is used for Firebase (index.js) -->
@@ -182,7 +195,7 @@
                             <div class="popdown pop-id">
                                 <form action="#" class="form-id">
                                     <label>ID/Employee Number</label>
-                                    <input type="number" name="form_id" id="">
+                                    <input type="number" name="form_id" id="form_id">
 
                                     <input type="submit" value="Save Changes">
                                 </form>
@@ -210,7 +223,7 @@
                             <div class="popdown pop-phonenum">
                                 <form action="#" class="form-phonenum">
                                     <label>Phone Number</label>
-                                    <input type="tel" name="form_phonenum" id="">
+                                    <input type="tel" name="form_phonenum" id="form_phonenum">
 
                                     <input type="submit" value="Save Changes">
                                 </form>
@@ -221,7 +234,7 @@
                             <div class="popdown pop-college">
                                 <form action="#" class="form-college">
                                     <label>College</label>
-                                    <select name="college_option" id="college_option">
+                                    <select name="college_option" id="college_option" required>
                                         <option value="CAFA">College of Architecture and Fine Arts (CAFA)</option>
                                         <option value="CAL">College of Arts and Letters (CAL)</option>
                                         <option value="CBA">College of Business Administration (CBA)</option>
@@ -243,40 +256,6 @@
                             </div>
                             <!-- <span class="endpoint" style="text-align: right;">Edit</span> -->
                         </div>
-
-
-
-                        
-                        <!-- <table class="personal-info-table">
-                            <tbody>
-                                <tr>
-                                    <td class="personal-category">Profile Picture</td>
-                                    <td class="personal-profile"></td>
-                                    <td class="personal-edit-btn"></td>
-                                </tr>
-                                <tr>
-                                    <td class="personal-category">Name</td>
-                                    <td class="personal-info-fullname">-------------</td>
-                                    <td class="personal-edit-btn"></td>
-                                </tr>
-                                <tr>
-                                    <td class="personal-category">ID/Employee Number</td>
-                                    <td class="personal-info-id">-------------</td>
-                                    <td class="personal-edit-btn"></td>
-                                </tr>
-                                <tr>
-                                    <td class="personal-category">User Type</td>
-                                    <td class="personal-info-category">-------------</td>
-                                    <td class="personal-edit-btn"></td>
-                                </tr>
-                                <tr>
-                                    <td class="personal-category">Phone Number</td>
-                                    <td class="personal-info-phonenum">-------------</td>
-                                    <td class="personal-edit-btn"></td>
-                                </tr>
-                            </tbody>
-        
-                        </table> -->
                     </div>
                 </div>
 
@@ -338,6 +317,8 @@
 <script src="https://code.jquery.com/jquery-3.6.1.js" 
 integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" 
 crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js" defer></script>
 <script src="../dist/bundle.js" defer></script>
 <script src="script_users/account.js" defer></script>
 <script src="./sidebar/sidebar-mobile.js" defer></script>

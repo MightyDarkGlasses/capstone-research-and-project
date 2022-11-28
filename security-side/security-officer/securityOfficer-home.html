@@ -20,11 +20,14 @@
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="../../user-side/sidebar/sidebar-mobile.css">
+    <script src="../../user-side/sidebar/sidebar-mobile.js" defer></script>
 
     <script
           src="https://code.jquery.com/jquery-3.6.1.min.js"
           integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-          crossorigin="anonymous" defer></script>
+          crossorigin="anonymous" 
+          defer></script>
      <script
           src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"
           defer></script>
@@ -33,18 +36,27 @@
           charset="utf8"
           src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"
           defer></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.1/b-2.3.3/b-colvis-2.3.3/b-html5-2.3.3/b-print-2.3.3/datatables.min.css"/>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js" defer></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js" defer></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.1/b-2.3.3/b-colvis-2.3.3/b-html5-2.3.3/b-print-2.3.3/datatables.min.js" defer></script>
+
     <script src="toggle/custom_toggle.js" defer></script>
     <script src="../../dist/bundle.js" defer></script>
     <script src="./scripts/securityOfficer.js" defer></script>
 
-
-
-
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" defer></script>
-
 </head>
 
 <style>
+
+    /* Mobile Sidebar */
+    .mobile-sidebar {
+        padding-right: 3em;
+    }
+
     /* .main-container {
         width: 95%;
     } */
@@ -178,6 +190,52 @@
                 </div> -->
             </div>
         </div>
+
+        <nav class="mobile-nav">
+            <ul>
+                <li>
+                    <a href="securityOfficer-home.html" id="menu-id">
+                        <div id="title-home" class="title">Home</div>
+                    </a>
+                </li>
+                <li>
+                    <a id="account-id-mobile" style="cursor: pointer;">
+                        <div class="title" id="title-myAccount">My Account</div>
+                    </a>
+                </li>
+                <li>
+                    <a id="logs-id-mobile" style="cursor: pointer;">
+                        <div class="title" id="title-logs">Logs</div>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="mobile-nav-buttons">
+                <a href="../index.html">Logout</a>
+            </div>
+        </nav>
+
+        <div class="sidebar mobile-sidebar">
+            <header style="margin-bottom: 1em;">
+                <div class="main-sidebar">
+                    <h2>BulSU</h2>
+                    <button class="hamburger">
+                        <div class="bar"></div>
+                    </button>
+                </div>
+            </header>
+            <nav class="mobile-nav">
+                <a href="user-home.html">Home</a>
+                <a href="user-account.html">My Account</a>
+                <a href="user-vehicle.html">Vehicles</a>
+                <a href="user-logs.html">Logs</a>
+                <a href="user-announcements.html">Announcements</a>
+                <div class="mobile-nav-buttons">
+                    <a href="../index.html">Logout</a>
+                </div>
+            </nav>
+        </div>
+
         <div class="main-container" id="main-container">
             <div class="header-container">
                 <div class="header">
@@ -571,36 +629,4 @@
         </div>
     </div>
 </body>
-
-
-<script defer>
-    
-
-    // Event for Add Guest Information
-    // document.getElementById('guest-submit-data').addEventListener(('click'), () => {
-    //     console.log('clicked');
-    //     document.getElementById("guest-add-information").dispatchEvent(new CustomEvent('submit', {cancelable: true}));
-    // });
-
-    // document.querySelector('#guest-add-information').addEventListener('submit', (e) => {
-    //     e.preventDefault();
-    //     e.stopPropagation();
-    //     console.log("guest submit:", e);
-
-    //     e.target.reset();
-    // });
-
-    // document.querySelector('#guest-search-information').addEventListener('submit', (e) => {
-    //     e.preventDefault();
-    //     e.stopPropagation();
-    //     console.log("search submit:", e);
-
-    //     e.target.reset();
-    // });
-</script>
 </html>
-<!-- <div class="visitor">
-            <button onclick="loadAddVisitor()" id="btn-visitor" type="button">
-            Are You a Visitor?
-            </button>
-            </div> -->
