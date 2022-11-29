@@ -52,7 +52,7 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
                 }
                 else {
                     console.log("securityInfo.isDisabled", securityInfo.isDisable);
-                    if(securityInfo.isDisable === true || typeof(securityInfo.isDisable) === "undefined") {
+                    if(securityInfo.isDisable === true) {
                         fire.getSignOut(fire.auth)
                         .then(() => {
                             console.log("Done checking auth.");

@@ -307,32 +307,50 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             const unsubCollection = fire.myOnSnapshot(myQuery, (snapshot) => {     //based on the query
                 let logs = [];
                 let index = 0;
+                let checkLengthTimeIn = 0;
+                let checkLengthTimeOut = 0;
+                
                 snapshot.docs.forEach((doc) => {
+                    
                     let unpackData = {...doc.data()};
                     let objSize = Object.keys(unpackData).length;
-                    
-                    /** Change date formatting. */
+
+                    // alert("Number of time in: ", objSize);
+                    /** Change date formatting. */  
                     Object.entries(unpackData).map((element, index) => {
+                        
                         if(objSize-1 !== index) {
 
                             // ********************************
                             // element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
                             // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
                             // element[1]['time_in']['timestamp'] = ""
+
+                            checkLengthTimeIn += 1;
+                            if(element[1]['time_out']['timestamp'] !== null) {
+                                checkLengthTimeOut += 1;
+                            }
+
                             element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString();
                             element[1]['time_out']['gate_number'] = element[1]['time_out']['gate_number'] === null ? '-' : element[1]['time_out']['gate_number'];
                             element[1]['time_out']['officer_uid'] = element[1]['time_out']['officer_uid'] === null ? '-' : element[1]['time_out']['officer_uid'];
 
                             // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '' : element[1]['time_out']['timestamp'];
                             // ********************************
-
-                            
+  
                             index += 1; //increment
+                            
+
                             logs.push(element[1]);
                         }
                     });
+
+
+
                 });
                 console.log(logs); 
+                console.log("Number of length (TIME IN): ", checkLengthTimeIn)
+                console.log("Number of length (TIME OUT): ", checkLengthTimeOut)
 
                 //Sort the data by time_scanned
                 // logs.sort(function(a, b) {
@@ -360,12 +378,12 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                             // {"data": "time_in.timestamp"},
                             // {"data": "time_out.timestamp"},
                             {"data": (data, type, dataToSet) => {
-                                console.log("data.time_in: ", data.time_in);
+                                // console.log("data.time_in: ", data.time_in);
                                 return data.time_in.timestamp.toDate().toLocaleString(); }
                                 // return "Time In"; }
                             },
                             {"data": (data, type, dataToSet) => {
-                                console.log("data.time_out: ", data.time_out);
+                                // console.log("data.time_out: ", data.time_out);
                                 return data.time_out.timestamp; }
                                 // return "Time Out"; }
                             },

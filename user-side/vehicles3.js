@@ -553,6 +553,16 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     // document.querySelector("#college_option").addEventListener("change", (e) => {
     //     console.log("college_option: ", e);
     // });
+
+
+    // GANITO YUNG SA UPDATE
+    fire.myUpdate(fire.myDoc(fire.db, "security", myId), {
+        [`USER_ID.isDisabled`]: false,
+    });
+    fire.myUpdate(fire.myDoc(fire.db, "security", myId), {
+        [`USER_ID.isDisabled`]: true,
+    });
+
     function updateVehicleInformation(myId, myObject, myForm) {
         console.log("vehicle updated: ", myObject);
         const docRefAccount = fire.myDoc(fire.db, "vehicle-information", myId);
@@ -564,7 +574,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 window.location.href = window.location.href; //reload a page in JS
                 location.reload();
             });
-        })
+        });
     }
 
     // swal("Success!", "Vehicle informatioinformationn updated.", "success");
