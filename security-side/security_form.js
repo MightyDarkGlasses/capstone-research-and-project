@@ -23,39 +23,43 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
         const password = $('#admin_pass').val();
         console.log(email, password);
 
-        // if(email === 'ethoharon@duck.com' || email === 'admin@local.com') {    
-            fire.doSignInWithEmailAndPassword(fire.auth, email, password)
-            .then(async (cred) => {
-                console.log("User logged in:", cred.user);
+        fire.doSignInWithEmailAndPassword(fire.auth, email, password)
+        .then(async (cred) => {
+            console.log("User logged in:", fire.auth.currentUser.uid);
+            const myRef = fire.myDoc(fire.db, 'security', fire.auth.currentUser.uid); 
+            await fire.myGetDoc(myRef).then((snapshot) => { 
+                console.log(snapshot.data(), snapshot.id);
+                const securityInfo = snapshot.data();
                 
 
-                // if(cred.user.uid === "aqkfBzQp1YTxXVohFDSkCXO2esR2") {
-                //     console.log("match")
+    
 
-                    
-                    // fire.doUpdateProfile(cred.user, {
-                    //     disabled: true
-                    // });
+                if(snapshot.data() === undefined) {
+                    $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
+                    $('.modal-container-title').html('Error');
+                    $('.modal-container-header').css({
+                        'backgroundColor': 'red'
+                    })
+                    $("#error-popup").modal({
+                        fadeDuration: 100
+                    });
 
-                    // getAuth().updateCurrentUser(cred.user.uid, {
-                    //     disabled: true,
-                    // }).then((e) => {
-                    //     console.log("User updated");
-                    // });
-                // }
-
-                const myRef = fire.myDoc(fire.db, 'security', cred.user.uid); 
-                await fire.myGetDoc(myRef).then((snapshot) => { 
-                    console.log(snapshot.data(), snapshot.id);
-
-                    if(snapshot.data() === undefined) {
+                    fire.getSignOut(fire.auth)
+                    .then(() => {
+                        console.log("Done checking auth.");
+                    }).catch((err) => {
+                    });
+                }
+                else {
+                    console.log("securityInfo.isDisabled", securityInfo.isDisable);
+                    if(securityInfo.isDisable === true || typeof(securityInfo.isDisable) === "undefined") {
                         fire.getSignOut(fire.auth)
                         .then(() => {
                             console.log("Done checking auth.");
                         }).catch((err) => {
                         });
 
-                        $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
+                        $('.modal-container-main').html(`<p>User is currently disabled.</p>`);
                         $('.modal-container-title').html('Error');
                         $('.modal-container-header').css({
                             'backgroundColor': 'red'
@@ -67,45 +71,46 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
                     else {
                         window.location = 'security-officer/securityOfficer-home.html';
                     }
-                });
-                
-            }).catch((error) => {
-                console.log('error: ', error);
-                switch (error.code) {
-                    case 'auth/wrong-password': {
-                        $('.modal-container-main').html(`<p>User credentials is wrong.<br/>Consider re-checking and enter the correct and valid input.</p>`);
-                        $('.modal-container-title').html('Error');
-                        $('.modal-container-header').css({
-                            'backgroundColor': 'red'
-                        })
-                        $("#error-popup").modal({
-                            fadeDuration: 100
-                        });
-                        break;
-                    }
-                    case 'auth/user-not-found': {
-                        $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
-                        $('.modal-container-title').html('Error');
-                        $('.modal-container-header').css({
-                            'backgroundColor': 'red'
-                        })
-                        $("#error-popup").modal({
-                            fadeDuration: 100
-                        });
-                        break;
-                    }
-                    default: {
-                        $('.modal-container-main').html(`<p>${error.code}</p>`);
-                        $('.modal-container-title').html('Error');
-                        $('.modal-container-header').css({
-                            'backgroundColor': 'red'
-                        })
-                        $("#error-popup").modal({
-                            fadeDuration: 100
-                        });
-                    }
                 }
             });
+            
+        }).catch((error) => {
+            console.log('error: ', error);
+            switch (error.code) {
+                case 'auth/wrong-password': {
+                    $('.modal-container-main').html(`<p>User credentials is wrong.<br/>Consider re-checking and enter the correct and valid input.</p>`);
+                    $('.modal-container-title').html('Error');
+                    $('.modal-container-header').css({
+                        'backgroundColor': 'red'
+                    })
+                    $("#error-popup").modal({
+                        fadeDuration: 100
+                    });
+                    break;
+                }
+                case 'auth/user-not-found': {
+                    $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
+                    $('.modal-container-title').html('Error');
+                    $('.modal-container-header').css({
+                        'backgroundColor': 'red'
+                    })
+                    $("#error-popup").modal({
+                        fadeDuration: 100
+                    });
+                    break;
+                }
+                default: {
+                    $('.modal-container-main').html(`<p>${error.code}</p>`);
+                    $('.modal-container-title').html('Error');
+                    $('.modal-container-header').css({
+                        'backgroundColor': 'red'
+                    })
+                    $("#error-popup").modal({
+                        fadeDuration: 100
+                    });
+                }
+            }
+        });
         // } // end if condition
     });
 
