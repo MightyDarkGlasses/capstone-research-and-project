@@ -708,7 +708,7 @@ async function generateVehicleQRCode(userUID, plateNumber, mySize) {
             colorDark : "#000000",
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H,
-            quietZone: true
+            addQuietZone: true
         })
         generatedOutput = qrcode._oDrawing._elCanvas.toDataURL("image/png");
     };

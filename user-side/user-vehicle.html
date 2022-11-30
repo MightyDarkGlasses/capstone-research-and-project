@@ -456,8 +456,8 @@
                             <img src="#" alt="" width="50" height="50" id='profile-picture' style="border-radius: 1em;">
                         </div>
                         <div class="profile-box">
-                            <div class="fullname">User</div>
-                            <div class="category">Personnel</div>
+                            <div class="fullname">▃▃▃▃▃</div>
+                            <div class="category">▃▃▃▃▃</div>
                         </div>
                     </div>
                     <div class="util-holder">
@@ -527,6 +527,7 @@
                             <input type="file" name="form_side" id="" required>
                             <input type="file" name="form_rear" id="" required>
                             <input type="submit" value="Save Changes">
+                            
                         </form>
                     </div>
 
@@ -755,17 +756,8 @@
                                 </thead>
                                 <tbody class="linkages-data-body">
                                     <tr>
-                                        <td>X</td>
-                                        <td>X</td>
-                                        <td>X</td>
-                                        <td>
-                                            <a href="">X</a>
-                                        </td>
+                                        <td style="text-align: center; font-size: 1em; margin-block: 1em;" colspan="4">No data available in linkages.</td>
                                     </tr>
-
-                                    <!-- <tr>
-                                        <td style="text-align: center; font-size: 1.5em" colspan="3">No data.</td>
-                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -854,16 +846,18 @@
             text-align: center;
             font-size: 2em;
         }
+
     </style>
     <!-- Modals -->
 
     
     <div id="add-vehicle-modal" class="modal" style="max-width: 750px;">
         <div>
+            <a href="#" rel="modal:close" style="color: white; background-color: black; padding: .5em 1em; border-radius: 1em;">Close</a>
             <div>
                 <p>Add New Vehicle</p>
             </div>
-            <div class="add-vehicle-modal-container">
+            <div class="add-vehicle-modal-container" style="padding: 1em;">
                 <div class="drop-zone" index="1">
                     <div class="vehicle-front-drop-info">
                         <div class="icon">
@@ -897,18 +891,19 @@
             </div>
             <form class="modal-vehicle-form">
                 <div class="user-input">
-                    <div>
+                    <div style="padding: 1em;">
                         <label>Vehicle Model</label>
                         <input type="text" class="vehicle-icon-1 vehicle-input" name="signup_vehiclemodel" id="vehicle-model" required="required" pattern=".{8,50}" title="You can only within the range of 8 - 50 character length."
                         value="">
                     </div>
-                    <div>
+                    <div style="padding: 1em;">
                         <label>Plate Number</label>
                         <input type="text" class="vehicle-icon-2 vehicle-input" name="signup_vehicleplatenum" id="vehicle-platenum" required="required" pattern=".{1,10}" title="You can only enter a maximum of 10 characters."
                         value="">
                     </div>
                     <div id="qrcode" style="display: none;"> <!-- QR Code is generated here -->
-                </div>
+                    </div>
+                    
                 <div class="navigation">
                     <input type="submit" id="modal-submit-vehicle" value="Submit">
                 </div>
@@ -1045,6 +1040,7 @@
 <script src="qrcode.min.js" defer></script>
 <script src="../file_upload/main.js" defer></script>
 <script src="./sidebar/sidebar-mobile.js" defer></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 <!-- <script type="module">
     import QrScanner from "./linkages/qr-scanner.min.js";
 

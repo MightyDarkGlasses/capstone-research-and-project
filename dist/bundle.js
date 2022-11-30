@@ -38430,7 +38430,7 @@ async function generateVehicleQRCode(userUID, plateNumber, mySize) {
             colorDark : "#000000",
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H,
-            quietZone: true
+            addQuietZone: true
         })
         generatedOutput = qrcode._oDrawing._elCanvas.toDataURL("image/png");
     };
@@ -38842,78 +38842,15 @@ if(windowLocation.indexOf("user-announcement") > -1) {
     // DISPLAY THE PROFILE PICTURE...
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
         if (user) {
-
-            // Display user profile picture.
-            const profilePicture = displayProfile(user.uid).then(evt => { 
-                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
-                console.log('evt.profilePicture: ', evt);
-
-                if(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL !== null) {
-                    document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL);
-                }
-                else {
-                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
-                }
-
-                // Set the fullname
-                document.querySelector(".fullname").textContent = evt[0];
-
-                // Set the position of user. (NAP or Faculty)
-                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
-                    document.querySelector(".category").textContent = evt[1];
-                }
-                else {
-                    document.querySelector(".category").textContent = "-";
-                }
-                
-            });
-            
-            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
-            console.log('fire auth: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-
-            // Did we download the file?
-            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
-            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
-                getVehicleInformation(docRefVehicle);
-            }
-            else {
-                // console.log("I did the else.")
-                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
-                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
-
-                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-                // console.log('vehicleInformation:', vehi);
-                // displayVehicleDropdownList(vehi);
-                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
-                displayLinkagesDropdownList(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-                addEventsInList(vehi);  //re-add the events
-
-                // let noQrCode = document.querySelector('.no-qr-code');
-                let yesQRCode = document.querySelector('.yes-qr-code');
-                yesQRCode.style.display = 'flex';
-            }
+            document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
+            document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
+            document.querySelector(".category").textContent = localStorage.getItem("profile-category");
         }
         else {
             window.location = "../login.html";
         }
     });
-    async function displayProfile(userUID) {
-        const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
-        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docAccountActivity);
-        if (docVSnap.exists()) {
-            const position = docVSnap.data()["category"];
 
-            console.log("position: ", position);
-            console.log("position: ", typeof(position) !== "undefined" || position !== null);
-            if(typeof(position) !== "undefined" || position !== null) {
-                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
-            }
-        }
-        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
-    }
-    
     const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "announcements");
     const linkagesQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(10));
     const docsSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDocs(linkagesQuery);
@@ -38932,7 +38869,7 @@ if(windowLocation.indexOf("user-announcement") > -1) {
                 <p>${myData.title}</p>
             </div>
             <div>
-                <p>${myData.posted_on}</p>
+                <p>${myData.createdAt.toDate().toLocaleString()}</p>
                 <div class="dropdown"></div>
             </div>
         </div>
@@ -38971,7 +38908,7 @@ if(windowLocation.indexOf("user-announcement") > -1) {
             <div>
                 <div class="announcement-priority">${myData.priority}</div>
                 <p class="announcements-headline">${myData.title}</p>
-                <p class="announcements-timestamp">${myData.posted_on}</p>
+                <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
                 <p class="announcements-person">${myData.posted_by}</p>
             </div>
             <div class="annoucements-main-container">
@@ -39260,30 +39197,48 @@ document.addEventListener('DOMContentLoaded', function() {
         if (user) {
             // Display user profile picture.
             // console.log("Current authenticated user: ", user.uid);
-            const profilePicture = displayProfile(user.uid).then(evt => { 
-                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser);
-                console.log('current user uid: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-                console.log('evt.profilePicture: ', evt);
 
-                if(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL !== null) {
-                    document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL);
-                }
-                else {
-                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
-                }
 
-                // Set the fullname
-                document.querySelector(".fullname").textContent = evt[0];
+            console.log("profile-picture: ", localStorage.getItem("profile-picture") );
+            if((localStorage.getItem("profile-picture") === null 
+            || localStorage.getItem("profile-category") === null
+            || localStorage.getItem("profile-owner") === null)) {
+                // console.log("false...");
 
-                // Set the position of user. (NAP or Faculty)
-                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
-                    document.querySelector(".category").textContent = evt[1];
-                }
-                else {
-                    document.querySelector(".category").textContent = "-";
-                }
-                
-            });
+                const profilePicture = displayProfile(user.uid).then(evt => { 
+                    console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser);
+                    console.log('current user uid: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+                    console.log('evt.profilePicture: ', evt);
+    
+                    if(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL !== null) {
+                        document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL);
+                        localStorage.setItem("profile-picture", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL);
+                    }
+                    else {
+                        document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
+                        localStorage.setItem("profile-picture", "bulsu-logo.png");
+                    }
+    
+                    // Set the fullname
+                    document.querySelector(".fullname").textContent = evt[0];
+                    localStorage.setItem("profile-owner", evt[0]);
+    
+                    // Set the position of user. (NAP or Faculty)
+                    if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
+                        document.querySelector(".category").textContent = evt[1];
+                        localStorage.setItem("profile-category", evt[1]);
+                    }
+                    else {
+                        document.querySelector(".category").textContent = "-";
+                        localStorage.setItem("profile-category", "-");
+                    }
+                });
+            }
+            else {
+                document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
+                document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
+                document.querySelector(".category").textContent = localStorage.getItem("profile-category");
+            }
             
             // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
             
@@ -39295,9 +39250,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             else {
                 // console.log("I did the else.")
-                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
+
+                if(JSON.parse(localStorage.getItem("qrCodePlaceholder")) === "h") {
+                    myQRImage.setAttribute("src", "bulsu-logo.png");
+                    myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                }
+                else {
+                    myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                    myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                    saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
+                }
+
                 // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
 
                 vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
@@ -39468,7 +39431,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // console.log('linkagesList', linkagesList, Object.keys(linkagesList).length);
             
             if(!doc.exists()) {
-                console.log('There are no linked vehicle data.')
+                console.log('There are no linked vehicle data.');
             }
             else {
                 if(Object.keys(linkagesList).length) {
@@ -39476,11 +39439,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         let ownerFullName = undefined;
                         let ownerVehicleModel = undefined;
-                        await getAccountInformationOwner(userUID).then(evt => {
+                        await getAccountInformationOwner(linkagesList[data]["orig_uid"]).then(evt => {
                             // console.log('event: ', evt)
                             ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
                         });
-                        await getVehicleInformationModel(userUID).then(evt => {
+                        await getVehicleInformationModel(linkagesList[data]["orig_uid"]).then(evt => {
                             console.log('event: ', evt, data)
                             ownerVehicleModel = evt[data]['model'][0];
                         });
@@ -39500,6 +39463,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         node.addEventListener('click', () => {
                             // console.log('linkages clicked: ', linkagesList);
                             // console.log(linkagesList[data].qr);
+
+                            console.log("linkages: ", linkagesList[data].qr);
 
                             myQRImage.setAttribute("src", linkagesList[data].qr);
                             myQRImage2.setAttribute("src", linkagesList[data].qr);
@@ -39685,78 +39650,17 @@ if(windowLocation.indexOf("user-logs") > -1) {
     // DISPLAY THE PROFILE PICTURE AND LOGS
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
         if (user) {
+            document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
+            document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
+            document.querySelector(".category").textContent = localStorage.getItem("profile-category");
+
             displayLogs(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
             displayActivityLogs(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid); //display logs in the table
-            // Display user profile picture.
-            const profilePicture = displayProfile(user.uid).then(evt => { 
-                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
-                console.log('evt.profilePicture: ', evt);
-
-                if(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL !== null) {
-                    document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL);
-                }
-                else {
-                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
-                }
-
-                // Set the fullname
-                document.querySelector(".fullname").textContent = evt[0];
-
-                // Set the position of user. (NAP or Faculty)
-                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
-                    document.querySelector(".category").textContent = evt[1];
-                }
-                else {
-                    document.querySelector(".category").textContent = "-";
-                }
-                
-            });
-            
-            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
-            console.log('fire auth: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-
-            // Did we download the file?
-            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
-            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
-                getVehicleInformation(docRefVehicle);
-            }
-            else {
-                // console.log("I did the else.")
-                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
-                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
-
-                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-                // console.log('vehicleInformation:', vehi);
-                // displayVehicleDropdownList(vehi);
-                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
-                displayLinkagesDropdownList(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-                addEventsInList(vehi);  //re-add the events
-
-                // let noQrCode = document.querySelector('.no-qr-code');
-                let yesQRCode = document.querySelector('.yes-qr-code');
-                yesQRCode.style.display = 'flex';
-            }
         }
         else {
             window.location = "../login.html";
         }
     });
-    async function displayProfile(userUID) {
-        const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
-        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docAccountActivity);
-        if (docVSnap.exists()) {
-            const position = docVSnap.data()["category"];
-
-            console.log("position: ", position);
-            console.log("position: ", typeof(position) !== "undefined" || position !== null);
-            if(typeof(position) !== "undefined" || position !== null) {
-                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
-            }
-        }
-        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
-    }
 
     // console.log('logs4.js');
     // const docReference = fire.myDoc(fire.db, "logs", JSON.parse(localStorage.currentUser).uid);
@@ -39807,8 +39711,8 @@ if(windowLocation.indexOf("user-logs") > -1) {
 
             Object.entries(logsInformation).map((element, index) => {
                 if(objSize-1 !== index) {
-                    element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : new Date(element[1]['time_in']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
-                    element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'});
+                    element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString() + " Gate #" + element[1]['time_in']['gate_number'];
+                    element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : element[1]['time_out']['timestamp'].toDate().toLocaleString() + " Gate #" + element[1]['time_in']['gate_number'];;
                     logs.push(element[1]);
                 }
             });
@@ -39823,9 +39727,6 @@ if(windowLocation.indexOf("user-logs") > -1) {
                     "columns": [
                         {"data": "time_in.timestamp"},
                         {"data": "time_out.timestamp"},
-                        {"data": (data) => {
-                            return data.time_in.gate_number + ", " + data.time_out.gate_number}
-                        },
                         {"data": (data) => {
                             return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
                         },
@@ -40123,62 +40024,17 @@ if(windowLocation.indexOf("user-account") > -1) {
     // DISPLAY THE PROFILE PICTURE...
     _src_index__WEBPACK_IMPORTED_MODULE_1__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth, (user) => {
         if (user) {
-            // Display user profile picture.
-            const profilePicture = displayProfile(user.uid).then(evt => { 
-                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser)
-                console.log('evt.profilePicture: ', evt);
-
-                if(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.photoURL !== null) {
-                    document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.photoURL);
-                }
-                else {
-                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
-                }
-
-                // Set the fullname
-                document.querySelector(".fullname").textContent = evt[0];
-
-                // Set the position of user. (NAP or Faculty)
-                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
-                    document.querySelector(".category").textContent = evt[1];
-                }
-                else {
-                    document.querySelector(".category").textContent = "-";
-                }
-                
-            });
-            
-            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
-            console.log('fire auth: ', _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.uid);
-
-            // Did we download the file?
-            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
-            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
-                getVehicleInformation(docRefVehicle);
-            }
-            else {
-                // console.log("I did the else.")
-                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
-                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
-
-                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-                // console.log('vehicleInformation:', vehi);
-                // displayVehicleDropdownList(vehi);
-                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
-                displayLinkagesDropdownList(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.uid);
-                addEventsInList(vehi);  //re-add the events
-
-                // let noQrCode = document.querySelector('.no-qr-code');
-                let yesQRCode = document.querySelector('.yes-qr-code');
-                yesQRCode.style.display = 'flex';
-            }
+            document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
+            document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
+            document.querySelector(".category").textContent = localStorage.getItem("profile-category");
         }
         else {
             window.location = "../login.html";
         }
     });
+
+
+
     async function displayProfile(userUID) {
         const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "account-information", userUID);
         const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDoc(docAccountActivity);
@@ -41116,6 +40972,16 @@ jQuery(function() {
         });
     });
 
+    //Checking the current authenticated user.
+    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
+        if (user) {
+            const uid = user.uid;
+            console.log('getOnAuthStateChanged: ', uid)
+        } else {
+            // User is signed out
+        }
+    });
+
     // $('.personal-info-plate').on('click', () => {
     //     $('.pop-plate').animate({
     //         opacity: "toggle",
@@ -41273,7 +41139,10 @@ jQuery(function() {
     // Modals
     $('#add-new-vehicle').on('click', () => {
         $("#add-vehicle-modal").modal({
-            fadeDuration: 100
+            fadeDuration: 100,
+            escapeClose: false,
+            clickClose: false,
+            // showClose: false
         });    
 
         $('.mobile-sidebar').css('opacity', 0);
@@ -41301,15 +41170,7 @@ jQuery(function() {
     // });
 
     
-    //Checking the current authenticated user.
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
-        if (user) {
-            const uid = user.uid;
-            console.log('getOnAuthStateChanged: ', uid)
-        } else {
-            // User is signed out
-        }
-    });
+
 
     // Add Vehicles
     $('#add-vehicle-modal').on($.modal.CLOSE, () => {
@@ -41326,6 +41187,31 @@ jQuery(function() {
         localStorage.removeItem('vehicle-rear-filetype');
         localStorage.removeItem('vehicle-rear-filename');
         localStorage.removeItem('vehicle-rear');
+
+        $(".add-vehicle-modal-container .drop-zone:nth-child(1)").html(`	<div class="vehicle-front-drop-info">
+		<div class="icon">
+			<div class="front-car-view"></div>
+		</div>
+		<span class="drop-zone__prompt">Drop file here or click to upload</span>
+		<p>Front View</p>
+	</div>
+	<input type="file" accept=".jpg, .jpeg, .png, .gif" name="vehicle-front" class="drop-zone__input">`)
+        $(".add-vehicle-modal-container .drop-zone:nth-child(2)").html(`	<div class="vehicle-side-drop-info">
+		<div class="icon">
+			<div class="side-car-view"></div>
+		</div>
+		<span class="drop-zone__prompt">Drop file here or click to upload</span>
+		<p>Side View</p>
+	</div>
+	<input type="file" accept=".jpg, .jpeg, .png, .gif" name="vehicle-side" class="drop-zone__input">`)
+        $(".add-vehicle-modal-container .drop-zone:nth-child(3)").html(`	<div class="vehicle-rear-drop-info">
+		<div class="icon">
+			<div class="rear-car-view"></div>
+		</div>
+		<span class="drop-zone__prompt">Drop file here or click to upload</span>
+		<p>Rear View</p>
+	</div>
+	<input type="file" accept=".jpg, .jpeg, .png, .gif" name="vehicle-rear" class="drop-zone__input">`)
     });
 
     
@@ -41334,233 +41220,121 @@ jQuery(function() {
         e.stopPropagation();
         console.log('.modal-vehicle-form', e)
 
+        
+        const plate = $('#vehicle-platenum').val().trim().replace(" ", "").toUpperCase();
+        console.log("plate: ", plate)
+        checkExistingPlateNumber(plate);
+    }); //end of JQuery submit event
+    
+    
+        
+    async function checkExistingPlateNumber(plateNumber) {
+        const docRefLogs = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+        const docSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docRefLogs);
+        const listOfRegisteredVehicleData =  Object.keys(docSnap.data());
+        const a = localStorage.getItem('vehicle-front'),
+        b = localStorage.getItem('vehicle-side'),
+        c = localStorage.getItem('vehicle-rear');
 
-        async function checkExistingPlateNumber(plateNumber) {
-            const docRefLogs = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-            const docSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docRefLogs);
-            const listOfRegisteredVehicleData =  Object.keys(docSnap.data());
+        console.log('Object.keys()', Object.keys(docSnap.data()));
+        //Document logs exists?
+        if (listOfRegisteredVehicleData.includes(plateNumber.trim().toUpperCase())) {
+            console.log('This plate number ALREADY EXISTS.');
 
-            console.log('Object.keys()', Object.keys(docSnap.data()));
-            //Document logs exists?
-            if (listOfRegisteredVehicleData.includes(plateNumber)) {
-                console.log('This plate number ALREADY EXISTS.');
-            }
-            else {
-                console.log('This is a UNIQUE PLATE NUMBER.');
-
-                console.log('getVehicleInformation()', );
-                console.log($('#vehicle-platenum').val().trim().replace(" ", "").toUpperCase());
-                if(checkExistingPlateNumber($('#vehicle-platenum').val().trim().replace(" ", "").toUpperCase()) === false) {
-                    console.log('checkExistingPlateNumber() true');
-                }
-                else {
-                    console.log('checkExistingPlateNumber() false');
-                }
-                const a = localStorage.getItem('vehicle-front'),
-                b = localStorage.getItem('vehicle-side'),
-                c = localStorage.getItem('vehicle-rear');
-                
-                if([a, b, c].includes(null)) {
-                    console.log('null');
-                    console.log('vehicle-model: ', $('#vehicle-model').val());
-                    console.log('vehicle-platenum: ', $('#vehicle-platenum').val());
-                    window.reload();
-                }
-                else {
-                    console.log('all done!');
-                    console.log('Submitted');
-
-                    console.log('vehicle-model: ', $('#vehicle-model').val())
-                    console.log('vehicle-platenum: ', $('#vehicle-platenum').val())
-                    console.log('currentUser: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
-
-                    const model = $('#vehicle-model').val();
-                    const plateNum = $('#vehicle-platenum').val();
-                    const vehicleLength = JSON.parse(localStorage.vehicleInformation)['vehicle_length'];
-
-                    // Create a new vehicle image data.
-                    createVehicleImageData(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid, vehicleLength, plateNum, model);
-                    // generateVehicleQRCode(fire.auth.currentUser.uid, plateNum, 500, vehicleLength+1);
-                }
-
-            }
-            return Object.keys(docSnap.data());
+            Swal.fire(
+                'Error:',
+                'This plate number already exists.',
+                'error'
+            );
+            return;
         }
+        else {
+            console.log('This is a UNIQUE PLATE NUMBER.');
 
-        checkExistingPlateNumber(
-            $('#vehicle-platenum').val().trim().replace(" ", "").toUpperCase())
-            .then((result) => {
-                console.log('result', result);
-            })
-
-
-        
-        
-
-        async function createVehicleImageData(userId, vehicleLength, plateNumber, model) {
-            let imageLinks = [];
-            vehicleLength += 1;
-            // let generatedQRCodeLink = fire.exportGenerateVehicleQRCode(userId, plateNumber, 500, vehicleLength);
-
-
-            if(localStorage.getItem("vehicle-front") === null || localStorage.getItem("vehicle-side") === null || localStorage.getItem("vehicle-rear") === null) {
-                console.log("Skipped, no image was uploaded");
+            // console.log('getVehicleInformation()', );
+            // console.log($('#vehicle-platenum').val().trim().replace(" ", "").toUpperCase());
+            // if(checkExistingPlateNumber($('#vehicle-platenum').val().trim().replace(" ", "").toUpperCase()) === false) {
+            //     console.log('checkExistingPlateNumber() true');
+            // }
+            // else {
+            //     console.log('checkExistingPlateNumber() false');
+            // }
+            
+            
+            if(a === null || b === null || c === null) {
+                Swal.fire(
+                    'Error:',
+                    'You must provide necessary images of the vehicle.',
+                    'error'
+                );
             }
             else {
-                let fileNameFront = localStorage.getItem("vehicle-front-filename");
-                let fileNameSide = localStorage.getItem("vehicle-side-filename");
-                let fileNameRear = localStorage.getItem("vehicle-rear-filename");
-                let vehicle_front = [localStorage.getItem("vehicle-front").replace(/^data:image\/(png|jpeg);base64,/, ""), 
-                "vehicleFront"+fileNameFront.substring(fileNameFront.lastIndexOf(".")), localStorage.getItem("vehicle-front-filetype")];
-                let vehicle_side = [localStorage.getItem("vehicle-side").replace(/^data:image\/(png|jpeg);base64,/, ""), 
-                "vehicleSide"+fileNameSide.substring(fileNameSide.lastIndexOf(".")), localStorage.getItem("vehicle-side-filetype")];
-                let vehicle_rear = [localStorage.getItem("vehicle-rear").replace(/^data:image\/(png|jpeg);base64,/, ""), 
-                "vehicleRear"+fileNameRear.substring(fileNameRear.lastIndexOf(".")), localStorage.getItem("vehicle-rear-filetype")];
-                
-                const storage = _src_index__WEBPACK_IMPORTED_MODULE_0__.storage;
-                let blobVehicleFront, blobVehicleSide, blobVehicleRear;
-                blobVehicleFront = base64ToBlob(vehicle_front[0], vehicle_front[2]);  
-                blobVehicleSide = base64ToBlob(vehicle_side[0], vehicle_side[2]);  
-                blobVehicleRear = base64ToBlob(vehicle_rear[0], vehicle_rear[2]);  
-            
-                const metadataFront = { contentType: vehicle_front[2], };
-                const metadataSide = { contentType: vehicle_side[2], };
-                const metadataRear = { contentType: vehicle_rear[2], };
-            
-                const storageRef1 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(storage, `vehicle-information/${userId}/${vehicleLength}/${vehicle_front[1]}`);
-                const storageRef2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(storage, `vehicle-information/${userId}/${vehicleLength}/${vehicle_side[1]}`);
-                const storageRef3 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(storage, `vehicle-information/${userId}/${vehicleLength}/${vehicle_rear[1]}`);
-                
-                const uploadTask1 = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUploadBytesResumable(storageRef1, blobVehicleFront, metadataFront);
-                const uploadTask2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUploadBytesResumable(storageRef2, blobVehicleSide, metadataSide);
-                const uploadTask3 = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUploadBytesResumable(storageRef3, blobVehicleRear, metadataRear);
-                
-                console.log('uploadTask1:', uploadTask1);
-                console.log('uploadTask2:', uploadTask2);
-                console.log('uploadTask3:', uploadTask3);
-                // Upload image (front view)
-                var promise1 = uploadTask1.on('state_changed', (snapshot) => {
-                        // Progress of fileupload
-                        const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                        console.log("Uploading vehicle front.");
-                        console.log('Upload is ' + progress + '% done');    //progress of upload
-                    }, 
-                    (error) => {
-                        // Handle unsuccessful uploads
-                        console.log(error);
-                    }, 
-                    (success) => {
-                        // If successful, do this.
-                        _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(uploadTask1.snapshot.ref).then((downloadURL) => {
-                            console.log('File available at', downloadURL);
-                            console.log(typeof(downloadURL))
-                            imageLinks.push(downloadURL); //append the user link (vehicle)
-                            // localStorage.setItem('uploadImage1', downloadURL);
-                        });
-                    } //end of fire.myGetDownloadURL
-                ); //end of on method
-                var promise2 = uploadTask2.on('state_changed', (snapshot) => {
-                        const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                        console.log("Uploading vehicle side.");
-                        console.log('Upload is ' + progress + '% done');    //progress of upload
-                    }, 
-                    (error) => {
-                        // Handle unsuccessful uploads
-                        console.log(error);
-                    }, 
-                    (success) => {
-                        _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(uploadTask2.snapshot.ref).then((downloadURL) => {
-                            console.log('File available at', downloadURL);
-                            console.log(typeof(downloadURL))
-                            imageLinks.push(downloadURL); //append the user link (vehicle)
-                        });
-                    } //end of fire.myGetDownloadURL
-                ); //end of on method  
-                var promise3 = uploadTask3.on('state_changed', (snapshot) => {
-                        const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                        console.log("Uploading vehicle rear.");
-                        console.log('Upload is ' + progress + '% done');    //progress of upload 
-                    }, 
-                    (error) => {
-                        // Handle unsuccessful uploads
-                        console.log(error);
-                    }, 
-                    (success) => {
-                        _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(uploadTask3.snapshot.ref).then((downloadURL) => {
-                            console.log('File available at', downloadURL);
-                            console.log(typeof(downloadURL));
-                            imageLinks.push(downloadURL); //append the user link (vehicle)
-                        });
-                    } //end of fire.myGetDownloadURL
-                ); //end of on method
-                
-                //Wait for everything to be uploaded.
-                Promise.all([uploadTask1, uploadTask2, uploadTask3]).then((output) => {
-                    // console.log("All uploaded done.")
-                    // console.log(output);
-                    
-                    // console.log("imageLinks:", imageLinks);
+                console.log('all done!');
+                console.log('Submitted');
 
-                    generateVehicleQRCode(userId, plateNumber, 500, vehicleLength, model, imageLinks);
-                    // console.log("generatedQRCodeLink:", generatedQRCodeLink);
-                });
-                console.log("BeforeReturn_Image Links: ", imageLinks);
+                console.log('vehicle-model: ', $('#vehicle-model').val().trim().toUpperCase())
+                console.log('vehicle-platenum: ', $('#vehicle-platenum').val().trim().toUpperCase())
+                console.log('currentUser: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
+
+                const model = $('#vehicle-model').val();
+                const plateNum = $('#vehicle-platenum').val();
+                const vehicleLength = JSON.parse(localStorage.vehicleInformation)['vehicle_length'];
+
+                // Create a new vehicle image data.
+                createVehicleImageData(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid, vehicleLength, plateNum, model);
+                // generateVehicleQRCode(fire.auth.currentUser.uid, plateNum, 500, vehicleLength+1);
             }
-            // Add the new vehicle information
-            // const promiseVehicle = fire.doUpdateDoc(fire.myDoc(fire.db, "vehicle-information", userId), {
-            // [plateNumber.replace(" ", "")]: {
-            //     qrCode: "qr-code-link",
-            //     images: imageLinks,
-            //     model: [model],
-            //     use_types: 'Private',
-            //     createdAt: fire.getServerTimestamp()
-            // },
-            // }).then(() => {
-            //     console.log("Vehicle Information was added in the collection");
-            // });
+
+        }
+        // return Object.keys(docSnap.data());
+    }
+
+    async function createVehicleImageData(userId, vehicleLength, plateNumber, model) {
+        let imageLinks = [];
+        vehicleLength += 1;
+        // let generatedQRCodeLink = fire.exportGenerateVehicleQRCode(userId, plateNumber, 500, vehicleLength);
+
+
+        if(localStorage.getItem("vehicle-front") === null || localStorage.getItem("vehicle-side") === null || localStorage.getItem("vehicle-rear") === null) {
+            console.log("Skipped, no image was uploaded");
+        }
+        else {
+            let fileNameFront = localStorage.getItem("vehicle-front-filename");
+            let fileNameSide = localStorage.getItem("vehicle-side-filename");
+            let fileNameRear = localStorage.getItem("vehicle-rear-filename");
+            let vehicle_front = [localStorage.getItem("vehicle-front").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+            "vehicleFront"+fileNameFront.substring(fileNameFront.lastIndexOf(".")), localStorage.getItem("vehicle-front-filetype")];
+            let vehicle_side = [localStorage.getItem("vehicle-side").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+            "vehicleSide"+fileNameSide.substring(fileNameSide.lastIndexOf(".")), localStorage.getItem("vehicle-side-filetype")];
+            let vehicle_rear = [localStorage.getItem("vehicle-rear").replace(/^data:image\/(png|jpeg);base64,/, ""), 
+            "vehicleRear"+fileNameRear.substring(fileNameRear.lastIndexOf(".")), localStorage.getItem("vehicle-rear-filetype")];
             
-
-            // increment the vehicle length
-            // fire.doUpdateDoc(fire.myDoc(db, "vehicle-information", userId), {
-            //     vehicle_length: fire.doIncrement(1)
-            // });
-        } // end of function declaration
-
-        async function generateVehicleQRCode(userUID, plateNumber, mySize, index, model, imageLinks) {
-            // Check if the index parameter is given, if not then given it a default value
-            if (typeof(index)==='undefined') index = "1";
-            let generatedOutput;
-            let strDownloadURL = "";
-
-            const generateQRCode = (text, size) => {
-                const qrcode = new QRCode('qrcode', {
-                    text: text,
-                    width: size,
-                    height: size,
-                    colorDark : "#000000",
-                    colorLight : "#ffffff",
-                    correctLevel : QRCode.CorrectLevel.H,
-                    quietZone: true
-                });
-                generatedOutput = qrcode._oDrawing._elCanvas.toDataURL("image/png");
-            };
-        
-            let qrCodeDataObject = {
-                'uid': userUID,
-                'plate_number': plateNumber.replace(" ", "")
-            }
-        
-            await generateQRCode(JSON.stringify(qrCodeDataObject), mySize);
             const storage = _src_index__WEBPACK_IMPORTED_MODULE_0__.storage;
-            const storageRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(storage, `vehicle-information/${userUID}/${index}/qrCode0.PNG`);
-            let qrCodeBlob = await base64ToBlob((generatedOutput.replace(/^data:image\/(png|jpeg);base64,/, "")), "image/png");
-            const uploadTask = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUploadBytesResumable(storageRef, qrCodeBlob, "image/png");
+            let blobVehicleFront, blobVehicleSide, blobVehicleRear;
+            blobVehicleFront = base64ToBlob(vehicle_front[0], vehicle_front[2]);  
+            blobVehicleSide = base64ToBlob(vehicle_side[0], vehicle_side[2]);  
+            blobVehicleRear = base64ToBlob(vehicle_rear[0], vehicle_rear[2]);  
+        
+            const metadataFront = { contentType: vehicle_front[2], };
+            const metadataSide = { contentType: vehicle_side[2], };
+            const metadataRear = { contentType: vehicle_rear[2], };
+        
+            const storageRef1 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(storage, `vehicle-information/${userId}/${vehicleLength}/${vehicle_front[1]}`);
+            const storageRef2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(storage, `vehicle-information/${userId}/${vehicleLength}/${vehicle_side[1]}`);
+            const storageRef3 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(storage, `vehicle-information/${userId}/${vehicleLength}/${vehicle_rear[1]}`);
             
-            uploadTask.on('state_changed', 
-                async (snapshot) => {
+            const uploadTask1 = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUploadBytesResumable(storageRef1, blobVehicleFront, metadataFront);
+            const uploadTask2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUploadBytesResumable(storageRef2, blobVehicleSide, metadataSide);
+            const uploadTask3 = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUploadBytesResumable(storageRef3, blobVehicleRear, metadataRear);
+            
+            console.log('uploadTask1:', uploadTask1);
+            console.log('uploadTask2:', uploadTask2);
+            console.log('uploadTask3:', uploadTask3);
+            // Upload image (front view)
+            var promise1 = uploadTask1.on('state_changed', (snapshot) => {
                     // Progress of fileupload
                     const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                    console.log("Uploading qr code vehicle");
+                    console.log("Uploading vehicle front.");
                     console.log('Upload is ' + progress + '% done');    //progress of upload
                 }, 
                 (error) => {
@@ -41569,96 +41343,211 @@ jQuery(function() {
                 }, 
                 (success) => {
                     // If successful, do this.
-                    _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        console.log('QR Code - File available at', downloadURL);
-                        // strDownloadURL = downloadURL;
+                    _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(uploadTask1.snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                        console.log(typeof(downloadURL))
+                        imageLinks.push(downloadURL); //append the user link (vehicle)
+                        // localStorage.setItem('uploadImage1', downloadURL);
+                    });
+                } //end of fire.myGetDownloadURL
+            ); //end of on method
+            var promise2 = uploadTask2.on('state_changed', (snapshot) => {
+                    const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    console.log("Uploading vehicle side.");
+                    console.log('Upload is ' + progress + '% done');    //progress of upload
+                }, 
+                (error) => {
+                    // Handle unsuccessful uploads
+                    console.log(error);
+                }, 
+                (success) => {
+                    _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(uploadTask2.snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                        console.log(typeof(downloadURL))
+                        imageLinks.push(downloadURL); //append the user link (vehicle)
+                    });
+                } //end of fire.myGetDownloadURL
+            ); //end of on method  
+            var promise3 = uploadTask3.on('state_changed', (snapshot) => {
+                    const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    console.log("Uploading vehicle rear.");
+                    console.log('Upload is ' + progress + '% done');    //progress of upload 
+                }, 
+                (error) => {
+                    // Handle unsuccessful uploads
+                    console.log(error);
+                }, 
+                (success) => {
+                    _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(uploadTask3.snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                        console.log(typeof(downloadURL));
+                        imageLinks.push(downloadURL); //append the user link (vehicle)
+                    });
+                } //end of fire.myGetDownloadURL
+            ); //end of on method
+            
+            //Wait for everything to be uploaded.
+            Promise.all([uploadTask1, uploadTask2, uploadTask3]).then((output) => {
+                // console.log("All uploaded done.")
+                // console.log(output);
+                
+                // console.log("imageLinks:", imageLinks);
 
-                        console.log('Check for qr code link')
-                        // Add the new vehicle information
-                        const promiseVehicle = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUpdateDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", userUID), {
-                        [plateNumber.replace(" ", "")]: {
-                            qrCode: downloadURL,
-                            images: imageLinks,
-                            model: [model],
-                            use_types: 'Private',
-                            createdAt: _src_index__WEBPACK_IMPORTED_MODULE_0__.getServerTimestamp(),
-                            classification: null,
-                            manufacturer: null,
-                            color: null,
-                            year: null,
-                            license_code: null,
-                            code_category: null,
-                            remarks: null,
-                        },
-                        }).then(() => {
-                            console.log("Vehicle Information was added in the collection");
-                        });
-                        
-                        // increment the vehicle length
-                        _src_index__WEBPACK_IMPORTED_MODULE_0__.doUpdateDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", userUID), {
-                            vehicle_length: _src_index__WEBPACK_IMPORTED_MODULE_0__.doIncrement(1)
-                        }).then((success) => {
-                            _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid), (doc) => {
-                                let vehicleInformation = {...doc.data()};
-                                localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation));
-                                window.location.reload();
-                            });
+                generateVehicleQRCode(userId, plateNumber, 500, vehicleLength, model, imageLinks);
+                // console.log("generatedQRCodeLink:", generatedQRCodeLink);
+            });
+            console.log("BeforeReturn_Image Links: ", imageLinks);
+        }
+        // Add the new vehicle information
+        // const promiseVehicle = fire.doUpdateDoc(fire.myDoc(fire.db, "vehicle-information", userId), {
+        // [plateNumber.replace(" ", "")]: {
+        //     qrCode: "qr-code-link",
+        //     images: imageLinks,
+        //     model: [model],
+        //     use_types: 'Private',
+        //     createdAt: fire.getServerTimestamp()
+        // },
+        // }).then(() => {
+        //     console.log("Vehicle Information was added in the collection");
+        // });
+        
+
+        // increment the vehicle length
+        // fire.doUpdateDoc(fire.myDoc(db, "vehicle-information", userId), {
+        //     vehicle_length: fire.doIncrement(1)
+        // });
+    } // end of function declaration
+
+    async function generateVehicleQRCode(userUID, plateNumber, mySize, index, model, imageLinks) {
+        // Check if the index parameter is given, if not then given it a default value
+        if (typeof(index)==='undefined') index = "1";
+        let generatedOutput;
+        let strDownloadURL = "";
+
+        const generateQRCode = (text, size) => {
+            const qrcode = new QRCode('qrcode', {
+                text: text,
+                width: size,
+                height: size,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H,
+                quietZone: true
+            });
+            generatedOutput = qrcode._oDrawing._elCanvas.toDataURL("image/png");
+        };
+    
+        let qrCodeDataObject = {
+            'uid': userUID,
+            'plate_number': plateNumber.replace(" ", "")
+        }
+    
+        await generateQRCode(JSON.stringify(qrCodeDataObject), mySize);
+        const storage = _src_index__WEBPACK_IMPORTED_MODULE_0__.storage;
+        const storageRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(storage, `vehicle-information/${userUID}/${index}/qrCode0.PNG`);
+        let qrCodeBlob = await base64ToBlob((generatedOutput.replace(/^data:image\/(png|jpeg);base64,/, "")), "image/png");
+        const uploadTask = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUploadBytesResumable(storageRef, qrCodeBlob, "image/png");
+        
+        uploadTask.on('state_changed', 
+            async (snapshot) => {
+                // Progress of fileupload
+                const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                console.log("Uploading qr code vehicle");
+                console.log('Upload is ' + progress + '% done');    //progress of upload
+            }, 
+            (error) => {
+                // Handle unsuccessful uploads
+                console.log(error);
+            }, 
+            (success) => {
+                // If successful, do this.
+                _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('QR Code - File available at', downloadURL);
+                    // strDownloadURL = downloadURL;
+
+                    console.log('Check for qr code link')
+                    // Add the new vehicle information
+                    const promiseVehicle = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUpdateDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", userUID), {
+                    [plateNumber.replace(" ", "")]: {
+                        qrCode: downloadURL,
+                        images: imageLinks,
+                        model: [model],
+                        use_types: 'Private',
+                        createdAt: _src_index__WEBPACK_IMPORTED_MODULE_0__.getServerTimestamp(),
+                        classification: null,
+                        manufacturer: null,
+                        color: null,
+                        year: null,
+                        license_code: null,
+                        code_category: null,
+                        remarks: null,
+                    },
+                    }).then(() => {
+                        console.log("Vehicle Information was added in the collection");
+                    });
+                    
+                    // increment the vehicle length
+                    _src_index__WEBPACK_IMPORTED_MODULE_0__.doUpdateDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", userUID), {
+                        vehicle_length: _src_index__WEBPACK_IMPORTED_MODULE_0__.doIncrement(1)
+                    }).then((success) => {
+                        _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid), (doc) => {
+                            let vehicleInformation = {...doc.data()};
+                            localStorage.setItem("vehicleInformation", JSON.stringify(vehicleInformation));
+                            window.location.reload();
                         });
                     });
-                } //end of getDownloadURL
-            ); //end of uploadTask
+                });
+            } //end of getDownloadURL
+        ); //end of uploadTask
+        
+
+        // Promise.all([uploadTask]).then((output) => {
             
+        // });
+    }
 
-            // Promise.all([uploadTask]).then((output) => {
-                
-            // });
-        }
+    // function addNewVehicleInformation() {
+    //     console.log('Check for qr code link')
+    //     // Add the new vehicle information
+    //     const promiseVehicle = fire.doUpdateDoc(fire.myDoc(fire.db, "vehicle-information", userUID), {
+    //     [plateNumber.replace(" ", "")]: {
+    //         qrCode: strDownloadURL,
+    //         images: imageLinks,
+    //         model: [model],
+    //         use_types: 'Private',
+    //         createdAt: fire.getServerTimestamp()
+    //     },
+    //     }).then(() => {
+    //         console.log("Vehicle Information was added in the collection");
+    //     });
+        
+    //     // increment the vehicle length
+    //     fire.doUpdateDoc(fire.myDoc(fire.db, "vehicle-information", userUID), {
+    //         vehicle_length: fire.doIncrement(1)
+    //     }).then((success) => {
+    //         // window.location.reload();
+    //     });
+    // }
+    function base64ToBlob(base64, mime) {
+        mime = mime || '';
+        var sliceSize = 1024;
+        var byteChars = window.atob(base64);
+        var byteArrays = [];
 
-        // function addNewVehicleInformation() {
-        //     console.log('Check for qr code link')
-        //     // Add the new vehicle information
-        //     const promiseVehicle = fire.doUpdateDoc(fire.myDoc(fire.db, "vehicle-information", userUID), {
-        //     [plateNumber.replace(" ", "")]: {
-        //         qrCode: strDownloadURL,
-        //         images: imageLinks,
-        //         model: [model],
-        //         use_types: 'Private',
-        //         createdAt: fire.getServerTimestamp()
-        //     },
-        //     }).then(() => {
-        //         console.log("Vehicle Information was added in the collection");
-        //     });
-            
-        //     // increment the vehicle length
-        //     fire.doUpdateDoc(fire.myDoc(fire.db, "vehicle-information", userUID), {
-        //         vehicle_length: fire.doIncrement(1)
-        //     }).then((success) => {
-        //         // window.location.reload();
-        //     });
-        // }
-        function base64ToBlob(base64, mime) {
-            mime = mime || '';
-            var sliceSize = 1024;
-            var byteChars = window.atob(base64);
-            var byteArrays = [];
-
-            for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
-                var slice = byteChars.slice(offset, offset + sliceSize);
-                var byteNumbers = new Array(slice.length);
-                for (var i = 0; i < slice.length; i++) {
-                    byteNumbers[i] = slice.charCodeAt(i);
-                }
-                
-                var byteArray = new Uint8Array(byteNumbers);
-                byteArrays.push(byteArray);
+        for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+            var slice = byteChars.slice(offset, offset + sliceSize);
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
             }
-
-            return new Blob(byteArrays, {type: mime});
+            
+            var byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
         }
-        
-        
-    }); //end of JQuery submit event
-    
+
+        return new Blob(byteArrays, {type: mime});
+    }
+
     // Linkages
     $('#add-new-linkages').on('click', () => {
         $("#add-linkages-modal").modal({
@@ -41769,28 +41658,10 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
         if (user) {
             // Display user profile picture.
-            const profilePicture = displayProfile(user.uid).then(evt => { 
-                console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser)
-                console.log('evt.profilePicture: ', evt);
 
-                if(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL !== null) {
-                    document.querySelector("#profile-picture").setAttribute('src', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.photoURL);
-                }
-                else {
-                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
-                }
-
-                // Set the fullname
-                document.querySelector(".fullname").textContent = evt[0];
-
-                // Set the position of user. (NAP or Faculty)
-                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
-                    document.querySelector(".category").textContent = evt[1];
-                }
-                else {
-                    document.querySelector(".category").textContent = "-";
-                }
-            });
+            document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
+            document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
+            document.querySelector(".category").textContent = localStorage.getItem("profile-category");
             showVehicleList(vehicleInformation);  // display the list
             showLinkagesList(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid); // display the linkages
             clickableVehicleList();
@@ -41799,20 +41670,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             window.location = "../login.html";
         }
     });
-    async function displayProfile(userUID) {
-        const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
-        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docAccountActivity);
-        if (docVSnap.exists()) {
-            const position = docVSnap.data()["category"];
-
-            console.log("position: ", position);
-            console.log("position: ", typeof(position) !== "undefined" || position !== null);
-            if(typeof(position) !== "undefined" || position !== null) {
-                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
-            }
-        }
-        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
-    }
     
     localStorage.removeItem("vehicle-front");
     localStorage.removeItem("vehicle-front-filetype");
@@ -41887,8 +41744,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     document.querySelector('.personal-info-plate').innerText = vehicleKeys[index];
                     
                     // First time of execution?
-                    if(!isFirstTime) {
-                        console.log("First time of execution.")
+                    // if(!isFirstTime) {
+                    //     console.log("First time of execution.")
                         // Classification
                         if(typeof(preSelectedVehicleKey["classification"]) === 'undefined' || preSelectedVehicleKey["classification"] === null) {
                             preSelectedVehicleKey["classification"] = "Unspecified.";
@@ -41963,7 +41820,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                         document.querySelector('#license-code').innerText = preSelectedVehicleKey["license_code"];
                         document.querySelector('#my-vehicle-categories').innerText = preSelectedVehicleKey["code_category"];
                         isFirstTime = true;
-                    } //end of isFirstTime
+                    // } //end of isFirstTime
 
                     iterator += 1;
                     // if(x === 1) { //will be used for placeholder
@@ -41991,8 +41848,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             let linkagesList = {...doc.data()};
             let listLinkagesKeys = Object.keys(linkagesList);
             let linkagesDataLI = ``;
-
-
             
             if(!doc.exists()) {
                 console.log('There are no linked vehicle data.')
@@ -42000,13 +41855,15 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             else {
                 if(Object.keys(linkagesList).length) {
                     listLinkagesKeys.forEach(async (data, index) => {
+
+                        console.log("listLinkagesKeys: ", listLinkagesKeys)
                         let ownerFullName = undefined;
                         let ownerVehicleModel = undefined;
-                        await getAccountInformationOwner(userUID).then(evt => {
+                        await getAccountInformationOwner(linkagesList[data]["orig_uid"]).then(evt => {
                             // console.log('event: ', evt)
                             ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
                         });
-                        await getVehicleInformationModel(userUID).then(evt => {
+                        await getVehicleInformationModel(linkagesList[data]["orig_uid"]).then(evt => {
                             console.log('event: ', evt, data)
                             ownerVehicleModel = evt[data]['model'][0];
                         });
@@ -42020,7 +41877,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                                 <button data-key="${data}" class="remove-linkages">Remove</button>
                             </td>
                         </tr>`;
-                        console.log("linkages: ", linkagesDataLI, index);
+                        // console.log("linkages: ", linkagesDataLI, index);
                         if(index+1 === Object.keys(linkagesList).length) {
                             // Set the linkages data.
                             $(".linkages-data-body").html(linkagesDataLI);
@@ -42202,8 +42059,16 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
     function addRemoveLinkagesButton() {
         document.querySelectorAll('.remove-linkages').forEach((element) => {
-            element.addEventListener('click', (e) => {
-                console.log(element.getAttribute('data-key'));
+            element.addEventListener('click', async (e) => {
+                const dataKey = element.getAttribute('data-key');
+                await _src_index__WEBPACK_IMPORTED_MODULE_0__.doUpdateDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "linkages", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid), {
+                    [dataKey]: _src_index__WEBPACK_IMPORTED_MODULE_0__.doDeleteField(),
+                }).then((e) => {
+                    swal("Success!", "Linked vehicle deleted.", "success").then(() => {
+                        window.location.href = window.location.href; //reload a page in JS
+                        location.reload();
+                    });
+                });
             });
         });
     }
@@ -42309,26 +42174,28 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     //     console.log("college_option: ", e);
     // });
 
-
-    // GANITO YUNG SA UPDATE
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdate(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "security", myId), {
-        [`USER_ID.isDisabled`]: false,
-    });
-    _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdate(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "security", myId), {
-        [`USER_ID.isDisabled`]: true,
-    });
-
     function updateVehicleInformation(myId, myObject, myForm) {
         console.log("vehicle updated: ", myObject);
         const docRefAccount = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", myId);
         
         _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefAccount, myObject)
         .then(() => {    
-            swal("Success!", "Vehicle information updated.", "success").then(() => {
+
+            Swal.fire(
+                'Success!',
+                'Vehicle information updated.',
+                'success'
+            ).then(() => {
                 myForm.reset();
                 window.location.href = window.location.href; //reload a page in JS
                 location.reload();
             });
+
+            // swal("Success!", "Vehicle information updated.", "success").then(() => {
+            //     myForm.reset();
+            //     window.location.href = window.location.href; //reload a page in JS
+            //     location.reload();
+            // });
         });
     }
 
@@ -42473,9 +42340,9 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                         const linkUserScannedPlateNum = document.querySelector('.guest-platenum-caption-value');
                         const linkUserScannedVehicleModel = document.querySelector('.guest-model-caption-value');
                         // const linkUserScannedVehicleOwner = document.querySelector('.guest-fullname-caption-value');
-                        currentPlateNumberKeysRegistered = doc.data()[plateNumber]
+                        currentPlateNumberKeysRegistered = doc.data()[plateNumber];
         
-                        console.log('currentPlateNumberKeysRegistered', currentPlateNumberKeysRegistered)
+                        console.log('currentPlateNumberKeysRegistered', currentPlateNumberKeysRegistered);
                         linkUserScannedUserUID.innerText = (scannedQRUserUID);
                         linkUserScannedDate.innerText = (new Date());
                         linkUserScannedPlateNum.innerText = (plateNumber);
@@ -42563,7 +42430,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 colorDark : "#000000",
                 colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.H,
-                quietZone: true
+                addQuietZone: true
             });
             generatedOutput = qrcode._oDrawing._elCanvas.toDataURL("image/png");
         };
@@ -42608,6 +42475,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                                 'account_ref': _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, '/account-information/' + scannedQRUserUID),
                                 'vehicle_ref': _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, '/vehicle-information/' + scannedQRUserUID),
                                 'qr': downloadURL,
+                                'orig_uid': scannedQRUserUID
                             }
                         }).then((success) => {
                             console.log("Done");
@@ -42700,11 +42568,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         
                                 let referredVehicleInfo = docSnap1.data()[tempPlateNumber];
                                 console.log(true);
-        
-                                // listOfLinkedData[data.plate_number] = {
-                                //     "model": referredVehicleInfo.model[0],
-                                //     "owner": docSnap2.exists() ? `${docSnap2.data()['last_name']}, ${docSnap2.data()['first_name']} ${docSnap2.data()['middle_name'][0]}.` : 'Uknown owner.',
-                                //     "registration_date": referredVehicleInfo.createdAt,
                                 // };
         
                                 listOfLinkedDataTable += `
@@ -42769,7 +42632,13 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         .catch(e => {
             // setResult(fileQrResult, { data: e || 'No QR code found.' })
 
-            swal("Oops", e , "error");
+            // swal("Oops", e , "error");
+            console.log("linkage qr error: ", e)
+            Swal.fire(
+                'Oops!',
+                "The user may have submiited an forfeited QR code. Please upload another one.",
+                'error'
+            );
             // console.info('No QR code found.', e)
         });
     }

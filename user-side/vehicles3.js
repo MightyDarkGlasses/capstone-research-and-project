@@ -14,28 +14,10 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     fire.getOnAuthStateChanged(fire.auth, (user) => {
         if (user) {
             // Display user profile picture.
-            const profilePicture = displayProfile(user.uid).then(evt => { 
-                console.log("current user: ", fire.auth.currentUser)
-                console.log('evt.profilePicture: ', evt);
+            document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
+            document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
+            document.querySelector(".category").textContent = localStorage.getItem("profile-category");
 
-                if(fire.auth.currentUser.photoURL !== null) {
-                    document.querySelector("#profile-picture").setAttribute('src', fire.auth.currentUser.photoURL);
-                }
-                else {
-                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
-                }
-
-                // Set the fullname
-                document.querySelector(".fullname").textContent = evt[0];
-
-                // Set the position of user. (NAP or Faculty)
-                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
-                    document.querySelector(".category").textContent = evt[1];
-                }
-                else {
-                    document.querySelector(".category").textContent = "-";
-                }
-            });
             showVehicleList(vehicleInformation);  // display the list
             showLinkagesList(fire.auth.currentUser.uid); // display the linkages
             clickableVehicleList();
@@ -44,20 +26,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             window.location = "../login.html";
         }
     });
-    async function displayProfile(userUID) {
-        const docAccountActivity = fire.myDoc(fire.db, "account-information", userUID);
-        const docVSnap = await fire.myGetDoc(docAccountActivity);
-        if (docVSnap.exists()) {
-            const position = docVSnap.data()["category"];
-
-            console.log("position: ", position);
-            console.log("position: ", typeof(position) !== "undefined" || position !== null);
-            if(typeof(position) !== "undefined" || position !== null) {
-                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
-            }
-        }
-        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
-    }
     
     localStorage.removeItem("vehicle-front");
     localStorage.removeItem("vehicle-front-filetype");
@@ -132,8 +100,8 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     document.querySelector('.personal-info-plate').innerText = vehicleKeys[index];
                     
                     // First time of execution?
-                    if(!isFirstTime) {
-                        console.log("First time of execution.")
+                    // if(!isFirstTime) {
+                    //     console.log("First time of execution.")
                         // Classification
                         if(typeof(preSelectedVehicleKey["classification"]) === 'undefined' || preSelectedVehicleKey["classification"] === null) {
                             preSelectedVehicleKey["classification"] = "Unspecified.";
@@ -208,7 +176,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                         document.querySelector('#license-code').innerText = preSelectedVehicleKey["license_code"];
                         document.querySelector('#my-vehicle-categories').innerText = preSelectedVehicleKey["code_category"];
                         isFirstTime = true;
-                    } //end of isFirstTime
+                    // } //end of isFirstTime
 
                     iterator += 1;
                     // if(x === 1) { //will be used for placeholder
@@ -236,8 +204,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             let linkagesList = {...doc.data()};
             let listLinkagesKeys = Object.keys(linkagesList);
             let linkagesDataLI = ``;
-
-
             
             if(!doc.exists()) {
                 console.log('There are no linked vehicle data.')
@@ -245,13 +211,15 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             else {
                 if(Object.keys(linkagesList).length) {
                     listLinkagesKeys.forEach(async (data, index) => {
+
+                        console.log("listLinkagesKeys: ", listLinkagesKeys)
                         let ownerFullName = undefined;
                         let ownerVehicleModel = undefined;
-                        await getAccountInformationOwner(userUID).then(evt => {
+                        await getAccountInformationOwner(linkagesList[data]["orig_uid"]).then(evt => {
                             // console.log('event: ', evt)
                             ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
                         });
-                        await getVehicleInformationModel(userUID).then(evt => {
+                        await getVehicleInformationModel(linkagesList[data]["orig_uid"]).then(evt => {
                             console.log('event: ', evt, data)
                             ownerVehicleModel = evt[data]['model'][0];
                         });
@@ -265,7 +233,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                                 <button data-key="${data}" class="remove-linkages">Remove</button>
                             </td>
                         </tr>`;
-                        console.log("linkages: ", linkagesDataLI, index);
+                        // console.log("linkages: ", linkagesDataLI, index);
                         if(index+1 === Object.keys(linkagesList).length) {
                             // Set the linkages data.
                             $(".linkages-data-body").html(linkagesDataLI);
@@ -447,8 +415,16 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
     function addRemoveLinkagesButton() {
         document.querySelectorAll('.remove-linkages').forEach((element) => {
-            element.addEventListener('click', (e) => {
-                console.log(element.getAttribute('data-key'));
+            element.addEventListener('click', async (e) => {
+                const dataKey = element.getAttribute('data-key');
+                await fire.doUpdateDoc(fire.myDoc(fire.db, "linkages", fire.auth.currentUser.uid), {
+                    [dataKey]: fire.doDeleteField(),
+                }).then((e) => {
+                    swal("Success!", "Linked vehicle deleted.", "success").then(() => {
+                        window.location.href = window.location.href; //reload a page in JS
+                        location.reload();
+                    });
+                });
             });
         });
     }
@@ -554,26 +530,28 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     //     console.log("college_option: ", e);
     // });
 
-
-    // GANITO YUNG SA UPDATE
-    fire.myUpdate(fire.myDoc(fire.db, "security", myId), {
-        [`USER_ID.isDisabled`]: false,
-    });
-    fire.myUpdate(fire.myDoc(fire.db, "security", myId), {
-        [`USER_ID.isDisabled`]: true,
-    });
-
     function updateVehicleInformation(myId, myObject, myForm) {
         console.log("vehicle updated: ", myObject);
         const docRefAccount = fire.myDoc(fire.db, "vehicle-information", myId);
         
         fire.myUpdateDoc(docRefAccount, myObject)
         .then(() => {    
-            swal("Success!", "Vehicle information updated.", "success").then(() => {
+
+            Swal.fire(
+                'Success!',
+                'Vehicle information updated.',
+                'success'
+            ).then(() => {
                 myForm.reset();
                 window.location.href = window.location.href; //reload a page in JS
                 location.reload();
             });
+
+            // swal("Success!", "Vehicle information updated.", "success").then(() => {
+            //     myForm.reset();
+            //     window.location.href = window.location.href; //reload a page in JS
+            //     location.reload();
+            // });
         });
     }
 
@@ -718,9 +696,9 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                         const linkUserScannedPlateNum = document.querySelector('.guest-platenum-caption-value');
                         const linkUserScannedVehicleModel = document.querySelector('.guest-model-caption-value');
                         // const linkUserScannedVehicleOwner = document.querySelector('.guest-fullname-caption-value');
-                        currentPlateNumberKeysRegistered = doc.data()[plateNumber]
+                        currentPlateNumberKeysRegistered = doc.data()[plateNumber];
         
-                        console.log('currentPlateNumberKeysRegistered', currentPlateNumberKeysRegistered)
+                        console.log('currentPlateNumberKeysRegistered', currentPlateNumberKeysRegistered);
                         linkUserScannedUserUID.innerText = (scannedQRUserUID);
                         linkUserScannedDate.innerText = (new Date());
                         linkUserScannedPlateNum.innerText = (plateNumber);
@@ -808,7 +786,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 colorDark : "#000000",
                 colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.H,
-                quietZone: true
+                addQuietZone: true
             });
             generatedOutput = qrcode._oDrawing._elCanvas.toDataURL("image/png");
         };
@@ -853,6 +831,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                                 'account_ref': fire.myDoc(fire.db, '/account-information/' + scannedQRUserUID),
                                 'vehicle_ref': fire.myDoc(fire.db, '/vehicle-information/' + scannedQRUserUID),
                                 'qr': downloadURL,
+                                'orig_uid': scannedQRUserUID
                             }
                         }).then((success) => {
                             console.log("Done");
@@ -945,11 +924,6 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         
                                 let referredVehicleInfo = docSnap1.data()[tempPlateNumber];
                                 console.log(true);
-        
-                                // listOfLinkedData[data.plate_number] = {
-                                //     "model": referredVehicleInfo.model[0],
-                                //     "owner": docSnap2.exists() ? `${docSnap2.data()['last_name']}, ${docSnap2.data()['first_name']} ${docSnap2.data()['middle_name'][0]}.` : 'Uknown owner.',
-                                //     "registration_date": referredVehicleInfo.createdAt,
                                 // };
         
                                 listOfLinkedDataTable += `
@@ -1014,7 +988,13 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         .catch(e => {
             // setResult(fileQrResult, { data: e || 'No QR code found.' })
 
-            swal("Oops", e , "error");
+            // swal("Oops", e , "error");
+            console.log("linkage qr error: ", e)
+            Swal.fire(
+                'Oops!',
+                "The user may have submiited an forfeited QR code. Please upload another one.",
+                'error'
+            );
             // console.info('No QR code found.', e)
         });
     }

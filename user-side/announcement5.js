@@ -9,78 +9,15 @@ if(windowLocation.indexOf("user-announcement") > -1) {
     // DISPLAY THE PROFILE PICTURE...
     fire.getOnAuthStateChanged(fire.auth, (user) => {
         if (user) {
-
-            // Display user profile picture.
-            const profilePicture = displayProfile(user.uid).then(evt => { 
-                console.log("current user: ", fire.auth.currentUser)
-                console.log('evt.profilePicture: ', evt);
-
-                if(fire.auth.currentUser.photoURL !== null) {
-                    document.querySelector("#profile-picture").setAttribute('src', fire.auth.currentUser.photoURL);
-                }
-                else {
-                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
-                }
-
-                // Set the fullname
-                document.querySelector(".fullname").textContent = evt[0];
-
-                // Set the position of user. (NAP or Faculty)
-                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
-                    document.querySelector(".category").textContent = evt[1];
-                }
-                else {
-                    document.querySelector(".category").textContent = "-";
-                }
-                
-            });
-            
-            // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
-            console.log('fire auth: ', fire.auth.currentUser.uid);
-
-            // Did we download the file?
-            // console.log("localStorage:", localStorage.getItem("qrCodePlaceholder"));
-            if(localStorage.getItem("qrCodePlaceholder") === null || localStorage.getItem("vehicleInformation") === null) {  
-                getVehicleInformation(docRefVehicle);
-            }
-            else {
-                // console.log("I did the else.")
-                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
-                // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
-
-                vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
-                // console.log('vehicleInformation:', vehi);
-                // displayVehicleDropdownList(vehi);
-                displayVehicleDropdownList(vehi); //display the dropdown ul list, depend on number of vehicle
-                displayLinkagesDropdownList(fire.auth.currentUser.uid);
-                addEventsInList(vehi);  //re-add the events
-
-                // let noQrCode = document.querySelector('.no-qr-code');
-                let yesQRCode = document.querySelector('.yes-qr-code');
-                yesQRCode.style.display = 'flex';
-            }
+            document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
+            document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
+            document.querySelector(".category").textContent = localStorage.getItem("profile-category");
         }
         else {
             window.location = "../login.html";
         }
     });
-    async function displayProfile(userUID) {
-        const docAccountActivity = fire.myDoc(fire.db, "account-information", userUID);
-        const docVSnap = await fire.myGetDoc(docAccountActivity);
-        if (docVSnap.exists()) {
-            const position = docVSnap.data()["category"];
 
-            console.log("position: ", position);
-            console.log("position: ", typeof(position) !== "undefined" || position !== null);
-            if(typeof(position) !== "undefined" || position !== null) {
-                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
-            }
-        }
-        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
-    }
-    
     const colRef = fire.myCollection(fire.db, "announcements");
     const linkagesQuery = fire.doQuery(colRef, fire.doLimit(10));
     const docsSnap = await fire.myGetDocs(linkagesQuery);
@@ -99,7 +36,7 @@ if(windowLocation.indexOf("user-announcement") > -1) {
                 <p>${myData.title}</p>
             </div>
             <div>
-                <p>${myData.posted_on}</p>
+                <p>${myData.createdAt.toDate().toLocaleString()}</p>
                 <div class="dropdown"></div>
             </div>
         </div>
@@ -138,7 +75,7 @@ if(windowLocation.indexOf("user-announcement") > -1) {
             <div>
                 <div class="announcement-priority">${myData.priority}</div>
                 <p class="announcements-headline">${myData.title}</p>
-                <p class="announcements-timestamp">${myData.posted_on}</p>
+                <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
                 <p class="announcements-person">${myData.posted_by}</p>
             </div>
             <div class="annoucements-main-container">

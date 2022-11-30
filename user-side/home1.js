@@ -21,30 +21,48 @@ document.addEventListener('DOMContentLoaded', function() {
         if (user) {
             // Display user profile picture.
             // console.log("Current authenticated user: ", user.uid);
-            const profilePicture = displayProfile(user.uid).then(evt => { 
-                console.log("current user: ", fire.auth.currentUser);
-                console.log('current user uid: ', fire.auth.currentUser.uid);
-                console.log('evt.profilePicture: ', evt);
 
-                if(fire.auth.currentUser.photoURL !== null) {
-                    document.querySelector("#profile-picture").setAttribute('src', fire.auth.currentUser.photoURL);
-                }
-                else {
-                    document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
-                }
 
-                // Set the fullname
-                document.querySelector(".fullname").textContent = evt[0];
+            console.log("profile-picture: ", localStorage.getItem("profile-picture") );
+            if((localStorage.getItem("profile-picture") === null 
+            || localStorage.getItem("profile-category") === null
+            || localStorage.getItem("profile-owner") === null)) {
+                // console.log("false...");
 
-                // Set the position of user. (NAP or Faculty)
-                if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
-                    document.querySelector(".category").textContent = evt[1];
-                }
-                else {
-                    document.querySelector(".category").textContent = "-";
-                }
-                
-            });
+                const profilePicture = displayProfile(user.uid).then(evt => { 
+                    console.log("current user: ", fire.auth.currentUser);
+                    console.log('current user uid: ', fire.auth.currentUser.uid);
+                    console.log('evt.profilePicture: ', evt);
+    
+                    if(fire.auth.currentUser.photoURL !== null) {
+                        document.querySelector("#profile-picture").setAttribute('src', fire.auth.currentUser.photoURL);
+                        localStorage.setItem("profile-picture", fire.auth.currentUser.photoURL);
+                    }
+                    else {
+                        document.querySelector("#profile-picture").setAttribute('src', "bulsu-logo.png");
+                        localStorage.setItem("profile-picture", "bulsu-logo.png");
+                    }
+    
+                    // Set the fullname
+                    document.querySelector(".fullname").textContent = evt[0];
+                    localStorage.setItem("profile-owner", evt[0]);
+    
+                    // Set the position of user. (NAP or Faculty)
+                    if(typeof(evt[1]) !== "undefined" || evt[1] !== null) {
+                        document.querySelector(".category").textContent = evt[1];
+                        localStorage.setItem("profile-category", evt[1]);
+                    }
+                    else {
+                        document.querySelector(".category").textContent = "-";
+                        localStorage.setItem("profile-category", "-");
+                    }
+                });
+            }
+            else {
+                document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
+                document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
+                document.querySelector(".category").textContent = localStorage.getItem("profile-category");
+            }
             
             // fire.deleteUserData("Vut59fOZ1TflIsqbWgkgEzu2phN2");
             
@@ -56,9 +74,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             else {
                 // console.log("I did the else.")
-                myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
-                saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
+
+                if(JSON.parse(localStorage.getItem("qrCodePlaceholder")) === "h") {
+                    myQRImage.setAttribute("src", "bulsu-logo.png");
+                    myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                }
+                else {
+                    myQRImage.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                    myQRImage2.setAttribute("src", JSON.parse(localStorage.getItem("qrCodePlaceholder")));
+                    saveQR.setAttribute("onclick", `downloadImage("${JSON.parse(localStorage.getItem("qrCodePlaceholder"))}")`);
+                }
+
                 // console.log("vehicleInformation:", localStorage.getItem("vehicleInformation"));
 
                 vehi = JSON.parse(localStorage.getItem("vehicleInformation"));
@@ -229,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // console.log('linkagesList', linkagesList, Object.keys(linkagesList).length);
             
             if(!doc.exists()) {
-                console.log('There are no linked vehicle data.')
+                console.log('There are no linked vehicle data.');
             }
             else {
                 if(Object.keys(linkagesList).length) {
@@ -237,11 +263,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         let ownerFullName = undefined;
                         let ownerVehicleModel = undefined;
-                        await getAccountInformationOwner(userUID).then(evt => {
+                        await getAccountInformationOwner(linkagesList[data]["orig_uid"]).then(evt => {
                             // console.log('event: ', evt)
                             ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
                         });
-                        await getVehicleInformationModel(userUID).then(evt => {
+                        await getVehicleInformationModel(linkagesList[data]["orig_uid"]).then(evt => {
                             console.log('event: ', evt, data)
                             ownerVehicleModel = evt[data]['model'][0];
                         });
@@ -261,6 +287,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         node.addEventListener('click', () => {
                             // console.log('linkages clicked: ', linkagesList);
                             // console.log(linkagesList[data].qr);
+
+                            console.log("linkages: ", linkagesList[data].qr);
 
                             myQRImage.setAttribute("src", linkagesList[data].qr);
                             myQRImage2.setAttribute("src", linkagesList[data].qr);
