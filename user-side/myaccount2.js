@@ -3,6 +3,10 @@ import * as fire from "../src/index";
    
 
 let windowLocation = window.location.pathname;
+if(localStorage.getItem("theme") === "light") {
+    document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+    document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+}
 
 //Check if I am on the user-account.html
 if(windowLocation.indexOf("user-account") > -1) {
@@ -193,22 +197,50 @@ if(windowLocation.indexOf("user-account") > -1) {
     });
 
 
+    // Notification, Full Screen, Logout, etc.
+    function topButtons() {        
+        const notif = document.querySelector(".util-icon-notif");
+        const themes = document.querySelector(".util-icon-theme");
+        const fullScreen = document.querySelector(".util-icon-fullscr");
+        const settings = document.querySelector(".util-icon-settings");
+        const logout = document.querySelector(".util-icon-logout");
+        const elem = document.querySelector("html");
 
-    async function displayProfile(userUID) {
-        const docAccountActivity = fire.myDoc(fire.db, "account-information", userUID);
-        const docVSnap = await fire.myGetDoc(docAccountActivity);
-        if (docVSnap.exists()) {
-            const position = docVSnap.data()["category"];
-
-            console.log("position: ", position);
-            console.log("position: ", typeof(position) !== "undefined" || position !== null);
-            if(typeof(position) !== "undefined" || position !== null) {
-                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
+        fullScreen.addEventListener("click", () => {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
             }
-        }
-        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
-    }
+        });
 
+        themes.addEventListener("click", () => {
+            if(localStorage.getItem("theme") === "dark") {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+                localStorage.setItem("theme", "light");
+            }
+            else {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        logout.addEventListener('click', () => {
+            // console.log("this is a test.");
+            // Add activity when user is logged out.
+            fire.addActivity(fire.auth.currentUser.uid, fire.listOfUserLevels[0], fire.listOfPages["auth_login"], fire.listOfActivityContext["user_logout"])
+            .then((success) => {
+                fire.logoutUser();
+                localStorage.clear();
+                window.location = '../login.html';
+            });
+        });
+    }
+    topButtons();
 
     console.log('My Account - Edit Information');
     const auth = fire.auth;

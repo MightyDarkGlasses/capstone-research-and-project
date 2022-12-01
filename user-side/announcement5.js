@@ -5,6 +5,13 @@ import * as fire from "../src/index";
 let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', async () => {
 if(windowLocation.indexOf("user-announcement") > -1) {
+
+    if(localStorage.getItem("theme") === "light") {
+        document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+        document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+        document.querySelector("#system-theme3").setAttribute("href", "user-announcement-light.css");
+    }
+
     console.log('announcement5.js');
     // DISPLAY THE PROFILE PICTURE...
     fire.getOnAuthStateChanged(fire.auth, (user) => {
@@ -17,6 +24,53 @@ if(windowLocation.indexOf("user-announcement") > -1) {
             window.location = "../login.html";
         }
     });
+
+    // Notification, Full Screen, Logout, etc.
+    function topButtons() {        
+        const notif = document.querySelector(".util-icon-notif");
+        const themes = document.querySelector(".util-icon-theme");
+        const fullScreen = document.querySelector(".util-icon-fullscr");
+        const settings = document.querySelector(".util-icon-settings");
+        const logout = document.querySelector(".util-icon-logout");
+        const elem = document.querySelector("html");
+
+        fullScreen.addEventListener("click", () => {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        });
+
+        themes.addEventListener("click", () => {
+            if(localStorage.getItem("theme") === "dark") {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-announcement-light.css");
+                localStorage.setItem("theme", "light");
+            }
+            else {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-announcement.css");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        logout.addEventListener('click', () => {
+            // console.log("this is a test.");
+            // Add activity when user is logged out.
+            fire.addActivity(fire.auth.currentUser.uid, fire.listOfUserLevels[0], fire.listOfPages["auth_login"], fire.listOfActivityContext["user_logout"])
+            .then((success) => {
+                fire.logoutUser();
+                localStorage.clear();
+                window.location = '../login.html';
+            });
+        });
+    }
+    topButtons();
 
     const colRef = fire.myCollection(fire.db, "announcements");
     const linkagesQuery = fire.doQuery(colRef, fire.doLimit(10));
@@ -44,7 +98,7 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         // announcements.insertAdjacentElement('beforeend', toggleAnnouncement);
         $('.announcements').append(toggleAnnouncement)
 
-        let listOfSources = '';
+        let listOfSources = "<br/>" + myData.sources;
         // myData.sources.forEach((data) => {
         //     listOfSources += `<li><a href="${data}">${data}</a></li>`
         // });
@@ -58,45 +112,157 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         console.log(listOfFiles);
 
 
-        // If there are no files uplaoded
-        if(listOfFiles === '') {
-            listOfFiles = "<p style='color: rgba(255,255,255,.75);'><i>No files.</i></p>"
-            listOfFiles = "<p><i>No files.</i></p>"
-        }
+        
         // If there are no sources given
         if(listOfSources === '') {
             listOfSources = "<p style='color: rgba(255,255,255,.75)><i>No sources.</i></p>"
             listOfSources = "<p><i>No sources.</i></p>"
         }
         
-        const toggleAnnouncementDetails =
-        `
-        <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
-            <div>
-                <div class="announcement-priority">${myData.priority}</div>
-                <p class="announcements-headline">${myData.title}</p>
-                <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
-                <p class="announcements-person">${myData.posted_by}</p>
-            </div>
-            <div class="annoucements-main-container">
-                <div class="announcements-container">
-                        <p class="announcements-message">
-                            ${myData.message}
-                        </p>
-                        <ul class="announcements-sources">
-                           ${listOfSources}
-                        </ul>
-                        <ul class="announcements-file">
-                            ${listOfFiles}
-                        </ul>
-                </div>
+
+        const imageRef = fire.myRef(fire.storage, `announcements/thumbnail/${myData.title}/profilepic.jpg`);
+        const fileRef1 = fire.myRef(fire.storage, `announcements/files/${myData.title}/file1`);
+        const fileRef2 = fire.myRef(fire.storage, `announcements/files/${myData.title}/file2`);
+        const fileRef3 = fire.myRef(fire.storage, `announcements/files/${myData.title}/file3`);
+
+        const w = fire.myGetDownloadURL(imageRef).then((url) => {
+            console.log(url);
+            return url;
+        });
+        const x = fire.myGetDownloadURL(fileRef1).then((url) => {
+            console.log("url1", url);
+            return url;
+        });
+        const y = fire.myGetDownloadURL(fileRef2).then((url) => {
+            console.log("url2", url);
+            return url;
+        });
+        const z = fire.myGetDownloadURL(fileRef3).then((url) => {
+            console.log("url3", url);
+            return url;
+        });
+
+        // Isang kuhanan lang...
+        z.then((returnedData) => {
+            console.log("returnedData z: ", returnedData);
+        });
+        
+        // Sabay-sabay
+        Promise.all([w, x, y, z]).then((links) => {
+            console.log("downloadURL: ", links);
+
+            links.forEach((data, index) => {
+                if(data !== null || typeof(data) !== "undefined" || index !== 0) {
+                    listOfFiles += `<li><a href="${data}">File #${index}</a></li>`
+                }
+            });
+
+            // If there are no files uplaoded
+            if(listOfFiles === '') {
+                listOfFiles = "<p style='color: rgba(255,255,255,.75);'><i>No files.</i></p>"
+                listOfFiles = "<p><i>No files.</i></p>"
+            }
+            
+
+            const toggleAnnouncementDetails =
+            `
+            <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
                 <div>
-                    <img class="announcement-thumbnail" src="${myData.thumbnail}" alt="announcement thumbnail">
+                    <div class="announcement-priority">${myData.priority}</div>
+                    <p class="announcements-headline">${myData.title}</p>
+                    <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
+                    <p class="announcements-person">${myData.posted_by}</p>
+                </div>
+                <br/>
+                <div class="annoucements-main-container">
+                    <div class="announcements-container">
+                            <p class="announcements-message">
+                                ${myData.message}
+                            </p>
+                            <ul class="announcements-sources">
+                               ${listOfSources}
+                            </ul>
+                            <ul class="announcements-file">
+                                ${listOfFiles}
+                            </ul>
+                    </div>
+                    <div>
+                        <img class="announcement-thumbnail" src="${links[0]}" alt="announcement thumbnail">
+                    </div>
                 </div>
             </div>
-        </div>
-        `;
-        $('.announcements').append(toggleAnnouncementDetails);
+            `;
+            $('.announcements').append(toggleAnnouncementDetails);
+        });
+
+        
+
+
+
+        // console.log("imageRef: ", imageRef);
+        // fire.myGetDownloadURL(imageRef).then((url) => {
+        //     console.log(url);
+
+        //     const toggleAnnouncementDetails =
+        //     `
+        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
+        //         <div>
+        //             <div class="announcement-priority">${myData.priority}</div>
+        //             <p class="announcements-headline">${myData.title}</p>
+        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
+        //             <p class="announcements-person">${myData.posted_by}</p>
+        //         </div>
+        //         <div class="annoucements-main-container">
+        //             <div class="announcements-container">
+        //                     <p class="announcements-message">
+        //                         ${myData.message}
+        //                     </p>
+        //                     <ul class="announcements-sources">
+        //                        ${listOfSources}
+        //                     </ul>
+        //                     <ul class="announcements-file">
+        //                         <li>${listOfFiles}</li>
+        //                     </ul>
+        //             </div>
+        //             <div>
+        //                 <img class="announcement-thumbnail" src="${url}" alt="announcement thumbnail">
+        //             </div>
+        //         </div>
+        //     </div>
+        //     `;
+        //     $('.announcements').append(toggleAnnouncementDetails);
+        // }).catch((e) => {
+        //     console.error("error: ", e);
+        //     const toggleAnnouncementDetails =
+        //     `
+        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
+        //         <div>
+        //             <div class="announcement-priority">${myData.priority}</div>
+        //             <p class="announcements-headline">${myData.title}</p>
+        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
+        //             <p class="announcements-person">${myData.posted_by}</p>
+        //         </div>
+        //         <div class="annoucements-main-container">
+        //             <div class="announcements-container">
+        //                     <p class="announcements-message">
+        //                         ${myData.message}
+        //                     </p>
+        //                     <ul class="announcements-sources">
+        //                        ${listOfSources}
+        //                     </ul>
+        //                     <ul class="announcements-file">
+        //                         ${listOfFiles}
+        //                     </ul>
+        //             </div>
+        //             <div>
+        //                 <img class="announcement-thumbnail" src="bulsu-logo.png" alt="announcement thumbnail">
+        //             </div>
+        //         </div>
+        //     </div>
+        //     `;
+        //     $('.announcements').append(toggleAnnouncementDetails);
+        // });
+
 
 
         

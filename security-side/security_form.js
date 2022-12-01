@@ -23,17 +23,13 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
         const password = $('#admin_pass').val();
         console.log(email, password);
 
-        fire.doSignInWithEmailAndPassword(fire.auth, email, password)
+        fire.doSignInWithEmailAndPassword(fire.auth, email.trim(), password)
         .then(async (cred) => {
             console.log("User logged in:", fire.auth.currentUser.uid);
             const myRef = fire.myDoc(fire.db, 'security', fire.auth.currentUser.uid); 
             await fire.myGetDoc(myRef).then((snapshot) => { 
                 console.log(snapshot.data(), snapshot.id);
                 const securityInfo = snapshot.data();
-                
-
-    
-
                 if(snapshot.data() === undefined) {
                     $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
                     $('.modal-container-title').html('Error');

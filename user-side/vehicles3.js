@@ -6,10 +6,18 @@ import QrScanner from './script_users/qr-scanner.min.js';
 let vehicleForm = document.querySelector('.vehicle-form');
 
 
+
 let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', () => {
 
 if(windowLocation.indexOf("user-vehicle") > -1) {
+    if(localStorage.getItem("theme") === "light") {
+        document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+        document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+        document.querySelector("#system-theme3").setAttribute("href", "user-account-light.css");
+    }
+
+
     // DISPLAY THE PROFILE PICTURE...
     fire.getOnAuthStateChanged(fire.auth, (user) => {
         if (user) {
@@ -39,12 +47,53 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     localStorage.removeItem("vehicle-rear-filetype");
     localStorage.removeItem("vehicle-rear-filename");
     
-    let logoutUser = document.querySelector('.util-icon-logout');
-    logoutUser.addEventListener('click', () => {
-        console.log("this is a test.");
-        localStorage.clear();
-        window.location = '../index.html';
-    });
+
+    // Notification, Full Screen, Logout, etc.
+    function topButtons() {        
+        const notif = document.querySelector(".util-icon-notif");
+        const themes = document.querySelector(".util-icon-theme");
+        const fullScreen = document.querySelector(".util-icon-fullscr");
+        const settings = document.querySelector(".util-icon-settings");
+        const logout = document.querySelector(".util-icon-logout");
+        const elem = document.querySelector("html");
+
+        fullScreen.addEventListener("click", () => {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        });
+
+        themes.addEventListener("click", () => {
+            if(localStorage.getItem("theme") === "dark") {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-account-light.css");
+                localStorage.setItem("theme", "light");
+            }
+            else {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-account.css");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        logout.addEventListener('click', () => {
+            // console.log("this is a test.");
+            // Add activity when user is logged out.
+            fire.addActivity(fire.auth.currentUser.uid, fire.listOfUserLevels[0], fire.listOfPages["auth_login"], fire.listOfActivityContext["user_logout"])
+            .then((success) => {
+                fire.logoutUser();
+                localStorage.clear();
+                window.location = '../login.html';
+            });
+        });
+    }
+    topButtons();
     
 
     //JSON
@@ -196,12 +245,15 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     }
     function showLinkagesList(userUID) {
         console.log("showLinkagesList")
-        const docRef = fire.myDoc(fire.db, "linkages", userUID);
+        const docRef = fire.myDoc(fire.db, "linkages", userUID.trim());
+        // console.log("showLinkagesList userUID", userUID)
         // const docRef = fire.myDoc(fire.db, "linkages", userUID);
 
         fire.myOnSnapshot(docRef, async (doc) => {
             // console.log("linkages", doc.data(), doc.id);
             let linkagesList = {...doc.data()};
+
+            console.log("linkagesList: ", linkagesList)
             let listLinkagesKeys = Object.keys(linkagesList);
             let linkagesDataLI = ``;
             
@@ -213,14 +265,25 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     listLinkagesKeys.forEach(async (data, index) => {
 
                         console.log("listLinkagesKeys: ", listLinkagesKeys)
+                        console.log("linkagesList[data][orig_uid]: ", linkagesList[data]["orig_uid"]);
+
                         let ownerFullName = undefined;
                         let ownerVehicleModel = undefined;
                         await getAccountInformationOwner(linkagesList[data]["orig_uid"]).then(evt => {
                             // console.log('event: ', evt)
-                            ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
+
+                            // if(typeof(evt['middle_name']) === "undefined") {
+                            //     evt['middle_name'] = " ";
+                            //     ${evt['middle_name'][0]}
+                            // }
+                            ownerFullName = `${evt['last_name']} ${evt['first_name']} `;
                         });
                         await getVehicleInformationModel(linkagesList[data]["orig_uid"]).then(evt => {
                             console.log('event: ', evt, data)
+
+                            if(evt[data]['model'][0] === undefined) {
+                                ownerVehicleModel = "-";
+                            }
                             ownerVehicleModel = evt[data]['model'][0];
                         });
 
@@ -420,7 +483,11 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 await fire.doUpdateDoc(fire.myDoc(fire.db, "linkages", fire.auth.currentUser.uid), {
                     [dataKey]: fire.doDeleteField(),
                 }).then((e) => {
-                    swal("Success!", "Linked vehicle deleted.", "success").then(() => {
+                    Swal.fire(
+                        'Success!',
+                        'Linked vehicle deleted.',
+                        'success'
+                    ).then(() => {
                         window.location.href = window.location.href; //reload a page in JS
                         location.reload();
                     });
@@ -670,7 +737,11 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             else {
                 // Check if the plate number exists on the scanned user id.
                 fire.myOnSnapshot(docRefOthers, (doc) => {
+
+                    console.log("check datta datta: ", doc.data());
                     let currentPlateNumberKeysRegistered = Object.keys(doc.data());
+
+
                     // console.log('doc.data', doc.data())
                     // const fullName = 
                     //     `${doc.data()[plateNumber]['last_name']}, ${doc.data()[plateNumber]['first_name']} ${doc.data()[plateNumber]['middle_name']}`;
@@ -831,7 +902,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                                 'account_ref': fire.myDoc(fire.db, '/account-information/' + scannedQRUserUID),
                                 'vehicle_ref': fire.myDoc(fire.db, '/vehicle-information/' + scannedQRUserUID),
                                 'qr': downloadURL,
-                                'orig_uid': scannedQRUserUID
+                                'orig_uid': scannedQRUserUID,
                             }
                         }).then((success) => {
                             console.log("Done");
@@ -845,6 +916,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                                 'account_ref': fire.myDoc(fire.db, '/account-information/' + scannedQRUserUID),
                                 'vehicle_ref': fire.myDoc(fire.db, '/vehicle-information/' + scannedQRUserUID),
                                 'qr': downloadURL,
+                                'orig_uid': scannedQRUserUID,
                             }
                         }).then((success) => {
                             console.log("Done");
@@ -929,7 +1001,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                                 listOfLinkedDataTable += `
                                     <td>${referredVehicleInfo.model[0]}</td>
                                     <td>${tempPlateNumber}</td>
-                                    <td>${docSnap2.exists() ? `${docSnap2.data()['last_name']}, ${docSnap2.data()['first_name']} ${docSnap2.data()['middle_name'][0]}.` : 'Uknown owner.'}</td>
+                                    <td>${docSnap2.exists() ? `${docSnap2.data()['last_name']}, ${docSnap2.data()['first_name']} ${docSnap2.data()['middle_name'][0]}.` : 'Unknown owner.'}</td>
                                     <td><a href="">X</a></td>`;
         
                                 console.log(listOfLinkedDataTable);

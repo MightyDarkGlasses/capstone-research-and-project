@@ -37515,17 +37515,13 @@ if(window.location.pathname.indexOf('security-side/security_panel.html') > -1) {
         const password = $('#admin_pass').val();
         console.log(email, password);
 
-        _src_index__WEBPACK_IMPORTED_MODULE_1__.doSignInWithEmailAndPassword(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth, email, password)
+        _src_index__WEBPACK_IMPORTED_MODULE_1__.doSignInWithEmailAndPassword(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth, email.trim(), password)
         .then(async (cred) => {
             console.log("User logged in:", _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.uid);
             const myRef = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, 'security', _src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.uid); 
             await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDoc(myRef).then((snapshot) => { 
                 console.log(snapshot.data(), snapshot.id);
                 const securityInfo = snapshot.data();
-                
-
-    
-
                 if(snapshot.data() === undefined) {
                     $('.modal-container-main').html(`<p>User is not found. Please re-check your email address.</p>`);
                     $('.modal-container-title').html('Error');
@@ -37710,6 +37706,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "doArrayRemove": () => (/* binding */ doArrayRemove),
 /* harmony export */   "doArrayUnion": () => (/* binding */ doArrayUnion),
 /* harmony export */   "doCreateUserWithEmailAndPassword": () => (/* binding */ doCreateUserWithEmailAndPassword),
+/* harmony export */   "doDeleteField": () => (/* binding */ doDeleteField),
 /* harmony export */   "doIncrement": () => (/* binding */ doIncrement),
 /* harmony export */   "doLimit": () => (/* binding */ doLimit),
 /* harmony export */   "doOrderBy": () => (/* binding */ doOrderBy),
@@ -37799,6 +37796,7 @@ const myGetDocs = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getDocs;
 const myGetDoc = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getDoc;
 const myAddDoc = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.addDoc;
 const myDeleteDoc = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.deleteDoc;
+const doDeleteField = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.deleteField;
 const myDoc = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc;
 const myUpdateDoc = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.updateDoc;
 const doUpdateDoc = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.updateDoc;
@@ -38838,6 +38836,13 @@ __webpack_require__.r(__webpack_exports__);
 let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', async () => {
 if(windowLocation.indexOf("user-announcement") > -1) {
+
+    if(localStorage.getItem("theme") === "light") {
+        document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+        document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+        document.querySelector("#system-theme3").setAttribute("href", "user-announcement-light.css");
+    }
+
     console.log('announcement5.js');
     // DISPLAY THE PROFILE PICTURE...
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
@@ -38850,6 +38855,53 @@ if(windowLocation.indexOf("user-announcement") > -1) {
             window.location = "../login.html";
         }
     });
+
+    // Notification, Full Screen, Logout, etc.
+    function topButtons() {        
+        const notif = document.querySelector(".util-icon-notif");
+        const themes = document.querySelector(".util-icon-theme");
+        const fullScreen = document.querySelector(".util-icon-fullscr");
+        const settings = document.querySelector(".util-icon-settings");
+        const logout = document.querySelector(".util-icon-logout");
+        const elem = document.querySelector("html");
+
+        fullScreen.addEventListener("click", () => {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        });
+
+        themes.addEventListener("click", () => {
+            if(localStorage.getItem("theme") === "dark") {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-announcement-light.css");
+                localStorage.setItem("theme", "light");
+            }
+            else {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-announcement.css");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        logout.addEventListener('click', () => {
+            // console.log("this is a test.");
+            // Add activity when user is logged out.
+            _src_index__WEBPACK_IMPORTED_MODULE_0__.addActivity(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfUserLevels[0], _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfPages.auth_login, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfActivityContext.user_logout)
+            .then((success) => {
+                _src_index__WEBPACK_IMPORTED_MODULE_0__.logoutUser();
+                localStorage.clear();
+                window.location = '../login.html';
+            });
+        });
+    }
+    topButtons();
 
     const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "announcements");
     const linkagesQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(10));
@@ -38877,7 +38929,7 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         // announcements.insertAdjacentElement('beforeend', toggleAnnouncement);
         $('.announcements').append(toggleAnnouncement)
 
-        let listOfSources = '';
+        let listOfSources = "<br/>" + myData.sources;
         // myData.sources.forEach((data) => {
         //     listOfSources += `<li><a href="${data}">${data}</a></li>`
         // });
@@ -38891,45 +38943,157 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         console.log(listOfFiles);
 
 
-        // If there are no files uplaoded
-        if(listOfFiles === '') {
-            listOfFiles = "<p style='color: rgba(255,255,255,.75);'><i>No files.</i></p>"
-            listOfFiles = "<p><i>No files.</i></p>"
-        }
+        
         // If there are no sources given
         if(listOfSources === '') {
             listOfSources = "<p style='color: rgba(255,255,255,.75)><i>No sources.</i></p>"
             listOfSources = "<p><i>No sources.</i></p>"
         }
         
-        const toggleAnnouncementDetails =
-        `
-        <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
-            <div>
-                <div class="announcement-priority">${myData.priority}</div>
-                <p class="announcements-headline">${myData.title}</p>
-                <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
-                <p class="announcements-person">${myData.posted_by}</p>
-            </div>
-            <div class="annoucements-main-container">
-                <div class="announcements-container">
-                        <p class="announcements-message">
-                            ${myData.message}
-                        </p>
-                        <ul class="announcements-sources">
-                           ${listOfSources}
-                        </ul>
-                        <ul class="announcements-file">
-                            ${listOfFiles}
-                        </ul>
-                </div>
+
+        const imageRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, `announcements/thumbnail/${myData.title}/profilepic.jpg`);
+        const fileRef1 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, `announcements/files/${myData.title}/file1`);
+        const fileRef2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, `announcements/files/${myData.title}/file2`);
+        const fileRef3 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, `announcements/files/${myData.title}/file3`);
+
+        const w = _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(imageRef).then((url) => {
+            console.log(url);
+            return url;
+        });
+        const x = _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(fileRef1).then((url) => {
+            console.log("url1", url);
+            return url;
+        });
+        const y = _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(fileRef2).then((url) => {
+            console.log("url2", url);
+            return url;
+        });
+        const z = _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(fileRef3).then((url) => {
+            console.log("url3", url);
+            return url;
+        });
+
+        // Isang kuhanan lang...
+        z.then((returnedData) => {
+            console.log("returnedData z: ", returnedData);
+        });
+        
+        // Sabay-sabay
+        Promise.all([w, x, y, z]).then((links) => {
+            console.log("downloadURL: ", links);
+
+            links.forEach((data, index) => {
+                if(data !== null || typeof(data) !== "undefined" || index !== 0) {
+                    listOfFiles += `<li><a href="${data}">File #${index}</a></li>`
+                }
+            });
+
+            // If there are no files uplaoded
+            if(listOfFiles === '') {
+                listOfFiles = "<p style='color: rgba(255,255,255,.75);'><i>No files.</i></p>"
+                listOfFiles = "<p><i>No files.</i></p>"
+            }
+            
+
+            const toggleAnnouncementDetails =
+            `
+            <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
                 <div>
-                    <img class="announcement-thumbnail" src="${myData.thumbnail}" alt="announcement thumbnail">
+                    <div class="announcement-priority">${myData.priority}</div>
+                    <p class="announcements-headline">${myData.title}</p>
+                    <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
+                    <p class="announcements-person">${myData.posted_by}</p>
+                </div>
+                <br/>
+                <div class="annoucements-main-container">
+                    <div class="announcements-container">
+                            <p class="announcements-message">
+                                ${myData.message}
+                            </p>
+                            <ul class="announcements-sources">
+                               ${listOfSources}
+                            </ul>
+                            <ul class="announcements-file">
+                                ${listOfFiles}
+                            </ul>
+                    </div>
+                    <div>
+                        <img class="announcement-thumbnail" src="${links[0]}" alt="announcement thumbnail">
+                    </div>
                 </div>
             </div>
-        </div>
-        `;
-        $('.announcements').append(toggleAnnouncementDetails);
+            `;
+            $('.announcements').append(toggleAnnouncementDetails);
+        });
+
+        
+
+
+
+        // console.log("imageRef: ", imageRef);
+        // fire.myGetDownloadURL(imageRef).then((url) => {
+        //     console.log(url);
+
+        //     const toggleAnnouncementDetails =
+        //     `
+        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
+        //         <div>
+        //             <div class="announcement-priority">${myData.priority}</div>
+        //             <p class="announcements-headline">${myData.title}</p>
+        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
+        //             <p class="announcements-person">${myData.posted_by}</p>
+        //         </div>
+        //         <div class="annoucements-main-container">
+        //             <div class="announcements-container">
+        //                     <p class="announcements-message">
+        //                         ${myData.message}
+        //                     </p>
+        //                     <ul class="announcements-sources">
+        //                        ${listOfSources}
+        //                     </ul>
+        //                     <ul class="announcements-file">
+        //                         <li>${listOfFiles}</li>
+        //                     </ul>
+        //             </div>
+        //             <div>
+        //                 <img class="announcement-thumbnail" src="${url}" alt="announcement thumbnail">
+        //             </div>
+        //         </div>
+        //     </div>
+        //     `;
+        //     $('.announcements').append(toggleAnnouncementDetails);
+        // }).catch((e) => {
+        //     console.error("error: ", e);
+        //     const toggleAnnouncementDetails =
+        //     `
+        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
+        //         <div>
+        //             <div class="announcement-priority">${myData.priority}</div>
+        //             <p class="announcements-headline">${myData.title}</p>
+        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
+        //             <p class="announcements-person">${myData.posted_by}</p>
+        //         </div>
+        //         <div class="annoucements-main-container">
+        //             <div class="announcements-container">
+        //                     <p class="announcements-message">
+        //                         ${myData.message}
+        //                     </p>
+        //                     <ul class="announcements-sources">
+        //                        ${listOfSources}
+        //                     </ul>
+        //                     <ul class="announcements-file">
+        //                         ${listOfFiles}
+        //                     </ul>
+        //             </div>
+        //             <div>
+        //                 <img class="announcement-thumbnail" src="bulsu-logo.png" alt="announcement thumbnail">
+        //             </div>
+        //         </div>
+        //     </div>
+        //     `;
+        //     $('.announcements').append(toggleAnnouncementDetails);
+        // });
+
 
 
         
@@ -39183,6 +39347,12 @@ let vehicleInformation = [];
 
 if(windowLocation.indexOf("user-home") > -1) {
 
+// Change theme
+if(localStorage.getItem("theme") === "light") {
+    document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+    document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // ##### Delete User
     // fire.getOnAuthStateChanged(fire.auth, (user) => {
@@ -39205,6 +39375,7 @@ document.addEventListener('DOMContentLoaded', function() {
             || localStorage.getItem("profile-owner") === null)) {
                 // console.log("false...");
 
+                localStorage.setItem("theme", "dark");
                 const profilePicture = displayProfile(user.uid).then(evt => { 
                     console.log("current user: ", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser);
                     console.log('current user uid: ', _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid);
@@ -39279,6 +39450,9 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location = "../login.html";
         }
     });
+
+
+
 
     async function displayProfile(userUID) {
         const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
@@ -39366,6 +39540,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+    // Notification, Full Screen, Logout, etc.
+    function topButtons() {        
+        const notif = document.querySelector(".util-icon-notif");
+        const themes = document.querySelector(".util-icon-theme");
+        const fullScreen = document.querySelector(".util-icon-fullscr");
+        const settings = document.querySelector(".util-icon-settings");
+        const logout = document.querySelector(".util-icon-logout");
+        const elem = document.querySelector("html");
+
+        fullScreen.addEventListener("click", () => {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        });
+
+        themes.addEventListener("click", () => {
+            if(localStorage.getItem("theme")) {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+                localStorage.removeItem("theme");
+            }
+            else {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        logout.addEventListener('click', () => {
+            // console.log("this is a test.");
+            // Add activity when user is logged out.
+            _src_index__WEBPACK_IMPORTED_MODULE_0__.addActivity(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfUserLevels[0], _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfPages.auth_login, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfActivityContext.user_logout)
+            .then((success) => {
+                _src_index__WEBPACK_IMPORTED_MODULE_0__.logoutUser();
+                localStorage.clear();
+                window.location = '../login.html';
+            });
+        });
+    }
+    topButtons();
+
     function displayVehicleDropdownList() {
         let listOfVehiclesTags = '';
         let vehicleListUL = document.getElementById("vehicle-list");
@@ -39377,6 +39596,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // console.log('displayVehicleDropdownList');
         // console.log('displayVehicleDropdownList : vehicleData', vehicleData);
 
+        let counter = 1;
         for (let x=0; x<vehicleDataKeys.length; x++) {
             if(vehicleDataKeys[x] !== "vehicle_length") {
                 // console.log('x:', vehicleDataKeys[x]);
@@ -39385,11 +39605,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 //vehicle-placeholder
                 console.log('vehicleData: ', vehicleData);
                 console.log('keys: ', vehicleDataKeys[x], 'vehicleData model: ', vehicleData[vehicleDataKeys[x]]["model"]);
-                listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
-                
+                listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${counter} | ${vehicleData[vehicleDataKeys[x]]["model"]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
+                counter += 1;
                 if(x === 1) { //will be used for placeholder
-                    // console.log('placeholder');
-
                     vehiclePlaceholder.innerHTML =  `<p>Vehicle #1</p>
                     <p>${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</p>`;
                     
@@ -39397,6 +39615,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     myQRImage.setAttribute("src", qrCodeImageLink);
                     myQRImage2.setAttribute("src", qrCodeImageLink);
                     saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
+                }
+                else {
+                    vehiclePlaceholder.innerHTML =  `<p style="font-size: 1em;">Click the dropdown.</p><p>Number of items: ${vehicleDataKeys.length}</p>`;
+                    myQRImage.setAttribute("src", "bulsu-logo.png");
+                    myQRImage2.setAttribute("src", "bulsu-logo.png");
+                    saveQR.setAttribute("onclick", ``);
                 }
             }
         } //end of iteration
@@ -39441,7 +39665,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         let ownerVehicleModel = undefined;
                         await getAccountInformationOwner(linkagesList[data]["orig_uid"]).then(evt => {
                             // console.log('event: ', evt)
-                            ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
+                            ownerFullName = `${evt['last_name']} ${evt['first_name']}`;
                         });
                         await getVehicleInformationModel(linkagesList[data]["orig_uid"]).then(evt => {
                             console.log('event: ', evt, data)
@@ -39601,21 +39825,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 
-    let logoutUser = document.querySelector('.util-icon-logout');
-    logoutUser.addEventListener('click', () => {
-        // console.log("this is a test.");
-        localStorage.clear();
-        
-
-        // Add activity when user is logged out.
-        _src_index__WEBPACK_IMPORTED_MODULE_0__.addActivity(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfUserLevels[0], _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfPages.auth_login, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfActivityContext.user_logout)
-        .then((success) => {
-            _src_index__WEBPACK_IMPORTED_MODULE_0__.logoutUser();
-            window.location = '../login.html';
-        });
-
-        // window.location = '../login.html';
-    });
+    
 
     // document.querySelector('.fullname').innerText = localStorage.personal_info_name === '' ? '' : localStorage.personal_info_name;
     // document.querySelector('.category').innerText = 
@@ -39641,11 +39851,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let windowLocation = window.location.pathname;
+
 window.addEventListener('DOMContentLoaded', () => {
 
 // console.log(JSON.parse(localStorage.currentUser).uid);
 
 if(windowLocation.indexOf("user-logs") > -1) {
+    console.log("theme: ", localStorage.getItem("theme"));
+    console.log("theme undefined: ", localStorage.getItem("theme") === null);
+
+    if(localStorage.getItem("theme") === "light") {
+        document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+        document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+        document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
+    }
+    if(localStorage.getItem("theme") === null) {
+        document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
+    }
 
     // DISPLAY THE PROFILE PICTURE AND LOGS
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
@@ -39661,6 +39883,53 @@ if(windowLocation.indexOf("user-logs") > -1) {
             window.location = "../login.html";
         }
     });
+
+    // Notification, Full Screen, Logout, etc.
+    function topButtons() {        
+        const notif = document.querySelector(".util-icon-notif");
+        const themes = document.querySelector(".util-icon-theme");
+        const fullScreen = document.querySelector(".util-icon-fullscr");
+        const settings = document.querySelector(".util-icon-settings");
+        const logout = document.querySelector(".util-icon-logout");
+        const elem = document.querySelector("html");
+
+        fullScreen.addEventListener("click", () => {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        });
+
+        themes.addEventListener("click", () => {
+            if(localStorage.getItem("theme") === "dark") {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
+                localStorage.setItem("theme", "light");
+            }
+            else {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-logs.css");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        logout.addEventListener('click', () => {
+            // console.log("this is a test.");
+            // Add activity when user is logged out.
+            _src_index__WEBPACK_IMPORTED_MODULE_0__.addActivity(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfUserLevels[0], _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfPages.auth_login, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfActivityContext.user_logout)
+            .then((success) => {
+                _src_index__WEBPACK_IMPORTED_MODULE_0__.logoutUser();
+                localStorage.clear();
+                window.location = '../login.html';
+            });
+        });
+    }
+    topButtons();
 
     // console.log('logs4.js');
     // const docReference = fire.myDoc(fire.db, "logs", JSON.parse(localStorage.currentUser).uid);
@@ -39712,7 +39981,7 @@ if(windowLocation.indexOf("user-logs") > -1) {
             Object.entries(logsInformation).map((element, index) => {
                 if(objSize-1 !== index) {
                     element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString() + " Gate #" + element[1]['time_in']['gate_number'];
-                    element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : element[1]['time_out']['timestamp'].toDate().toLocaleString() + " Gate #" + element[1]['time_in']['gate_number'];;
+                    element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : element[1]['time_out']['timestamp'].toDate().toLocaleString() + " Gate #" + element[1]['time_in']['gate_number'];
                     logs.push(element[1]);
                 }
             });
@@ -39813,16 +40082,50 @@ if(windowLocation.indexOf("user-logs") > -1) {
     }
 
 
-    document.querySelector(".user-activity").style.display = 'none';
+    // document.querySelector(".user-activity").style.display = 'none';
+    // $('.user-activity').animate({
+    //     opacity: "toggle",
+    //     height: "toggle"
+    // }, 250, 'linear', () => {
+    //     // animation complete
+    // });
 
-    document.querySelector("#site-logs").addEventListener("click", () => {
-        document.querySelector(".user-activity").style.display = 'none';
-        document.querySelector(".user-logs").style.display = 'block';
-    });
-    document.querySelector("#site-activities").addEventListener("click", () => {
-        document.querySelector(".user-activity").style.display = 'block';
-        document.querySelector(".user-logs").style.display = 'none';
-    });
+    // document.querySelector("#site-logs").addEventListener("click", () => {
+    //     // document.querySelector(".user-activity").style.display = 'none';
+    //     // document.querySelector(".user-logs").style.display = 'block';
+
+    //     $('.user-activity').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+
+    //     $('.user-logs').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
+    // document.querySelector("#site-activities").addEventListener("click", () => {
+    //     // document.querySelector(".user-activity").style.display = 'block';
+    //     // document.querySelector(".user-logs").style.display = 'none';
+
+    //     $('.user-activity').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+
+    //     $('.user-logs').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
     
 }
 }); //end DOMContentLoaded
@@ -39844,6 +40147,10 @@ __webpack_require__.r(__webpack_exports__);
    
 
 let windowLocation = window.location.pathname;
+if(localStorage.getItem("theme") === "light") {
+    document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+    document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+}
 
 //Check if I am on the user-account.html
 if(windowLocation.indexOf("user-account") > -1) {
@@ -40034,22 +40341,50 @@ if(windowLocation.indexOf("user-account") > -1) {
     });
 
 
+    // Notification, Full Screen, Logout, etc.
+    function topButtons() {        
+        const notif = document.querySelector(".util-icon-notif");
+        const themes = document.querySelector(".util-icon-theme");
+        const fullScreen = document.querySelector(".util-icon-fullscr");
+        const settings = document.querySelector(".util-icon-settings");
+        const logout = document.querySelector(".util-icon-logout");
+        const elem = document.querySelector("html");
 
-    async function displayProfile(userUID) {
-        const docAccountActivity = _src_index__WEBPACK_IMPORTED_MODULE_1__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_1__.db, "account-information", userUID);
-        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_1__.myGetDoc(docAccountActivity);
-        if (docVSnap.exists()) {
-            const position = docVSnap.data()["category"];
-
-            console.log("position: ", position);
-            console.log("position: ", typeof(position) !== "undefined" || position !== null);
-            if(typeof(position) !== "undefined" || position !== null) {
-                return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, position];
+        fullScreen.addEventListener("click", () => {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
             }
-        }
-        return [`${docVSnap.data()['last_name']}, ${docVSnap.data()['first_name']}`, null];
-    }
+        });
 
+        themes.addEventListener("click", () => {
+            if(localStorage.getItem("theme") === "dark") {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+                localStorage.setItem("theme", "light");
+            }
+            else {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        logout.addEventListener('click', () => {
+            // console.log("this is a test.");
+            // Add activity when user is logged out.
+            _src_index__WEBPACK_IMPORTED_MODULE_1__.addActivity(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser.uid, _src_index__WEBPACK_IMPORTED_MODULE_1__.listOfUserLevels[0], _src_index__WEBPACK_IMPORTED_MODULE_1__.listOfPages.auth_login, _src_index__WEBPACK_IMPORTED_MODULE_1__.listOfActivityContext.user_logout)
+            .then((success) => {
+                _src_index__WEBPACK_IMPORTED_MODULE_1__.logoutUser();
+                localStorage.clear();
+                window.location = '../login.html';
+            });
+        });
+    }
+    topButtons();
 
     console.log('My Account - Edit Information');
     const auth = _src_index__WEBPACK_IMPORTED_MODULE_1__.auth;
@@ -41650,18 +41985,26 @@ __webpack_require__.r(__webpack_exports__);
 let vehicleForm = document.querySelector('.vehicle-form');
 
 
+
 let windowLocation = window.location.pathname;
 window.addEventListener('DOMContentLoaded', () => {
 
 if(windowLocation.indexOf("user-vehicle") > -1) {
+    if(localStorage.getItem("theme") === "light") {
+        document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+        document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+        document.querySelector("#system-theme3").setAttribute("href", "user-account-light.css");
+    }
+
+
     // DISPLAY THE PROFILE PICTURE...
     _src_index__WEBPACK_IMPORTED_MODULE_0__.getOnAuthStateChanged(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth, (user) => {
         if (user) {
             // Display user profile picture.
-
             document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
             document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
             document.querySelector(".category").textContent = localStorage.getItem("profile-category");
+
             showVehicleList(vehicleInformation);  // display the list
             showLinkagesList(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid); // display the linkages
             clickableVehicleList();
@@ -41683,12 +42026,53 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     localStorage.removeItem("vehicle-rear-filetype");
     localStorage.removeItem("vehicle-rear-filename");
     
-    let logoutUser = document.querySelector('.util-icon-logout');
-    logoutUser.addEventListener('click', () => {
-        console.log("this is a test.");
-        localStorage.clear();
-        window.location = '../index.html';
-    });
+
+    // Notification, Full Screen, Logout, etc.
+    function topButtons() {        
+        const notif = document.querySelector(".util-icon-notif");
+        const themes = document.querySelector(".util-icon-theme");
+        const fullScreen = document.querySelector(".util-icon-fullscr");
+        const settings = document.querySelector(".util-icon-settings");
+        const logout = document.querySelector(".util-icon-logout");
+        const elem = document.querySelector("html");
+
+        fullScreen.addEventListener("click", () => {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        });
+
+        themes.addEventListener("click", () => {
+            if(localStorage.getItem("theme") === "dark") {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-account-light.css");
+                localStorage.setItem("theme", "light");
+            }
+            else {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-account.css");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        logout.addEventListener('click', () => {
+            // console.log("this is a test.");
+            // Add activity when user is logged out.
+            _src_index__WEBPACK_IMPORTED_MODULE_0__.addActivity(_src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfUserLevels[0], _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfPages.auth_login, _src_index__WEBPACK_IMPORTED_MODULE_0__.listOfActivityContext.user_logout)
+            .then((success) => {
+                _src_index__WEBPACK_IMPORTED_MODULE_0__.logoutUser();
+                localStorage.clear();
+                window.location = '../login.html';
+            });
+        });
+    }
+    topButtons();
     
 
     //JSON
@@ -41840,12 +42224,15 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     }
     function showLinkagesList(userUID) {
         console.log("showLinkagesList")
-        const docRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "linkages", userUID);
+        const docRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "linkages", userUID.trim());
+        // console.log("showLinkagesList userUID", userUID)
         // const docRef = fire.myDoc(fire.db, "linkages", userUID);
 
         _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(docRef, async (doc) => {
             // console.log("linkages", doc.data(), doc.id);
             let linkagesList = {...doc.data()};
+
+            console.log("linkagesList: ", linkagesList)
             let listLinkagesKeys = Object.keys(linkagesList);
             let linkagesDataLI = ``;
             
@@ -41857,14 +42244,25 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                     listLinkagesKeys.forEach(async (data, index) => {
 
                         console.log("listLinkagesKeys: ", listLinkagesKeys)
+                        console.log("linkagesList[data][orig_uid]: ", linkagesList[data]["orig_uid"]);
+
                         let ownerFullName = undefined;
                         let ownerVehicleModel = undefined;
                         await getAccountInformationOwner(linkagesList[data]["orig_uid"]).then(evt => {
                             // console.log('event: ', evt)
-                            ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
+
+                            // if(typeof(evt['middle_name']) === "undefined") {
+                            //     evt['middle_name'] = " ";
+                            //     ${evt['middle_name'][0]}
+                            // }
+                            ownerFullName = `${evt['last_name']} ${evt['first_name']} `;
                         });
                         await getVehicleInformationModel(linkagesList[data]["orig_uid"]).then(evt => {
                             console.log('event: ', evt, data)
+
+                            if(evt[data]['model'][0] === undefined) {
+                                ownerVehicleModel = "-";
+                            }
                             ownerVehicleModel = evt[data]['model'][0];
                         });
 
@@ -42064,7 +42462,11 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 await _src_index__WEBPACK_IMPORTED_MODULE_0__.doUpdateDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "linkages", _src_index__WEBPACK_IMPORTED_MODULE_0__.auth.currentUser.uid), {
                     [dataKey]: _src_index__WEBPACK_IMPORTED_MODULE_0__.doDeleteField(),
                 }).then((e) => {
-                    swal("Success!", "Linked vehicle deleted.", "success").then(() => {
+                    Swal.fire(
+                        'Success!',
+                        'Linked vehicle deleted.',
+                        'success'
+                    ).then(() => {
                         window.location.href = window.location.href; //reload a page in JS
                         location.reload();
                     });
@@ -42314,7 +42716,11 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
             else {
                 // Check if the plate number exists on the scanned user id.
                 _src_index__WEBPACK_IMPORTED_MODULE_0__.myOnSnapshot(docRefOthers, (doc) => {
+
+                    console.log("check datta datta: ", doc.data());
                     let currentPlateNumberKeysRegistered = Object.keys(doc.data());
+
+
                     // console.log('doc.data', doc.data())
                     // const fullName = 
                     //     `${doc.data()[plateNumber]['last_name']}, ${doc.data()[plateNumber]['first_name']} ${doc.data()[plateNumber]['middle_name']}`;
@@ -42475,7 +42881,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                                 'account_ref': _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, '/account-information/' + scannedQRUserUID),
                                 'vehicle_ref': _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, '/vehicle-information/' + scannedQRUserUID),
                                 'qr': downloadURL,
-                                'orig_uid': scannedQRUserUID
+                                'orig_uid': scannedQRUserUID,
                             }
                         }).then((success) => {
                             console.log("Done");
@@ -42489,6 +42895,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                                 'account_ref': _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, '/account-information/' + scannedQRUserUID),
                                 'vehicle_ref': _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, '/vehicle-information/' + scannedQRUserUID),
                                 'qr': downloadURL,
+                                'orig_uid': scannedQRUserUID,
                             }
                         }).then((success) => {
                             console.log("Done");
@@ -42573,7 +42980,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                                 listOfLinkedDataTable += `
                                     <td>${referredVehicleInfo.model[0]}</td>
                                     <td>${tempPlateNumber}</td>
-                                    <td>${docSnap2.exists() ? `${docSnap2.data()['last_name']}, ${docSnap2.data()['first_name']} ${docSnap2.data()['middle_name'][0]}.` : 'Uknown owner.'}</td>
+                                    <td>${docSnap2.exists() ? `${docSnap2.data()['last_name']}, ${docSnap2.data()['first_name']} ${docSnap2.data()['middle_name'][0]}.` : 'Unknown owner.'}</td>
                                     <td><a href="">X</a></td>`;
         
                                 console.log(listOfLinkedDataTable);

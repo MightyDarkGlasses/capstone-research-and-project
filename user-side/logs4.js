@@ -4,11 +4,23 @@ import * as fire from "../src/index";
 
 
 let windowLocation = window.location.pathname;
+
 window.addEventListener('DOMContentLoaded', () => {
 
 // console.log(JSON.parse(localStorage.currentUser).uid);
 
 if(windowLocation.indexOf("user-logs") > -1) {
+    console.log("theme: ", localStorage.getItem("theme"));
+    console.log("theme undefined: ", localStorage.getItem("theme") === null);
+
+    if(localStorage.getItem("theme") === "light") {
+        document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+        document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+        document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
+    }
+    if(localStorage.getItem("theme") === null) {
+        document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
+    }
 
     // DISPLAY THE PROFILE PICTURE AND LOGS
     fire.getOnAuthStateChanged(fire.auth, (user) => {
@@ -24,6 +36,53 @@ if(windowLocation.indexOf("user-logs") > -1) {
             window.location = "../login.html";
         }
     });
+
+    // Notification, Full Screen, Logout, etc.
+    function topButtons() {        
+        const notif = document.querySelector(".util-icon-notif");
+        const themes = document.querySelector(".util-icon-theme");
+        const fullScreen = document.querySelector(".util-icon-fullscr");
+        const settings = document.querySelector(".util-icon-settings");
+        const logout = document.querySelector(".util-icon-logout");
+        const elem = document.querySelector("html");
+
+        fullScreen.addEventListener("click", () => {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        });
+
+        themes.addEventListener("click", () => {
+            if(localStorage.getItem("theme") === "dark") {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
+                localStorage.setItem("theme", "light");
+            }
+            else {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-logs.css");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        logout.addEventListener('click', () => {
+            // console.log("this is a test.");
+            // Add activity when user is logged out.
+            fire.addActivity(fire.auth.currentUser.uid, fire.listOfUserLevels[0], fire.listOfPages["auth_login"], fire.listOfActivityContext["user_logout"])
+            .then((success) => {
+                fire.logoutUser();
+                localStorage.clear();
+                window.location = '../login.html';
+            });
+        });
+    }
+    topButtons();
 
     // console.log('logs4.js');
     // const docReference = fire.myDoc(fire.db, "logs", JSON.parse(localStorage.currentUser).uid);
@@ -75,7 +134,7 @@ if(windowLocation.indexOf("user-logs") > -1) {
             Object.entries(logsInformation).map((element, index) => {
                 if(objSize-1 !== index) {
                     element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString() + " Gate #" + element[1]['time_in']['gate_number'];
-                    element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : element[1]['time_out']['timestamp'].toDate().toLocaleString() + " Gate #" + element[1]['time_in']['gate_number'];;
+                    element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : element[1]['time_out']['timestamp'].toDate().toLocaleString() + " Gate #" + element[1]['time_in']['gate_number'];
                     logs.push(element[1]);
                 }
             });
@@ -176,16 +235,50 @@ if(windowLocation.indexOf("user-logs") > -1) {
     }
 
 
-    document.querySelector(".user-activity").style.display = 'none';
+    // document.querySelector(".user-activity").style.display = 'none';
+    // $('.user-activity').animate({
+    //     opacity: "toggle",
+    //     height: "toggle"
+    // }, 250, 'linear', () => {
+    //     // animation complete
+    // });
 
-    document.querySelector("#site-logs").addEventListener("click", () => {
-        document.querySelector(".user-activity").style.display = 'none';
-        document.querySelector(".user-logs").style.display = 'block';
-    });
-    document.querySelector("#site-activities").addEventListener("click", () => {
-        document.querySelector(".user-activity").style.display = 'block';
-        document.querySelector(".user-logs").style.display = 'none';
-    });
+    // document.querySelector("#site-logs").addEventListener("click", () => {
+    //     // document.querySelector(".user-activity").style.display = 'none';
+    //     // document.querySelector(".user-logs").style.display = 'block';
+
+    //     $('.user-activity').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+
+    //     $('.user-logs').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
+    // document.querySelector("#site-activities").addEventListener("click", () => {
+    //     // document.querySelector(".user-activity").style.display = 'block';
+    //     // document.querySelector(".user-logs").style.display = 'none';
+
+    //     $('.user-activity').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+
+    //     $('.user-logs').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
     
 }
 }); //end DOMContentLoaded

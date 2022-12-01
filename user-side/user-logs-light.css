@@ -1,0 +1,38 @@
+#table_id_length > label,
+#table_id_filter, #table_id_filter > label > input,
+#table_id_length > label > select{
+color: white !important;
+}
+.dataTables_info, #table_id_info, #table_id_paginate > a{
+color: white !important;
+}
+
+/* Show Entries */
+#table_id_activity_wrapper label,
+#table_id_activity_wrapper label select[name="table_id_activity_length"],
+#table_id_activity_info
+{
+color: white !important;
+}
+#table_id_activity_wrapper table > thead > tr > th,
+#table_id_wrapper table > thead > tr > th {
+    color: white !important;
+}
+
+#activity-content {
+    color: white !important;
+}
+        
+#table_id_length > label,
+#table_id_filter, #table_id_filter > label > input,
+#table_id_length > label > select{
+    color: white !important;
+}
+#table_id_info, #table_id_paginate > a{
+    color: white !important;
+}
+
+#table_id td,
+#table_id_activity td {
+    color: white !important;
+}

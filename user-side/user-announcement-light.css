@@ -1,0 +1,158 @@
+#announcements-caption {
+    color: black;
+}
+
+.right-container .announcements ul{
+    list-style-type: none;
+}
+
+.right-container .announcements ul a{
+    color: floralwhite;
+    text-decoration: underline;
+}
+
+
+.right-container .announcements .annoucements-main-container {
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+}
+
+.right-container .announcements .announcements-sources::before {
+    content: 'Sources: ';
+}
+.right-container .announcements .announcements-file::before {
+    content: 'Files: ';
+}
+
+.right-container .announcements {
+    /* border: 5px solid white; */
+    border-radius: 1em;
+    padding: 1em;
+    font-family: 'Lexend Deca', sans-serif;
+    display: grid;
+    gap: 1em;
+}
+
+.right-container .announcements .announcements-container {
+    display: grid;
+    gap: 1em;
+}
+.right-container .announcements .announcement-priority {
+    background-color: rgb(197, 14, 14);
+    width: fit-content;
+    padding: .5em 1em;
+    border-radius: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: .5em 0;
+}
+
+.right-container .announcements .announcement-thumbnail {
+    --size: 250px;
+    height: var(--size);
+    width: var(--size);
+    border-radius: 1em;
+}
+.right-container .announcements .announcements-timestamp {
+    font-style: italic;
+}
+.right-container .announcements .announcements-timestamp::before {
+    content: 'Posted on: ';
+}
+
+.right-container .announcements .announcements-person {
+    font-style: italic;
+}
+.right-container .announcements .announcements-person::before {
+    content: 'Posted by: ';
+}
+
+
+
+.right-container .announcements-headline {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+.right-container .announcements-headline::before {
+    content: 'Re: ';
+}
+
+.right-container .announcements-message {
+    /* white-space: pre-line; */
+    text-align: justify;
+    
+}
+.right-container .announcements-message::first-letter {
+    /* white-space: pre-line; */
+    padding-left: 2em;
+}
+
+@media screen and (max-width: 960px) {
+    .announcement-thumbnail {
+         display: none;
+    }
+}
+
+.toggle-announcements > * {
+    color: white;
+}
+.toggle-announcements {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-inline: 1em;
+    padding-block: 1em;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.75);
+    border-radius: 1em;
+}
+.announcements-info, 
+.annoucements-main-container 
+.announcements-container 
+.announcements-file li a{
+    color: white;
+}
+.announcement-priority {
+    color: white;
+}
+
+.announcements-file li a{
+    font-weight: bold;
+    font-style: italic;
+}
+#announcements-caption {
+    color: white;
+}
+
+
+
+@media screen and (max-width: 960px) {
+    .toggle-announcements {
+         flex-direction: column;
+    }
+}
+.toggle-announcements > div {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+
+.toggle-announcements .dropdown {
+    --size: 25px;
+    background: url('https://api.iconify.design/gridicons/dropdown.svg?color=white') no-repeat center center / contain;
+    background-size: var(--size);
+    height: var(--size);
+    width: var(--size);
+}
+.toggle-announcements .circle {
+    --size: 20px;
+    border-radius : 50%;
+    background-color: red;
+    height: var(--size);
+    width: var(--size);
+}
+
+

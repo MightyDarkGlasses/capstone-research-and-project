@@ -7,7 +7,7 @@ import {
     addDoc,       //add new document
     deleteDoc,    //delete document
     doc,          //making references
-
+    deleteField,
     query,      //Firestore queries, See line 62
     where,       //used by Firestore queries
     orderBy,      //used by Firestore queries, sorting data
@@ -77,6 +77,7 @@ export const myGetDocs = getDocs;
 export const myGetDoc = getDoc;
 export const myAddDoc = addDoc;
 export const myDeleteDoc = deleteDoc;
+export const doDeleteField = deleteField;
 export const myDoc = doc;
 export const myUpdateDoc = updateDoc;
 export const doUpdateDoc = updateDoc;

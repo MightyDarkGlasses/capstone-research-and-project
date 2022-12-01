@@ -1,0 +1,791 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+:root {
+    --image-dimensions: 65px;
+    --icon-dimensions: 30px;
+
+    --sidebar-width: 250px;
+    --right-container-width: calc(98vw - var(--sidebar-width));
+
+    --primary-color: #11101D;
+    --secondary-color: #272442;
+    --secondary-color-opaque: rgba(39, 36, 66, 0.35);
+    --tertiary-color: #191925;
+
+    --bradius: 100vmax;
+
+    /* icon size for edit and profile */
+    --icon-size: 40px;
+}
+
+
+/* Disable text selection */
+.disable-select {
+    -webkit-user-select: none;  
+    -moz-user-select: none;    
+    -ms-user-select: none;      
+    user-select: none;
+}
+
+table tbody{
+    font-family: 'Lexend Deca', sans-serif;
+}
+
+/* Sidebar icons */
+.sidebar-icon-1 {
+    background: url('https://api.iconify.design/ic/round-dashboard.svg?color=black') no-repeat center center / contain;
+    height: var(--icon-dimensions);
+    width: var(--icon-dimensions);
+}
+.sidebar-icon-2 {
+    background: url('https://api.iconify.design/carbon/user-avatar-filled.svg?color=black') no-repeat center center / contain;
+    height: var(--icon-dimensions);
+    width: var(--icon-dimensions);
+}
+.sidebar-icon-3 {
+    background: url('https://api.iconify.design/fluent/vehicle-car-profile-ltr-16-filled.svg?color=black') no-repeat center center / contain;
+    height: var(--icon-dimensions);
+    width: var(--icon-dimensions);
+}
+.sidebar-icon-4 {
+    background: url('https://api.iconify.design/heroicons/newspaper-solid.svg?color=black') no-repeat center center / contain;
+    height: var(--icon-dimensions);
+    width: var(--icon-dimensions);
+}
+.sidebar-icon-5 {
+    background: url('https://api.iconify.design/zondicons/announcement.svg?color=black') no-repeat center center / contain;
+    height: var(--icon-dimensions);
+    width: var(--icon-dimensions);
+}
+
+/* Change the font settings in Sidebar menus */
+.sidebar .title {
+    font-size: 1.25em;
+    font-family: 'Lexend Deca', Courier, monospace;
+    letter-spacing: -0.035em;
+}
+
+/* Spacing between the sidebar menus/optionss */
+.sidebar .menu {
+    margin: 0.5em !important;
+}
+.sidebar .menu .title {
+    margin-left: 15px !important;
+}
+
+.container, .sidebar {
+    height: 98vh;
+
+    /* width size of sidebar */
+    width: var(--sidebar-width);
+}
+
+body {
+    /* background-image: url("../images/background_home.jpg");
+    aspect-ratio: 16 9;
+    background-image: cover;
+    overflow-y: hidden; */
+
+    height: 100vh;
+    background: url("abstract_background_securityofficer.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow-y: hidden; 
+}
+
+/* Edit button */
+.personal-box .personal-info-table .personal-edit-btn {
+    background: url('https://api.iconify.design/bxs/message-square-edit.svg?color=white') no-repeat center center / contain;
+    background-size: var(--icon-size);
+}
+.personal-box .personal-info-table .personal-profile {
+    background: url('https://api.iconify.design/healthicons/ui-user-profile.svg?color=white') no-repeat 35% center / contain;
+    background-size: var(--icon-size);
+}
+
+.personal-box .personal-box-grid .personal-info-profile {
+    background: url('https://api.iconify.design/healthicons/ui-user-profile.svg?color=white') no-repeat 35% center / contain;
+    background-size: var(--icon-size);
+}
+.personal-box :where(.personal-edit-btn, .personal-profile):hover {
+    /* filter: brightness(0.75); */
+    filter: brightness(75%);
+}
+
+
+/* Tables */
+.personal-info-table {
+    width: 90%;
+    color: white;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+
+    border-spacing: 0 .5em;
+    /* border-collapse: collapse; */
+    border-collapse: separate;
+}
+.personal-info-table tr {
+    display: table-row;
+    transition: .2s ease;
+}
+.personal-info-table tr:hover {
+    background-color: #1c1b3e;
+}
+.personal-info-table td  {
+    display: table-cell;
+    max-width: 30px;
+    padding: 1em;
+}
+/* .personal-info-table tbody tr td {
+    padding: .25em 0 !important;
+    align-items: center;
+} */
+.personal-edit-btn {
+    text-align: center;
+    cursor: pointer;
+    width: 10%;
+}
+
+
+
+
+
+hr {
+    width: 60%;
+    margin: 0 auto;
+
+    border: none;
+    height: 5px;
+    background-color: #414141;
+    
+}
+
+.admin-details-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    justify-content: space-evenly;
+    margin: 1em 0.5em;
+}
+
+.admin-details-box p {
+    font-family: 'Lexend Deca', Courier, monospace;
+    font-weight: bold;
+    font-size: 1em;
+    color: black;
+    line-height: 1;
+    letter-spacing: -0.035em;
+}
+
+/* Size of img and its parent container */
+.school-logo-container {
+    width: var(--image-dimensions);
+}
+.admin-details-box img {
+    height: var(--image-dimensions) !important;
+    width: var(--image-dimensions) !important;
+}
+
+.school-logo-container {
+    height: var(--image-dimensions);
+}
+
+.right-container {
+    height: 98vh;
+    background-color: #e8e5f9;
+    padding: 0 1em;
+    overflow: scroll;
+    
+    /* Strect - the size of sidebar */
+    /* width: calc(98vw - 250px); */
+    width: var(--right-container-width);
+
+}
+.right-container #content {
+    height: fit-content;
+}
+
+
+/* Horizontal line */
+.horizontal-box {
+    margin: 2em 0;
+}
+
+/* search icon in text input */
+
+.search-box {
+    height: 40px;
+    width: 90%;
+    color: black;
+}
+
+.search-icon::placeholder {
+    color: black;
+}
+.search-icon {
+    background: url('https://api.iconify.design/bx/search-alt.svg?color=black') no-repeat 10px center / contain !important;
+    /* background-position: 10px 50%; */
+    background-size: 25px !important;
+    padding-left: 50px !important;
+
+    
+    height: inherit !important;
+    width: inherit !important;
+    color: black !important;
+    /* font-weight: bold; */
+
+    padding: .5em;
+    border: 1px solid white;
+    border-radius: 100vmax;
+    background-color: #e9e8ff  !important;
+}
+
+
+
+.logo-holder {
+    display: flex;
+    align-items: center;
+    color: black;
+    font-size: 40px;
+
+    width: 35%;
+    padding-left: 20px;
+}  
+.util-holder {
+    width: 60%; 
+    display: flex;
+    align-items: center;
+}
+
+.header {
+    background-color: #a49aff;
+    display: flex;
+    width: 100%;
+    margin: .5em 0;
+    border-radius: 50vmax;
+    justify-content: space-;
+}
+
+/* Buttons on top right, (Settings, Change Theme, etc.) */
+.utils {
+    display: flex;
+    justify-content: space-between;
+    /* width: 40%; */
+    /* gap: .5em; */
+}
+.util-box {
+    --icon-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1B192E;
+    border-radius: 10px;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    padding: 1em;
+
+    transition: .25s ease;
+}
+.util-box:hover {
+    background-color: whitesmoke;
+}
+
+
+/* Tips Items */
+.tips-items {
+    display: flex;
+    align-items: center;
+    background: #11101D;
+    margin: .25em 0;
+    padding: 1em;
+    border-radius: 20pt;
+    gap: 10px;
+}
+
+.tips-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.tips-box .tips-items {
+    width: 100%;
+}
+.tips-box .tip-1, .tip-2, .tip-3 {
+    width: 100%;
+    color: white;
+    font-size: 1.25em;
+    /* padding-left: 1.5em; */
+}
+.take-me {
+    color: white;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+.tips-box .tips-items
+.tip-1::before, .tip-2::before,
+.tip-3::before, .take-me::before {
+    content: '';
+    float: left;
+
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+    margin-right: 10px;
+    height: 30px;
+    width: 30px;
+}
+.tips-box .tips-items .tip-1:before {
+    background: url('https://api.iconify.design/material-symbols/privacy-tip-rounded.svg?color=white') no-repeat 0 0 / contain;
+}
+.tips-box .tips-items .tip-2::before {
+    content: '';
+    background: url('https://api.iconify.design/icon-park-solid/email-lock.svg?color=white') no-repeat 0 0 / contain;
+}
+.tips-box .tips-items .tip-3::before {
+    content: '';
+    background: url('https://api.iconify.design/material-symbols/forms-apps-script.svg?color=white') no-repeat 0 0 / contain;
+}
+.take-me::before {
+    content: '';
+    background: url('https://api.iconify.design/ion/enter.svg?color=white') no-repeat center center / contain;
+}
+
+
+/* Icons in top right */
+.util-icon-notif{
+    background: url('https://api.iconify.design/carbon/notification-filled.svg?color=black') no-repeat center center / contain;
+}
+.util-icon-theme {
+    background: url('https://api.iconify.design/gg/dark-mode.svg?color=black') no-repeat center center / contain;
+}
+.util-icon-fullscr {
+    background: url('https://api.iconify.design/mingcute/fullscreen-fill.svg?color=black') no-repeat center center / contain;
+}
+.util-icon-settings {
+    background: url('https://api.iconify.design/ci/settings-filled.svg?color=black') no-repeat center center / contain;
+}
+.util-icon-logout {
+    background: url('https://api.iconify.design/majesticons/logout-half-circle.svg?color=black') no-repeat center center / contain;
+}
+/* .util-icon-notif, .util-icon-theme, .util-icon-fullscr,
+.util-icon-settings, .util-icon-logout {
+    cursor: pointer;
+} */
+.utils :where(.util-icon-notif, .util-icon-theme, .util-icon-fullscr,
+.util-icon-settings, .util-icon-logout) {
+    --icon-size: 45px;
+    cursor: pointer;
+    height: var(--icon-size);
+    width: var(--icon-size);
+    /* height: 50px; */
+    background-size: 30px;
+}
+
+/* 
+
+Specificity -> Inline Styles, IDs, [Classes, Pseudo-class], and [Elements, and pseudo-elements]
+:is() -> highest specificity 
+:where() -> zero specificity 
+*/
+
+
+
+/* 
+.registration-information-vehicle > div:nth-child(3)::before {
+  content: "";
+  background: url("https://api.iconify.design/icon-park-solid/hand-painted-plate.svg?width=19&height=17");
+    background-repeat: repeat;
+}
+*/
+
+/* 
+.registration-information-personal > div::before, .registration-information-vehicle > div::before {
+  background-repeat: no-repeat !important;
+  background-position: center bottom;
+  position: relative;
+  height: 20px;
+  width: 20px;
+  margin-right: 10px;
+  display: inline-block;
+  float: left;
+}
+*/
+
+/* https://mightydarkglasses.github.io/capstone-research-and-project/ */
+
+/* QR Code class */
+.tips-box {
+    display: none;
+}
+
+/* QR Code with Vehicle Information */
+.qr-code {
+    width: 100%;
+    /* height: 300px;  */
+    height: fit-content;
+    background-color: #877aff;
+    border-radius: 1em;
+    display: flex;
+    padding-bottom: 1em;
+
+    color: white;
+}
+.qr-code button {
+    color: white;
+    cursor: pointer;
+    background-color: var(--secondary-color-opaque);
+    border-radius: var(--bradius);
+    padding: 1em;
+    font-size: .75em;
+    text-transform: uppercase;
+    font-family: 'Lexend Deca', serif;
+}
+.qr-code-image, .qr-code-nocode {
+    background-image: url('../images/shape_blank.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 70% center;
+    /* backdrop-filter: brightness(30%); */
+}
+.qr-code .qr-code-information {
+    margin: 1em;
+}
+
+/* Quick Actions like Recent Activity, Linkages, Registration Status, and Update Information */
+/* .qr-code .qr-code-common-actions .save{
+    background: url('https://api.iconify.design/bxs/save.svg?color=white') no-repeat center center / contain;
+}
+.qr-code .qr-code-common-actions .viewQR{
+    background: url('https://api.iconify.design/entypo/eye.svg?color=white') no-repeat center center / contain;
+} */
+.qr-code .qr-code-quick-actions > a:hover,
+.qr-code .qr-code-common-actions > a:hover {
+    background-color: #272442;
+    
+}
+.viewQR, .save {
+    cursor: pointer;
+    padding: 
+    1em;
+    border-radius: 100vmax;
+    color: white;
+    text-transform: uppercase;
+    font-size: .75em;
+}
+.qr-code .qr-code-quick-actions > a,
+.qr-code .qr-code-common-actions > a {
+    background-color: #18162a;
+    /* pointer-events: none; */
+    transition: .25s ease;
+}
+.qr-code .qr-code-quick-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1em;
+    margin: 01em;
+}
+.qr-code .qr-code-quick-actions > a {
+    display: flex;
+    align-items: center;
+    /* gap: 1em; */
+}
+.qr-code .qr-code-common-actions > a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+}
+
+/* Save and View QR Code */
+.qr-code .qr-code-common-actions {
+    margin: 0 1em;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    justify-content: end;
+}
+.qr-code .qr-code-common-actions > a{
+    width: fit-content;
+}
+.qr-code .qr-code-image,
+.qr-code .qr-code-image-nocode {
+    height: 90%;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1em;
+    background-color: var(--secondary-color-opaque);
+    border-radius: 1em;
+}
+
+
+/* For no vehicle information layout */
+
+.qr-code {
+    display: none;
+}
+.qr-code .qr-code-no-info {
+    margin: 1em;
+}
+.qr-code .qr-code-image-nocode img {
+    width: 250px;
+}
+
+.qr-code :where(.qr-code-no-info, .qr-code-nocode-steps) {
+    width: 65%;
+}
+.qr-code-nocode-steps {
+    margin-left: 1em;
+}
+
+.qr-code .qr-code-no-info .qr-code-nocode-title {
+    background-color: var(--secondary-color-opaque);
+    border-radius: 1.5em;
+    padding: .5em;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+
+    font-family: 'Lexend Deca', sans-serif;
+    padding: 1em 2em;
+    margin-bottom: 1em;
+}
+.qr-code-nocode-steps {
+    width: 98%;
+    font-family: 'Lexend Deca', sans-serif;
+}
+.qr-code .qr-code-no-info .qr-code-nocode-title p {
+    font-weight: bold;
+}
+
+.qr-code-nocode-steps p{
+    text-transform: uppercase;
+}
+.qr-code-nocode-steps-ulist {
+    margin: 1em 0;
+}
+.qr-code-nocode-steps-ulist > li {
+    margin: .5em 0;
+}
+
+.qr-code .qr-code-no-info .qr-code-nocode-title::before {
+    content: '';
+    background: url('https://api.iconify.design/carbon/vehicle-insights.svg?color=white') no-repeat center center / contain;
+}
+/* qr-code-nocode */
+
+.qr-code .qr-code-image img,
+.qr-code .qr-code-nocode img {
+    --image-dimension: 250px;
+    width: var(--image-dimension);
+    border: 1em white solid;
+    border-radius: 1em;
+}
+
+/* .qr-code .qr-code-image img {
+    --image-dimension: 250px;
+    width: var(--image-dimension);
+    border: 1em white solid;
+    border-radius: 1em;
+} */
+
+
+/* QR Code - Information */
+.qr-code-vehicle-info {
+    width: 65%;
+    font-family: 'Lexend Deca', sans-serif;
+    margin: 1em 0;
+}
+/* .qr-code-vehicle-info::before {
+    
+    --icon-dimension: 50px;
+
+    content: "";
+    background: url('https://api.iconify.design/fluent/vehicle-car-28-filled.svg?color=white') no-repeat center center / contain;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 20px 0 35px;
+    height: 70px;
+    width: var(--icon-dimension);
+} */
+
+/* .qr-code-vehicle-info::after {
+    --icon-dimension: 50px;
+
+    content: "";
+    background: url('https://api.iconify.design/fluent/vehicle-car-28-filled.svg?color=white') no-repeat center center / contain;
+    float: right;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    top: 100px;
+    height: 90px;
+    width: var(--icon-dimension);
+} */
+/* All of the component (divs) Vehicle dropdown, descriptions, quick actions, save and qr view */
+
+.qr-code-vehicle-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.qr-code-vehicle-info > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    /* margin: auto 0; */
+}
+.qr-code-vehicle-info .qr-code-dropdown .qr-code-dropdown-clickable {
+    background-color: var(--secondary-color-opaque);
+    border-radius: 1.5em;
+    padding: .5em;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    /* margin: .75em; */
+}
+.qr-code-vehicle-info .qr-code-dropdown {
+    position: relative;
+}
+.popup-dropdown {
+    background-color: #4530ff !important;
+    display: block;
+    display: none;
+    position: absolute;
+    top: 80px;
+    /* left: 50px; */
+    max-width: 100%;
+    border-radius: 1em;
+    z-index: 100;
+    
+    /* top: 50px; */
+    /* margin: 1.5em 0; */
+}
+.popup-dropdown ul {
+    margin: 0 2em;
+}
+.popup-dropdown ul li {
+    cursor: pointer;
+    margin: 1em 0;
+}
+.popup-dropdown ul li:hover {
+    background-color: var(--tertiary-color);
+}
+.qr-code-vehicle-info .qr-code-dropdown img {
+    width: 50px;
+    margin: 0 1em;
+}
+.qr-code-vehicle-info .qr-code-dropdown div {
+    width: 100%;
+}
+.qr-code-vehicle-info .qr-code-dropdown p:last-child {
+    /* Target the Vehicle Index (Vehicle #1, #2, etc...) */
+    font-size: 1em;
+}
+.qr-code-vehicle-info .qr-code-dropdown p:first-child {
+    /* Target the Vehicle Index (Vehicle #1, #2, etc...) */
+    font-weight: 700;
+    font-size: 1.5em;
+}
+
+/* 
+<div id="ex1" class="modal">
+    <img class="modal-qrcode" src="" alt="">
+</div>
+     */
+
+#qr-code-modal {
+    width: minmax(300px, 750px);
+    height: minmax(300px, 800px);
+}
+
+/* .modal > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+} */
+
+#qr-code-modal img {
+    width: 100%;
+    padding: 1em;
+}
+.right-container .mobile-sidebar {
+    display: none;
+}
+
+@media screen and (max-width: 960px) {
+    .container {
+        width: 97%;
+    }
+
+    .header {
+        display: none;
+    }
+
+    .right-container {
+        /* width: 95vw !important; */
+        overflow: hidden;
+        padding: 0;
+        overflow-y: scroll;
+        border-radius: 1em;
+        width: 97vw;
+    }
+
+
+    .qr-code .qr-code-image {
+        display: block;
+        width: fit-content;
+        height: fit-content;
+        padding: 1em;
+        margin: 1em auto;
+    }
+    .welcome-box {
+        width: 100%;
+    }
+
+    .qr-code-vehicle-info {
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    .qr-code .qr-code-quick-actions {
+        flex-direction: column;
+    }
+
+    /* Dropdown */
+    .qr-code-vehicle-info .qr-code-dropdown .qr-code-dropdown-clickable {
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    /* Save, View QR Code */
+    .qr-code .qr-code-common-actions {
+        /* text-align: center; */
+        justify-content: center;
+    }
+
+    .welcome-title {
+        text-align: center;
+    }
+
+    .right-container .mobile-sidebar {
+        display: block;
+    }
+    
+
+}
+
+
+
+
+

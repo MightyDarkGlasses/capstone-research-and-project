@@ -7,6 +7,12 @@ let vehicleInformation = [];
 
 if(windowLocation.indexOf("user-home") > -1) {
 
+// Change theme
+if(localStorage.getItem("theme") === "light") {
+    document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+    document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // ##### Delete User
     // fire.getOnAuthStateChanged(fire.auth, (user) => {
@@ -29,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
             || localStorage.getItem("profile-owner") === null)) {
                 // console.log("false...");
 
+                localStorage.setItem("theme", "dark");
                 const profilePicture = displayProfile(user.uid).then(evt => { 
                     console.log("current user: ", fire.auth.currentUser);
                     console.log('current user uid: ', fire.auth.currentUser.uid);
@@ -103,6 +110,9 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location = "../login.html";
         }
     });
+
+
+
 
     async function displayProfile(userUID) {
         const docAccountActivity = fire.myDoc(fire.db, "account-information", userUID);
@@ -190,6 +200,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+    // Notification, Full Screen, Logout, etc.
+    function topButtons() {        
+        const notif = document.querySelector(".util-icon-notif");
+        const themes = document.querySelector(".util-icon-theme");
+        const fullScreen = document.querySelector(".util-icon-fullscr");
+        const settings = document.querySelector(".util-icon-settings");
+        const logout = document.querySelector(".util-icon-logout");
+        const elem = document.querySelector("html");
+
+        fullScreen.addEventListener("click", () => {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        });
+
+        themes.addEventListener("click", () => {
+            if(localStorage.getItem("theme")) {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+                localStorage.removeItem("theme");
+            }
+            else {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        logout.addEventListener('click', () => {
+            // console.log("this is a test.");
+            // Add activity when user is logged out.
+            fire.addActivity(fire.auth.currentUser.uid, fire.listOfUserLevels[0], fire.listOfPages["auth_login"], fire.listOfActivityContext["user_logout"])
+            .then((success) => {
+                fire.logoutUser();
+                localStorage.clear();
+                window.location = '../login.html';
+            });
+        });
+    }
+    topButtons();
+
     function displayVehicleDropdownList() {
         let listOfVehiclesTags = '';
         let vehicleListUL = document.getElementById("vehicle-list");
@@ -201,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // console.log('displayVehicleDropdownList');
         // console.log('displayVehicleDropdownList : vehicleData', vehicleData);
 
+        let counter = 1;
         for (let x=0; x<vehicleDataKeys.length; x++) {
             if(vehicleDataKeys[x] !== "vehicle_length") {
                 // console.log('x:', vehicleDataKeys[x]);
@@ -209,11 +265,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 //vehicle-placeholder
                 console.log('vehicleData: ', vehicleData);
                 console.log('keys: ', vehicleDataKeys[x], 'vehicleData model: ', vehicleData[vehicleDataKeys[x]]["model"]);
-                listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${x} | ${vehicleData[vehicleDataKeys[x]]["model"]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
-                
+                listOfVehiclesTags += `<li data-key="${vehicleDataKeys[x]}">Vehicle ${counter} | ${vehicleData[vehicleDataKeys[x]]["model"]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</li>`
+                counter += 1;
                 if(x === 1) { //will be used for placeholder
-                    // console.log('placeholder');
-
                     vehiclePlaceholder.innerHTML =  `<p>Vehicle #1</p>
                     <p>${vehicleData[vehicleDataKeys[x]]["model"][0]}, ${vehicleData[vehicleDataKeys[x]]["use_types"]}</p>`;
                     
@@ -221,6 +275,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     myQRImage.setAttribute("src", qrCodeImageLink);
                     myQRImage2.setAttribute("src", qrCodeImageLink);
                     saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
+                }
+                else {
+                    vehiclePlaceholder.innerHTML =  `<p style="font-size: 1em;">Click the dropdown.</p><p>Number of items: ${vehicleDataKeys.length}</p>`;
+                    myQRImage.setAttribute("src", "bulsu-logo.png");
+                    myQRImage2.setAttribute("src", "bulsu-logo.png");
+                    saveQR.setAttribute("onclick", ``);
                 }
             }
         } //end of iteration
@@ -265,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         let ownerVehicleModel = undefined;
                         await getAccountInformationOwner(linkagesList[data]["orig_uid"]).then(evt => {
                             // console.log('event: ', evt)
-                            ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
+                            ownerFullName = `${evt['last_name']} ${evt['first_name']}`;
                         });
                         await getVehicleInformationModel(linkagesList[data]["orig_uid"]).then(evt => {
                             console.log('event: ', evt, data)
@@ -425,21 +485,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 
-    let logoutUser = document.querySelector('.util-icon-logout');
-    logoutUser.addEventListener('click', () => {
-        // console.log("this is a test.");
-        localStorage.clear();
-        
-
-        // Add activity when user is logged out.
-        fire.addActivity(fire.auth.currentUser.uid, fire.listOfUserLevels[0], fire.listOfPages["auth_login"], fire.listOfActivityContext["user_logout"])
-        .then((success) => {
-            fire.logoutUser();
-            window.location = '../login.html';
-        });
-
-        // window.location = '../login.html';
-    });
+    
 
     // document.querySelector('.fullname').innerText = localStorage.personal_info_name === '' ? '' : localStorage.personal_info_name;
     // document.querySelector('.category').innerText = 
