@@ -45,18 +45,20 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         });
 
         themes.addEventListener("click", () => {
-            if(localStorage.getItem("theme") === "light") {
+            console.log("my theme clicked", localStorage.getItem("theme"));
+            if(localStorage.getItem("theme") == "dark") {
+                console.log("my theme clicked", `localStorage.getItem("theme") == "light"`);
                 document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
                 document.querySelector("#system-theme3").setAttribute("href", "user-announcement.css");
-                localStorage.setItem("theme", "dark");
+                localStorage.setItem("theme", "light");
             }
-            
-            if(localStorage.getItem("theme") === "dark" || localStorage.getItem("theme") === null) {
+            else if(localStorage.getItem("theme") == "light" || localStorage.getItem("theme") === null) {
+                console.log("my theme clicked", `localStorage.getItem("theme") == "dark" or null`);
                 document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
                 document.querySelector("#system-theme3").setAttribute("href", "user-announcement-light.css");
-                localStorage.setItem("theme", "light");
+                localStorage.setItem("theme", "dark");
             }
         });
 
@@ -76,273 +78,81 @@ if(windowLocation.indexOf("user-announcement") > -1) {
     const colRef = fire.myCollection(fire.db, "announcements");
     const linkagesQuery = fire.doQuery(colRef, fire.doLimit(10));
     const docsSnap = await fire.myGetDocs(linkagesQuery);
+    const announcements = document.querySelector('.announcements');
 
     let index = 0;
     docsSnap.forEach(async doc => {
         index = index + 1;
         let myData = doc.data();
-        console.log("data", myData, index);
-        
-        const announcements = document.querySelector('.announcements');
-        const toggleAnnouncement = 
-        `<div class="toggle-announcements" data="announcements-toggle${index}">
-            <div class="toggle-title">
-                <div class="circle"></div>
-                <p>${myData.title}</p>
-            </div>
-            <div>
-                <p>${myData.createdAt.toDate().toLocaleString()}</p>
-                <div class="dropdown"></div>
-            </div>
-        </div>
-        `;
-        // announcements.insertAdjacentElement('beforeend', toggleAnnouncement);
-        $('.announcements').append(toggleAnnouncement)
-
-        let listOfSources = "<br/>" + myData.sources;
-        // myData.sources.forEach((data) => {
-        //     listOfSources += `<li><a href="${data}">${data}</a></li>`
-        // });
-        
-        let listOfFiles = '';
-        // myData.files.forEach((data) => {
-        //     let httpsReference = fire.myRef(fire.storage, data).name;
-        //     listOfFiles += `<li><a href="${data}">${httpsReference}</a></li>`
-        // });
-        console.log(listOfSources);
-        console.log(listOfFiles);
-
-
-        
-        // If there are no sources given
-        if(listOfSources === '') {
-            listOfSources = "<p style='color: rgba(255,255,255,.75)><i>No sources.</i></p>"
-            listOfSources = "<p><i>No sources.</i></p>"
-        }
-        
+        console.log("data", myData.title, index);
 
         const imageRef = fire.myRef(fire.storage, `announcements/thumbnail/${myData.title}/profilepic.jpg`);
-        const fileRef1 = fire.myRef(fire.storage, `announcements/files/${myData.title}/file1`);
-        const fileRef2 = fire.myRef(fire.storage, `announcements/files/${myData.title}/file2`);
-        const fileRef3 = fire.myRef(fire.storage, `announcements/files/${myData.title}/file3`);
+        fire.myGetDownloadURL(imageRef).then((url) => {
+            const toggleAnnouncement = 
+            `<div class="toggle-announcements" data="announcements-toggle${index}">
+                <div class="toggle-title">
+                    <div class="circle"></div>
+                    <p>${myData.title}</p>
+                </div>
+                <div>
+                    <p>${myData.createdAt.toDate().toLocaleString()}</p>
+                    <div class="dropdown"></div>
+                </div>
+            </div>
+            `;
+            // announcements.insertAdjacentElement('beforeend', toggleAnnouncement);
+            $('.announcements').append(toggleAnnouncement)
 
-        // const w = fire.myGetDownloadURL(imageRef).then((url) => {
-        //     console.log(url);
-        //     return url;
-        // });
-        // const x = fire.myGetDownloadURL(fileRef1).then((url) => {
-        //     console.log("url1", url);
-        //     return url;
-        // });
-        // const y = fire.myGetDownloadURL(fileRef2).then((url) => {
-        //     console.log("url2", url);
-        //     return url;
-        // });
-        // const z = fire.myGetDownloadURL(fileRef3).then((url) => {
-        //     console.log("url3", url);
-        //     return url;
-        // });
+            let listOfSources = myData.sources;
+            // If there are no sources given
+            if(listOfSources === '' || listOfSources === null || listOfSources.length === undefined) {
+                listOfSources = "<p style='color: rgba(255,255,255,.75)><i>No sources.</i></p>"
+                listOfSources = "<p><i>No sources.</i></p>"
+            }
 
-        // // Isang kuhanan lang...
-        // z.then((returnedData) => {
-        //     console.log("returnedData z: ", returnedData);
-        // });
-        
-
-        const w = fire.myGetDownloadURL(imageRef).then((url) => {
-            console.log(url);
             const toggleAnnouncementDetails =
             `
-            <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
+            <div class="announcements-info" id="announcements-toggle${index}">
                 <div>
                     <div class="announcement-priority">${myData.priority}</div>
                     <p class="announcements-headline">${myData.title}</p>
                     <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
                     <p class="announcements-person">${myData.posted_by}</p>
                 </div>
-                <br/>
                 <div class="annoucements-main-container">
                     <div class="announcements-container">
                             <p class="announcements-message">
                                 ${myData.message}
                             </p>
                             <ul class="announcements-sources">
-                               ${listOfSources}
+                            ${listOfSources}
                             </ul>
                     </div>
                     <div>
                         <img class="announcement-thumbnail" src="${url}" alt="announcement thumbnail">
                     </div>
                 </div>
-            </div>
-            `;
+            </div>`;
+
             $('.announcements').append(toggleAnnouncementDetails);
         });
-
-        // Sabay-sabay
-        // Promise.all([w, x, y, z]).then((links) => {
-        //     console.log("downloadURL: ", links);
-
-        //     links.forEach((data, index) => {
-        //         if(data !== null || typeof(data) !== "undefined" || index !== 0) {
-        //             listOfFiles += `<li><a href="${data}">File #${index}</a></li>`
-        //         }
-        //     });
-
-        //     // If there are no files uplaoded
-        //     if(listOfFiles === '') {
-        //         listOfFiles = "<p style='color: rgba(255,255,255,.75);'><i>No files.</i></p>"
-        //         listOfFiles = "<p><i>No files.</i></p>"
-        //     }
-            
-
-        //     const toggleAnnouncementDetails =
-        //     `
-        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
-        //         <div>
-        //             <div class="announcement-priority">${myData.priority}</div>
-        //             <p class="announcements-headline">${myData.title}</p>
-        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
-        //             <p class="announcements-person">${myData.posted_by}</p>
-        //         </div>
-        //         <br/>
-        //         <div class="annoucements-main-container">
-        //             <div class="announcements-container">
-        //                     <p class="announcements-message">
-        //                         ${myData.message}
-        //                     </p>
-        //                     <ul class="announcements-sources">
-        //                        ${listOfSources}
-        //                     </ul>
-        //                     <ul class="announcements-file">
-        //                         ${listOfFiles}
-        //                     </ul>
-        //             </div>
-        //             <div>
-        //                 <img class="announcement-thumbnail" src="${links[0]}" alt="announcement thumbnail">
-        //             </div>
-        //         </div>
-        //     </div>
-        //     `;
-        //     $('.announcements').append(toggleAnnouncementDetails);
-        // });
-
-        
-
-
-
-        // console.log("imageRef: ", imageRef);
-        // fire.myGetDownloadURL(imageRef).then((url) => {
-        //     console.log(url);
-
-        //     const toggleAnnouncementDetails =
-        //     `
-        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
-        //         <div>
-        //             <div class="announcement-priority">${myData.priority}</div>
-        //             <p class="announcements-headline">${myData.title}</p>
-        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
-        //             <p class="announcements-person">${myData.posted_by}</p>
-        //         </div>
-        //         <div class="annoucements-main-container">
-        //             <div class="announcements-container">
-        //                     <p class="announcements-message">
-        //                         ${myData.message}
-        //                     </p>
-        //                     <ul class="announcements-sources">
-        //                        ${listOfSources}
-        //                     </ul>
-        //                     <ul class="announcements-file">
-        //                         <li>${listOfFiles}</li>
-        //                     </ul>
-        //             </div>
-        //             <div>
-        //                 <img class="announcement-thumbnail" src="${url}" alt="announcement thumbnail">
-        //             </div>
-        //         </div>
-        //     </div>
-        //     `;
-        //     $('.announcements').append(toggleAnnouncementDetails);
-        // }).catch((e) => {
-        //     console.error("error: ", e);
-        //     const toggleAnnouncementDetails =
-        //     `
-        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
-        //         <div>
-        //             <div class="announcement-priority">${myData.priority}</div>
-        //             <p class="announcements-headline">${myData.title}</p>
-        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
-        //             <p class="announcements-person">${myData.posted_by}</p>
-        //         </div>
-        //         <div class="annoucements-main-container">
-        //             <div class="announcements-container">
-        //                     <p class="announcements-message">
-        //                         ${myData.message}
-        //                     </p>
-        //                     <ul class="announcements-sources">
-        //                        ${listOfSources}
-        //                     </ul>
-        //                     <ul class="announcements-file">
-        //                         ${listOfFiles}
-        //                     </ul>
-        //             </div>
-        //             <div>
-        //                 <img class="announcement-thumbnail" src="bulsu-logo.png" alt="announcement thumbnail">
-        //             </div>
-        //         </div>
-        //     </div>
-        //     `;
-        //     $('.announcements').append(toggleAnnouncementDetails);
-        // });
-
-
-
-        
-
-        
-        // const priorityNode = document.createElement("div");
-        // const priorityAttr = document.createAttribute("class");
-        // priorityAttr.value = "announcement-priority";
-        // priorityNode.setAttribute(priorityAttr);
-
-        // const headlineNode = document.createElement("p");
-        // const headlineAttr = document.createAttribute("class");
-        // headlineAttr.value = "announcement-headline";
-        // headlineNode.setAttribute(headlineAttr);
-
-        // const timestampNode = document.createElement("p");
-        // const timestampAttr = document.createAttribute("class");
-        // timestampAttr.value = "announcement-timestamp";
-        // timestampNode.setAttribute(timestampAttr);
-        
-        // const personNode = document.createElement("p");
-        // const personAttr = document.createAttribute("class");
-        // personAttr.value = "announcement-person";
-        // personNode.setAttribute(personAttr);
-
-    });
-
-    document.querySelectorAll('.toggle-announcements').forEach((element) => {
-        // console.log(element.getAttribute("data"));
-        const attr = element.getAttribute("data");
-        console.log(attr);
-        element.addEventListener('click', () => {
-            $('#' + attr).animate({
-                opacity: "toggle",
-                height: "toggle"
-            }, 250, 'linear', () => {
-                // animation complete
-            });
-            console.log(attr)
-        });
-    });
-
-    $(`#announcements-toggle1`).on('click', () => {
-        console.log(`toggle1`);
-    });
-    $(`#announcements-toggle2`).on('click', () => {
-        console.log(`toggle2`);
-    });
+    }); //end of foreach
+    
+    // console.log(document.querySelectorAll('.toggle-announcements'));
+    // document.getElementsByClassName("toggle-announcements").forEach((element) => {
+    //     // console.log(element.getAttribute("data"));
+    //     const attr = element.getAttribute("data");
+    //     console.log(attr);
+    //     element.addEventListener('click', () => {
+    //         $('#' + attr).animate({
+    //             opacity: "toggle",
+    //             height: "toggle"
+    //         }, 250, 'linear', () => {
+    //             // animation complete
+    //         });
+    //         console.log(attr)
+    //     });
+    // });
 }
 
 

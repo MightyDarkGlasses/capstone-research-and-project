@@ -815,16 +815,16 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 if(currentLinkagesKeysRegistered.includes(plateNumber)) {
                     // console.log('You cannot add that plate number to your linkages. Reason: Already added to your linkages list. ');
     
-                    $('#error-popup .modal-container-main').html(
-                        `<p>You cannot add the plate number to your linkages</p>
-                        <p class="note">Note: Already added to your linkages list. </p>`
-                        );
-                    $("#error-popup").modal({
-                        fadeDuration: 100
-                    });
-                    $("#error-popup").on($.modal.CLOSE, () => {
-                        $('.mobile-sidebar').css('opacity', 1);
-                    });
+                    // $('#error-popup .modal-container-main').html(
+                    //     `<p>You cannot add the plate number to your linkages</p>
+                    //     <p class="note">Note: Already added to your linkages list. </p>`
+                    //     );
+                    // $("#error-popup").modal({
+                    //     fadeDuration: 100
+                    // });
+                    // $("#error-popup").on($.modal.CLOSE, () => {
+                    //     $('.mobile-sidebar').css('opacity', 1);
+                    // });
                 }
                 else {
                     console.log('All unique.')

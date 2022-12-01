@@ -3,14 +3,14 @@ import * as fire from "../src/index";
    
 
 let windowLocation = window.location.pathname;
-if(localStorage.getItem("theme") === "light") {
-    document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
-    document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
-}
+
 
 //Check if I am on the user-account.html
 if(windowLocation.indexOf("user-account") > -1) {
-    
+    if(localStorage.getItem("theme") === "light") {
+        document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+        document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+    }
 
     // document.querySelector('.fullname').innerText = localStorage.personal_info_name === '' ? '' : localStorage.personal_info_name;
     // document.querySelector('.category').innerText = 
@@ -190,6 +190,9 @@ if(windowLocation.indexOf("user-account") > -1) {
             document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
             document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
             document.querySelector(".category").textContent = localStorage.getItem("profile-category");
+
+            localStorage.setItem("personal_info_email", user.email);
+            console.log("setItem: ", localStorage.getItem("personal_info_email"));
         }
         else {
             window.location = "../login.html";
@@ -467,6 +470,8 @@ if(windowLocation.indexOf("user-account") > -1) {
                         const updateProfile = await fire.doUpdateProfile(fire.auth.currentUser, {
                             'photoURL': downloadURL,
                         });
+                        localStorage.setItem("profile-picture", downloadURL);
+                        window.location.reload();
                     });
                 } //end of getDownloadURL
                 );

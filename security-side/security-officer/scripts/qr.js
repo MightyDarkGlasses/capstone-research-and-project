@@ -40,18 +40,10 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             Object.keys(visitorInfo).forEach((element) => {
                 // console.log('visitorInfo: ', visitorInfo);
                 let fullname = `${visitorInfo[element].last_name.trim()}, ${visitorInfo[element].first_name.trim()} ${visitorInfo[element].middle_name.trim()}`;
-                // console.log('fname: ', visitorInfo[element].first_name.trim());
-                // console.log('lname: ', visitorInfo[element].last_name.trim());
-                // console.log('mname: ', visitorInfo[element].middle_name.trim());
 
-                // const obj = {label: doc.id, value: fullname };
-                // console.log('obj: ', obj);
-
-                // console.log('some: ', availableTags.some(item => item.fullname === fullname));
                 if(!availableTags.some(item => item.fullname === fullname)) {
                     console.log('element: ', visitorInfo)
                     availableTags.push({label: `${doc.id}, ${fullname}`, 'value': fullname, 'data': visitorInfo[element]});
-
                 }
                 // fullname = null;
             });
@@ -70,9 +62,6 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         $('input[name="guest-add-lname"]').attr({'value': selectedItem.last_name});
                         $('input[name="guest-add-vehiclemodel"]').attr({'value': selectedItem.vehicle_model});
                         $('input[name="guest-add-platenum"]').attr({'value': selectedItem.plate_number});
-
-
-
                     }
                 });
 
@@ -87,6 +76,12 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     let isSuccessPersonal = false;
     let isSuccessVehicle = false;
     
+
+    // const inned = document.querySelector('.dataTables_filter input');
+    // $(".dataTables_filter input").css({
+    //     "border": "1px solid red",
+    // })
+
     async function fetchInformation(userUID, plateNumber) {
         console.log('fetchInformation: ', userUID, plateNumber);
         // Success checking
@@ -331,8 +326,15 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                                 checkLengthTimeOut += 1;
                             }
 
-                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString();
+
                             element[1]['time_out']['gate_number'] = element[1]['time_out']['gate_number'] === null ? '-' : element[1]['time_out']['gate_number'];
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' 
+                            : element[1]['time_out']['timestamp'].toDate().toLocaleString() + ", Gate #" + element[1]['time_out']['gate_number'];
+
+
+                           
+
+                            
                             element[1]['time_out']['officer_uid'] = element[1]['time_out']['officer_uid'] === null ? '-' : element[1]['time_out']['officer_uid'];
 
                             // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '' : element[1]['time_out']['timestamp'];
@@ -379,17 +381,17 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                             // {"data": "time_out.timestamp"},
                             {"data": (data, type, dataToSet) => {
                                 // console.log("data.time_in: ", data.time_in);
-                                return data.time_in.timestamp.toDate().toLocaleString(); }
+                                return data.time_in.timestamp.toDate().toLocaleString() + ", Gate #" + data.time_in.gate_number; }
                                 // return "Time In"; }
                             },
                             {"data": (data, type, dataToSet) => {
                                 // console.log("data.time_out: ", data.time_out);
-                                return data.time_out.timestamp; }
+                                return data.time_out.timestamp }
                                 // return "Time Out"; }
                             },
-                            {"data": (data, type, dataToSet) => {
-                                return data.time_in.gate_number + ", " + data.time_out.gate_number}
-                            },
+                            // {"data": (data, type, dataToSet) => {
+                            //     return data.time_in.gate_number + ", " + data.time_out.gate_number}
+                            // },
                             // {"data": "time_out.officer_uid"},
                             {"data": (data, type, dataToSet) => {
                                 return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
@@ -439,8 +441,11 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
                         element[1]['type'] = "Registered";
                         
-                        index += 1; //increment
-                        logs.push(element[1]);
+                        console.log("Search: ", element[1]['time_out']['timestamp']);
+                        if(element[1]['time_out']['timestamp'] === null) {
+                            logs.push(element[1]);
+                            index += 1; //increment
+                        }
                     }
                 }); //end of foreach
             }); //end of snapshot
@@ -459,8 +464,11 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
                         element[1]['type'] = "Visitor";
                         
-                        index += 1; //increment
-                        logs.push(element[1]);
+                        console.log("Search: ", element[1]['time_out']['timestamp']);
+                        if(element[1]['time_out']['timestamp'] === null) {
+                            logs.push(element[1]);
+                            index += 1; //increment
+                        }
                     }
                 }); //end of foreach
             }); //end of snapshot
@@ -538,9 +546,12 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                             // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
                             
 
-                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
-                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString();
+                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString() + ", Gate #" + element[1]['time_in']['gate_number'];
+
                             element[1]['time_out']['gate_number'] = element[1]['time_out']['gate_number'] === null ? '-' : element[1]['time_out']['gate_number'];
+
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString() + " Gate #" + element[1]['time_out']['gate_number'];
+
                             element[1]['time_out']['officer_uid'] = element[1]['time_out']['officer_uid'] === null ? '-' : element[1]['time_out']['officer_uid'];
 
 
@@ -563,9 +574,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         "columns": [
                             {"data": "time_in.timestamp"},
                             {"data": "time_out.timestamp"},
-                            {"data": (data, type, dataToSet) => {
-                                return data.time_in.gate_number + ", " + data.time_out.gate_number}
-                            },
+                            // {"data": (data, type, dataToSet) => {
+                            //     return data.time_in.gate_number + ", " + data.time_out.gate_number}
+                            // },
                             // {"data": "time_out.officer_uid"},
                             {"data": (data, type, dataToSet) => {
                                 return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
@@ -862,6 +873,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 const setOfficerName = document.querySelector('.name-sg');
                 setOfficerName.innerText = 
                 `${securityOfficerInformation.lastname}, ${securityOfficerInformation.firstname} ${securityOfficerInformation.middlename}`
+                localStorage.setItem("security-officer", JSON.stringify(securityOfficerInformation));
+
+
             }
             else {
                 console.log('That security officer does not exist.')

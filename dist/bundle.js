@@ -36584,18 +36584,10 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
             Object.keys(visitorInfo).forEach((element) => {
                 // console.log('visitorInfo: ', visitorInfo);
                 let fullname = `${visitorInfo[element].last_name.trim()}, ${visitorInfo[element].first_name.trim()} ${visitorInfo[element].middle_name.trim()}`;
-                // console.log('fname: ', visitorInfo[element].first_name.trim());
-                // console.log('lname: ', visitorInfo[element].last_name.trim());
-                // console.log('mname: ', visitorInfo[element].middle_name.trim());
 
-                // const obj = {label: doc.id, value: fullname };
-                // console.log('obj: ', obj);
-
-                // console.log('some: ', availableTags.some(item => item.fullname === fullname));
                 if(!availableTags.some(item => item.fullname === fullname)) {
                     console.log('element: ', visitorInfo)
                     availableTags.push({label: `${doc.id}, ${fullname}`, 'value': fullname, 'data': visitorInfo[element]});
-
                 }
                 // fullname = null;
             });
@@ -36614,9 +36606,6 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         $('input[name="guest-add-lname"]').attr({'value': selectedItem.last_name});
                         $('input[name="guest-add-vehiclemodel"]').attr({'value': selectedItem.vehicle_model});
                         $('input[name="guest-add-platenum"]').attr({'value': selectedItem.plate_number});
-
-
-
                     }
                 });
 
@@ -36631,6 +36620,12 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
     let isSuccessPersonal = false;
     let isSuccessVehicle = false;
     
+
+    // const inned = document.querySelector('.dataTables_filter input');
+    // $(".dataTables_filter input").css({
+    //     "border": "1px solid red",
+    // })
+
     async function fetchInformation(userUID, plateNumber) {
         console.log('fetchInformation: ', userUID, plateNumber);
         // Success checking
@@ -36875,8 +36870,15 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                                 checkLengthTimeOut += 1;
                             }
 
-                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString();
+
                             element[1]['time_out']['gate_number'] = element[1]['time_out']['gate_number'] === null ? '-' : element[1]['time_out']['gate_number'];
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' 
+                            : element[1]['time_out']['timestamp'].toDate().toLocaleString() + ", Gate #" + element[1]['time_out']['gate_number'];
+
+
+                           
+
+                            
                             element[1]['time_out']['officer_uid'] = element[1]['time_out']['officer_uid'] === null ? '-' : element[1]['time_out']['officer_uid'];
 
                             // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '' : element[1]['time_out']['timestamp'];
@@ -36923,17 +36925,17 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                             // {"data": "time_out.timestamp"},
                             {"data": (data, type, dataToSet) => {
                                 // console.log("data.time_in: ", data.time_in);
-                                return data.time_in.timestamp.toDate().toLocaleString(); }
+                                return data.time_in.timestamp.toDate().toLocaleString() + ", Gate #" + data.time_in.gate_number; }
                                 // return "Time In"; }
                             },
                             {"data": (data, type, dataToSet) => {
                                 // console.log("data.time_out: ", data.time_out);
-                                return data.time_out.timestamp; }
+                                return data.time_out.timestamp }
                                 // return "Time Out"; }
                             },
-                            {"data": (data, type, dataToSet) => {
-                                return data.time_in.gate_number + ", " + data.time_out.gate_number}
-                            },
+                            // {"data": (data, type, dataToSet) => {
+                            //     return data.time_in.gate_number + ", " + data.time_out.gate_number}
+                            // },
                             // {"data": "time_out.officer_uid"},
                             {"data": (data, type, dataToSet) => {
                                 return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
@@ -36983,8 +36985,11 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
                         element[1]['type'] = "Registered";
                         
-                        index += 1; //increment
-                        logs.push(element[1]);
+                        console.log("Search: ", element[1]['time_out']['timestamp']);
+                        if(element[1]['time_out']['timestamp'] === null) {
+                            logs.push(element[1]);
+                            index += 1; //increment
+                        }
                     }
                 }); //end of foreach
             }); //end of snapshot
@@ -37003,8 +37008,11 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
                         element[1]['type'] = "Visitor";
                         
-                        index += 1; //increment
-                        logs.push(element[1]);
+                        console.log("Search: ", element[1]['time_out']['timestamp']);
+                        if(element[1]['time_out']['timestamp'] === null) {
+                            logs.push(element[1]);
+                            index += 1; //increment
+                        }
                     }
                 }); //end of foreach
             }); //end of snapshot
@@ -37082,9 +37090,12 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                             // element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === '' ? '' : new Date(element[1]['time_out']['timestamp']).toLocaleString('en-GB',{timeZone:'UTC'})
                             
 
-                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString();
-                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString();
+                            element[1]['time_in']['timestamp'] = element[1]['time_in']['timestamp'] === '' ? '' : element[1]['time_in']['timestamp'].toDate().toLocaleString() + ", Gate #" + element[1]['time_in']['gate_number'];
+
                             element[1]['time_out']['gate_number'] = element[1]['time_out']['gate_number'] === null ? '-' : element[1]['time_out']['gate_number'];
+
+                            element[1]['time_out']['timestamp'] = element[1]['time_out']['timestamp'] === null ? '-' : element[1]['time_out']['timestamp'].toDate().toLocaleString() + " Gate #" + element[1]['time_out']['gate_number'];
+
                             element[1]['time_out']['officer_uid'] = element[1]['time_out']['officer_uid'] === null ? '-' : element[1]['time_out']['officer_uid'];
 
 
@@ -37107,9 +37118,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                         "columns": [
                             {"data": "time_in.timestamp"},
                             {"data": "time_out.timestamp"},
-                            {"data": (data, type, dataToSet) => {
-                                return data.time_in.gate_number + ", " + data.time_out.gate_number}
-                            },
+                            // {"data": (data, type, dataToSet) => {
+                            //     return data.time_in.gate_number + ", " + data.time_out.gate_number}
+                            // },
                             // {"data": "time_out.officer_uid"},
                             {"data": (data, type, dataToSet) => {
                                 return data.time_in.officer_uid + ", " + data.time_out.officer_uid}
@@ -37406,6 +37417,9 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                 const setOfficerName = document.querySelector('.name-sg');
                 setOfficerName.innerText = 
                 `${securityOfficerInformation.lastname}, ${securityOfficerInformation.firstname} ${securityOfficerInformation.middlename}`
+                localStorage.setItem("security-officer", JSON.stringify(securityOfficerInformation));
+
+
             }
             else {
                 console.log('That security officer does not exist.')
@@ -38876,18 +38890,20 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         });
 
         themes.addEventListener("click", () => {
-            if(localStorage.getItem("theme") === "light") {
+            console.log("my theme clicked", localStorage.getItem("theme"));
+            if(localStorage.getItem("theme") == "dark") {
+                console.log("my theme clicked", `localStorage.getItem("theme") == "light"`);
                 document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
                 document.querySelector("#system-theme3").setAttribute("href", "user-announcement.css");
-                localStorage.setItem("theme", "dark");
+                localStorage.setItem("theme", "light");
             }
-            
-            if(localStorage.getItem("theme") === "dark" || localStorage.getItem("theme") === null) {
+            else if(localStorage.getItem("theme") == "light" || localStorage.getItem("theme") === null) {
+                console.log("my theme clicked", `localStorage.getItem("theme") == "dark" or null`);
                 document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
                 document.querySelector("#system-theme3").setAttribute("href", "user-announcement-light.css");
-                localStorage.setItem("theme", "light");
+                localStorage.setItem("theme", "dark");
             }
         });
 
@@ -38907,273 +38923,81 @@ if(windowLocation.indexOf("user-announcement") > -1) {
     const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "announcements");
     const linkagesQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(colRef, _src_index__WEBPACK_IMPORTED_MODULE_0__.doLimit(10));
     const docsSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDocs(linkagesQuery);
+    const announcements = document.querySelector('.announcements');
 
     let index = 0;
     docsSnap.forEach(async doc => {
         index = index + 1;
         let myData = doc.data();
-        console.log("data", myData, index);
-        
-        const announcements = document.querySelector('.announcements');
-        const toggleAnnouncement = 
-        `<div class="toggle-announcements" data="announcements-toggle${index}">
-            <div class="toggle-title">
-                <div class="circle"></div>
-                <p>${myData.title}</p>
-            </div>
-            <div>
-                <p>${myData.createdAt.toDate().toLocaleString()}</p>
-                <div class="dropdown"></div>
-            </div>
-        </div>
-        `;
-        // announcements.insertAdjacentElement('beforeend', toggleAnnouncement);
-        $('.announcements').append(toggleAnnouncement)
-
-        let listOfSources = "<br/>" + myData.sources;
-        // myData.sources.forEach((data) => {
-        //     listOfSources += `<li><a href="${data}">${data}</a></li>`
-        // });
-        
-        let listOfFiles = '';
-        // myData.files.forEach((data) => {
-        //     let httpsReference = fire.myRef(fire.storage, data).name;
-        //     listOfFiles += `<li><a href="${data}">${httpsReference}</a></li>`
-        // });
-        console.log(listOfSources);
-        console.log(listOfFiles);
-
-
-        
-        // If there are no sources given
-        if(listOfSources === '') {
-            listOfSources = "<p style='color: rgba(255,255,255,.75)><i>No sources.</i></p>"
-            listOfSources = "<p><i>No sources.</i></p>"
-        }
-        
+        console.log("data", myData.title, index);
 
         const imageRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, `announcements/thumbnail/${myData.title}/profilepic.jpg`);
-        const fileRef1 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, `announcements/files/${myData.title}/file1`);
-        const fileRef2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, `announcements/files/${myData.title}/file2`);
-        const fileRef3 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, `announcements/files/${myData.title}/file3`);
+        _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(imageRef).then((url) => {
+            const toggleAnnouncement = 
+            `<div class="toggle-announcements" data="announcements-toggle${index}">
+                <div class="toggle-title">
+                    <div class="circle"></div>
+                    <p>${myData.title}</p>
+                </div>
+                <div>
+                    <p>${myData.createdAt.toDate().toLocaleString()}</p>
+                    <div class="dropdown"></div>
+                </div>
+            </div>
+            `;
+            // announcements.insertAdjacentElement('beforeend', toggleAnnouncement);
+            $('.announcements').append(toggleAnnouncement)
 
-        // const w = fire.myGetDownloadURL(imageRef).then((url) => {
-        //     console.log(url);
-        //     return url;
-        // });
-        // const x = fire.myGetDownloadURL(fileRef1).then((url) => {
-        //     console.log("url1", url);
-        //     return url;
-        // });
-        // const y = fire.myGetDownloadURL(fileRef2).then((url) => {
-        //     console.log("url2", url);
-        //     return url;
-        // });
-        // const z = fire.myGetDownloadURL(fileRef3).then((url) => {
-        //     console.log("url3", url);
-        //     return url;
-        // });
+            let listOfSources = myData.sources;
+            // If there are no sources given
+            if(listOfSources === '' || listOfSources === null || listOfSources.length === undefined) {
+                listOfSources = "<p style='color: rgba(255,255,255,.75)><i>No sources.</i></p>"
+                listOfSources = "<p><i>No sources.</i></p>"
+            }
 
-        // // Isang kuhanan lang...
-        // z.then((returnedData) => {
-        //     console.log("returnedData z: ", returnedData);
-        // });
-        
-
-        const w = _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(imageRef).then((url) => {
-            console.log(url);
             const toggleAnnouncementDetails =
             `
-            <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
+            <div class="announcements-info" id="announcements-toggle${index}">
                 <div>
                     <div class="announcement-priority">${myData.priority}</div>
                     <p class="announcements-headline">${myData.title}</p>
                     <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
                     <p class="announcements-person">${myData.posted_by}</p>
                 </div>
-                <br/>
                 <div class="annoucements-main-container">
                     <div class="announcements-container">
                             <p class="announcements-message">
                                 ${myData.message}
                             </p>
                             <ul class="announcements-sources">
-                               ${listOfSources}
+                            ${listOfSources}
                             </ul>
                     </div>
                     <div>
                         <img class="announcement-thumbnail" src="${url}" alt="announcement thumbnail">
                     </div>
                 </div>
-            </div>
-            `;
+            </div>`;
+
             $('.announcements').append(toggleAnnouncementDetails);
         });
-
-        // Sabay-sabay
-        // Promise.all([w, x, y, z]).then((links) => {
-        //     console.log("downloadURL: ", links);
-
-        //     links.forEach((data, index) => {
-        //         if(data !== null || typeof(data) !== "undefined" || index !== 0) {
-        //             listOfFiles += `<li><a href="${data}">File #${index}</a></li>`
-        //         }
-        //     });
-
-        //     // If there are no files uplaoded
-        //     if(listOfFiles === '') {
-        //         listOfFiles = "<p style='color: rgba(255,255,255,.75);'><i>No files.</i></p>"
-        //         listOfFiles = "<p><i>No files.</i></p>"
-        //     }
-            
-
-        //     const toggleAnnouncementDetails =
-        //     `
-        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
-        //         <div>
-        //             <div class="announcement-priority">${myData.priority}</div>
-        //             <p class="announcements-headline">${myData.title}</p>
-        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
-        //             <p class="announcements-person">${myData.posted_by}</p>
-        //         </div>
-        //         <br/>
-        //         <div class="annoucements-main-container">
-        //             <div class="announcements-container">
-        //                     <p class="announcements-message">
-        //                         ${myData.message}
-        //                     </p>
-        //                     <ul class="announcements-sources">
-        //                        ${listOfSources}
-        //                     </ul>
-        //                     <ul class="announcements-file">
-        //                         ${listOfFiles}
-        //                     </ul>
-        //             </div>
-        //             <div>
-        //                 <img class="announcement-thumbnail" src="${links[0]}" alt="announcement thumbnail">
-        //             </div>
-        //         </div>
-        //     </div>
-        //     `;
-        //     $('.announcements').append(toggleAnnouncementDetails);
-        // });
-
-        
-
-
-
-        // console.log("imageRef: ", imageRef);
-        // fire.myGetDownloadURL(imageRef).then((url) => {
-        //     console.log(url);
-
-        //     const toggleAnnouncementDetails =
-        //     `
-        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
-        //         <div>
-        //             <div class="announcement-priority">${myData.priority}</div>
-        //             <p class="announcements-headline">${myData.title}</p>
-        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
-        //             <p class="announcements-person">${myData.posted_by}</p>
-        //         </div>
-        //         <div class="annoucements-main-container">
-        //             <div class="announcements-container">
-        //                     <p class="announcements-message">
-        //                         ${myData.message}
-        //                     </p>
-        //                     <ul class="announcements-sources">
-        //                        ${listOfSources}
-        //                     </ul>
-        //                     <ul class="announcements-file">
-        //                         <li>${listOfFiles}</li>
-        //                     </ul>
-        //             </div>
-        //             <div>
-        //                 <img class="announcement-thumbnail" src="${url}" alt="announcement thumbnail">
-        //             </div>
-        //         </div>
-        //     </div>
-        //     `;
-        //     $('.announcements').append(toggleAnnouncementDetails);
-        // }).catch((e) => {
-        //     console.error("error: ", e);
-        //     const toggleAnnouncementDetails =
-        //     `
-        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
-        //         <div>
-        //             <div class="announcement-priority">${myData.priority}</div>
-        //             <p class="announcements-headline">${myData.title}</p>
-        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
-        //             <p class="announcements-person">${myData.posted_by}</p>
-        //         </div>
-        //         <div class="annoucements-main-container">
-        //             <div class="announcements-container">
-        //                     <p class="announcements-message">
-        //                         ${myData.message}
-        //                     </p>
-        //                     <ul class="announcements-sources">
-        //                        ${listOfSources}
-        //                     </ul>
-        //                     <ul class="announcements-file">
-        //                         ${listOfFiles}
-        //                     </ul>
-        //             </div>
-        //             <div>
-        //                 <img class="announcement-thumbnail" src="bulsu-logo.png" alt="announcement thumbnail">
-        //             </div>
-        //         </div>
-        //     </div>
-        //     `;
-        //     $('.announcements').append(toggleAnnouncementDetails);
-        // });
-
-
-
-        
-
-        
-        // const priorityNode = document.createElement("div");
-        // const priorityAttr = document.createAttribute("class");
-        // priorityAttr.value = "announcement-priority";
-        // priorityNode.setAttribute(priorityAttr);
-
-        // const headlineNode = document.createElement("p");
-        // const headlineAttr = document.createAttribute("class");
-        // headlineAttr.value = "announcement-headline";
-        // headlineNode.setAttribute(headlineAttr);
-
-        // const timestampNode = document.createElement("p");
-        // const timestampAttr = document.createAttribute("class");
-        // timestampAttr.value = "announcement-timestamp";
-        // timestampNode.setAttribute(timestampAttr);
-        
-        // const personNode = document.createElement("p");
-        // const personAttr = document.createAttribute("class");
-        // personAttr.value = "announcement-person";
-        // personNode.setAttribute(personAttr);
-
-    });
-
-    document.querySelectorAll('.toggle-announcements').forEach((element) => {
-        // console.log(element.getAttribute("data"));
-        const attr = element.getAttribute("data");
-        console.log(attr);
-        element.addEventListener('click', () => {
-            $('#' + attr).animate({
-                opacity: "toggle",
-                height: "toggle"
-            }, 250, 'linear', () => {
-                // animation complete
-            });
-            console.log(attr)
-        });
-    });
-
-    $(`#announcements-toggle1`).on('click', () => {
-        console.log(`toggle1`);
-    });
-    $(`#announcements-toggle2`).on('click', () => {
-        console.log(`toggle2`);
-    });
+    }); //end of foreach
+    
+    // console.log(document.querySelectorAll('.toggle-announcements'));
+    // document.getElementsByClassName("toggle-announcements").forEach((element) => {
+    //     // console.log(element.getAttribute("data"));
+    //     const attr = element.getAttribute("data");
+    //     console.log(attr);
+    //     element.addEventListener('click', () => {
+    //         $('#' + attr).animate({
+    //             opacity: "toggle",
+    //             height: "toggle"
+    //         }, 250, 'linear', () => {
+    //             // animation complete
+    //         });
+    //         console.log(attr)
+    //     });
+    // });
 }
 
 
@@ -40176,14 +40000,14 @@ __webpack_require__.r(__webpack_exports__);
    
 
 let windowLocation = window.location.pathname;
-if(localStorage.getItem("theme") === "light") {
-    document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
-    document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
-}
+
 
 //Check if I am on the user-account.html
 if(windowLocation.indexOf("user-account") > -1) {
-    
+    if(localStorage.getItem("theme") === "light") {
+        document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
+        document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
+    }
 
     // document.querySelector('.fullname').innerText = localStorage.personal_info_name === '' ? '' : localStorage.personal_info_name;
     // document.querySelector('.category').innerText = 
@@ -40363,6 +40187,9 @@ if(windowLocation.indexOf("user-account") > -1) {
             document.querySelector("#profile-picture").setAttribute("src", localStorage.getItem("profile-picture"));
             document.querySelector(".fullname").textContent = localStorage.getItem("profile-owner");
             document.querySelector(".category").textContent = localStorage.getItem("profile-category");
+
+            localStorage.setItem("personal_info_email", user.email);
+            console.log("setItem: ", localStorage.getItem("personal_info_email"));
         }
         else {
             window.location = "../login.html";
@@ -40640,6 +40467,8 @@ if(windowLocation.indexOf("user-account") > -1) {
                         const updateProfile = await _src_index__WEBPACK_IMPORTED_MODULE_1__.doUpdateProfile(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser, {
                             'photoURL': downloadURL,
                         });
+                        localStorage.setItem("profile-picture", downloadURL);
+                        window.location.reload();
                     });
                 } //end of getDownloadURL
                 );
@@ -42823,16 +42652,16 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 if(currentLinkagesKeysRegistered.includes(plateNumber)) {
                     // console.log('You cannot add that plate number to your linkages. Reason: Already added to your linkages list. ');
     
-                    $('#error-popup .modal-container-main').html(
-                        `<p>You cannot add the plate number to your linkages</p>
-                        <p class="note">Note: Already added to your linkages list. </p>`
-                        );
-                    $("#error-popup").modal({
-                        fadeDuration: 100
-                    });
-                    $("#error-popup").on($.modal.CLOSE, () => {
-                        $('.mobile-sidebar').css('opacity', 1);
-                    });
+                    // $('#error-popup .modal-container-main').html(
+                    //     `<p>You cannot add the plate number to your linkages</p>
+                    //     <p class="note">Note: Already added to your linkages list. </p>`
+                    //     );
+                    // $("#error-popup").modal({
+                    //     fadeDuration: 100
+                    // });
+                    // $("#error-popup").on($.modal.CLOSE, () => {
+                    //     $('.mobile-sidebar').css('opacity', 1);
+                    // });
                 }
                 else {
                     console.log('All unique.')

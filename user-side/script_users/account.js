@@ -8,15 +8,18 @@ jQuery(function() {
     // })
 
     $("#college_option").select2();
+    
+    // Full Name
+    // $('.personal-info-name').on('click', () => {
+    //     $('.pop-name').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
+    
 
-    $('.personal-info-name').on('click', () => {
-        $('.pop-name').animate({
-            opacity: "toggle",
-            height: "toggle"
-        }, 250, 'linear', () => {
-            // animation complete
-        });
-    });
     
     $('.personal-info-profile').on('click', () => {
         $('.pop-profile').animate({
@@ -28,16 +31,15 @@ jQuery(function() {
     });
 
 
-
-    $('.personal-info-id').on('click', () => {
-        $('.pop-id').animate({
-            opacity: "toggle",
-            height: "toggle"
-        }, 250, 'linear', () => {
-            // animation complete
-        });
-        
-    });
+    // ID/Employee Number
+    // $('.personal-info-id').on('click', () => {
+    //     $('.pop-id').animate({
+    //         opacity: "toggle",
+    //         height: "toggle"
+    //     }, 250, 'linear', () => {
+    //         // animation complete
+    //     });
+    // });
     
     // $('.personal-info-usertype').on('click', () => {
     //     $('.pop-usertype').animate({

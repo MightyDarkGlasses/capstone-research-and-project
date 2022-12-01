@@ -36,3 +36,8 @@ color: white !important;
 #table_id_activity td {
     color: white !important;
 }
+
+
+.right-container > h2 {
+    color: white !important;
+}

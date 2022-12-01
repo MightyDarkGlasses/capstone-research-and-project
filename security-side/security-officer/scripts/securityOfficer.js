@@ -70,7 +70,15 @@ function loadMyAccount() {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById("content-container").innerHTML =
         this.responseText;
+        
+      const unpack = JSON.parse(localStorage.getItem("security-officer"));
+      document.querySelector("#name-id").textContent = `${unpack.lastname} ${unpack.firstname}`;
+      document.querySelector(".address-id").textContent = `${unpack.province}, ${unpack.municipality}, ${unpack.barangay} ${unpack.street}`
+      document.querySelector(".phoneNumber-id").textContent = unpack.phone;
+      document.querySelector(".email-id").textContent = unpack.email;
     }
+
+    
   };
 
   xhttp.open("GET", "securityOfficer-myAccount.html", true);
