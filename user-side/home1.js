@@ -220,10 +220,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         themes.addEventListener("click", () => {
-            if(localStorage.getItem("theme")) {
+            if(localStorage.getItem("theme") === "dark") {
                 document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
-                localStorage.removeItem("theme");
+                localStorage.setItem("theme", "light");
             }
             else {
                 document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
@@ -277,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
                 }
                 else {
-                    vehiclePlaceholder.innerHTML =  `<p style="font-size: 1em;">Click the dropdown.</p><p>Number of items: ${vehicleDataKeys.length}</p>`;
+                    vehiclePlaceholder.innerHTML =  `<p style="font-size: 1em;">Click the dropdown.</p>`;
                     myQRImage.setAttribute("src", "bulsu-logo.png");
                     myQRImage2.setAttribute("src", "bulsu-logo.png");
                     saveQR.setAttribute("onclick", ``);

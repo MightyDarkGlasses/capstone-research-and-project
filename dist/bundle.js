@@ -38840,7 +38840,7 @@ if(windowLocation.indexOf("user-announcement") > -1) {
     if(localStorage.getItem("theme") === "light") {
         document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
         document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
-        document.querySelector("#system-theme3").setAttribute("href", "user-announcement-light.css");
+        document.querySelector("#system-theme3").setAttribute("href", "user-announcement.css");
     }
 
     console.log('announcement5.js');
@@ -38876,17 +38876,18 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         });
 
         themes.addEventListener("click", () => {
-            if(localStorage.getItem("theme") === "dark") {
+            if(localStorage.getItem("theme") === "light") {
                 document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
-                document.querySelector("#system-theme3").setAttribute("href", "user-announcement-light.css");
-                localStorage.setItem("theme", "light");
-            }
-            else {
-                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
-                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
                 document.querySelector("#system-theme3").setAttribute("href", "user-announcement.css");
                 localStorage.setItem("theme", "dark");
+            }
+            
+            if(localStorage.getItem("theme") === "dark" || localStorage.getItem("theme") === null) {
+                document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
+                document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
+                document.querySelector("#system-theme3").setAttribute("href", "user-announcement-light.css");
+                localStorage.setItem("theme", "light");
             }
         });
 
@@ -38956,45 +38957,31 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         const fileRef2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, `announcements/files/${myData.title}/file2`);
         const fileRef3 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.storage, `announcements/files/${myData.title}/file3`);
 
+        // const w = fire.myGetDownloadURL(imageRef).then((url) => {
+        //     console.log(url);
+        //     return url;
+        // });
+        // const x = fire.myGetDownloadURL(fileRef1).then((url) => {
+        //     console.log("url1", url);
+        //     return url;
+        // });
+        // const y = fire.myGetDownloadURL(fileRef2).then((url) => {
+        //     console.log("url2", url);
+        //     return url;
+        // });
+        // const z = fire.myGetDownloadURL(fileRef3).then((url) => {
+        //     console.log("url3", url);
+        //     return url;
+        // });
+
+        // // Isang kuhanan lang...
+        // z.then((returnedData) => {
+        //     console.log("returnedData z: ", returnedData);
+        // });
+        
+
         const w = _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(imageRef).then((url) => {
             console.log(url);
-            return url;
-        });
-        const x = _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(fileRef1).then((url) => {
-            console.log("url1", url);
-            return url;
-        });
-        const y = _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(fileRef2).then((url) => {
-            console.log("url2", url);
-            return url;
-        });
-        const z = _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(fileRef3).then((url) => {
-            console.log("url3", url);
-            return url;
-        });
-
-        // Isang kuhanan lang...
-        z.then((returnedData) => {
-            console.log("returnedData z: ", returnedData);
-        });
-        
-        // Sabay-sabay
-        Promise.all([w, x, y, z]).then((links) => {
-            console.log("downloadURL: ", links);
-
-            links.forEach((data, index) => {
-                if(data !== null || typeof(data) !== "undefined" || index !== 0) {
-                    listOfFiles += `<li><a href="${data}">File #${index}</a></li>`
-                }
-            });
-
-            // If there are no files uplaoded
-            if(listOfFiles === '') {
-                listOfFiles = "<p style='color: rgba(255,255,255,.75);'><i>No files.</i></p>"
-                listOfFiles = "<p><i>No files.</i></p>"
-            }
-            
-
             const toggleAnnouncementDetails =
             `
             <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
@@ -39013,18 +39000,63 @@ if(windowLocation.indexOf("user-announcement") > -1) {
                             <ul class="announcements-sources">
                                ${listOfSources}
                             </ul>
-                            <ul class="announcements-file">
-                                ${listOfFiles}
-                            </ul>
                     </div>
                     <div>
-                        <img class="announcement-thumbnail" src="${links[0]}" alt="announcement thumbnail">
+                        <img class="announcement-thumbnail" src="${url}" alt="announcement thumbnail">
                     </div>
                 </div>
             </div>
             `;
             $('.announcements').append(toggleAnnouncementDetails);
         });
+
+        // Sabay-sabay
+        // Promise.all([w, x, y, z]).then((links) => {
+        //     console.log("downloadURL: ", links);
+
+        //     links.forEach((data, index) => {
+        //         if(data !== null || typeof(data) !== "undefined" || index !== 0) {
+        //             listOfFiles += `<li><a href="${data}">File #${index}</a></li>`
+        //         }
+        //     });
+
+        //     // If there are no files uplaoded
+        //     if(listOfFiles === '') {
+        //         listOfFiles = "<p style='color: rgba(255,255,255,.75);'><i>No files.</i></p>"
+        //         listOfFiles = "<p><i>No files.</i></p>"
+        //     }
+            
+
+        //     const toggleAnnouncementDetails =
+        //     `
+        //     <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
+        //         <div>
+        //             <div class="announcement-priority">${myData.priority}</div>
+        //             <p class="announcements-headline">${myData.title}</p>
+        //             <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
+        //             <p class="announcements-person">${myData.posted_by}</p>
+        //         </div>
+        //         <br/>
+        //         <div class="annoucements-main-container">
+        //             <div class="announcements-container">
+        //                     <p class="announcements-message">
+        //                         ${myData.message}
+        //                     </p>
+        //                     <ul class="announcements-sources">
+        //                        ${listOfSources}
+        //                     </ul>
+        //                     <ul class="announcements-file">
+        //                         ${listOfFiles}
+        //                     </ul>
+        //             </div>
+        //             <div>
+        //                 <img class="announcement-thumbnail" src="${links[0]}" alt="announcement thumbnail">
+        //             </div>
+        //         </div>
+        //     </div>
+        //     `;
+        //     $('.announcements').append(toggleAnnouncementDetails);
+        // });
 
         
 
@@ -39560,10 +39592,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         themes.addEventListener("click", () => {
-            if(localStorage.getItem("theme")) {
+            if(localStorage.getItem("theme") === "dark") {
                 document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
-                localStorage.removeItem("theme");
+                localStorage.setItem("theme", "light");
             }
             else {
                 document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
@@ -39617,7 +39649,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     saveQR.setAttribute("onclick", `downloadImage("${qrCodeImageLink}")`);
                 }
                 else {
-                    vehiclePlaceholder.innerHTML =  `<p style="font-size: 1em;">Click the dropdown.</p><p>Number of items: ${vehicleDataKeys.length}</p>`;
+                    vehiclePlaceholder.innerHTML =  `<p style="font-size: 1em;">Click the dropdown.</p>`;
                     myQRImage.setAttribute("src", "bulsu-logo.png");
                     myQRImage2.setAttribute("src", "bulsu-logo.png");
                     saveQR.setAttribute("onclick", ``);
@@ -39863,10 +39895,7 @@ if(windowLocation.indexOf("user-logs") > -1) {
     if(localStorage.getItem("theme") === "light") {
         document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
         document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
-        document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
-    }
-    if(localStorage.getItem("theme") === null) {
-        document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
+        document.querySelector("#system-theme3").setAttribute("href", "user-logs.css");
     }
 
     // DISPLAY THE PROFILE PICTURE AND LOGS
@@ -39904,17 +39933,17 @@ if(windowLocation.indexOf("user-logs") > -1) {
         });
 
         themes.addEventListener("click", () => {
-            if(localStorage.getItem("theme") === "dark") {
+            if(localStorage.getItem("theme") === "light") {
                 document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
                 document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
-                localStorage.setItem("theme", "light");
+                localStorage.setItem("theme", "dark");
             }
             else {
                 document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
                 document.querySelector("#system-theme3").setAttribute("href", "user-logs.css");
-                localStorage.setItem("theme", "dark");
+                localStorage.setItem("theme", "light");
             }
         });
 

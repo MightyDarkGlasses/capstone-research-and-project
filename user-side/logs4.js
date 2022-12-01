@@ -16,10 +16,7 @@ if(windowLocation.indexOf("user-logs") > -1) {
     if(localStorage.getItem("theme") === "light") {
         document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
         document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
-        document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
-    }
-    if(localStorage.getItem("theme") === null) {
-        document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
+        document.querySelector("#system-theme3").setAttribute("href", "user-logs.css");
     }
 
     // DISPLAY THE PROFILE PICTURE AND LOGS
@@ -57,17 +54,17 @@ if(windowLocation.indexOf("user-logs") > -1) {
         });
 
         themes.addEventListener("click", () => {
-            if(localStorage.getItem("theme") === "dark") {
+            if(localStorage.getItem("theme") === "light") {
                 document.querySelector("#system-theme1").setAttribute("href", "user-home.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods.css");
                 document.querySelector("#system-theme3").setAttribute("href", "user-logs-light.css");
-                localStorage.setItem("theme", "light");
+                localStorage.setItem("theme", "dark");
             }
             else {
                 document.querySelector("#system-theme1").setAttribute("href", "user-home-light.css");
                 document.querySelector("#system-theme2").setAttribute("href", "user-home-mods-light.css");
                 document.querySelector("#system-theme3").setAttribute("href", "user-logs.css");
-                localStorage.setItem("theme", "dark");
+                localStorage.setItem("theme", "light");
             }
         });
 
