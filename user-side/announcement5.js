@@ -3,7 +3,7 @@ import * as fire from "../src/index";
 
 
 let windowLocation = window.location.pathname;
-window.addEventListener('DOMContentLoaded', async () => {
+window.addEventListener('DOMContentLoaded', () => {
 if(windowLocation.indexOf("user-announcement") > -1) {
 
     if(localStorage.getItem("theme") === "light") {
@@ -75,84 +75,120 @@ if(windowLocation.indexOf("user-announcement") > -1) {
     }
     topButtons();
 
-    const colRef = fire.myCollection(fire.db, "announcements");
-    const linkagesQuery = fire.doQuery(colRef, fire.doLimit(10));
-    const docsSnap = await fire.myGetDocs(linkagesQuery);
-    const announcements = document.querySelector('.announcements');
+
 
     let index = 0;
-    docsSnap.forEach(async doc => {
-        index = index + 1;
-        let myData = doc.data();
-        console.log("data", myData.title, index);
 
-        const imageRef = fire.myRef(fire.storage, `announcements/thumbnail/${myData.title}/profilepic.jpg`);
-        fire.myGetDownloadURL(imageRef).then((url) => {
-            const toggleAnnouncement = 
-            `<div class="toggle-announcements" data="announcements-toggle${index}">
-                <div class="toggle-title">
-                    <div class="circle"></div>
-                    <p>${myData.title}</p>
-                </div>
-                <div>
-                    <p>${myData.createdAt.toDate().toLocaleString()}</p>
-                    <div class="dropdown"></div>
-                </div>
-            </div>
-            `;
-            // announcements.insertAdjacentElement('beforeend', toggleAnnouncement);
-            $('.announcements').append(toggleAnnouncement)
+    async function displayAnnouncement() {
+        console.log("first first first first")
+        const colRef = fire.myCollection(fire.db, "announcements");
+        const linkagesQuery = fire.doQuery(colRef, fire.doLimit(10));
+        const docsSnap = await fire.myGetDocs(linkagesQuery);
+        const announcements = document.querySelector('.announcements');
+        
 
-            let listOfSources = myData.sources;
-            // If there are no sources given
-            if(listOfSources === '' || listOfSources === null || listOfSources.length === undefined) {
-                listOfSources = "<p style='color: rgba(255,255,255,.75)><i>No sources.</i></p>"
-                listOfSources = "<p><i>No sources.</i></p>"
-            }
-
-            const toggleAnnouncementDetails =
-            `
-            <div class="announcements-info" id="announcements-toggle${index}">
-                <div>
-                    <div class="announcement-priority">${myData.priority}</div>
-                    <p class="announcements-headline">${myData.title}</p>
-                    <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
-                    <p class="announcements-person">${myData.posted_by}</p>
-                </div>
-                <div class="annoucements-main-container">
-                    <div class="announcements-container">
-                            <p class="announcements-message">
-                                ${myData.message}
-                            </p>
-                            <ul class="announcements-sources">
-                            ${listOfSources}
-                            </ul>
+        console.log("index::::::::::", docsSnap.size);
+        docsSnap.forEach(async (doc) => {
+            
+            console.log(`id="announcements-toggle${index}"`)
+            let myData = doc.data();
+            console.log("data", myData.title, index);
+    
+            const imageRef = fire.myRef(fire.storage, `announcements/thumbnail/${myData.title}/profilepic.jpg`);
+            fire.myGetDownloadURL(imageRef).then((url) => {
+                index = index + 1;
+                const toggleAnnouncement = 
+                `<div class="toggle-announcements" data="announcements-toggle${index}">
+                    <div class="toggle-title">
+                        <div class="circle"></div>
+                        <p>${myData.title}</p>
                     </div>
                     <div>
-                        <img class="announcement-thumbnail" src="${url}" alt="announcement thumbnail">
+                        <p>${myData.createdAt.toDate().toLocaleString()}</p>
+                        <div class="dropdown"></div>
                     </div>
                 </div>
-            </div>`;
-
-            $('.announcements').append(toggleAnnouncementDetails);
-        });
-    }); //end of foreach
+                `;
+                // announcements.insertAdjacentElement('beforeend', toggleAnnouncement);
+                $('.announcements').append(toggleAnnouncement)
     
-    // console.log(document.querySelectorAll('.toggle-announcements'));
-    // document.getElementsByClassName("toggle-announcements").forEach((element) => {
-    //     // console.log(element.getAttribute("data"));
-    //     const attr = element.getAttribute("data");
-    //     console.log(attr);
-    //     element.addEventListener('click', () => {
-    //         $('#' + attr).animate({
-    //             opacity: "toggle",
-    //             height: "toggle"
-    //         }, 250, 'linear', () => {
-    //             // animation complete
-    //         });
-    //         console.log(attr)
-    //     });
-    // });
+                let listOfSources = myData.sources;
+                // If there are no sources given
+                if(listOfSources === '' || listOfSources === null || listOfSources.length === undefined) {
+                    listOfSources = "<p style='color: rgba(255,255,255,.75)><i>No sources.</i></p>"
+                    listOfSources = "<p><i>No sources.</i></p>"
+                }
+    
+                const toggleAnnouncementDetails =
+                `
+                <div class="announcements-info" id="announcements-toggle${index}" style="display: none;">
+                    <div>
+                        <div class="announcement-priority">${myData.priority}</div>
+                        <p class="announcements-headline">${myData.title}</p>
+                        <p class="announcements-timestamp">${myData.createdAt.toDate().toLocaleString()}</p>
+                        <p class="announcements-person">${myData.posted_by}</p>
+                    </div>
+                    <div class="annoucements-main-container">
+                        <div class="announcements-container">
+                                <p class="announcements-message">
+                                    ${myData.message}
+                                </p>
+                                <ul class="announcements-sources">
+                                ${listOfSources}
+                                </ul>
+                        </div>
+                        <div>
+                            <img class="announcement-thumbnail" src="${url}" alt="announcement thumbnail">
+                        </div>
+                    </div>
+                </div>`;
+    
+                $('.announcements').append(toggleAnnouncementDetails);
+                
+            });
+        }); //end of foreach
+
+        let timeout;
+        let num = 0;
+        function fun() {
+            timeout = setInterval(() => {
+                if(document.querySelectorAll('.toggle-announcements').length == docsSnap.size) {
+                    console.log("stooped")
+                    console.log(document.querySelectorAll('.toggle-announcements'));
+                    document.querySelectorAll('.toggle-announcements').forEach((element, index) => {
+                        console.log(element.getAttribute("data"));
+                        const attr = element.getAttribute("data");
+                        console.log(attr);
+                        element.addEventListener('click', () => {
+                            $(`#announcements-toggle${index+1}`).animate({
+                                opacity: "toggle",
+                                height: "toggle"
+                            }, 250, 'linear', () => {
+                                // animation complete
+                            });
+                            console.log(attr);
+                
+                        });
+                    });
+
+                    stop();
+                }
+                else {
+                    console.log("watig")
+                }
+            }, 100);
+        }
+
+        function stop() {
+            clearInterval(timeout);
+        }
+        fun();
+        // console.log(document.querySelectorAll('.toggle-announcements'));
+    }
+    displayAnnouncement();
+
+    
+    
 }
 
 

@@ -346,13 +346,7 @@ if(window.location.pathname.indexOf('securityOfficer-home') > -1) {
                             logs.push(element[1]);
                         }
                     });
-
-
-
                 });
-                console.log(logs); 
-                console.log("Number of length (TIME IN): ", checkLengthTimeIn)
-                console.log("Number of length (TIME OUT): ", checkLengthTimeOut)
 
                 //Sort the data by time_scanned
                 // logs.sort(function(a, b) {
