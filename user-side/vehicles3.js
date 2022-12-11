@@ -178,16 +178,22 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                         console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
                         $("#circle").css({backgroundColor: "red"});
                         $("#circle-message").html("Not yet verified.")
+
+                        $("#verificiation-message").html("Note: <br>You can submit the image on the inputs below.")
                     }
                     else if(preSelectedVehicleKey["is_vehicle_verified"] === false) {
                         console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
                         $("#circle").css({backgroundColor: "yellow"});
                         $("#circle-message").html("Pending verification.")
+
+                        $("#verificiation-message").html("Note: <br>The verification is currently pending. <br> You can re-submit the vehicle verification form.")
                     }
                     else {
                         console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
                         $("#circle").css({backgroundColor: "green"});
-                        $("#circle-message").html("Verified.")
+                        $("#circle-message").html("Verified.");
+
+                        $("#verificiation-message").html("Note: <br>You have already verified your vehicle.")
                     }
 
                     
@@ -450,18 +456,22 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 || personalVerification === undefined) {
                     console.log("Not yet verified - SELECTED!")
                     $("#circle").css({backgroundColor: "red"});
-                    $("#circle-message").html("Not yet verified.")
+                    $("#circle-message").html("Not yet verified.");
+                    $("#verificiation-message").html("Note: <br>You can submit the image on the inputs below.");
                 }
                 else if(personalVerification === false) {
                     console.log("Pending verification - SELECTED!")
                     $("#circle").css({backgroundColor: "yellow"});
-                    $("#circle-message").html("Pending verification.")
+                    $("#circle-message").html("Pending verification.");
+                    $("#verificiation-message").html("Note: <br>The verification is currently pending. <br> You can re-submit the vehicle verification form.")
                 }
                 else {
                     console.log("Verified - SELECTED!")
                     $("#circle").css({backgroundColor: "green"});
-                    $("#circle-message").html("Verified.")
+                    $("#circle-message").html("Verified.");
+                    $("#verificiation-message").html("Note: <br>You have already verified your vehicle.");
                 }
+
 
                 // Classification
                 if(typeof(personalInfoClassification) === 'undefined' || personalInfoClassification === null) {
@@ -577,6 +587,29 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     const formModel = document.querySelector('.form-model');
 
     const formPhotoVerification = document.querySelector('.form-photo-verification');
+    const formHelp = document.querySelector('#verification-help');
+
+    // Add Help
+    formHelp.addEventListener('click', () => {
+        Swal.fire({
+            header: 'How to issue an vehicle verification request.',
+            html: '<h1>Official Receipt / Certificate of Registration</h1><p>You can submit the OR/CR issued by the LTO.</p>',
+            imageUrl: 'officialReceipt.png',
+            imageWidth: 400,
+            imageHeight: 500,
+            imageAlt: 'Custom image',
+        }).then(() => {
+            Swal.fire({
+                header: 'How to issue an vehicle verification request.',
+                html: `<h1>KYC Verification</h1><p>For KYC, you must be beside the vehicle, if possible; you can show your drivers' license.</p>`,
+                imageUrl: 'KYCVerification.jpg',
+                imageWidth: 400,
+                imageHeight: 200,
+                imageAlt: 'Custom image',
+            });
+        });
+    });
+
     const formClassification = document.querySelector('.form-classification');
     const formColor = document.querySelector('.form-color');
     const formYear = document.querySelector('.form-year');
