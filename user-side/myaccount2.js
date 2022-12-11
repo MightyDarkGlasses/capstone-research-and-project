@@ -300,7 +300,14 @@ if(windowLocation.indexOf("user-account") > -1) {
         initialCountry: "ph",
         allowDropdown: false,
     });
-        
+    
+
+
+    // const remove2FA = document.querySelector("#phone-sms-2fa-remove");
+    // remove2FA.addEventListener("click", () => {
+    //     console.log("Remove MFA")
+    // });
+
     formPhoneNum.addEventListener('submit', async (e) => {
         e.preventDefault();
 

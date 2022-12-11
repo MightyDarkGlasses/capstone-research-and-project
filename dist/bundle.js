@@ -37813,10 +37813,24 @@ if(window.location.pathname.indexOf("user-account") > -1) {
         if(multiFactorUser.enrolledFactors.length > 0) {
             display2FA.innerText = "2FA is active";
             $("#circle").css({backgroundColor: "rgb(1, 255, 77)"});
+            $("#phone-sms-send").css("display", "none");
+            $("#phone-sms-2fa-remove").css("display", "block");
+
+            $("#mfa-title").html("- Remove SMS Multi-factor Authentication")
+            $("#mfa-description").html(`You can instantly revoke the SMS Multi-factor Authentication by clicking the button below. No SMS verification is needed.`);
         }
         else {
             display2FA.innerText = "2FA is not enabled.";
             $("#circle").css({backgroundColor: "red"});
+            $("#phone-sms-send").css("display", "block");
+            $("#phone-sms-2fa-remove").css("display", "none");
+
+            $("#mfa-title").html("- Enable SMS Multi-factor Authentication")
+            $("#mfa-description").html(`If you have not enabled the 2FA, click the button below in order
+            to verify the authenticity of your number.
+            Provide the correct code in order enable the MFA.
+            <br><br>
+            You may be asked to reauthenticate your account by proving the account password so you can proceed to MFA.`);
         }
 
 
@@ -37856,6 +37870,8 @@ if(window.location.pathname.indexOf("user-account") > -1) {
                 console.log("Done checking verification code");
                 // Complete enrollment.
                 return (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.multiFactor)(user).enroll(multiFactorAssertion, "Phone Number");
+            }).then(() => {
+                window.location.reload();
             }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -40720,7 +40736,14 @@ if(windowLocation.indexOf("user-account") > -1) {
         initialCountry: "ph",
         allowDropdown: false,
     });
-        
+    
+
+
+    const remove2FA = document.querySelector("#phone-sms-2fa-remove");
+    remove2FA.addEventListener("click", () => {
+        console.log("Remove MFA")
+    });
+
     formPhoneNum.addEventListener('submit', async (e) => {
         e.preventDefault();
 

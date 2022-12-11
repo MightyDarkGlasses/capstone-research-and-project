@@ -26,6 +26,8 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js" defer></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <title>Welcome To BulSU VMS</title>
 </head>
 <!-- 
@@ -287,8 +289,8 @@
                                     <br>
                                     <input type="submit" value="Save Changes">
                                     <br><br>
-                                    <h2>- Enable 2FA</h2>
-                                    <p>If you have not enabled the 2FA, click the button below in order
+                                    <h2 id="mfa-title">- Enable SMS Multi-factor Authentication</h2>
+                                    <p id="mfa-description">If you have not enabled the 2FA, click the button below in order
                                         to verify the authenticity of your number.
                                         Provide the correct code in order enable the MFA.
                                     </p>
