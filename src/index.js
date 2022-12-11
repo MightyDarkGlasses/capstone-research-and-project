@@ -169,6 +169,19 @@ if(window.location.pathname.indexOf("user-account") > -1) {
             }
             });
         });
+
+        const mfaRemove = document.querySelector("#phone-sms-2fa-remove");
+        mfaRemove.addEventListener("click", async () => {
+            await multiFactorUser.unenroll(multiFactorUser.enrolledFactors[0]);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'MFA Revoked.',
+                text: 'Multi-factor authentication has been removed successfully.',
+            }).then((success) => {
+                window.location.reload();
+            });
+        });
     });
 
     // onAuthStateChanged(auth, (user) => {
