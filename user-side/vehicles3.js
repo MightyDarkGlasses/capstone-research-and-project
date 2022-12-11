@@ -136,6 +136,61 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
                     const preSelectedVehicleKey = vehicleInformation[vehicleKeys[index]];
                     console.log('preSelectedVehicleKey: ', preSelectedVehicleKey);
+
+                    // Vehicle Verification
+                    // let checkVerified = null;
+                    // async function isVehicleVerified(plateNumber) {
+                    //     const docRef = fire.myDoc(fire.db, "vehicle-information", currentUserId);
+                        
+                    //     // console.log("isVehicleVerified: ", plateNumber)
+                    //     const docSnap = await fire.myGetDoc(docRef)
+                        
+                    //     if (docSnap.exists()) {
+                    //         // console.log("preSelectedVehicleKey: ",  preSelectedVehicleKey)
+                    //         console.log("data: ", docSnap.data()[preSelectedVehicleKey]);
+                    //         checkVerified = docSnap.data()[preSelectedVehicleKey]["is_vehicle_verified"];
+                    //         // console.log("hey hey hey", checkVerified)
+                    //     }  
+                
+                
+                    //     console.log("checkVerified: ", checkVerified)
+                    //     if(checkVerified === null || checkVerified === "" || checkVerified === undefined) {
+                    //         console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                    //         $("#circle").css({backgroundColor: "red"});
+                    //         $("#circle-message").html("Not yet verified.")
+                    //     }
+                    //     else if(checkVerified === false) {
+                    //         console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+                    //         $("#circle").css({backgroundColor: "yellow"});
+                    //         $("#circle-message").html("Pending verification.")
+                    //     }
+                    //     else {
+                    //         console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+                    //         $("#circle").css({backgroundColor: "green"});
+                    //         $("#circle-message").html("Verified.")
+                    //     }
+                    // }
+                    // isVehicleVerified(preSelectedVehicleKey);
+                    // console.log("checkVerified: ", checkVerified)
+                    if(preSelectedVehicleKey["is_vehicle_verified"] === null 
+                    || preSelectedVehicleKey["is_vehicle_verified"] === "" 
+                    || preSelectedVehicleKey["is_vehicle_verified"] === undefined) {
+                        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                        $("#circle").css({backgroundColor: "red"});
+                        $("#circle-message").html("Not yet verified.")
+                    }
+                    else if(preSelectedVehicleKey["is_vehicle_verified"] === false) {
+                        console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+                        $("#circle").css({backgroundColor: "yellow"});
+                        $("#circle-message").html("Pending verification.")
+                    }
+                    else {
+                        console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+                        $("#circle").css({backgroundColor: "green"});
+                        $("#circle-message").html("Verified.")
+                    }
+
+                    
                     if(!typeof(preSelectedVehicleKey["model"]) === 'undefined') {
                         listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${iterator} | ${preSelectedVehicleKey["model"][0]}, ${vehicleKeys[index]}</li>`;
                         document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"][0];
@@ -378,6 +433,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
                 let getSelectedAttrKey = element.getAttribute('data-key'),
                 personalInfoPlate = vehicleInformation[getSelectedAttrKey],
+                personalVerification = vehicleInformation[getSelectedAttrKey]["is_vehicle_verified"],
                 personalInfoModel = vehicleInformation[getSelectedAttrKey]["model"][0],
                 personalInfoClassification = vehicleInformation[getSelectedAttrKey]["classification"],
                 personalInfoColor = vehicleInformation[getSelectedAttrKey]["color"],
@@ -387,6 +443,25 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 personalInfoRemarks = vehicleInformation[getSelectedAttrKey]["remarks"];
                 
                 // console.log('personalInfoPlate:', personalInfoPlate);
+
+                console.log("personalVerification: ", personalVerification);
+                if(personalVerification === null 
+                || personalVerification === "" 
+                || personalVerification === undefined) {
+                    console.log("Not yet verified - SELECTED!")
+                    $("#circle").css({backgroundColor: "red"});
+                    $("#circle-message").html("Not yet verified.")
+                }
+                else if(personalVerification === false) {
+                    console.log("Pending verification - SELECTED!")
+                    $("#circle").css({backgroundColor: "yellow"});
+                    $("#circle-message").html("Pending verification.")
+                }
+                else {
+                    console.log("Verified - SELECTED!")
+                    $("#circle").css({backgroundColor: "green"});
+                    $("#circle-message").html("Verified.")
+                }
 
                 // Classification
                 if(typeof(personalInfoClassification) === 'undefined' || personalInfoClassification === null) {
@@ -501,6 +576,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     const formPlate = document.querySelector('.form-plate');
     const formModel = document.querySelector('.form-model');
 
+    const formPhotoVerification = document.querySelector('.form-photo-verification');
     const formClassification = document.querySelector('.form-classification');
     const formColor = document.querySelector('.form-color');
     const formYear = document.querySelector('.form-year');
@@ -585,6 +661,170 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         }
     });
 
+
+
+    // Know if the vehicle was verified.
+    // let checkVerified = null;
+    // async function isVehicleVerified(plateNumber) {
+    //     plateNumber = "BAC5599"
+    //     const docRef = fire.myDoc(fire.db, "vehicle-information", currentUserId);
+        
+    //     // console.log("isVehicleVerified: ", plateNumber)
+    //     const docSnap = await fire.myGetDoc(docRef)
+    //     .then(() => {
+    //         if (docSnap.exists()) {
+    //             console.log("data: ", docSnap.data());
+    //             // console.log("check: ", docSnap.data()[plateNumber]["is_vehicle_verified"] === undefined)
+    //             // if(docSnap.data()[plateNumber]["is_vehicle_verified"] === undefined) {
+    //             //     checkVerified = null;
+    //             // }
+    //             // else if(docSnap.data()[plateNumber]["is_vehicle_verified"] === false) {
+    //             //     checkVerified = false;
+    //             // }
+    //             // else {
+    //             //     checkVerified = true;
+    //             // }
+
+    //             console.log("hey hey hey", checkVerified)
+    //         }
+    //     }).catch((error) => {
+    //         checkVerified = null;
+    //         console.log("Records error: ", error)
+    //     });    
+
+
+    //     console.log("checkVerified: ", checkVerified)
+    //     if(checkVerified === null || checkVerified === "" || checkVerified === undefined) {
+    //         console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    //         $("#circle").css({backgroundColor: "red"});
+    //         $("#circle-message").html("Not yet verified...")
+    //     }
+    //     else if(checkVerified === false) {
+    //         console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+    //         $("#circle").css({backgroundColor: "yellow"});
+    //         $("#circle-message").html("Pending verification.")
+    //     }
+    //     else {
+    //         console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+    //         $("#circle").css({backgroundColor: "green"});
+    //         $("#circle-message").html("Verified.")
+    //     }
+    // }
+    
+
+    const docRefAccount = fire.myDoc(fire.db, "vehicle-information", currentUserId);
+    formPhotoVerification.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const a = formPhotoVerification.querySelector("#verification-receipt").files[0];
+        const b = formPhotoVerification.querySelector("#verification-kyc").files[0];
+
+        const metadataA = { contentType: a.type };
+        const metadataB = { contentType: b.type };
+
+        let fileExtensionA = "";
+        let fileExtensionB = "";
+        if(a.type === "image/png") {
+            fileExtensionA = ".png";
+        }
+        else if(a.type === "image/jpeg") {
+            fileExtensionA = ".jpg";
+        }
+        else if(a.type === "image/gif") {
+            fileExtensionA = ".gif";
+        }
+
+
+        if(b.type === "image/png") {
+            fileExtensionB = ".png";
+        }
+        else if(b.type === "image/jpeg") {
+            fileExtensionB = ".jpg";
+        }
+        else if(b.type === "image/gif") {
+            fileExtensionB = ".gif";
+        }
+
+        const storageRef1 = fire.myRef(fire.myGetStorage(), `vehicle-information/admin-verification/${getPlateNumber.textContent}/receipt${fileExtensionA}`);
+        const storageRef2 = fire.myRef(fire.myGetStorage(), `vehicle-information/admin-verification/${getPlateNumber.textContent}/kyc${fileExtensionB}`);
+        const uploadTask1 = fire.doUploadBytesResumable(storageRef1, a, metadataA);
+        const uploadTask2 = fire.doUploadBytesResumable(storageRef2, b, metadataB);
+
+
+        console.log(`vehicle-information/admin-verification/${getPlateNumber.textContent}/receipt${fileExtensionA}`);
+        console.log(`vehicle-information/admin-verification/${getPlateNumber.textContent}/kyc${fileExtensionB}`);
+        // Upload the receipt and kyc.
+        const uploadProfilePromiseA = uploadTask1.on('state_changed', (snapshot) => {
+                // Progress of fileupload
+                const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                console.log("Uploading verification receipt.");
+                console.log('Upload is ' + progress + '% done');    //progress of upload
+            }, 
+            (error) => {
+                // Handle unsuccessful uploads
+                console.log(error);
+            }, 
+            (success) => {
+                // If successful, do this.
+                fire.myGetDownloadURL(uploadTask1.snapshot.ref).then(async (downloadURL) => {
+                    
+                    // Set attribute for verification receipt
+                    const x = fire.myUpdateDoc(docRefAccount, {
+                        [`${getPlateNumber.textContent}.verification_receipt`]: downloadURL
+                    })
+                    .then(() => {});
+                    console.log('Done receipt! File available at', downloadURL, x);
+                });
+            } //end of getDownloadURL
+        );
+        const uploadProfilePromiseB = uploadTask2.on('state_changed', (snapshot) => {
+                // Progress of fileupload
+                const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                console.log("Upload KYC profile.");
+                console.log('Upload is ' + progress + '% done');    //progress of upload
+            }, 
+            (error) => {
+                // Handle unsuccessful uploads
+                console.log(error);
+            }, 
+            (success) => {
+                // If successful, do this.
+                fire.myGetDownloadURL(uploadTask2.snapshot.ref).then(async (downloadURL) => {
+                    console.log('Done KYC! File available at', downloadURL);
+
+                    // Add attribute for verification KYC
+                    fire.myUpdateDoc(docRefAccount, {
+                        [`${getPlateNumber.textContent}.verification_kyc`]: downloadURL
+                    })
+                    .then(() => {});
+                });
+            } //end of getDownloadURL
+        );
+
+        
+        // When the files for verification are uploaded.
+        Promise.all([uploadProfilePromiseA, uploadProfilePromiseB]).then((success) => {
+            console.log("Uploaded the Official Receipt and KYC Verification.");
+            console.log("Done done done!", docRefAccount)
+            fire.myUpdateDoc(docRefAccount, {
+                [`${getPlateNumber.textContent}.is_vehicle_verified`]: false,
+                [`${getPlateNumber.textContent}.is_vehicle_date`]: fire.getServerTimestamp()
+            }).then(() => {
+                getVehicleInformation(currentUserId);
+            });
+
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Receipt and KYC Details Submitted!',
+                text: 'Verification is now pending. It may take a while to complete.',
+            }).then((success) => {
+                window.location.reload();
+            });
+        });
+
+    });
     
     function changeListOfVehicleCategory() {
         console.log("college_option: ", document.querySelector("#college_option"));

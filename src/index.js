@@ -18,7 +18,7 @@ import {
     setDoc,
     arrayUnion,         // atomically add new element inside the array
     arrayRemove,        // atomically remove the element into the array
-    increment           // increment numeric field
+    increment,           // increment numeric field
 } from 'firebase/firestore';
 
 //Authentication
@@ -37,10 +37,16 @@ import {
     sendPasswordResetEmail,
     verifyBeforeUpdateEmail,
     deleteUser,
+    RecaptchaVerifier,
+    multiFactor,
+    PhoneAuthProvider,
+    PhoneMultiFactorGenerator,
+    EmailAuthProvider,
+    getMultiFactorResolver
 } from 'firebase/auth';
 
 
-import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL } 
+import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject } 
 from "firebase/storage";
 
 console.log("index.js is called.");
@@ -64,11 +70,207 @@ initializeApp(firebaseConfig)
 export const db = getFirestore(); //anything we do in our DB, we use this
 export const auth = getAuth(); //utilize authentication service, (login, signup, signin)
 export const storage = getStorage(); //get the firebase storage
+export const doMultiFactor = multiFactor;
+
 // const colRef1 = collection(db, 'account-information');
 // const colRef2 = collection(db, 'vehicle-information');
 
-//exports
 
+
+
+// Only in User Account
+if(window.location.pathname.indexOf("user-account") > -1) {
+
+    onAuthStateChanged(auth, (user) => {
+        const multiFactorUser = multiFactor(auth.currentUser);
+        console.log("multiFactorUser", multiFactorUser)
+
+        const display2FA = document.querySelector("#circle-message");
+
+        if(multiFactorUser.enrolledFactors.length > 0) {
+            display2FA.innerText = "2FA is active";
+            $("#circle").css({backgroundColor: "rgb(1, 255, 77)"});
+        }
+        else {
+            display2FA.innerText = "2FA is not enabled.";
+            $("#circle").css({backgroundColor: "red"});
+        }
+
+
+        
+        // Present user the option to choose which factor to unenroll.
+        // await multiFactorUser.unenroll(multiFactorUser.enrolledFactors[i])
+
+
+        const smsSend = document.querySelector("#phone-sms-send");
+        smsSend.addEventListener("click", () => {
+            const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container-id', {
+                "size": "invisible",
+                "callback": function(response) {
+                    // reCAPTCHA solved, you can proceed with
+                    // phoneAuthProvider.verifyPhoneNumber(...).
+                    onSolvedRecaptcha();
+                }
+            }, auth);
+            multiFactor(user).getSession()
+            .then(function (multiFactorSession) {
+                // Specify the phone number and pass the MFA session.
+                const phoneInfoOptions = {
+                    phoneNumber: "+639052354473",
+                    session: multiFactorSession
+                };
+
+                const phoneAuthProvider = new PhoneAuthProvider(auth);
+
+                // Send SMS verification code.
+                console.log("Done sending SMS verification code");
+                return phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
+            }).then(function (verificationId) {
+                // Ask user for the verification code. Then:
+                const cred = PhoneAuthProvider.credential(verificationId, window.prompt("Enter your SMS verification code: "));
+                const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+
+                console.log("Done checking verification code");
+                // Complete enrollment.
+                return multiFactor(user).enroll(multiFactorAssertion, "Phone Number");
+            }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            switch(errorCode) {
+                case 'auth/requires-recent-login': {
+                    // TODO(you): prompt the user to re-provide their sign-in credentials
+                    let userProvidedPassword = window.prompt("Enter your password: ");
+                    const credential = EmailAuthProvider.credential(
+                        auth.currentUser.email,
+                        userProvidedPassword
+                    )
+
+                    reauthenticateWithCredential(user, credential).then(() => {
+                        swal("Success!", "User reauthenticated.", "success").then((e) => {
+                            // window.location.href = window.location.href; //reload a page in JS
+                            // location.reload();
+                        });
+                    }).catch((error) => {
+                        swal("Oops.", "Something went wrong during reauthentication!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+                            // window.location.href = window.location.href; //reload a page in JS
+                            // location.reload();
+                        });
+                    });
+                    break;
+                }
+                default: {
+                    swal("Oops.", "Something went wrong!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+                        // window.location.href = window.location.href; //reload a page in JS
+                        // location.reload();
+                    });
+                    console.log("Error: ", error);
+                }
+            }
+            });
+        });
+    });
+
+    // onAuthStateChanged(auth, (user) => {
+    //     // const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container-id', {
+    //     //     "size": "invisible",
+    //     //     "callback": function(response) {
+    //     //         // reCAPTCHA solved, you can proceed with
+    //     //         // phoneAuthProvider.verifyPhoneNumber(...).
+    //     //         onSolvedRecaptcha();
+    //     //     }
+    //     // }, auth);
+
+    //     window.recaptchaVerifier = new RecaptchaVerifier('2fa-captcha', {
+    //         size: 'invisible',
+    //         callback: (response) => console.log('captcha solved!', response),
+    //     }, auth);
+
+    //     // SMS Multi-Factor Authentication
+    //     const getPhoneNumber = document.querySelector('#user-phone-number').value;
+    //     const sendSMSVerification = document.querySelector('#phone-sms-send');
+        
+    //     // Asked for Phone Verification
+    //     sendSMSVerification.addEventListener('click', () => {
+            
+    //         multiFactor(auth.currentUser).getSession()
+    //             .then(function (multiFactorSession) {
+    //                 // Specify the phone number and pass the MFA session.
+    //                 const phoneInfoOptions = {
+    //                     phoneNumber: "+639052354473",
+    //                     session: multiFactorSession
+    //                 };
+            
+    //                 const phoneAuthProvider = new PhoneAuthProvider(auth);
+                    
+    //                 // Send SMS verification code.
+    //                 return phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
+    //             })
+    //             .catch((error) => {
+    //                 const errorCode = error.code;
+    //                 const errorMessage = error.message;
+
+    //                 switch(errorCode) {
+    //                     case 'auth/requires-recent-login': {
+    //                         // TODO(you): prompt the user to re-provide their sign-in credentials
+    //                         let userProvidedPassword = window.prompt("Enter your password: ");
+    //                         const credential = EmailAuthProvider.credential(
+    //                             auth.currentUser.email,
+    //                             userProvidedPassword
+    //                         )
+
+    //                         reauthenticateWithCredential(user, credential).then(() => {
+    //                             swal("Success!", "User reauthenticated.", "success").then((e) => {
+    //                                 // window.location.href = window.location.href; //reload a page in JS
+    //                                 // location.reload();
+    //                             });
+    //                         }).catch((error) => {
+    //                             swal("Oops.", "Something went wrong during reauthentication!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+    //                                 // window.location.href = window.location.href; //reload a page in JS
+    //                                 // location.reload();
+    //                             });
+    //                         });
+    //                         break;
+    //                     }
+    //                     default: {
+    //                         swal("Oops.", "Something went wrong!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+    //                             // window.location.href = window.location.href; //reload a page in JS
+    //                             // location.reload();
+    //                         });
+    //                         console.log("Error: ", error);
+    //                     }
+    //                 }
+    //             });
+    //     });
+        
+        
+    //     // <input id="enroll-verify-code" value=""> 
+    //     // <button id="enroll-verify-button">Verify</button>
+    //     const enrollVerify = document.querySelector("#enroll-verify-code");
+    //     const verifyPhoneButton = document.querySelector("#enroll-verify-button");
+        
+    //     verifyPhoneButton.addEventListener("click", () => {
+
+    //         multiFactor(auth.currentUser).getSession()
+    //         .then(function (verificationId) {
+    //             console.log('enrollVerify: ', enrollVerify, enrollVerify.value)
+    //             console.log('verificationId: ', verificationId)
+
+    //             // Ask user for the verification code. Then:
+    //             const cred = PhoneAuthProvider.credential(verificationId, "408154");
+    //             const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+                
+    //             // Complete enrollment.
+    //             return multiFactor(auth.currentUser).enroll(multiFactorAssertion, 'phone number');
+    //         }).catch((error) => {
+    //             console.log('error: ', error);
+    //         });
+
+    //         // return multiFactor(user).enroll(multiFactorAssertion, mfaDisplayName);
+    //     });
+    // }); //end of onAuthStateChanged
+}   //end of window.location.pathname
+  
 // Firestore
 export const myGetFirestore = getFirestore;
 export const myCollection = collection;
@@ -113,6 +315,7 @@ export const myUploadBytes = uploadBytes;
 export const myUploadBytesResumable = uploadBytesResumable;
 export const doUploadBytesResumable = uploadBytesResumable;
 export const myGetDownloadURL = getDownloadURL;
+export const doDeleteObject = deleteObject;
 export const doVerifyBeforeUpdateEmail = verifyBeforeUpdateEmail;
 
 
@@ -248,6 +451,52 @@ function doLoginForm() {
                         $('.modal-container-main').html(`<p>Wrong credentials</p>`);
                         console.log('switch case')
                         break;
+                    }
+                    case 'auth/multi-factor-auth-required': {
+                        // Ask user which second factor to use.
+
+                        let isSMSSent = false;
+                        const recaptchaVerifier = new RecaptchaVerifier("sign-in-button", {
+                            "size": "invisible",
+                            "callback": function(response) {
+                                // reCAPTCHA solved, you can proceed with
+                                // phoneAuthProvider.verifyPhoneNumber(...).
+                                onSolvedRecaptcha();
+                            }
+                        }, auth);
+
+                        const resolver = getMultiFactorResolver(auth, err);
+                        console.log("resolver: ", resolver)
+
+                        if (resolver.hints[0].factorId ===
+                            PhoneMultiFactorGenerator.FACTOR_ID) {
+                            const phoneInfoOptions = {
+                                multiFactorHint: resolver.hints[0],
+                                session: resolver.session
+                            };
+                            const phoneAuthProvider = new PhoneAuthProvider(auth);
+                            // Send SMS verification code
+                            return phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+                                .then(function (verificationId) {
+                                    // console.log("verificationId: ", verificationId)
+
+                                    // Ask user for the SMS verification code. Then:
+                                    const cred = PhoneAuthProvider.credential(
+                                        verificationId, window.prompt("Enter your SMS verification code: "));
+                                    const multiFactorAssertion =
+                                        PhoneMultiFactorGenerator.assertion(cred);
+                                    
+                                    // Complete sign-in.
+                                    return resolver.resolveSignIn(multiFactorAssertion)
+                                })
+                                .then(function (userCredential) {
+                                    console.log(userCredential)
+                                    console.log("User successfully signed in with the second factor phone number.");
+                                    checkCurrentLoggedUser();
+                                });
+                        } else {
+                            // Unsupported second factor.
+                        }
                     }
                     default: {  
                         console.log('switch default')

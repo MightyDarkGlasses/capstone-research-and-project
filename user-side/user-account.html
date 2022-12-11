@@ -19,7 +19,13 @@
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.iconify.design/iconify-icon/1.0.0/iconify-icon.min.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.0/iconify-icon.min.js" defer></script>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js" defer></script>
     <title>Welcome To BulSU VMS</title>
 </head>
 <!-- 
@@ -43,6 +49,8 @@
  </style>
 
 <body>
+    <div id="recaptcha-container-id"></div>
+    <div id="2fa-captcha"></div>
     <div class="container user-main" id="user-account-information"> <!-- user-account-information is used for Firebase (index.js) -->
         <div class="sidebar">
             <div class="admin-details-box">
@@ -220,14 +228,72 @@
                                 </form>
                             </div>
 
+                            <style>
+                                .personal-info-verification {
+                                    display: flex;
+                                    gap: 1em;
+                                    align-items: center;
+                                }
+                                #circle {
+                                    height: 10px;
+                                    width: 10px;
+                                    background-color: white;
+                                    border-radius: 50%;
+                                    display: inline-block;
+                                }
+
+                                .personal-info-phonenum {
+                                    display: grid;
+                                    gap: .5em;
+                                }
+
+                                #form_phonenum {
+                                    border: none;
+                                    outline: 0;
+                                    font-family: 'Lexend Deca', sans-serif;
+                                    font-size: 1em;
+                                    margin-bottom: 1.5em;
+                                    background: #F8F8F8;
+                                    border-radius: 10px;
+                                    padding: 0.75em 1em;
+                                    color: black;
+                                    width: 100%;
+                                }
+                            </style>
+
                             <span class="personal-info-title">Phone Number</span>
-                            <span class="personal-info-phonenum">▃▃▃▃▃▃</span>
+                            <span class="personal-info-phonenum" >
+                                <p id="user-phone-number">▃▃▃▃▃</p>
+                                <span class="personal-info-verification">
+                                    <span id="circle"></span>
+                                    <span id="circle-message">▃▃▃▃▃</span>
+                                    <!-- <span id="circle-message">2FA is not active.</span> -->
+                                </span>
+                            </span>
                             <div class="popdown pop-phonenum">
                                 <form action="#" class="form-phonenum">
-                                    <label>Phone Number</label>
-                                    <input type="tel" name="form_phonenum" id="form_phonenum">
-
+                                    <h2>- Update Phone Number</h2>
+                                    <p>Provide your new phone number in the field below.
+                                        Also, consider following the E.164 internation phone formatting (beginning with +63)
+                                        in order to save changes.
+                                    </p>
+                                    <br>
+                                    <p>
+                                        Note: The current MFA will be unenrolled if you provided a new number.
+                                    </p>
+                                    <br>
+                                    <label>Phone Number: </label>
+                                    <input type="tel" name="form_phonenum" id="form_phonenum" placeholder="+639123456789">
+                                    
                                     <input type="submit" value="Save Changes">
+                                    <br><br>
+                                    <h2>- Enable 2FA</h2>
+                                    <p>If you have not enabled the 2FA, click the button below in order
+                                        to verify the authenticity of your number.
+                                        Provide the correct code in order enable the MFA.
+                                    </p>
+                                    <br>
+                                    <input type="button" id="phone-sms-send" value="Send SMS">
                                 </form>
                             </div>
 

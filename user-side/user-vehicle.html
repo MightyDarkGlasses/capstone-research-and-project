@@ -530,8 +530,42 @@
                             
                         </form>
                     </div> -->
-
+                    <style>
+                        .personal-info-verification {
+                            display: flex;
+                            gap: 1em;
+                            align-items: center;
+                        }
+                        #circle {
+                            height: 10px;
+                            width: 10px;
+                            background-color: red;
+                            border-radius: 50%;
+                            display: inline-block;
+                        }
+                    </style>
                     
+
+                    <span class="personal-info-title">Vehicle Verification</span>
+                    <span class="personal-info-verification">
+                        <span id="circle"></span>
+                        <span id="circle-message">▃▃▃▃▃</span>
+                    </span>
+                    <div class="popdown pop-verification">
+                        <form action="#" class="form-photo-verification">
+
+                            <p>Official Receipt / Certificate of Registration</p>
+                            <input type="file" name="verification_receipt" id="verification-receipt" accept=".jpg, .jpeg, .png, .gif" required="required">
+                            
+                            <p>KYC Verification</p>
+                            <input type="file" name="verification_kyc" id="verification-kyc" accept=".jpg, .jpeg, .png, .gif" required="required">
+                            <!-- <p>Plate Number</p> -->
+                            <!-- <input type="text" name="form_plate" id="" required> -->
+                            <input type="submit" value="Save Changes">
+                        </form>
+                    </div>
+
+
 
                     <span class="personal-info-title">Plate Number</span>
                     <span class="personal-info-plate">▃▃▃▃▃</span>
@@ -612,6 +646,9 @@
                     <span class="personal-info-color">▃▃▃▃▃</span>
                     <div class="popdown pop-color">
                         <form action="#" class="form-color">
+                            <p>Note:<br>This should represent the paint finishes, design, and distinct color palette of the vehicle.</p>
+                            <p><i>e.g Cobalt Blue</i></p>
+                            <br><br>
                             <p>Vehicle Color</p>
                             <input type="text" name="form_color" id="form_color" required value="">
                             <input type="submit" value="Save Changes">
@@ -623,6 +660,8 @@
                     <span class="personal-info-year">▃▃▃▃▃</span>
                     <div class="popdown pop-year">
                         <form action="#" class="form-year">
+                            <p>Note:<br>The year when the vehicle was supplied in brand new or used imported CBU (Complete Built-Up).</p>
+                            <br>
                             <p>Year Model</p>
                             <input type="number" name="form_year" id="form_year" min="1900" max="2099" step="1" placeholder="1900 - 2099 only." />
                             <input type="submit" value="Save Changes">
@@ -638,6 +677,9 @@
                     </span>
                     <div class="popdown pop-category">
                         <form action="#" class="form-category">
+                            <p>The License Code and Vehicle Categories can found Drivers' License</p>
+                            <br><br>
+
                             <p>License Code</p>
                             <select name="vehicle_classification" id="vehicle_classification" required>
                                 <option value="A">A - Motorcycle</option>

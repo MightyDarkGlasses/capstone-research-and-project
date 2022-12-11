@@ -14,7 +14,11 @@
 
     <!-- Stylesheet here... -->
     <link rel="stylesheet" type="text/css" href="styles/registration/registration_part1.css">
-
+        <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
     <link rel="stylesheet" href="styles/modal.css">
 </head>
@@ -37,6 +41,17 @@
     .user-type > span{
         font-family: "Lexend Deca", sans-serif;
         font-weight: bold;
+    }
+
+    /* Override Phone Number */
+    .iti {
+        width: 100%;
+        padding-top: 0.5em;
+         height: 55px;
+    }
+
+    .iti__selected-flag {
+        padding: 0 25px 0 8px;
     }
 </style>
 <body>
@@ -88,7 +103,7 @@
                                 <p>Student</p>
                             </div> -->
                             <span>
-                                <input type="radio" id="usertype_1" name="user_type" value="FACULTY" required>
+                                <input type="radio" id="usertype_1" name="user_type" value="FACULTY" checked="checked" required>
                                 <span>Faculty Member</span>
                             </span>
                             <span>
@@ -126,9 +141,9 @@
                         <div class="user_input">
                             <label >Phone Number</label>
                             <input class="logo-text-input" required="required" type="tel" name="signup_phone" id="signup_phone"
-                            pattern=".{11,}"
+                            maxlength="13"
                             title="Please enter a 11-digit phone number."
-                            value=""
+                            placeholder="09123456789"
                             >
                         </div>
                         <div class="user_input">
@@ -211,5 +226,7 @@ integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="ano
 <script src="dist/bundle.js" defer></script>
 <!-- <script type="module" src="src/user.js" defer></script> -->
 <script type="text/javascript" src="src/cookies.js" defer></script>
-
+<script defer>
+    
+</script>
 </html>

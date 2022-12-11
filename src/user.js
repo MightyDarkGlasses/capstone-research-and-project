@@ -7,54 +7,87 @@ if(windowLocation.indexOf("signup1.html") > -1) {
 console.log('signup1.js loaded')
 
 
-document.querySelector("#reg-goto-page2").addEventListener('click', function() {
-    document.querySelector('input[name="user_type"]:checked').value;
-});
+// document.querySelector("#reg-goto-page2").addEventListener('click', function() {
+// });
 
 
 document.addEventListener('DOMContentLoaded', function(e) {
+    // document.querySelector('input[name="user_type"]:checked').value;
+
+    const phoneInputField = document.querySelector("#signup_phone");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        initialCountry: "ph",
+        allowDropdown: false,
+    });
+
+    function checkPhoneNumber() {
+        const phoneNumber = phoneInput.getNumber();
+        if (phoneInput.isValidNumber()) {
+            // alert(`Phone number in E.164 format: ${phoneNumber}`);
+            return phoneNumber;
+        } 
+        return null;
+    }
+
+
     const personalInfo = document.querySelector('.personal-info');
     let signup_cpassword = document.querySelector('input[name="signup_cpassword"]');
     setPredefinedValue();
 
+    
     if (personalInfo !== null && personalInfo !== undefined) {
         personalInfo.addEventListener('submit', (e) => {
             e.preventDefault();
             e.stopPropagation();
             
-            if($('#signup_password').val() === $('#signup_cpassword').val()) {
-                setCookiePersonalInformation();
-                console.log('Next page.');
-
-                fire.doSignInWithEmailAndPassword(fire.auth, 
-                    $('#signup_email').val(), 'password')
-                .then((e) => {
-                    //pass;
-                }).catch((error) => {
-                    console.log('error: ', error);
-                    switch (error.code) {
-                        case 'auth/wrong-password': {
-                            $('.modal-container-main').html(`<p>This email address already exist. Please use another one.</p>`);
-                            $("#error-popup").modal({
-                                fadeDuration: 100
-                            });
-                            console.log('signup err code: ', error.code)
-                            console.log('signup err message: ', error.message);
-                            break;
-                        }
-                        case 'auth/user-not-found': {
-                            console.log('Unique user!');
-                            window.location = "signup2.html";
-                            break;
-                        }
-                    }
-                });
+            let phoneNumber = checkPhoneNumber();
+            console.log("checkPhoneNumber: ", phoneNumber);
+            if(phoneNumber !== null) {
+                $("#signup_phone").val(phoneNumber);
                 
+                if($('#signup_password').val() === $('#signup_cpassword').val()) {
+                    setCookiePersonalInformation();
+                    console.log('Next page.');
+    
+                    fire.doSignInWithEmailAndPassword(fire.auth, 
+                        $('#signup_email').val(), 'password')
+                    .then((e) => {
+                        //pass;
+                    }).catch((error) => {
+                        console.log('error: ', error);
+                        switch (error.code) {
+                            case 'auth/wrong-password': {
+                                $('.modal-container-main').html(`<p>This email address already exist. Please use another one.</p>`);
+                                $("#error-popup").modal({
+                                    fadeDuration: 100
+                                });
+                                console.log('signup err code: ', error.code)
+                                console.log('signup err message: ', error.message);
+                                break;
+                            }
+                            case 'auth/user-not-found': {
+                                console.log('Unique user!');
+                                window.location = "signup2.html";
+                                break;
+                            }
+                        }
+                    });
+                    
+                }
+                else {
+                    console.log('Re-check the password');
+                    $('.modal-container-main').html(`<p>Password mismatch.</p>
+                    <p>Please re-check your password input.</p>`);
+                    $("#error-popup").modal({
+                        fadeDuration: 100
+                    });
+                }
             }
             else {
-                console.log('Re-check the password');
-                $('.modal-container-main').html(`<p>Password mismatch.</p>
-                <p>Please re-check your password input.</p>`);
+                console.log('Phone number is invalid.');
+                $('.modal-container-main').html(`<p>Invalid phone number format.</p>
+                <p>Please follow the given format in phone number.</p>`);
                 $("#error-popup").modal({
                     fadeDuration: 100
                 });

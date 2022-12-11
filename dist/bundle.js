@@ -37715,8 +37715,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "doArrayUnion": () => (/* binding */ doArrayUnion),
 /* harmony export */   "doCreateUserWithEmailAndPassword": () => (/* binding */ doCreateUserWithEmailAndPassword),
 /* harmony export */   "doDeleteField": () => (/* binding */ doDeleteField),
+/* harmony export */   "doDeleteObject": () => (/* binding */ doDeleteObject),
 /* harmony export */   "doIncrement": () => (/* binding */ doIncrement),
 /* harmony export */   "doLimit": () => (/* binding */ doLimit),
+/* harmony export */   "doMultiFactor": () => (/* binding */ doMultiFactor),
 /* harmony export */   "doOrderBy": () => (/* binding */ doOrderBy),
 /* harmony export */   "doQuery": () => (/* binding */ doQuery),
 /* harmony export */   "doSetDoc": () => (/* binding */ doSetDoc),
@@ -37791,11 +37793,207 @@ const firebaseConfig = {
 const db = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getFirestore)(); //anything we do in our DB, we use this
 const auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.getAuth)(); //utilize authentication service, (login, signup, signin)
 const storage = (0,firebase_storage__WEBPACK_IMPORTED_MODULE_3__.getStorage)(); //get the firebase storage
+const doMultiFactor = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.multiFactor;
+
 // const colRef1 = collection(db, 'account-information');
 // const colRef2 = collection(db, 'vehicle-information');
 
-//exports
 
+
+
+// Only in User Account
+if(window.location.pathname.indexOf("user-account") > -1) {
+
+    (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.onAuthStateChanged)(auth, (user) => {
+        const multiFactorUser = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.multiFactor)(auth.currentUser);
+        console.log("multiFactorUser", multiFactorUser)
+
+        const display2FA = document.querySelector("#circle-message");
+
+        if(multiFactorUser.enrolledFactors.length > 0) {
+            display2FA.innerText = "2FA is active";
+            $("#circle").css({backgroundColor: "rgb(1, 255, 77)"});
+        }
+        else {
+            display2FA.innerText = "2FA is not enabled.";
+            $("#circle").css({backgroundColor: "red"});
+        }
+
+
+        
+        // Present user the option to choose which factor to unenroll.
+        // await multiFactorUser.unenroll(multiFactorUser.enrolledFactors[i])
+
+
+        const smsSend = document.querySelector("#phone-sms-send");
+        smsSend.addEventListener("click", () => {
+            const recaptchaVerifier = new firebase_auth__WEBPACK_IMPORTED_MODULE_2__.RecaptchaVerifier('recaptcha-container-id', {
+                "size": "invisible",
+                "callback": function(response) {
+                    // reCAPTCHA solved, you can proceed with
+                    // phoneAuthProvider.verifyPhoneNumber(...).
+                    onSolvedRecaptcha();
+                }
+            }, auth);
+            (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.multiFactor)(user).getSession()
+            .then(function (multiFactorSession) {
+                // Specify the phone number and pass the MFA session.
+                const phoneInfoOptions = {
+                    phoneNumber: "+639052354473",
+                    session: multiFactorSession
+                };
+
+                const phoneAuthProvider = new firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneAuthProvider(auth);
+
+                // Send SMS verification code.
+                console.log("Done sending SMS verification code");
+                return phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
+            }).then(function (verificationId) {
+                // Ask user for the verification code. Then:
+                const cred = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneAuthProvider.credential(verificationId, window.prompt("Enter your SMS verification code: "));
+                const multiFactorAssertion = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneMultiFactorGenerator.assertion(cred);
+
+                console.log("Done checking verification code");
+                // Complete enrollment.
+                return (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.multiFactor)(user).enroll(multiFactorAssertion, "Phone Number");
+            }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            switch(errorCode) {
+                case 'auth/requires-recent-login': {
+                    // TODO(you): prompt the user to re-provide their sign-in credentials
+                    let userProvidedPassword = window.prompt("Enter your password: ");
+                    const credential = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.EmailAuthProvider.credential(
+                        auth.currentUser.email,
+                        userProvidedPassword
+                    )
+
+                    ;(0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.reauthenticateWithCredential)(user, credential).then(() => {
+                        swal("Success!", "User reauthenticated.", "success").then((e) => {
+                            // window.location.href = window.location.href; //reload a page in JS
+                            // location.reload();
+                        });
+                    }).catch((error) => {
+                        swal("Oops.", "Something went wrong during reauthentication!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+                            // window.location.href = window.location.href; //reload a page in JS
+                            // location.reload();
+                        });
+                    });
+                    break;
+                }
+                default: {
+                    swal("Oops.", "Something went wrong!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+                        // window.location.href = window.location.href; //reload a page in JS
+                        // location.reload();
+                    });
+                    console.log("Error: ", error);
+                }
+            }
+            });
+        });
+    });
+
+    // onAuthStateChanged(auth, (user) => {
+    //     // const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container-id', {
+    //     //     "size": "invisible",
+    //     //     "callback": function(response) {
+    //     //         // reCAPTCHA solved, you can proceed with
+    //     //         // phoneAuthProvider.verifyPhoneNumber(...).
+    //     //         onSolvedRecaptcha();
+    //     //     }
+    //     // }, auth);
+
+    //     window.recaptchaVerifier = new RecaptchaVerifier('2fa-captcha', {
+    //         size: 'invisible',
+    //         callback: (response) => console.log('captcha solved!', response),
+    //     }, auth);
+
+    //     // SMS Multi-Factor Authentication
+    //     const getPhoneNumber = document.querySelector('#user-phone-number').value;
+    //     const sendSMSVerification = document.querySelector('#phone-sms-send');
+        
+    //     // Asked for Phone Verification
+    //     sendSMSVerification.addEventListener('click', () => {
+            
+    //         multiFactor(auth.currentUser).getSession()
+    //             .then(function (multiFactorSession) {
+    //                 // Specify the phone number and pass the MFA session.
+    //                 const phoneInfoOptions = {
+    //                     phoneNumber: "+639052354473",
+    //                     session: multiFactorSession
+    //                 };
+            
+    //                 const phoneAuthProvider = new PhoneAuthProvider(auth);
+                    
+    //                 // Send SMS verification code.
+    //                 return phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
+    //             })
+    //             .catch((error) => {
+    //                 const errorCode = error.code;
+    //                 const errorMessage = error.message;
+
+    //                 switch(errorCode) {
+    //                     case 'auth/requires-recent-login': {
+    //                         // TODO(you): prompt the user to re-provide their sign-in credentials
+    //                         let userProvidedPassword = window.prompt("Enter your password: ");
+    //                         const credential = EmailAuthProvider.credential(
+    //                             auth.currentUser.email,
+    //                             userProvidedPassword
+    //                         )
+
+    //                         reauthenticateWithCredential(user, credential).then(() => {
+    //                             swal("Success!", "User reauthenticated.", "success").then((e) => {
+    //                                 // window.location.href = window.location.href; //reload a page in JS
+    //                                 // location.reload();
+    //                             });
+    //                         }).catch((error) => {
+    //                             swal("Oops.", "Something went wrong during reauthentication!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+    //                                 // window.location.href = window.location.href; //reload a page in JS
+    //                                 // location.reload();
+    //                             });
+    //                         });
+    //                         break;
+    //                     }
+    //                     default: {
+    //                         swal("Oops.", "Something went wrong!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+    //                             // window.location.href = window.location.href; //reload a page in JS
+    //                             // location.reload();
+    //                         });
+    //                         console.log("Error: ", error);
+    //                     }
+    //                 }
+    //             });
+    //     });
+        
+        
+    //     // <input id="enroll-verify-code" value=""> 
+    //     // <button id="enroll-verify-button">Verify</button>
+    //     const enrollVerify = document.querySelector("#enroll-verify-code");
+    //     const verifyPhoneButton = document.querySelector("#enroll-verify-button");
+        
+    //     verifyPhoneButton.addEventListener("click", () => {
+
+    //         multiFactor(auth.currentUser).getSession()
+    //         .then(function (verificationId) {
+    //             console.log('enrollVerify: ', enrollVerify, enrollVerify.value)
+    //             console.log('verificationId: ', verificationId)
+
+    //             // Ask user for the verification code. Then:
+    //             const cred = PhoneAuthProvider.credential(verificationId, "408154");
+    //             const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+                
+    //             // Complete enrollment.
+    //             return multiFactor(auth.currentUser).enroll(multiFactorAssertion, 'phone number');
+    //         }).catch((error) => {
+    //             console.log('error: ', error);
+    //         });
+
+    //         // return multiFactor(user).enroll(multiFactorAssertion, mfaDisplayName);
+    //     });
+    // }); //end of onAuthStateChanged
+}   //end of window.location.pathname
+  
 // Firestore
 const myGetFirestore = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getFirestore;
 const myCollection = firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.collection;
@@ -37840,6 +38038,7 @@ const myUploadBytes = firebase_storage__WEBPACK_IMPORTED_MODULE_3__.uploadBytes;
 const myUploadBytesResumable = firebase_storage__WEBPACK_IMPORTED_MODULE_3__.uploadBytesResumable;
 const doUploadBytesResumable = firebase_storage__WEBPACK_IMPORTED_MODULE_3__.uploadBytesResumable;
 const myGetDownloadURL = firebase_storage__WEBPACK_IMPORTED_MODULE_3__.getDownloadURL;
+const doDeleteObject = firebase_storage__WEBPACK_IMPORTED_MODULE_3__.deleteObject;
 const doVerifyBeforeUpdateEmail = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.verifyBeforeUpdateEmail;
 
 
@@ -37975,6 +38174,52 @@ function doLoginForm() {
                         $('.modal-container-main').html(`<p>Wrong credentials</p>`);
                         console.log('switch case')
                         break;
+                    }
+                    case 'auth/multi-factor-auth-required': {
+                        // Ask user which second factor to use.
+
+                        let isSMSSent = false;
+                        const recaptchaVerifier = new firebase_auth__WEBPACK_IMPORTED_MODULE_2__.RecaptchaVerifier("sign-in-button", {
+                            "size": "invisible",
+                            "callback": function(response) {
+                                // reCAPTCHA solved, you can proceed with
+                                // phoneAuthProvider.verifyPhoneNumber(...).
+                                onSolvedRecaptcha();
+                            }
+                        }, auth);
+
+                        const resolver = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.getMultiFactorResolver)(auth, err);
+                        console.log("resolver: ", resolver)
+
+                        if (resolver.hints[0].factorId ===
+                            firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneMultiFactorGenerator.FACTOR_ID) {
+                            const phoneInfoOptions = {
+                                multiFactorHint: resolver.hints[0],
+                                session: resolver.session
+                            };
+                            const phoneAuthProvider = new firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneAuthProvider(auth);
+                            // Send SMS verification code
+                            return phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+                                .then(function (verificationId) {
+                                    // console.log("verificationId: ", verificationId)
+
+                                    // Ask user for the SMS verification code. Then:
+                                    const cred = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneAuthProvider.credential(
+                                        verificationId, window.prompt("Enter your SMS verification code: "));
+                                    const multiFactorAssertion =
+                                        firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneMultiFactorGenerator.assertion(cred);
+                                    
+                                    // Complete sign-in.
+                                    return resolver.resolveSignIn(multiFactorAssertion)
+                                })
+                                .then(function (userCredential) {
+                                    console.log(userCredential)
+                                    console.log("User successfully signed in with the second factor phone number.");
+                                    checkCurrentLoggedUser();
+                                });
+                        } else {
+                            // Unsupported second factor.
+                        }
                     }
                     default: {  
                         console.log('switch default')
@@ -38682,54 +38927,87 @@ if(windowLocation.indexOf("signup1.html") > -1) {
 console.log('signup1.js loaded')
 
 
-document.querySelector("#reg-goto-page2").addEventListener('click', function() {
-    document.querySelector('input[name="user_type"]:checked').value;
-});
+// document.querySelector("#reg-goto-page2").addEventListener('click', function() {
+// });
 
 
 document.addEventListener('DOMContentLoaded', function(e) {
+    // document.querySelector('input[name="user_type"]:checked').value;
+
+    const phoneInputField = document.querySelector("#signup_phone");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        initialCountry: "ph",
+        allowDropdown: false,
+    });
+
+    function checkPhoneNumber() {
+        const phoneNumber = phoneInput.getNumber();
+        if (phoneInput.isValidNumber()) {
+            // alert(`Phone number in E.164 format: ${phoneNumber}`);
+            return phoneNumber;
+        } 
+        return null;
+    }
+
+
     const personalInfo = document.querySelector('.personal-info');
     let signup_cpassword = document.querySelector('input[name="signup_cpassword"]');
     setPredefinedValue();
 
+    
     if (personalInfo !== null && personalInfo !== undefined) {
         personalInfo.addEventListener('submit', (e) => {
             e.preventDefault();
             e.stopPropagation();
             
-            if($('#signup_password').val() === $('#signup_cpassword').val()) {
-                setCookiePersonalInformation();
-                console.log('Next page.');
-
-                _index_js__WEBPACK_IMPORTED_MODULE_0__.doSignInWithEmailAndPassword(_index_js__WEBPACK_IMPORTED_MODULE_0__.auth, 
-                    $('#signup_email').val(), 'password')
-                .then((e) => {
-                    //pass;
-                }).catch((error) => {
-                    console.log('error: ', error);
-                    switch (error.code) {
-                        case 'auth/wrong-password': {
-                            $('.modal-container-main').html(`<p>This email address already exist. Please use another one.</p>`);
-                            $("#error-popup").modal({
-                                fadeDuration: 100
-                            });
-                            console.log('signup err code: ', error.code)
-                            console.log('signup err message: ', error.message);
-                            break;
-                        }
-                        case 'auth/user-not-found': {
-                            console.log('Unique user!');
-                            window.location = "signup2.html";
-                            break;
-                        }
-                    }
-                });
+            let phoneNumber = checkPhoneNumber();
+            console.log("checkPhoneNumber: ", phoneNumber);
+            if(phoneNumber !== null) {
+                $("#signup_phone").val(phoneNumber);
                 
+                if($('#signup_password').val() === $('#signup_cpassword').val()) {
+                    setCookiePersonalInformation();
+                    console.log('Next page.');
+    
+                    _index_js__WEBPACK_IMPORTED_MODULE_0__.doSignInWithEmailAndPassword(_index_js__WEBPACK_IMPORTED_MODULE_0__.auth, 
+                        $('#signup_email').val(), 'password')
+                    .then((e) => {
+                        //pass;
+                    }).catch((error) => {
+                        console.log('error: ', error);
+                        switch (error.code) {
+                            case 'auth/wrong-password': {
+                                $('.modal-container-main').html(`<p>This email address already exist. Please use another one.</p>`);
+                                $("#error-popup").modal({
+                                    fadeDuration: 100
+                                });
+                                console.log('signup err code: ', error.code)
+                                console.log('signup err message: ', error.message);
+                                break;
+                            }
+                            case 'auth/user-not-found': {
+                                console.log('Unique user!');
+                                window.location = "signup2.html";
+                                break;
+                            }
+                        }
+                    });
+                    
+                }
+                else {
+                    console.log('Re-check the password');
+                    $('.modal-container-main').html(`<p>Password mismatch.</p>
+                    <p>Please re-check your password input.</p>`);
+                    $("#error-popup").modal({
+                        fadeDuration: 100
+                    });
+                }
             }
             else {
-                console.log('Re-check the password');
-                $('.modal-container-main').html(`<p>Password mismatch.</p>
-                <p>Please re-check your password input.</p>`);
+                console.log('Phone number is invalid.');
+                $('.modal-container-main').html(`<p>Invalid phone number format.</p>
+                <p>Please follow the given format in phone number.</p>`);
                 $("#error-popup").modal({
                     fadeDuration: 100
                 });
@@ -38842,7 +39120,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let windowLocation = window.location.pathname;
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
 if(windowLocation.indexOf("user-announcement") > -1) {
 
     if(localStorage.getItem("theme") === "light") {
@@ -39024,172 +39302,288 @@ if(windowLocation.indexOf("user-announcement") > -1) {
         fun();
         // console.log(document.querySelectorAll('.toggle-announcements'));
     }
-    displayAnnouncement();
+    // displayAnnouncement();
 
     
     
 }
 
 
-// // ### Display User Information Table
-// if(windowLocation.indexOf("user-announcement") > -1) {
-//     console.log('announcement5.js');
+// ### Display User Information Table
+if(windowLocation.indexOf("user-announcement") > -1) {
+    console.log('announcement5.js');
 
-//     let dataVehicle = [];
-//     const colRef = fire.myCollection(fire.db, "vehicle-information");
-//     const vehicleQuery = fire.doQuery(colRef);
+    let dataVehicle = [];
+    const colRef = _src_index__WEBPACK_IMPORTED_MODULE_0__.myCollection(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information");
+    const vehicleQuery = _src_index__WEBPACK_IMPORTED_MODULE_0__.doQuery(colRef);
 
-//     let currentIndex = 0;
-//     let countVehicle = 1;
+    let currentIndex = 0;
+    let countVehicle = 1;
 
-//     const docsSnap = await fire.myGetDocs(vehicleQuery);
-//     docsSnap.forEach(async doc => {
+    const docsSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDocs(vehicleQuery);
+    docsSnap.forEach(async doc => {
         
-//         let vehicleData = {...doc.data()};
-//         let appendData = {'a': ''};
+        let vehicleData = {...doc.data()};
+        let appendData = {'a': ''};
 
-//         const vehicle = Object.keys(vehicleData)
-//             .filter((key) => key !== "vehicle_length")
-//             // .filter((key) => key.includes("Name"))
-//             .reduce((obj, key) => {
-//                 return Object.assign(obj, {
-//                 [key]: vehicleData[key]
-//             });
-//         }, 
-//         {});
+        let vehicle = Object.keys(vehicleData)
+            .filter((key) => key !== "vehicle_length")
+            // .filter((key) => key.includes("Name"))
+            .reduce((obj, key) => {
+                return Object.assign(obj, {
+                [key]: vehicleData[key]
+            });
+        }, 
+        {});
 
+        // vehicle.filter((data) => {
+        //     return data.is_vehicle_verified !== null || data.is_vehicle_verified !== undefined
+        // });
+        // console.log("vehicle list: ", vehicle)
 
-//         let ownerFullName = '';
-//         let ownerProfilePic = '';
+        let ownerFullName = '';
+        let ownerProfilePic = '';
 
-//         await getAccountInformationOwner(doc.id).then(evt => {
-//             // console.log('event: ', evt)
-//             // If middle name is undefined
-//             if(typeof(evt['middle_name']) === 'undefined' || evt['middle_name'].trim() === '') {
-//                 console.log(true)
-//                 evt['middle_name'] = ' ';
-//             }
+        await getAccountInformationOwner(doc.id).then(evt => {
+            // If middle name is undefined
+            if(typeof(evt['middle_name']) === 'undefined' || evt['middle_name'].trim() === '') {
+                console.log(true)
+                evt['middle_name'] = ' ';
+            }
 
-//             // appendData['vehicle_owner'] = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
-//             ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
+            // appendData['vehicle_owner'] = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
+            ownerFullName = `${evt['last_name']} ${evt['first_name']} ${evt['middle_name'][0]}`;
 
-
-//             // Check the profile picture.
-//             if(typeof(evt['profile_pic']) === 'undefined' || evt['profile_pic'] === null) {
-//                 // appendData['profile_pic'] = 'https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fprofile-circled.svg?alt=media&token=5d172c80-6cc4-4ddd-841b-8877a6813010';
-//                 ownerProfilePic = 'https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fprofile-circled.svg?alt=media&token=5d172c80-6cc4-4ddd-841b-8877a6813010';
-//             }
-//             else {
-//                 // appendData['profile_pic'] = evt['profile_pic'];
-//                 ownerProfilePic = evt['profile_pic'];
-//             }
-//         });
+            // Check the profile picture.
+            if(typeof(evt['profile_pic']) === 'undefined' || evt['profile_pic'] === null) {
+                // appendData['profile_pic'] = 'https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fprofile-circled.svg?alt=media&token=5d172c80-6cc4-4ddd-841b-8877a6813010';
+                ownerProfilePic = 'https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fprofile-circled.svg?alt=media&token=5d172c80-6cc4-4ddd-841b-8877a6813010';
+            }
+            else {
+                // appendData['profile_pic'] = evt['profile_pic'];
+                ownerProfilePic = evt['profile_pic'];
+            }
+        });
 
 
         
-//         const vehicleKeys = Object.keys(vehicleData);
-//         console.log('vehicleKeys', vehicleKeys);
-//         vehicleKeys.forEach((data, index) => {
-//             if(data !== "vehicle_length") {
-//                 const entry = vehicle[data];
-//                 // console.log('current entry: ', entry, ownerFullName);
-//                 console.log('current entry: ', ownerFullName);
-//                 // Id, Plate, Vehicle Owner, Vehicle(Images), Model, QR Code, Use Types
+        const vehicleKeys = Object.keys(vehicleData);
+        // console.log('vehicleKeys', vehicleKeys);
+        vehicleKeys.forEach((data, index) => {
+            if(data !== "vehicle_length") {
+                const entry = vehicle[data];
+                // console.log('current entry: ', entry, ownerFullName);
+                // console.log('current entry: ', ownerFullName);
+                // Id, Plate, Vehicle Owner, Vehicle(Images), Model, QR Code, Use Types
 
-//                 if(typeof(entry.qrCode) === "object") {
-//                     entry.qrCode = entry.qrCode.toString();
-//                 }
+                if(typeof(entry.qrCode) === "object") {
+                    entry.qrCode = entry.qrCode.toString();
+                }
 
-//                 appendData = {
-//                     'index': index,
-//                     uid: doc.id,
-//                     'vehicle_owner': ownerFullName,
-//                     'profile_pic': ownerProfilePic,
-//                     'plate_number': data,
-//                     'model': entry.model[0],
-//                     'qrCode': entry.qrCode,
-//                     'entry': entry.use_types,
-//                     'registration_date': entry.createdAt.toDate()
-//                 }
+                console.log("isVehicleVerified: ", typeof(entry.is_vehicle_verified) !== "undefined");
+                // Check if the vehicle has sent verification
+                if(typeof(entry.is_vehicle_verified) !== "undefined") {
 
-//                 // Check the vehicle image
-//                 if(typeof(entry.images[1]) === 'undefined' || entry.images[1] === null) {
-//                     appendData['image'] = 'https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fvehicle-car-16-filled.svg?alt=media&token=8bb41423-816c-4de8-8a4c-22f597fd2b04';
-//                 }
-//                 else {
-//                     appendData['image'] = entry.images[1];
-//                 }
-//                 console.log('appendData', appendData);
+                    if(entry.is_vehicle_verified === true) {
+                        entry.is_vehicle_verified = "Approved";
+                    }
+                    else {
+                        entry.is_vehicle_verified = "Rejected";
+                    }
 
-//                 appendData['action'] = ''
-//                 appendData['index'] = countVehicle;
-//                 countVehicle += 1;
-//                 dataVehicle.push(appendData);
-//             }
-//         });
-//         appendData = null; //delete from memory
+                    appendData = {
+                        'index': index,
+                        uid: doc.id,
+                        'vehicle_owner': ownerFullName,
+                        'profile_pic': ownerProfilePic,
+                        'plate_number': data,
+                        'model': entry.model[0],
+                        'qrCode': entry.qrCode,
+                        'entry': entry.use_types,
+                        'verify_kyc': entry.verification_kyc,
+                        'verify_receipt': entry.verification_receipt,
+                        'status': entry.is_vehicle_verified,
+                        'registration_date': entry.createdAt.toDate()
+                    }
+    
+                    // Check the vehicle image
+                    if(typeof(entry.images[1]) === 'undefined' || entry.images[1] === null) {
+                        appendData['image'] = 'https://firebasestorage.googleapis.com/v0/b/bulsu---pms.appspot.com/o/placeholders%2Fvehicle-car-16-filled.svg?alt=media&token=8bb41423-816c-4de8-8a4c-22f597fd2b04';
+                    }
+                    else {
+                        appendData['image'] = entry.images[1];
+                    }
+                    // console.log('appendData', appendData);
+    
+                    appendData['action'] = ''
+                    appendData['index'] = countVehicle;
+                    countVehicle += 1;
+                    dataVehicle.push(appendData);
+                }
+
+            }
+        });
+        appendData = null; //delete from memory
         
-//         // Display the table after all the neccessary are ready.
-//         currentIndex = currentIndex + 1;
-//         // console.log('::', currentIndex, docsSnap.docs);
-//         if(currentIndex === docsSnap.docs.length) {
-//             // console.log('HAHAHA');
-//             // console.log('final vehicleInformation: ', dataVehicle);
-//             jQuery((e) => {
-//                 console.log("DataTable");
-//                 $("#table_vehicles").DataTable({
-//                     scrollX: true,
-//                     "data": dataVehicle,
-//                     "columns": [
-//                         {"data": "index"},
-//                         {"data": "uid"},
-//                         {
-//                             data: (data, type, dataToSet) => {
-//                                 return `<img src="${data.profile_pic}" alt="profile picture" width="20" height="20">
-//                                 ${data.vehicle_owner}`;
-//                             },
-//                         },
-//                         {"data": "plate_number"},
-//                         {
-//                             data: (data, type, dataToSet) => {
-//                                 return `<img src="${data.image}" alt="profile picture" width="20" height="20">
-//                                 ${data.model}`;
-//                             },
-//                         },
-//                         {"data": "registration_date"},
-//                         {"data": "action"},
-//                     ]
-//                 });
-//             });
-//         }
-//         else {
-//             // console.log('currentIndex: ' + currentIndex)
-//             // console.log('currentIndex: ' + currentIndex)
-//         }
-//         // console.log(doc.id, Object.keys(vehicleData).toString(), vehicle);        
-//     }); //end of docSnap
+        // Display the table after all the neccessary are ready.
+        currentIndex = currentIndex + 1;
+        // console.log('::', currentIndex, docsSnap.docs);
+
+        console.log("dataVehicle", dataVehicle)
+        if(currentIndex === docsSnap.docs.length) {
+            // console.log('HAHAHA');
+            // console.log('final vehicleInformation: ', dataVehicle);
+            jQuery((e) => {
+                console.log("DataTable");
+                $("#table_vehicles").DataTable({
+                    scrollX: true,
+                    "data": dataVehicle,
+                    "columns": [
+                        {"data": "index"},
+                        {"data": "uid"},
+                        {
+                            data: (data, type, dataToSet) => {
+                                return `<img src="${data.profile_pic}" alt="profile picture" width="20" height="20">
+                                ${data.vehicle_owner}`;
+                            },
+                        },
+                        {"data": "plate_number"},
+                        {
+                            data: (data, type, dataToSet) => {
+                                return `<img src="${data.image}" alt="profile picture" width="20" height="20">
+                                ${data.model}`;
+                            },
+                        },
+                        {"data": "registration_date"},
+                        {"data": "status"},
+                        {
+                            data: (data, type, dataToSet) => {
+                                return `
+                                <button class="view-verification" receipt="${data.verify_kyc}" kyc="${data.verify_receipt}" plate="${data.plate_number}" data-key="${data.uid}">View</button>`;
+                                // return `
+                                // <button class="view-verification" receipt="${data.verify_kyc}" kyc="${data.verify_receipt}" plate="${data.plate_number}" data-key="${data.uid}">View</button>
+                                // <button class="accept-verification" plate="${data.plate_number}" data-key="${data.uid}">Accept</button>
+                                // <button class="deny-verification" plate="${data.plate_number}" data-key="${data.uid}">Deny</button>`;
+                            },
+                        },
+                    ]
+                });
+
+                const viewVerification = document.querySelectorAll(".view-verification");
+                const acceptVerification = document.querySelectorAll(".accept-verification");
+                const denyVerification = document.querySelectorAll(".deny-verification");
+
+                viewVerification.forEach((view, index) => {
+                    view.addEventListener("click", () => {
+                        console.log("View button: ", view.getAttribute("data-key"), " : ", view.getAttribute("plate"));
+
+                        Swal.fire({
+                            // icon: 'error',
+                            title: 'Vehicle Verification',
+                            // text: 'Something went wrong!',
+                            html: `
+                            <div class="popup-verification">
+                                <div>
+                                    <p>Official Receipt / Certificate of Registration</p>
+                                    <img src="${view.getAttribute("kyc")}" alt="kyc"/>
+                                </div> 
+                                <div>
+                                    <p>KYC Verification</p>
+                                    <img src="${view.getAttribute("receipt")}" alt="kyc"/>
+                                </div> 
+                            </div>
+                            `,
+                            showConfirmButton: false,
+                            footer: 
+                            `<div>
+                                <button class="popup-accept">Accept</button>
+                                <button class="popup-deny">Deny</button>
+                            </div>
+                            `
+                        });
+
+                        
+                        document.querySelector(".popup-accept").addEventListener("click", () => {
+                            console.log("popup-accept");
+                            console.log("uid: ", view.getAttribute("data-key"));
+                            console.log("plate: ", view.getAttribute("plate"));
+
+                            const docRefAccount = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", view.getAttribute("data-key"));
+                            _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefAccount, {
+                                [`${view.getAttribute("plate")}.is_vehicle_verified`]: true,
+                                [`${view.getAttribute("plate")}.is_vehicle_date`]: _src_index__WEBPACK_IMPORTED_MODULE_0__.getServerTimestamp()
+                            }).then(() => {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Verification accepted.',
+                                    // text: 'Something went wrong!',
+                                });
+                            });
+                
+                            swal.close();
+                        });
+                        document.querySelector(".popup-deny").addEventListener("click", () => {
+                            console.log("popup-deny");
+                            console.log("uid: ", view.getAttribute("data-key"));
+                            console.log("plate: ", view.getAttribute("plate"));
+
+                            const docRefAccount = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", view.getAttribute("data-key"));
+                            _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefAccount, {
+                                [`${view.getAttribute("plate")}.is_vehicle_verified`]: _src_index__WEBPACK_IMPORTED_MODULE_0__.doDeleteField(),
+                                [`${view.getAttribute("plate")}.is_vehicle_date`]: _src_index__WEBPACK_IMPORTED_MODULE_0__.getServerTimestamp()
+                            }).then(() => {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Verification rejected.',
+                                    // text: 'Something went wrong!',
+                                });
+                            });
+
+                            swal.close();
+                        });
+                    })
+                });
+
+                
+                // acceptVerification.forEach((accept, index) => {
+                //     accept.addEventListener("click", () => {
+                //         console.log("Accept button: ", accept.getAttribute("data-key"), " : ", accept.getAttribute("plate"));
+                //     })
+                // });
+                // denyVerification.forEach((deny, index) => {
+                //     deny.addEventListener("click", () => {
+                //         console.log("Delete button: ", deny.getAttribute("data-key"), " : ", deny.getAttribute("plate"));
+                //     })
+                // });
+            });
+        }
+        else {
+            // console.log('currentIndex: ' + currentIndex)
+            // console.log('currentIndex: ' + currentIndex)
+        }
+        // console.log(doc.id, Object.keys(vehicleData).toString(), vehicle);        
+    }); //end of docSnap
     
 
-//     async function getAccountInformationOwner(userUID) {
-//         let vehicle = undefined;
-//         const docVehicleActivity = fire.myDoc(fire.db, "account-information", userUID);
-//         const docVSnap = await fire.myGetDoc(docVehicleActivity);
-//         if (docVSnap.exists()) {
-//             // vehicle = Object.keys(docVSnap.data()).filter((e) => {
-//             //     if(e !== 'vehicle_length') {
-//             //         return e;
-//             //     }
-//             // }).toString();
-//             return {...docVSnap.data()};
-//         }
-//         else {
-//             vehicle = "N/A";
-//         }
-//         return vehicle;
-//     }
-
-//     console.log(dataVehicle);
-// }
+    async function getAccountInformationOwner(userUID) {
+        let vehicle = undefined;
+        const docVehicleActivity = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "account-information", userUID);
+        const docVSnap = await _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDoc(docVehicleActivity);
+        if (docVSnap.exists()) {
+            // vehicle = Object.keys(docVSnap.data()).filter((e) => {
+            //     if(e !== 'vehicle_length') {
+            //         return e;
+            //     }
+            // }).toString();
+            return {...docVSnap.data()};
+        }
+        else {
+            vehicle = "N/A";
+        }
+        return vehicle;
+    }
+    console.log(dataVehicle);
+}
 /**
     <table
         id="table_vehicles"
@@ -40059,7 +40453,7 @@ if(windowLocation.indexOf("user-account") > -1) {
     let fullName = document.querySelector(".personal-info-name");
     let userid = document.querySelector(".personal-info-id");
     let category = document.querySelector(".personal-info-usertype");
-    let phoneNum = document.querySelector(".personal-info-phonenum");
+    let phoneNum = document.querySelector("#user-phone-number");
     let useremail = document.querySelector(".personal-info-email");
     let college = document.querySelector(".personal-info-college");
     //getAccountInformation(colRefAccount);
@@ -40320,15 +40714,46 @@ if(windowLocation.indexOf("user-account") > -1) {
         updatePersonalInformation(currentUserId, categoryObj, formFullName)
         localStorage.setItem('personal_info_cat', `${categoryObj['category']}`)
     });
-    formPhoneNum.addEventListener('submit', (e) => {
+
+    const phoneInputField = document.querySelector("#form_phonenum");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        initialCountry: "ph",
+        allowDropdown: false,
+    });
+        
+    formPhoneNum.addEventListener('submit', async (e) => {
         e.preventDefault();
-        let phoneNumObj = {
-            phone_num: formPhoneNum.form_phonenum.value
+
+        
+        const phoneNumber = phoneInput.getNumber();
+        if (phoneInput.isValidNumber()) {
+            // alert(`Phone number in E.164 format: ${phoneNumber}`);
+
+            console.log(`Phone number in E.164 format: ${phoneNumber}`);
+            $("#form_phonenum").val(phoneNumber);
+            let phoneNumObj = {
+                phone_num: formPhoneNum.form_phonenum.value
+            }
+
+            const multiFactorUser = _src_index__WEBPACK_IMPORTED_MODULE_1__.doMultiFactor(_src_index__WEBPACK_IMPORTED_MODULE_1__.auth.currentUser);
+            if(multiFactorUser.enrolledFactors.length > 0) {
+                await multiFactorUser.unenroll(multiFactorUser.enrolledFactors[0]);
+            }
+            else {
+                console.log("No enrolled.")
+            }
+            
+            console.log("formPhoneNum:", currentUserId, phoneNumObj, formPhoneNum);
+            updatePersonalInformation(currentUserId, phoneNumObj, formPhoneNum);
+            localStorage.setItem('personal_info_phone', `${phoneNumObj['phone_num']}`);
+        } 
+        else {
+            console.log(`"Invalid phone number."`);
         }
-                
-        console.log("formPhoneNum:", currentUserId, phoneNumObj, formPhoneNum);
-        updatePersonalInformation(currentUserId, phoneNumObj, formPhoneNum)
-        localStorage.setItem('personal_info_phone', `${phoneNumObj['phone_num']}`)
+    
+
+        
     });
     formCollege.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -41288,7 +41713,15 @@ jQuery(function() {
     });
 
     
-
+    
+    $('.personal-info-verification').on('click', () => {
+        $('.pop-verification').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
     $('.personal-info-manufacturer').on('click', () => {
         $('.pop-manufacturer').animate({
             opacity: "toggle",
@@ -42003,6 +42436,61 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
                     const preSelectedVehicleKey = vehicleInformation[vehicleKeys[index]];
                     console.log('preSelectedVehicleKey: ', preSelectedVehicleKey);
+
+                    // Vehicle Verification
+                    // let checkVerified = null;
+                    // async function isVehicleVerified(plateNumber) {
+                    //     const docRef = fire.myDoc(fire.db, "vehicle-information", currentUserId);
+                        
+                    //     // console.log("isVehicleVerified: ", plateNumber)
+                    //     const docSnap = await fire.myGetDoc(docRef)
+                        
+                    //     if (docSnap.exists()) {
+                    //         // console.log("preSelectedVehicleKey: ",  preSelectedVehicleKey)
+                    //         console.log("data: ", docSnap.data()[preSelectedVehicleKey]);
+                    //         checkVerified = docSnap.data()[preSelectedVehicleKey]["is_vehicle_verified"];
+                    //         // console.log("hey hey hey", checkVerified)
+                    //     }  
+                
+                
+                    //     console.log("checkVerified: ", checkVerified)
+                    //     if(checkVerified === null || checkVerified === "" || checkVerified === undefined) {
+                    //         console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                    //         $("#circle").css({backgroundColor: "red"});
+                    //         $("#circle-message").html("Not yet verified.")
+                    //     }
+                    //     else if(checkVerified === false) {
+                    //         console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+                    //         $("#circle").css({backgroundColor: "yellow"});
+                    //         $("#circle-message").html("Pending verification.")
+                    //     }
+                    //     else {
+                    //         console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+                    //         $("#circle").css({backgroundColor: "green"});
+                    //         $("#circle-message").html("Verified.")
+                    //     }
+                    // }
+                    // isVehicleVerified(preSelectedVehicleKey);
+                    // console.log("checkVerified: ", checkVerified)
+                    if(preSelectedVehicleKey["is_vehicle_verified"] === null 
+                    || preSelectedVehicleKey["is_vehicle_verified"] === "" 
+                    || preSelectedVehicleKey["is_vehicle_verified"] === undefined) {
+                        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                        $("#circle").css({backgroundColor: "red"});
+                        $("#circle-message").html("Not yet verified.")
+                    }
+                    else if(preSelectedVehicleKey["is_vehicle_verified"] === false) {
+                        console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+                        $("#circle").css({backgroundColor: "yellow"});
+                        $("#circle-message").html("Pending verification.")
+                    }
+                    else {
+                        console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+                        $("#circle").css({backgroundColor: "green"});
+                        $("#circle-message").html("Verified.")
+                    }
+
+                    
                     if(!typeof(preSelectedVehicleKey["model"]) === 'undefined') {
                         listOfVehiclesTags += `<li data-key="${vehicleKeys[index]}">Vehicle ${iterator} | ${preSelectedVehicleKey["model"][0]}, ${vehicleKeys[index]}</li>`;
                         document.querySelector('.personal-info-model').innerText = preSelectedVehicleKey["model"][0];
@@ -42245,6 +42733,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
 
                 let getSelectedAttrKey = element.getAttribute('data-key'),
                 personalInfoPlate = vehicleInformation[getSelectedAttrKey],
+                personalVerification = vehicleInformation[getSelectedAttrKey]["is_vehicle_verified"],
                 personalInfoModel = vehicleInformation[getSelectedAttrKey]["model"][0],
                 personalInfoClassification = vehicleInformation[getSelectedAttrKey]["classification"],
                 personalInfoColor = vehicleInformation[getSelectedAttrKey]["color"],
@@ -42254,6 +42743,25 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
                 personalInfoRemarks = vehicleInformation[getSelectedAttrKey]["remarks"];
                 
                 // console.log('personalInfoPlate:', personalInfoPlate);
+
+                console.log("personalVerification: ", personalVerification);
+                if(personalVerification === null 
+                || personalVerification === "" 
+                || personalVerification === undefined) {
+                    console.log("Not yet verified - SELECTED!")
+                    $("#circle").css({backgroundColor: "red"});
+                    $("#circle-message").html("Not yet verified.")
+                }
+                else if(personalVerification === false) {
+                    console.log("Pending verification - SELECTED!")
+                    $("#circle").css({backgroundColor: "yellow"});
+                    $("#circle-message").html("Pending verification.")
+                }
+                else {
+                    console.log("Verified - SELECTED!")
+                    $("#circle").css({backgroundColor: "green"});
+                    $("#circle-message").html("Verified.")
+                }
 
                 // Classification
                 if(typeof(personalInfoClassification) === 'undefined' || personalInfoClassification === null) {
@@ -42368,6 +42876,7 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
     const formPlate = document.querySelector('.form-plate');
     const formModel = document.querySelector('.form-model');
 
+    const formPhotoVerification = document.querySelector('.form-photo-verification');
     const formClassification = document.querySelector('.form-classification');
     const formColor = document.querySelector('.form-color');
     const formYear = document.querySelector('.form-year');
@@ -42452,6 +42961,170 @@ if(windowLocation.indexOf("user-vehicle") > -1) {
         }
     });
 
+
+
+    // Know if the vehicle was verified.
+    // let checkVerified = null;
+    // async function isVehicleVerified(plateNumber) {
+    //     plateNumber = "BAC5599"
+    //     const docRef = fire.myDoc(fire.db, "vehicle-information", currentUserId);
+        
+    //     // console.log("isVehicleVerified: ", plateNumber)
+    //     const docSnap = await fire.myGetDoc(docRef)
+    //     .then(() => {
+    //         if (docSnap.exists()) {
+    //             console.log("data: ", docSnap.data());
+    //             // console.log("check: ", docSnap.data()[plateNumber]["is_vehicle_verified"] === undefined)
+    //             // if(docSnap.data()[plateNumber]["is_vehicle_verified"] === undefined) {
+    //             //     checkVerified = null;
+    //             // }
+    //             // else if(docSnap.data()[plateNumber]["is_vehicle_verified"] === false) {
+    //             //     checkVerified = false;
+    //             // }
+    //             // else {
+    //             //     checkVerified = true;
+    //             // }
+
+    //             console.log("hey hey hey", checkVerified)
+    //         }
+    //     }).catch((error) => {
+    //         checkVerified = null;
+    //         console.log("Records error: ", error)
+    //     });    
+
+
+    //     console.log("checkVerified: ", checkVerified)
+    //     if(checkVerified === null || checkVerified === "" || checkVerified === undefined) {
+    //         console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    //         $("#circle").css({backgroundColor: "red"});
+    //         $("#circle-message").html("Not yet verified...")
+    //     }
+    //     else if(checkVerified === false) {
+    //         console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+    //         $("#circle").css({backgroundColor: "yellow"});
+    //         $("#circle-message").html("Pending verification.")
+    //     }
+    //     else {
+    //         console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+    //         $("#circle").css({backgroundColor: "green"});
+    //         $("#circle-message").html("Verified.")
+    //     }
+    // }
+    
+
+    const docRefAccount = _src_index__WEBPACK_IMPORTED_MODULE_0__.myDoc(_src_index__WEBPACK_IMPORTED_MODULE_0__.db, "vehicle-information", currentUserId);
+    formPhotoVerification.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const a = formPhotoVerification.querySelector("#verification-receipt").files[0];
+        const b = formPhotoVerification.querySelector("#verification-kyc").files[0];
+
+        const metadataA = { contentType: a.type };
+        const metadataB = { contentType: b.type };
+
+        let fileExtensionA = "";
+        let fileExtensionB = "";
+        if(a.type === "image/png") {
+            fileExtensionA = ".png";
+        }
+        else if(a.type === "image/jpeg") {
+            fileExtensionA = ".jpg";
+        }
+        else if(a.type === "image/gif") {
+            fileExtensionA = ".gif";
+        }
+
+
+        if(b.type === "image/png") {
+            fileExtensionB = ".png";
+        }
+        else if(b.type === "image/jpeg") {
+            fileExtensionB = ".jpg";
+        }
+        else if(b.type === "image/gif") {
+            fileExtensionB = ".gif";
+        }
+
+        const storageRef1 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.myGetStorage(), `vehicle-information/admin-verification/${getPlateNumber.textContent}/receipt${fileExtensionA}`);
+        const storageRef2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.myRef(_src_index__WEBPACK_IMPORTED_MODULE_0__.myGetStorage(), `vehicle-information/admin-verification/${getPlateNumber.textContent}/kyc${fileExtensionB}`);
+        const uploadTask1 = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUploadBytesResumable(storageRef1, a, metadataA);
+        const uploadTask2 = _src_index__WEBPACK_IMPORTED_MODULE_0__.doUploadBytesResumable(storageRef2, b, metadataB);
+
+
+        console.log(`vehicle-information/admin-verification/${getPlateNumber.textContent}/receipt${fileExtensionA}`);
+        console.log(`vehicle-information/admin-verification/${getPlateNumber.textContent}/kyc${fileExtensionB}`);
+        // Upload the receipt and kyc.
+        const uploadProfilePromiseA = uploadTask1.on('state_changed', (snapshot) => {
+                // Progress of fileupload
+                const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                console.log("Uploading verification receipt.");
+                console.log('Upload is ' + progress + '% done');    //progress of upload
+            }, 
+            (error) => {
+                // Handle unsuccessful uploads
+                console.log(error);
+            }, 
+            (success) => {
+                // If successful, do this.
+                _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(uploadTask1.snapshot.ref).then(async (downloadURL) => {
+                    
+                    // Set attribute for verification receipt
+                    const x = _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefAccount, {
+                        [`${getPlateNumber.textContent}.verification_receipt`]: downloadURL
+                    })
+                    .then(() => {});
+                    console.log('Done receipt! File available at', downloadURL, x);
+                });
+            } //end of getDownloadURL
+        );
+        const uploadProfilePromiseB = uploadTask2.on('state_changed', (snapshot) => {
+                // Progress of fileupload
+                const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                console.log("Upload KYC profile.");
+                console.log('Upload is ' + progress + '% done');    //progress of upload
+            }, 
+            (error) => {
+                // Handle unsuccessful uploads
+                console.log(error);
+            }, 
+            (success) => {
+                // If successful, do this.
+                _src_index__WEBPACK_IMPORTED_MODULE_0__.myGetDownloadURL(uploadTask2.snapshot.ref).then(async (downloadURL) => {
+                    console.log('Done KYC! File available at', downloadURL);
+
+                    // Add attribute for verification KYC
+                    _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefAccount, {
+                        [`${getPlateNumber.textContent}.verification_kyc`]: downloadURL
+                    })
+                    .then(() => {});
+                });
+            } //end of getDownloadURL
+        );
+
+        
+        // When the files for verification are uploaded.
+        Promise.all([uploadProfilePromiseA, uploadProfilePromiseB]).then((success) => {
+            console.log("Uploaded the Official Receipt and KYC Verification.");
+            console.log("Done done done!", docRefAccount)
+            _src_index__WEBPACK_IMPORTED_MODULE_0__.myUpdateDoc(docRefAccount, {
+                [`${getPlateNumber.textContent}.is_vehicle_verified`]: false,
+                [`${getPlateNumber.textContent}.is_vehicle_date`]: _src_index__WEBPACK_IMPORTED_MODULE_0__.getServerTimestamp()
+            }).then(() => {
+                getVehicleInformation(currentUserId);
+            });
+
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Receipt and KYC Details Submitted!',
+                text: 'Verification is now pending. It may take a while to complete.',
+            }).then((success) => {
+                window.location.reload();
+            });
+        });
+
+    });
     
     function changeListOfVehicleCategory() {
         console.log("college_option: ", document.querySelector("#college_option"));

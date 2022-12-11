@@ -109,7 +109,15 @@ jQuery(function() {
     });
 
     
-
+    
+    $('.personal-info-verification').on('click', () => {
+        $('.pop-verification').animate({
+            opacity: "toggle",
+            height: "toggle"
+        }, 250, 'linear', () => {
+            // animation complete
+        });
+    });
     $('.personal-info-manufacturer').on('click', () => {
         $('.pop-manufacturer').animate({
             opacity: "toggle",

@@ -32,7 +32,7 @@ if(windowLocation.indexOf("user-account") > -1) {
     let fullName = document.querySelector(".personal-info-name");
     let userid = document.querySelector(".personal-info-id");
     let category = document.querySelector(".personal-info-usertype");
-    let phoneNum = document.querySelector(".personal-info-phonenum");
+    let phoneNum = document.querySelector("#user-phone-number");
     let useremail = document.querySelector(".personal-info-email");
     let college = document.querySelector(".personal-info-college");
     //getAccountInformation(colRefAccount);
@@ -293,15 +293,46 @@ if(windowLocation.indexOf("user-account") > -1) {
         updatePersonalInformation(currentUserId, categoryObj, formFullName)
         localStorage.setItem('personal_info_cat', `${categoryObj['category']}`)
     });
-    formPhoneNum.addEventListener('submit', (e) => {
+
+    const phoneInputField = document.querySelector("#form_phonenum");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        initialCountry: "ph",
+        allowDropdown: false,
+    });
+        
+    formPhoneNum.addEventListener('submit', async (e) => {
         e.preventDefault();
-        let phoneNumObj = {
-            phone_num: formPhoneNum.form_phonenum.value
+
+        
+        const phoneNumber = phoneInput.getNumber();
+        if (phoneInput.isValidNumber()) {
+            // alert(`Phone number in E.164 format: ${phoneNumber}`);
+
+            console.log(`Phone number in E.164 format: ${phoneNumber}`);
+            $("#form_phonenum").val(phoneNumber);
+            let phoneNumObj = {
+                phone_num: formPhoneNum.form_phonenum.value
+            }
+
+            const multiFactorUser = fire.doMultiFactor(fire.auth.currentUser);
+            if(multiFactorUser.enrolledFactors.length > 0) {
+                await multiFactorUser.unenroll(multiFactorUser.enrolledFactors[0]);
+            }
+            else {
+                console.log("No enrolled.")
+            }
+            
+            console.log("formPhoneNum:", currentUserId, phoneNumObj, formPhoneNum);
+            updatePersonalInformation(currentUserId, phoneNumObj, formPhoneNum);
+            localStorage.setItem('personal_info_phone', `${phoneNumObj['phone_num']}`);
+        } 
+        else {
+            console.log(`"Invalid phone number."`);
         }
-                
-        console.log("formPhoneNum:", currentUserId, phoneNumObj, formPhoneNum);
-        updatePersonalInformation(currentUserId, phoneNumObj, formPhoneNum)
-        localStorage.setItem('personal_info_phone', `${phoneNumObj['phone_num']}`)
+    
+
+        
     });
     formCollege.addEventListener('submit', (e) => {
         e.preventDefault();
