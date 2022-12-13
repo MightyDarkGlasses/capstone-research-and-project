@@ -20,8 +20,9 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Lexend Deca", "Inter", Arial, sans-serif;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
+
 input[type="text"], input[type="email"], input[type="pass"] {
     outline: none;
 }

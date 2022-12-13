@@ -37839,6 +37839,7 @@ if(window.location.pathname.indexOf("user-account") > -1) {
         // await multiFactorUser.unenroll(multiFactorUser.enrolledFactors[i])
 
 
+        const userPhoneNumber = document.querySelector("#user-phone-number");
         const smsSend = document.querySelector("#phone-sms-send");
         smsSend.addEventListener("click", () => {
             const recaptchaVerifier = new firebase_auth__WEBPACK_IMPORTED_MODULE_2__.RecaptchaVerifier('recaptcha-container-id', {
@@ -37851,9 +37852,12 @@ if(window.location.pathname.indexOf("user-account") > -1) {
             }, auth);
             (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.multiFactor)(user).getSession()
             .then(function (multiFactorSession) {
+
+
+                console.log("User phone number: ", userPhoneNumber);
                 // Specify the phone number and pass the MFA session.
                 const phoneInfoOptions = {
-                    phoneNumber: "+639052354473",
+                    phoneNumber: userPhoneNumber.textContent,
                     session: multiFactorSession
                 };
 
@@ -37863,37 +37867,82 @@ if(window.location.pathname.indexOf("user-account") > -1) {
                 console.log("Done sending SMS verification code");
                 return phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
             }).then(function (verificationId) {
-                // Ask user for the verification code. Then:
-                const cred = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneAuthProvider.credential(verificationId, window.prompt("Enter your SMS verification code: "));
-                const multiFactorAssertion = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneMultiFactorGenerator.assertion(cred);
-
-                console.log("Done checking verification code");
-                // Complete enrollment.
-                return (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.multiFactor)(user).enroll(multiFactorAssertion, "Phone Number");
+                console.log("verificationId: ", verificationId);
+                Swal.fire({
+                    text: 'Enter the SMS verification code',
+                    icon: 'question',
+                    input: 'number',
+                    showCancelButton: true,
+                    confirmButtonText: 'Submit Code',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (inputMFACode) => {
+                        const cred = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneAuthProvider.credential(verificationId, inputMFACode);
+                        const multiFactorAssertion = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneMultiFactorGenerator.assertion(cred);
+                        
+                        console.log("Done checking verification code");
+                        return (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.multiFactor)(user).enroll(multiFactorAssertion, "Phone Number").catch((error) => {
+                            Swal.showValidationMessage(
+                                `Error: ${error}`
+                            );
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                text: `SMS Multi-Factor Authentication is enabled.`,
+                                icon: 'success',
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                text: `SMS Multi-Factor Authentication process is cancelled.`,
+                                icon: 'error',
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        }
+                    });
             }).then(() => {
-                window.location.reload();
-            }).catch((error) => {
+                // window.location.reload();
+            }).catch(async (error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
 
             switch(errorCode) {
                 case 'auth/requires-recent-login': {
                     // TODO(you): prompt the user to re-provide their sign-in credentials
-                    let userProvidedPassword = window.prompt("Enter your password: ");
+
+                    const reauthenticatePassword = await Swal.fire({
+                        icon: 'question',
+                        title: 'Reauthentication required',
+                        text: 'Enter your current password',
+                        input: 'text',
+                        showCancelButton: true,
+                        confirmButtonText: 'Submit Passphrase',
+                        preConfirm: (inputValue) => {
+                            return inputValue;
+                        }
+                    });
+                    
+                    // console.log("verificationCode: ", verificationCode);
+                    // let userProvidedPassword = window.prompt("Enter your password: ");
                     const credential = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.EmailAuthProvider.credential(
                         auth.currentUser.email,
-                        userProvidedPassword
+                        reauthenticatePassword
                     )
 
                     ;(0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.reauthenticateWithCredential)(user, credential).then(() => {
                         swal("Success!", "User reauthenticated.", "success").then((e) => {
                             // window.location.href = window.location.href; //reload a page in JS
-                            // location.reload();
+                            location.reload();
                         });
-                    }).catch((error) => {
-                        swal("Oops.", "Something went wrong during reauthentication!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
+                    }).catch((errorReauthentication) => {
+                        swal("Oops.", "Something went wrong during reauthentication!\n" + "Error code: " + errorReauthentication.code + "\nMessage: " + errorReauthentication.message, "error").then((e) => {
                             // window.location.href = window.location.href; //reload a page in JS
-                            // location.reload();
+                            location.reload();
                         });
                     });
                     break;
@@ -37901,7 +37950,7 @@ if(window.location.pathname.indexOf("user-account") > -1) {
                 default: {
                     swal("Oops.", "Something went wrong!\n" + "Error code: " + errorCode + "\nMessage: " + errorMessage, "error").then((e) => {
                         // window.location.href = window.location.href; //reload a page in JS
-                        // location.reload();
+                        location.reload();
                     });
                     console.log("Error: ", error);
                 }
@@ -38229,29 +38278,59 @@ function doLoginForm() {
                             const phoneAuthProvider = new firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneAuthProvider(auth);
                             // Send SMS verification code
                             return phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
-                                .then(function (verificationId) {
-                                    // console.log("verificationId: ", verificationId)
+                            .then(async function (verificationId) {
 
-                                    // Ask user for the SMS verification code. Then:
-                                    const cred = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneAuthProvider.credential(
-                                        verificationId, window.prompt("Enter your SMS verification code: "));
-                                    const multiFactorAssertion =
-                                        firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneMultiFactorGenerator.assertion(cred);
-                                    
-                                    // Complete sign-in.
-                                    return resolver.resolveSignIn(multiFactorAssertion)
-                                })
-                                .then(function (userCredential) {
-                                    console.log(userCredential)
-                                    console.log("User successfully signed in with the second factor phone number.");
-                                    checkCurrentLoggedUser();
+                                const verificationCode = await Swal.fire({
+                                    icon: 'question',
+                                    text: 'Enter your SMS verification code',
+                                    input: 'number',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Verify MFA Code',
+                                    preConfirm: (inputValue) => {
+                                        return inputValue;
+                                    }
                                 });
+                                console.log("verificationCode: ", verificationCode);
+                                
+                                // Ask user for the SMS verification code. Then:
+                                const cred = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneAuthProvider.credential(
+                                    verificationId, verificationCode.value);
+                                const multiFactorAssertion = firebase_auth__WEBPACK_IMPORTED_MODULE_2__.PhoneMultiFactorGenerator.assertion(cred);
+                                // Complete sign-in.
+                                return resolver.resolveSignIn(multiFactorAssertion)
+                            })
+                            .then(function (userCredential) {
+                                console.log(userCredential)
+                                console.log("User successfully signed in with the second factor phone number.");
+                                checkCurrentLoggedUser();
+                            }).catch((errorPhoneAuth) => {
+                                switch(errorPhoneAuth.code) {
+                                    case "auth/missing-code": {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            text: 'SMS Multi-Factor Authentication process is cancelled.',
+                                        }).then(() => {
+                                            window.location.reload();
+                                        });
+                                        break;
+                                    }
+                                    default: {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'An error occured.',
+                                            text: `${errorPhoneAuth.message}`,
+                                        });
+                                        console.log("phoneAuthProvider: ", errorPhoneAuth, ": ", errorPhoneAuth.code, ": ", errorPhoneAuth.message)
+                                    }
+                                }
+                            });
                         } else {
                             // Unsupported second factor.
                         }
                     }
                     default: {  
-                        console.log('switch default')
+                        console.log('switch default');
+                        console.log("Error: ", err, ": ", err.code, ": ", err.message)
                     }
                 }
 
