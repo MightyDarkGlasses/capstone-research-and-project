@@ -37940,7 +37940,11 @@ if(window.location.pathname.indexOf("user-account") > -1) {
                             location.reload();
                         });
                     }).catch((errorReauthentication) => {
-                        swal("Oops.", "Something went wrong during reauthentication!\n" + "Error code: " + errorReauthentication.code + "\nMessage: " + errorReauthentication.message, "error").then((e) => {
+                        // swal("Oops.", "Something went wrong during reauthentication!\n" + "Error code: " + errorReauthentication.code + "\nMessage: " + errorReauthentication.message, "error").then((e) => {
+                        //     // window.location.href = window.location.href; //reload a page in JS
+                        //     location.reload();
+                        // });
+                        swal("SMS Multi-factor Authentication process is cancelled." + errorReauthentication.message, "error").then((e) => {
                             // window.location.href = window.location.href; //reload a page in JS
                             location.reload();
                         });
